@@ -1,0 +1,184 @@
+[
+{
+  "model": "contabilidad.resumen",
+  "pk": 1,
+  "fields": {
+    "saldoinicial": "0.0000",
+    "debe": "0.0000",
+    "haber": "0.0000",
+    "saldofinal": "0.0000",
+    "fecha": "2020-01-10T02:55:14Z",
+    "nombre": "CuentaPropia",
+    "codigo": "1",
+    "naturaleza": "A"
+  }
+},
+{
+  "model": "contabilidad.resumen",
+  "pk": 2,
+  "fields": {
+    "saldoinicial": "0.0000",
+    "debe": "0.0000",
+    "haber": "0.0000",
+    "saldofinal": "0.0000",
+    "fecha": "2020-01-10T03:00:08Z",
+    "nombre": "SubcuentaIVA",
+    "codigo": "2",
+    "naturaleza": "B"
+  }
+},
+{
+  "model": "contabilidad.resumen",
+  "pk": 3,
+  "fields": {
+    "saldoinicial": "0.0000",
+    "debe": "0.0000",
+    "haber": "0.0000",
+    "saldofinal": "0.0000",
+    "fecha": "2020-01-10T03:00:51Z",
+    "nombre": "SubcuentaSTPIVA",
+    "codigo": "3",
+    "naturaleza": "C"
+  }
+},
+{
+  "model": "contabilidad.resumen",
+  "pk": 4,
+  "fields": {
+    "saldoinicial": "0.0000",
+    "debe": "0.0000",
+    "haber": "0.0000",
+    "saldofinal": "0.0000",
+    "fecha": "2020-01-10T03:01:31Z",
+    "nombre": "CuentaTerceros",
+    "codigo": "4",
+    "naturaleza": "D"
+  }
+},
+{
+  "model": "contabilidad.resumen",
+  "pk": 5,
+  "fields": {
+    "saldoinicial": "0.0000",
+    "debe": "0.0000",
+    "haber": "0.0000",
+    "saldofinal": "0.0000",
+    "fecha": "2020-01-10T03:02:12Z",
+    "nombre": "CuentaSTP",
+    "codigo": "5",
+    "naturaleza": "E"
+  }
+},
+{
+  "model": "contabilidad.resumen",
+  "pk": 6,
+  "fields": {
+    "saldoinicial": "0.0000",
+    "debe": "0.0000",
+    "haber": "0.0000",
+    "saldofinal": "0.0000",
+    "fecha": "2020-01-10T03:02:42Z",
+    "nombre": "SCDTFTPE",
+    "codigo": "6",
+    "naturaleza": "F"
+  }
+},
+{
+  "model": "contabilidad.resumen",
+  "pk": 7,
+  "fields": {
+    "saldoinicial": "0.0000",
+    "debe": "0.0000",
+    "haber": "0.0000",
+    "saldofinal": "0.0000",
+    "fecha": "2020-01-10T03:03:14Z",
+    "nombre": "IVAacreditableNoPagado",
+    "codigo": "7",
+    "naturaleza": "G"
+  }
+},
+{
+  "model": "contabilidad.resumen",
+  "pk": 8,
+  "fields": {
+    "saldoinicial": "0.0000",
+    "debe": "0.0000",
+    "haber": "0.0000",
+    "saldofinal": "0.0000",
+    "fecha": "2020-01-10T03:03:41Z",
+    "nombre": "ComisionesporPagarSobreOperacionesVigentes",
+    "codigo": "8",
+    "naturaleza": "H"
+  }
+},
+{
+  "model": "contabilidad.resumen",
+  "pk": 9,
+  "fields": {
+    "saldoinicial": "0.0000",
+    "debe": "0.0000",
+    "haber": "0.0000",
+    "saldofinal": "0.0000",
+    "fecha": "2020-01-10T03:04:59Z",
+    "nombre": "IVAnoCobrado",
+    "codigo": "9",
+    "naturaleza": "I"
+  }
+},
+{
+  "model": "contabilidad.resumen",
+  "pk": 10,
+  "fields": {
+    "saldoinicial": "0.0000",
+    "debe": "0.0000",
+    "haber": "0.0000",
+    "saldofinal": "0.0000",
+    "fecha": "2020-01-10T03:05:18Z",
+    "nombre": "IVAcobrado",
+    "codigo": "10",
+    "naturaleza": "J"
+  }
+},
+{
+  "model": "contabilidad.resumen",
+  "pk": 11,
+  "fields": {
+    "saldoinicial": "0.0000",
+    "debe": "0.0000",
+    "haber": "0.0000",
+    "saldofinal": "0.0000",
+    "fecha": "2020-01-10T03:05:39Z",
+    "nombre": "ComisionesCobradas",
+    "codigo": "11",
+    "naturaleza": "K"
+  }
+},
+{
+  "model": "contabilidad.resumen",
+  "pk": 12,
+  "fields": {
+    "saldoinicial": "0.0000",
+    "debe": "0.0000",
+    "haber": "0.0000",
+    "saldofinal": "0.0000",
+    "fecha": "2020-01-10T03:06:11Z",
+    "nombre": "ComisionesPagadas",
+    "codigo": "12",
+    "naturaleza": "L"
+  }
+},
+{
+  "model": "contabilidad.resumen",
+  "pk": 13,
+  "fields": {
+    "saldoinicial": "0.0000",
+    "debe": "0.0000",
+    "haber": "0.0000",
+    "saldofinal": "0.0000",
+    "fecha": "2020-01-10T03:06:56Z",
+    "nombre": "FondosPagoElectronico",
+    "codigo": "13",
+    "naturaleza": "M"
+  }
+}
+]

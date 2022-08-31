@@ -1,0 +1,10 @@
+{% extends "admin/change_form.html" %}
+{% load i18n %}
+
+{% block form_top %}
+  {% if not is_popup %}
+    <p>{% trans "Primero ingresa el nombre de usuario. A continuación podrás agregar más datos de usuario." %}</p>
+  {% else %}
+    <p>{% trans "Ingresar nombre de usuario." %}</p>
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,24 @@
+# El servicio de traefik, en este debes de poner los subodomains que quieres
+# que se añadan como record sets en route 53 de aws
+apiVersion: v1
+kind: Service
+metadata:
+  name: traefik
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: zygoo.mx, *.zygoo.mx, inguz.site, *.inguz.site
+spec:
+  ports:
+    - protocol: TCP
+      name: web
+      port: 80
+      #Este es el puerto para el dashboard de traefik
+    - protocol: TCP
+      name: admin
+      port: 8080
+    - protocol: TCP
+      name: websecure
+      port: 443
+  selector:
+    app: traefik
+  # Importante llamarlo loadbalancer para que sea expuesto al publico
+  type: LoadBalancer

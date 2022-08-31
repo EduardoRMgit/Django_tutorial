@@ -1,0 +1,1 @@
+[{"model": "demograficos.statustarjeta", "pk": 1, "fields": {"status": "Vigente"}}, {"model": "demograficos.statustarjeta", "pk": 2, "fields": {"status": "Expirada"}}, {"model": "demograficos.statustarjeta", "pk": 3, "fields": {"status": "Por Expirar"}}]

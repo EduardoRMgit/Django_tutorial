@@ -1,0 +1,22 @@
+[
+{
+  "model": "scotiabank.datosfijospdf",
+  "pk": 1,
+  "fields": {
+    "tipo_transaccion": "Retiro",
+    "nombre_empresa": "INGUZ DIGITAL S.A.P.I. DE C.V.",
+    "numero_empresa": "17244",
+    "instrucciones": "Texto de prueba / Texto de prueba / Texto de prueba / Texto de prueba / Texto de prueba / Texto de prueba / Texto de prueba / Texto de prueba / Texto de prueba / Texto de prueba / Texto de prueba / Texto de prueba / Texto de prueba / Texto de prueba / Texto de prueba / Texto de prueba / Texto de prueba / Texto de prueba / Texto de prueba / Texto de prueba / Texto de prueba / Texto de prueba / Texto de prueba / Texto de prueba / Texto de prueba / Texto de prueba / Texto de prueba / Texto de prueb"
+  }
+},
+{
+  "model": "scotiabank.datosfijospdf",
+  "pk": 2,
+  "fields": {
+    "tipo_transaccion": "Deposito",
+    "nombre_empresa": "INGUZ DIGITAL S.A.P.I. DE C.V.",
+    "numero_empresa": "4572",
+    "instrucciones": "Texto de prueba / Texto de prueba / Texto de prueba / Texto de prueba / Texto de prueba / Texto de prueba / Texto de prueba / Texto de prueba / Texto de prueba / Texto de prueba / Texto de prueba / Texto de prueba / Texto de prueba / Texto de prueba / Texto de prueba / Texto de prueba / Texto de prueba / Texto de prueba / Texto de prueba / Texto de prueba / Texto de prueba / Texto de prueba / Texto de prueba / Texto de prueba / Texto de prueba / Texto de prueba / Texto de prueba / Texto de prueb"
+  }
+}
+]

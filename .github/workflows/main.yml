@@ -1,0 +1,152 @@
+on:
+  push:
+    paths-ignore:
+    - 'docs/**'
+    - 'documentation/**'
+    - 'mugres/**'
+    branches:
+      - master
+      - staging
+      - test
+name: Deploy Production to Amazon EKS with helm
+
+env:
+  REPO: cactus
+
+jobs:
+  checkout:
+    name: Checkout
+    runs-on: ubuntu-18.04
+    outputs:
+        imaged1: ${{steps.imaged.outputs.imaged}}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Check for image django
+        id: imaged
+        run: |
+          source $REPO/autodeploy_env.sh
+          echo $IMAGE_DJANGO
+          echo "::set-output name=imaged::$(echo $IMAGE_DJANGO)"
+
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-18.04
+    needs: checkout
+    if: ${{needs.checkout.outputs.imaged1 == 'true'}}
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-2
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+
+
+    - name: Build, tag, and push image to Amazon ECR
+      id: build-image
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        IMAGE_DJANGO: true
+        IMAGE_TAG: ${{ github.sha }}
+      run: |
+        # Build a docker container and
+        # push it to ECR so that it can
+        # be deployed to ECS.
+        source $REPO/autodeploy_env.sh
+        if [[ $IMAGE_PIP == true ]] ; then
+          echo "Building Pip image"
+          docker build -t $ECR_REGISTRY/$REPO:django3.7 -f docker/Dockerfile_builder .
+          docker push $ECR_REGISTRY/$REPO:django3.7
+        fi;
+        if [[ $IMAGE_DJANGO == true ]] || [[ $IMAGE_PIP == true ]] ; then
+          echo "Building Django Image"
+          docker build -t $ECR_REGISTRY/$REPO:$IMAGE_TAG -f docker/Dockerfile .
+          docker push $ECR_REGISTRY/$REPO:$IMAGE_TAG
+          echo "::set-output name=image::$ECR_REGISTRY/$REPO:$IMAGE_TAG"
+        fi;
+
+    - name: Run Helm tools
+      uses: brattdev/kube-tools@v1
+      env:
+        IMAGE_TAG: ${{ github.sha }}
+      with:
+        command: |
+          source $REPO/autodeploy_env.sh
+          echo "Configure Kubernetes"
+          aws eks update-kubeconfig --name $REPO-eksctl
+          echo "Package contents"
+          helm package kubernetes/charts/$REPO
+          echo "Set vars for deploy"
+          echo "Brancha  ${GITHUB_REF##*/}"
+          if [[ ${GITHUB_REF##*/} == master ]] ; then
+            export SUFFIX=prod
+            export DB=kubernetes-django-east2.c4csey4k0tc5.us-east-2.rds.amazonaws.com
+            export DEBUG=false
+          elif [[ ${GITHUB_REF##*/} == staging ]] ; then
+            echo "IN STAGING"
+            export SUFFIX=stage
+            export DB=cactus-stage-east-2.c4csey4k0tc5.us-east-2.rds.amazonaws.com
+            export DEBUG=true
+          elif [[ ${GITHUB_REF##*/} == test ]] ; then
+            echo "IN TEST"
+            export SUFFIX=test
+            export DB=cactus-test-db.c4csey4k0tc5.us-east-2.rds.amazonaws.com
+            export DEBUG=true
+          fi;
+          if [[ $NEW_RELEASE == true ]] ; then
+            if helm list -q | grep -q $REPO-$SUFFIX; then
+              echo "Checking if previous release is present"
+              echo $(helm list -q)
+              echo "Delete previous chart because it is present"
+              helm del $REPO-$SUFFIX
+            fi;
+            echo "Install helm chart"
+            helm upgrade $REPO-$SUFFIX --install --force $REPO-0.1.0.tgz \
+            --set rdsExternal=$DB \
+            --set dbSecret=postgres-credentials \
+            --set nameOverride=$REPO-$SUFFIX \
+            --set image.tag=$IMAGE_TAG \
+            --set s3.enabled=true \
+            --set twilio.enabled=true \
+            --set site=$SUFFIX \
+            --set debug=$DEBUG
+          else
+            kubectl set image deployments/$REPO-$SUFFIX \
+              $REPO=906062568112.dkr.ecr.us-east-2.amazonaws.com/$REPO:$IMAGE_TAG
+            helm template $REPO-$SUFFIX $REPO-0.1.0.tgz -s templates/job-migration.yaml \
+              --set rdsExternal=$DB \
+              --set dbSecret=postgres-credentials \
+              --set nameOverride=$REPO-$SUFFIX \
+              --set image.tag=$IMAGE_TAG \
+              --set s3.enabled=true \
+              --set twilio.enabled=true \
+              --set site=$SUFFIX  >> job.yaml
+            kubectl delete -f job.yaml --all
+            kubectl apply -f job.yaml
+          fi;
+          if [[ $CRONJOB == true ]] ; then
+            if helm list -q | grep -q cron-$REPO-$SUFFIX; then
+              echo "Delete previous cron chart because it is present"
+              helm del cron-$REPO-$SUFFIX
+            fi;
+            helm package kubernetes/charts/cronjob-django
+            helm upgrade cron-$REPO-$SUFFIX --install --force cronjob-django-0.1.0.tgz \
+            --set rdsExternal=$DB \
+            --set dbSecret=postgres-credentials \
+            --set nameOverride=cron-$REPO-$SUFFIX \
+            --set image.tag=$IMAGE_TAG \
+            --set s3.enabled=true \
+            --set twilio.enabled=false \
+            --set site=$SUFFIX
+          fi;

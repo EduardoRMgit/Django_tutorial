@@ -1,0 +1,21 @@
+# El servicio es el que expone todos los pods de un tipo para que se comuniquen replicationcontroller
+# todo lo que esta en el cluster. Este es un cluter del tipo ClusterIP. Que solo puedes
+# hablar con los internos de cluster. Esto es porque usamos el service del tipo LoadBalancer,
+# (el cual le pide al cloud providel hacer un loadblaancer publico) de traefik
+# para exponer lo que queramos con Ingress Router
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "django.name" . }}
+  labels:
+{{ include "django.labels" . | indent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    #El puerto para comunicarse entre pods
+    - port: {{ .Values.service.port }}
+      targetPort: {{ .Values.service.targetPort }}
+      protocol: TCP
+  selector:
+    # Los labels de los pods que vamos a exponer
+    app.kubernetes.io/name: {{ include "django.name" . }}

@@ -1,0 +1,42 @@
+[
+{
+  "model": "demograficos.phoneverification",
+  "pk": 1,
+  "fields": {
+    "token": "110247",
+    "ssid": "[]",
+    "fechaCreacion": "2020-05-12T18:41:20.141Z",
+    "telefono": 2
+  }
+},
+{
+  "model": "demograficos.phoneverification",
+  "pk": 2,
+  "fields": {
+    "token": "772330",
+    "ssid": "12342341324",
+    "fechaCreacion": "2020-05-12T18:43:32.836Z",
+    "telefono": 6
+  }
+},
+{
+  "model": "demograficos.phoneverification",
+  "pk": 3,
+  "fields": {
+    "token": "402421",
+    "ssid": "4678578567",
+    "fechaCreacion": "2020-05-12T18:44:09.394Z",
+    "telefono": 6
+  }
+},
+{
+  "model": "demograficos.phoneverification",
+  "pk": 4,
+  "fields": {
+    "token": "822087",
+    "ssid": "457567853",
+    "fechaCreacion": "2020-05-12T18:45:19.777Z",
+    "telefono": 6
+  }
+}
+]

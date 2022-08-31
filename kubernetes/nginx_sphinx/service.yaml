@@ -1,0 +1,14 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: sphinx-service
+spec:
+  selector:
+    static: web
+  ports:
+  - protocol: TCP
+#El puerto para comunicarse entre pods
+    port: 80
+#El puerto en el pod que esta distribuyendo
+    targetPort: 80

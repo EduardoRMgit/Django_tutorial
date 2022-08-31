@@ -1,0 +1,18 @@
+[
+    {
+	"model": "spei.adminutils",
+	"pk": 1,
+	"fields": {
+	    "util": "SendAbonoValidation",
+	    "activo": true
+	}
+    },
+    {
+	"model": "spei.adminutils",
+	"pk": 2,
+	"fields": {
+	    "util": "RegistroCuentaValidation",
+	    "activo": true
+	}
+    }
+]

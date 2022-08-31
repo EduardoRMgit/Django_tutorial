@@ -1,0 +1,37 @@
+[
+ {
+  "model": "pld.UrlsPLD",
+  "pk": 1,
+  "fields": {
+    "urls": "https://gt-servicios.com/propld/contractsapi/contract"
+  }
+},
+{
+ "model": "pld.UrlsPLD",
+ "pk": 2,
+ "fields": {
+   "urls": "https://gt-servicios.com/propld/customersapi/customer"
+ }
+},
+{
+  "model": "pld.UrlsPLD",
+  "pk": 3,
+  "fields": {
+    "urls": "https://gt-servicios.com/propld/movementsapi/movements"
+  }
+},
+{
+  "model": "pld.UrlsPLD",
+  "pk": 4,
+  "fields": {
+    "urls": "https://gt-servicios.com/propld/listsapi/searchlist"
+  }
+},
+{
+  "model": "pld.UrlsPLD",
+  "pk": 5,
+  "fields": {
+    "urls": "https://gt-servicios.com/propld/keys/generateToken"
+  }
+}
+]

@@ -1,0 +1,30 @@
+[
+{
+  "model": "legal.pdflegal",
+  "pk": 1,
+  "fields": {
+    "nombre": "declaraciones"
+  }
+},
+{
+  "model": "legal.pdflegal",
+  "pk": 2,
+  "fields": {
+    "nombre": "aviso_de_privacidad"
+  }
+},
+{
+  "model": "legal.pdflegal",
+  "pk": 3,
+  "fields": {
+    "nombre": "comisiones"
+  }
+},
+{
+  "model": "legal.pdflegal",
+  "pk": 4,
+  "fields": {
+    "nombre": "terminos_y_condiciones"
+  }
+}
+]

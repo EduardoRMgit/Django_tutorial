@@ -1,0 +1,26 @@
+[
+{
+  "model": "demograficos.tarjeta",
+  "pk": 1,
+  "fields": {
+    "tarjetaDebitoNum": "4555789545786589",
+    "tarjetaDebitoPin": "452",
+    "country": "MX",
+    "user": 6,
+    "institucion": 1,
+    "statusTarjeta": 1
+  }
+},
+{
+  "model": "demograficos.tarjeta",
+  "pk": 2,
+  "fields": {
+    "tarjetaDebitoNum": "4562145874589658",
+    "tarjetaDebitoPin": "854",
+    "country": "MX",
+    "user": 3,
+    "institucion": 1,
+    "statusTarjeta": 1
+  }
+}
+]

@@ -1,0 +1,58 @@
+name: PR Testing
+
+on:
+  pull_request:
+    types: [opened, reopened, edited, synchronize]
+    branches:
+      - master
+      - staging
+      - test
+
+env:
+  REPO: cactus
+
+jobs:
+  TEST:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.9"]
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-2
+      - name: Get S
+        id: get-s
+        uses: brattdev/kube-tools@v1
+        env:
+          IMAGE_TAG: ${{ github.sha }}
+        with:
+          command: |
+              echo "Configure kubectl"
+              aws eks update-kubeconfig --name $REPO-eksctl
+              kubectl get secret stp-private-key -o jsonpath="{.data.stp-private-key}" | base64 --decode > temp
+              STP=`cat temp`
+              rm temp
+              echo "::add-mask::$STP"
+              echo "::set-output name=stp::$STP"
+      - name: Install tox and any other packages
+        run: pip install tox
+      - name: Run tox
+        # Run tox
+        env:
+          STP: ${{ steps.get-s.outputs.STP }}
+        run: |
+          echo $STP > temp
+          export STP_PRIVATE_KEY=`cat temp`
+          rm temp
+          tox

@@ -1,0 +1,130 @@
+[
+    {
+        "fields": {
+            "activo": true,
+            "tipo": "Transferencia Recibida"
+        },
+        "model": "contabilidad.tipocontablecuenta",
+        "pk": 1
+    },
+    {
+        "fields": {
+            "activo": true,
+            "tipo": "Transferencia Enviada"
+        },
+        "model": "contabilidad.tipocontablecuenta",
+        "pk": 2
+    },
+    {
+        "fields": {
+            "activo": true,
+            "tipo": "Dep\u00f3sito en Efectivo (Scotiabank)"
+        },
+        "model": "contabilidad.tipocontablecuenta",
+        "pk": 3
+    },
+    {
+        "fields": {
+            "activo": true,
+            "tipo": "Dep\u00f3sito en Efectivo (Socio Comercial)"
+        },
+        "model": "contabilidad.tipocontablecuenta",
+        "pk": 4
+    },
+    {
+        "fields": {
+            "activo": true,
+            "tipo": "Retiro en Efectivo (Socio Comercial)"
+        },
+        "model": "contabilidad.tipocontablecuenta",
+        "pk": 5
+    },
+    {
+        "fields": {
+            "activo": true,
+            "tipo": "Retiro en Efectivo (Scotia Bank)"
+        },
+        "model": "contabilidad.tipocontablecuenta",
+        "pk": 6
+    },
+    {
+        "fields": {
+            "activo": true,
+            "tipo": "CODI"
+        },
+        "model": "contabilidad.tipocontablecuenta",
+        "pk": 7
+    },
+    {
+        "fields": {
+            "activo": true,
+            "tipo": "DDE Invercratos"
+        },
+        "model": "contabilidad.tipocontablecuenta",
+        "pk": 8
+    },
+    {
+        "fields": {
+            "activo": true,
+            "tipo": "DDE INGUZ"
+        },
+        "model": "contabilidad.tipocontablecuenta",
+        "pk": 9
+    },
+    {
+        "fields": {
+            "activo": true,
+            "tipo": "Inguz-Inguz Transaccion"
+        },
+        "model": "contabilidad.tipocontablecuenta",
+        "pk": 10
+    },
+    {
+        "fields": {
+            "activo": true,
+            "tipo": "Depósito Scotiabank"
+        },
+        "model": "contabilidad.tipocontablecuenta",
+        "pk": 11
+    },
+    {
+        "fields": {
+            "activo": true,
+            "tipo": "Retiro Scotiabank"
+        },
+        "model": "contabilidad.tipocontablecuenta",
+        "pk": 12
+    },
+    {
+        "fields": {
+            "activo": true,
+            "tipo": "Transferencia Interna Scotiabank"
+        },
+        "model": "contabilidad.tipocontablecuenta",
+        "pk": 13
+    },
+    {
+        "fields": {
+            "activo": true,
+            "tipo": "Transferencia Interbancaria Scotiabank"
+        },
+        "model": "contabilidad.tipocontablecuenta",
+        "pk": 14
+    },
+    {
+        "fields": {
+            "activo": true,
+            "tipo": "Inguz-Inguz Recibida"
+        },
+        "model": "contabilidad.tipocontablecuenta",
+        "pk": 15
+    },
+    {
+        "fields": {
+            "activo": true,
+            "tipo": "Inguz-Inguz Enviada"
+        },
+        "model": "contabilidad.tipocontablecuenta",
+        "pk": 16
+    }
+]

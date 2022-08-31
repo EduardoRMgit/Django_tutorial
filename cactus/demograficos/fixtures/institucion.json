@@ -1,0 +1,24 @@
+[
+    {
+        "model": "demograficos.institucion",
+        "pk": 1,
+        "fields": {
+            "nombre": "Santander",
+            "limiteCredito": 2800,
+            "minPorcentaje": 10,
+            "maxPorcentaje": 15,
+            "country": "MX"
+        }
+    },
+    {
+        "model": "demograficos.institucion",
+        "pk": 2,
+        "fields": {
+            "nombre": "Banamex",
+            "limiteCredito": 2800,
+            "minPorcentaje": 10,
+            "maxPorcentaje": 15,
+            "country": "MX"
+        }
+    }
+]

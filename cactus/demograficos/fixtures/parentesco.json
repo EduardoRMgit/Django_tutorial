@@ -1,0 +1,44 @@
+[
+{
+  "model": "demograficos.parentesco",
+  "pk": 1,
+  "fields": {
+    "parentesco": "Padre (Madre)"
+  }
+},
+{
+  "model": "demograficos.parentesco",
+  "pk": 2,
+  "fields": {
+    "parentesco": "Esposo(a)"
+  }
+},
+{
+  "model": "demograficos.parentesco",
+  "pk": 3,
+  "fields": {
+    "parentesco": "Hijo(a)"
+  }
+},
+{
+  "model": "demograficos.parentesco",
+  "pk": 4,
+  "fields": {
+    "parentesco": "Hermano(a)"
+  }
+},
+{
+  "model": "demograficos.parentesco",
+  "pk": 5,
+  "fields": {
+    "parentesco": "Amigo(a)"
+  }
+},
+{
+  "model": "demograficos.parentesco",
+  "pk": 6,
+  "fields": {
+    "parentesco": "Otra relaci\u00f3n familiar"
+  }
+}
+]

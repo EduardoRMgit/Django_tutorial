@@ -1,0 +1,668 @@
+[
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 1,
+    "fields": {
+      "etiqueta": "00-19",
+      "codigo": "00",
+      "descripcion": "NO ERROR (OK)"
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 2,
+    "fields": {
+      "etiqueta": "00-19",
+      "codigo": "01",
+      "descripcion": "FIN DE ARCHIVO"
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 3,
+    "fields": {
+      "etiqueta": "00-19",
+      "codigo": "02",
+      "descripcion": "ARCHIVO NO ENCONTRADO"
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 4,
+    "fields": {
+      "etiqueta": "00-19",
+      "codigo": "03",
+      "descripcion": "LECTURA : REGISTRO NO UNICO"
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 5,
+    "fields": {
+      "etiqueta": "00-19",
+      "codigo": "06",
+      "descripcion": "ERROR FUERA DE CATEGORIA DE CICS"
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 6,
+    "fields": {
+      "etiqueta": "00-19",
+      "codigo": "07",
+      "descripcion": "COMANDOS EN ORDEN ILOGICO"
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 7,
+    "fields": {
+      "etiqueta": "00-19",
+      "codigo": "08",
+      "descripcion": "NO SE TIENE AUTORIZACION"
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 8,
+    "fields": {
+      "etiqueta": "00-19",
+      "codigo": "09",
+      "descripcion": "MISMO BANCO PROGRAMADO - VALIDACION DE ETRUCTURA Y ESTATUS"
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 9,
+    "fields": {
+      "etiqueta": "00-19",
+      "codigo": "10",
+      "descripcion": "ARCHIVO NO ABIERTO"
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 10,
+    "fields": {
+      "etiqueta": "00-19",
+      "codigo": "11",
+      "descripcion": "TEF - VALIDACION DE ESTRUCTURA (ERRONEA)"
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 11,
+    "fields": {
+      "etiqueta": "00-19",
+      "codigo": "12",
+      "descripcion": "SPEI - VALIDACION DE ESTRUCTURA (ERRONEA)"
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 12,
+    "fields": {
+      "etiqueta": "00-19",
+      "codigo": "13",
+      "descripcion": "ERROR DE I/O NO CUBIERTO POR CICS"
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 13,
+    "fields": {
+      "etiqueta": "00-19",
+      "codigo": "14",
+      "descripcion": "LONGITUD DE REGISTRO ERRONEA"
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 14,
+    "fields": {
+      "etiqueta": "00-19",
+      "codigo": "15",
+      "descripcion": "ARCHIVO DISPONIBLE"
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 15,
+    "fields": {
+      "etiqueta": "00-19",
+      "codigo": "16",
+      "descripcion": "ESCEIRUEA: REGISTRO DUPLICADO"
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 16,
+    "fields": {
+      "etiqueta": "00-19",
+      "codigo": "17",
+      "descripcion": "NO HAY ESPACIO EN EL DISPOSITIVO PARA ADICIONAR REGISTRO"
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 17,
+    "fields": {
+      "etiqueta": "00-19",
+      "codigo": "19",
+      "descripcion": "OTRO ERROR DE I/O"
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 18,
+    "fields": {
+      "etiqueta": "20-50",
+      "codigo": "20",
+      "descripcion": "DATO NO NUMERICO"
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 19,
+    "fields": {
+      "etiqueta": "20-50",
+      "codigo": "21",
+      "descripcion": "DATO REQUERIDO"
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 20,
+    "fields": {
+      "etiqueta": "20-50",
+      "codigo": "22",
+      "descripcion": "VALOR FUERA DE RANGO"
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 21,
+    "fields": {
+      "etiqueta": "20-50",
+      "codigo": "23",
+      "descripcion": "DATO NO COINCIDE CON NIMBRE DE ARCHIVO"
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 22,
+    "fields": {
+      "etiqueta": "20-50",
+      "codigo": "24",
+      "descripcion": "ERROR DE SECUENIA DE REGISTROS"
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 23,
+    "fields": {
+      "etiqueta": "20-50",
+      "codigo": "25",
+      "descripcion": "NO EXISTE CONTRATO"
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 24,
+    "fields": {
+      "etiqueta": "20-50",
+      "codigo": "26",
+      "descripcion": "NO EXISTE PLAZA"
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 25,
+    "fields": {
+      "etiqueta": "20-50",
+      "codigo": "27",
+      "descripcion": "NO EXISTE SUCURSAL"
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 26,
+    "fields": {
+      "etiqueta": "20-50",
+      "codigo": "28",
+      "descripcion": "NO EXISTE CUENTA"
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 27,
+    "fields": {
+      "etiqueta": "20-50",
+      "codigo": "29",
+      "descripcion": "CUENTA NO ACTIVA"
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 28,
+    "fields": {
+      "etiqueta": "20-50",
+      "codigo": "30",
+      "descripcion": "CUENTA NO RELACINADA AL CONTRATO"
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 29,
+    "fields": {
+      "etiqueta": "20-50",
+      "codigo": "31",
+      "descripcion": "NO EXISTE BANCO"
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 30,
+    "fields": {
+      "etiqueta": "20-50",
+      "codigo": "32",
+      "descripcion": "MONEDA INVALIDA PARA ESE PRODUCTO"
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 31,
+    "fields": {
+      "etiqueta": "20-50",
+      "codigo": "33",
+      "descripcion": "ERROR EN CIFRA DE CONTROL"
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 32,
+    "fields": {
+      "etiqueta": "20-50",
+      "codigo": "34",
+      "descripcion": "ARCHIVO RECHAZADO POR REGISTROS RECHAZADOS"
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 33,
+    "fields": {
+      "etiqueta": "20-50",
+      "codigo": "35",
+      "descripcion": "PAGO DUPLICADO"
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 34,
+    "fields": {
+      "etiqueta": "20-50",
+      "codigo": "36",
+      "descripcion": "NO EXISTE PAGO"
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 35,
+    "fields": {
+      "etiqueta": "20-50",
+      "codigo": "37",
+      "descripcion": "ARCHIVO NO PENDIENTE DE VALIDACION"
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 36,
+    "fields": {
+      "etiqueta": "20-50",
+      "codigo": "38",
+      "descripcion": "CONTRATO NO ACTIVO"
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 37,
+    "fields": {
+      "etiqueta": "20-50",
+      "codigo": "39",
+      "descripcion": "ARCHIVO RECHAZADO PORQUE NO TIENE REGISTROS CORRECTOS"
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 38,
+    "fields": {
+      "etiqueta": "20-50",
+      "codigo": "40",
+      "descripcion": "MONEDA DE REGISTRO DETALLE DIFERENTE A MONEDA DE CUENTA DE CARGO"
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 39,
+    "fields": {
+      "etiqueta": "20-50",
+      "codigo": "41",
+      "descripcion": "FECHA INHABIL"
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 40,
+    "fields": {
+      "etiqueta": "20-50",
+      "codigo": "42",
+      "descripcion": "FECHA DE APLICACION INVALIDA PARA ESE TIPO DE PAGO"
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 41,
+    "fields": {
+      "etiqueta": "20-50",
+      "codigo": "43",
+      "descripcion": "NUMERO DE BANCO INVALIDO PARA ESE TIPO DE PAGO"
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 42,
+    "fields": {
+      "etiqueta": "20-50",
+      "codigo": "44",
+      "descripcion": "EL DIGITO DE INTERCAMBIO NO CORRESPONDE A LA CUENTA"
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 43,
+    "fields": {
+      "etiqueta": "20-50",
+      "codigo": "45",
+      "descripcion": ""
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 44,
+    "fields": {
+      "etiqueta": "20-50",
+      "codigo": "46",
+      "descripcion": "LA UENTA DE ABONO NO ESTA REGISTRADA EN LA BASE DE DATOS DEL BANCO PARA ESE CONTRATO"
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 45,
+    "fields": {
+      "etiqueta": "20-50",
+      "codigo": "47",
+      "descripcion": "IMPORTE SUPERIOR AL AUTORIZADO POR EL CLIENTE PARA ESA CUENTA DE ABONO"
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 46,
+    "fields": {
+      "etiqueta": "20-50",
+      "codigo": "48",
+      "descripcion": ""
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 47,
+    "fields": {
+      "etiqueta": "20-50",
+      "codigo": "49",
+      "descripcion": ""
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 48,
+    "fields": {
+      "etiqueta": "20-50",
+      "codigo": "50",
+      "descripcion": "FIN DE ARCHIVO"
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 49,
+    "fields": {
+      "etiqueta": "51-60",
+      "codigo": "51",
+      "descripcion": "ERROR AL HACER REGISTRO EN TOTALES"
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 50,
+    "fields": {
+      "etiqueta": "51-60",
+      "codigo": "52",
+      "descripcion": "ERROR AL HACER CARGO A CHEQUES"
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 51,
+    "fields": {
+      "etiqueta": "51-60",
+      "codigo": "53",
+      "descripcion": "EL MOVIMIENTO NO ESTA PENDIENTE DE PAGO"
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 52,
+    "fields": {
+      "etiqueta": "51-60",
+      "codigo": "54",
+      "descripcion": "ERROR AL REVERSAR CARGO A CHEQUES"
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 53,
+    "fields": {
+      "etiqueta": "51-60",
+      "codigo": "55",
+      "descripcion": ""
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 54,
+    "fields": {
+      "etiqueta": "51-60",
+      "codigo": "56",
+      "descripcion": ""
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 55,
+    "fields": {
+      "etiqueta": "51-60",
+      "codigo": "57",
+      "descripcion": ""
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 56,
+    "fields": {
+      "etiqueta": "51-60",
+      "codigo": "58",
+      "descripcion": ""
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 57,
+    "fields": {
+      "etiqueta": "51-60",
+      "codigo": "59",
+      "descripcion": ""
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 58,
+    "fields": {
+      "etiqueta": "51-60",
+      "codigo": "60",
+      "descripcion": ""
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 59,
+    "fields": {
+      "etiqueta": "61-",
+      "codigo": "61",
+      "descripcion": "INSUFICIENCIA DE FONDOS"
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 60,
+    "fields": {
+      "etiqueta": "61-",
+      "codigo": "62",
+      "descripcion": "CAMBIO A ABONO EN CUENTA DE DEVOLUCIONES"
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 61,
+    "fields": {
+      "etiqueta": "61-",
+      "codigo": "63",
+      "descripcion": "CAMBIO A PAGO EN VENTANILLA EFECTIVO"
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 62,
+    "fields": {
+      "etiqueta": "61-",
+      "codigo": "64",
+      "descripcion": "CAMBIO A CHEQUE DE CAJA AL BENEFICIARIO EN VENTANILLA"
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 63,
+    "fields": {
+      "etiqueta": "61-  ",
+      "codigo": "65",
+      "descripcion": "CAMBIO A CHEQUE DE CAJA CENTRAL AL BENEFICIARIO"
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 64,
+    "fields": {
+      "etiqueta": "61-  ",
+      "codigo": "66",
+      "descripcion": "CAMBIO A CHEQUE DE CAJA CENTRAL A LA EMPRESA POR TOTAL"
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 65,
+    "fields": {
+      "etiqueta": "61-  ",
+      "codigo": "67",
+      "descripcion": "CAMBIO A CHEQUE DE CAJA CENTRAL A LA EMPRESA POR DETALLE"
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 66,
+    "fields": {
+      "etiqueta": "61-  ",
+      "codigo": "68",
+      "descripcion": "CAMBIO ORIGINADO POR UN PAGO EN VENTANILLA"
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 67,
+    "fields": {
+      "etiqueta": "61-  ",
+      "codigo": "69",
+      "descripcion": "CAMBIO ORIGINADO POR UN ABONO A CHEQUES"
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 68,
+    "fields": {
+      "etiqueta": "61-  ",
+      "codigo": "70",
+      "descripcion": "CAMBIO ORIGINADO POR UN ABONO A AHORROS"
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 69,
+    "fields": {
+      "etiqueta": "61-  ",
+      "codigo": "71",
+      "descripcion": "CAMBIO ORIGINADO POR UN DEPOSITO INTERBANCARIO"
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 70,
+    "fields": {
+      "etiqueta": "61-  ",
+      "codigo": "72",
+      "descripcion": "CAMBIO ORIGINADO POR UN MOVIMIENTO DE TRANSFERENCIA DE FONDOS"
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 71,
+    "fields": {
+      "etiqueta": "61-  ",
+      "codigo": "73",
+      "descripcion": "BAJA RECHAZADA POR PAGO EN LINEA"
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 72,
+    "fields": {
+      "etiqueta": "61-  ",
+      "codigo": "74",
+      "descripcion": "DEVOLUCION GLOBAL POR RECHAZOS"
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 73,
+    "fields": {
+      "etiqueta": "61-  ",
+      "codigo": "75",
+      "descripcion": "DEVOLUCION GLOBAL POR VENCIMIENTO DE VIGENCIAS"
+    }
+  },
+  {
+    "model": "scotiabank.catalogocodigostef",
+    "pk": 74,
+    "fields": {
+      "etiqueta": "61-  ",
+      "codigo": "76",
+      "descripcion": "DEVOLUCION GLOBAL POR BAJAS SOLICITADAS"
+    }
+  }
+]

@@ -1,0 +1,16 @@
+[
+{
+  "model": "demograficos.statuscuenta",
+  "pk": 1,
+  "fields": {
+    "status": "ACTIVO"
+  }
+},
+{
+  "model": "demograficos.statuscuenta",
+  "pk": 2,
+  "fields": {
+    "status": "BLOQUEADO"
+  }
+}
+]

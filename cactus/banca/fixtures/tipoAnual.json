@@ -1,0 +1,18 @@
+[
+    {
+        "model": "banca.tipoanual",
+        "pk": 1,
+        "fields": {
+            "nombre": "Tipo Uno",
+            "numDias": 30
+        }
+    },
+    {
+        "model": "banca.tipoanual",
+        "pk": 2,
+        "fields": {
+            "nombre": "Tipo Dos",
+            "numDias": 90
+        }
+    }
+]

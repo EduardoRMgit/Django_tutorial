@@ -1,0 +1,23 @@
+[
+    {
+        "model": "demograficos.docadjuntotipo",
+        "pk": 1,
+        "fields": {
+            "tipo": "INE"
+        }
+    },
+    {
+        "model": "demograficos.docadjuntotipo",
+        "pk": 2,
+        "fields": {
+            "tipo": "INE REVERSO"
+        }
+    },
+    {
+        "model": "demograficos.docadjuntotipo",
+        "pk": 3,
+        "fields": {
+            "tipo": "COMPROBANTE DE DOMICILIO"
+        }
+    }
+]

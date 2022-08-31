@@ -1,0 +1,22 @@
+[
+{
+  "model": "demograficos.usernotas",
+  "pk": 1,
+  "fields": {
+    "nota": "Una nota sobre el usuario",
+    "fechaCreacion": "2019-08-01T21:45:29Z",
+    "user": 1,
+    "logger": 2
+  }
+},
+{
+  "model": "demograficos.usernotas",
+  "pk": 2,
+  "fields": {
+    "nota": "Otra nota de un usuario",
+    "fechaCreacion": "2019-08-01T21:47:28Z",
+    "user": 2,
+    "logger": 1
+  }
+}
+]

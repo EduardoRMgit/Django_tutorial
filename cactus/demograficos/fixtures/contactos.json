@@ -1,0 +1,17 @@
+[
+{
+  "model": "demograficos.contacto",
+  "pk": 1,
+  "fields": {
+    "nombre": "Lalo",
+    "nombreCompleto": "Lero Lalin Lalon",
+    "ap_paterno": "Lalin",
+    "ap_materno": "Lalon",
+    "banco": "BBVA",
+    "clabe": "846180000400000001",
+    "activo": true,
+    "verificacion": "O",
+    "user": 7
+  }
+}
+]

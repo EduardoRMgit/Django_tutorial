@@ -1,0 +1,114 @@
+[
+    {
+        "model": "demograficos.telefono",
+        "pk": 1,
+        "fields": {
+            "telefono": "5548754578",
+            "extension": "",
+            "fechaCreacion": "2019-08-15T22:53:03Z",
+            "country": "MX",
+            "prefijo": "+521",
+            "activo": false,
+            "validado": false,
+            "user": 1,
+            "proveedorTelefonico": 3,
+            "tipoTelefono": 1
+        }
+    },
+    {
+        "model": "demograficos.telefono",
+        "pk": 2,
+        "fields": {
+            "telefono": "5547854785",
+            "extension": "",
+            "fechaCreacion": "2019-08-15T22:55:26Z",
+            "country": "MX",
+            "prefijo": "+521",
+            "activo": true,
+            "validado": true,
+            "user": 6,
+            "proveedorTelefonico": 1,
+            "tipoTelefono": 1
+        }
+    },
+    {
+        "model": "demograficos.telefono",
+        "pk": 3,
+        "fields": {
+            "telefono": "4421545255",
+            "extension": "",
+            "fechaCreacion": "2019-08-15T22:58:27Z",
+            "country": "MX",
+            "prefijo": "+521",
+            "activo": true,
+            "validado": true,
+            "user": 4,
+            "proveedorTelefonico": 2,
+            "tipoTelefono": 1
+        }
+    },
+    {
+        "model": "demograficos.telefono",
+        "pk": 4,
+        "fields": {
+            "telefono": "5585457584",
+            "extension": "",
+            "fechaCreacion": "2019-08-15T22:59:04Z",
+            "country": "MX",
+            "prefijo": "+521",
+            "activo": true,
+            "validado": true,
+            "user": 1,
+            "proveedorTelefonico": 6,
+            "tipoTelefono": 2
+        }
+    },
+    {
+        "model": "demograficos.telefono",
+        "pk": 5,
+        "fields": {
+            "telefono": "5512365478",
+            "extension": "1083",
+            "fechaCreacion": "2019-08-15T23:00:02Z",
+            "country": "MX",
+            "prefijo": "+521",
+            "activo": true,
+            "validado": true,
+            "user": 3,
+            "proveedorTelefonico": 6,
+            "tipoTelefono": 3
+        }
+    },
+    {
+        "model": "demograficos.telefono",
+        "pk": 6,
+        "fields": { 
+            "telefono": "4204206669",
+            "extension": "69",
+            "fechaCreacion": "2019-08-15T23:00:02Z",
+            "country": "MX",
+            "prefijo": "+521",
+            "activo": true,
+            "validado": true,
+            "user": 16,
+            "proveedorTelefonico": 6,
+            "tipoTelefono": 3
+        }
+    },
+    {
+        "model": "demograficos.telefono",
+        "pk": 6,
+        "fields": {
+            "telefono": "5584639710",
+            "extension": "69",
+            "fechaCreacion": "2020-05-28T13:57:02Z",
+            "country": "MX",
+            "prefijo": "+521",
+            "activo": true,
+            "validado": true,
+            "user": 17,
+            "proveedorTelefonico": 6,
+            "tipoTelefono": 3
+        }
+    }
+]

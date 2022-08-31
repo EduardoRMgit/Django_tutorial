@@ -1,0 +1,122 @@
+[
+  {
+    "model": "demograficos.statusregistro",
+    "pk": 1,
+    "fields": {
+      "descripcion": "DATOS DE INE CAPTURADOS",
+      "codigo": "01"
+    }
+  },
+  {
+    "model": "demograficos.statusregistro",
+    "pk": 2,
+    "fields": {
+      "descripcion": "DATOS DE COMPROBANTE CAPTURADOS",
+      "codigo": "02"
+    }
+  },
+  {
+    "model": "demograficos.statusregistro",
+    "pk": 3,
+    "fields": {
+      "descripcion": "NUMERO DE TELEFONO CAPTURADO",
+      "codigo": "03"
+    }
+  },
+  {
+    "model": "demograficos.statusregistro",
+    "pk": 4,
+    "fields": {
+      "descripcion": "DATOS DE USUARIO VERIFICADOS",
+      "codigo": "04"
+    }
+  },
+  {
+    "model": "demograficos.statusregistro",
+    "pk": 5,
+    "fields": {
+      "descripcion": "NUMERO DE TELEFONO VERIFICADO",
+      "codigo": "05"
+    }
+  },
+  {
+    "model": "demograficos.statusregistro",
+    "pk": 6,
+    "fields": {
+      "descripcion": "SECCION 'A' DE REGISTRO COMPLETADA",
+      "codigo": "06"
+    }
+  },
+  {
+    "model": "demograficos.statusregistro",
+    "pk": 7,
+    "fields": {
+      "descripcion": "REGISTRO DE USUARIO Y CONTRASEÑA COMPLETADO",
+      "codigo": "07"
+    }
+  },
+  {
+    "model": "demograficos.statusregistro",
+    "pk": 8,
+    "fields": {
+      "descripcion": "CORREO ELECTRONICO CAPTURADO",
+      "codigo": "08"
+    }
+  },
+  {
+    "model": "demograficos.statusregistro",
+    "pk": 9,
+    "fields": {
+      "descripcion": "CAMBIO DEL NIP TEMPORAL EXITOSO",
+      "codigo": "09"
+    }
+  },
+  {
+    "model": "demograficos.statusregistro",
+    "pk": 10,
+    "fields": {
+      "descripcion": "CAMBIO DE NIP EXITOSO",
+      "codigo": "10"
+    }
+  },
+  {
+    "model": "demograficos.statusregistro",
+    "pk": 11,
+    "fields": {
+      "descripcion": "SECCION 'B' DE REGISTRO COMPLETADA",
+      "codigo": "11"
+    }
+  },
+  {
+    "model": "demograficos.statusregistro",
+    "pk": 12,
+    "fields": {
+      "descripcion": "PREGUNTAS DE SEGURIDAD ASIGNADAS",
+      "codigo": "12"
+    }
+  },
+  {
+    "model": "demograficos.statusregistro",
+    "pk": 13,
+    "fields": {
+      "descripcion": "VERIFICACION(2) DE TELEFONO EXITOSA",
+      "codigo": "13"
+    }
+  },
+  {
+    "model": "demograficos.statusregistro",
+    "pk": 14,
+    "fields": {
+      "descripcion": "ACTIVACION DE CUENTA EXITOSA",
+      "codigo": "14"
+    }
+  },
+  {
+    "model": "demograficos.statusregistro",
+    "pk": 15,
+    "fields": {
+      "descripcion": "SECCION 'C' DE REGISTRO COMPLETADA",
+      "codigo": "15"
+    }
+  }
+]

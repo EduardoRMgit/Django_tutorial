@@ -1,0 +1,82 @@
+[
+{
+  "model": "demograficos.profilecomponent",
+  "pk": 1,
+  "fields": {
+    "indice": 5,
+    "alias": "NIP Asignado",
+    "rn_screen": "KitLegal",
+    "default_status": "EP"
+  }
+},
+{
+  "model": "demograficos.profilecomponent",
+  "pk": 3,
+  "fields": {
+    "indice": 1,
+    "alias": "InfoPersonal",
+    "rn_screen": "FotoINESplash",
+    "default_status": "EP"
+  }
+},
+{
+  "model": "demograficos.profilecomponent",
+  "pk": 4,
+  "fields": {
+    "indice": 4,
+    "alias": "Beneficiarios",
+    "rn_screen": "BeneficiarioBalance",
+    "default_status": "EP"
+  }
+},
+{
+  "model": "demograficos.profilecomponent",
+  "pk": 5,
+  "fields": {
+    "indice": 2,
+    "alias": "direccion",
+    "rn_screen": "RequestComprobante",
+    "default_status": "EP"
+  }
+},
+{
+  "model": "demograficos.profilecomponent",
+  "pk": 6,
+  "fields": {
+    "indice": -1,
+    "alias": "telefono",
+    "rn_screen": "DataAcquisition",
+    "default_status": "EP"
+  }
+},
+{
+  "model": "demograficos.profilecomponent",
+  "pk": 7,
+  "fields": {
+    "indice": -4,
+    "alias": "dispositivo",
+    "rn_screen": "EmergenciaActivacionStart",
+    "default_status": "VA"
+  }
+},
+{
+  "model": "demograficos.profilecomponent",
+  "pk": 8,
+  "fields": {
+    "indice": -3,
+    "alias": "bloqueo",
+    "rn_screen": "EmergenciaDesbloqueoStart",
+    "default_status": "VA"
+  }
+},
+{
+  "model": "demograficos.profilecomponent",
+  "pk": 9,
+  "fields": {
+    "indice": 3,
+    "alias": "CreateBeneficiario",
+    "rn_screen": "BeneficiarioSplash",
+    "default_status": "EP"
+  }
+}
+]

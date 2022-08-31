@@ -1,0 +1,65 @@
+# Default values for django.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+site: stage
+
+debug: true
+
+image:
+  repository: 906062568112.dkr.ecr.us-east-2.amazonaws.com/cactus
+  tag: cactus
+  pullPolicy: Always
+
+imagePullSecrets:
+  - name: us-east-2-ecr-registry
+
+nameOverride: ""
+fullnameOverride: ""
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 8000
+
+ingress:
+  enabled: false
+  annotations: {}
+
+dbSecret: postgres-credentials
+dbPort: 5432
+dbName: brattdev
+
+stpSecret: stp-private-key
+
+renapoSecret: renapo-secret
+
+s3:
+  enabled: false
+  secret: s3-credentials
+
+twilio:
+  enabled: false
+  secret: twilio-credentials
+
+rdsExternal: {}
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

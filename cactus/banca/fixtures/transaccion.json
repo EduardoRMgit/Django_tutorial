@@ -1,0 +1,74 @@
+[
+{
+  "model": "banca.transaccion",
+  "fields": {
+    "user": 1,
+    "fechaValor": "2019-08-01T22:50:33Z",
+    "fechaAplicacion": "2019-08-01T22:50:33Z",
+    "monto": "34568.0000",
+    "statusTrans": null,
+    "errorRes": null,
+    "tipoTrans": 4
+  }
+},
+{
+  "model": "banca.transaccion",
+  "fields": {
+    "user": 2,
+    "fechaValor": "2019-08-01T22:50:33Z",
+    "fechaAplicacion": "2019-08-01T22:50:33Z",
+    "monto": "346.0000",
+    "statusTrans": null,
+    "errorRes": 3,
+    "tipoTrans": 4
+  }
+},
+{
+  "model": "banca.transaccion",
+  "fields": {
+    "user": 17,
+    "fechaValor": "2019-08-01T22:50:33Z",
+    "fechaAplicacion": "2019-08-01T22:50:33Z",
+    "monto": "346.0000",
+    "statusTrans": null,
+    "errorRes": 3,
+    "tipoTrans": 4
+  }
+},
+{
+  "model": "banca.transaccion",
+  "fields": {
+    "user": 17,
+    "fechaValor": "2019-08-01T22:50:33Z",
+    "fechaAplicacion": "2019-08-01T22:50:33Z",
+    "monto": "346.0000",
+    "statusTrans": null,
+    "errorRes": 3,
+    "tipoTrans": 4
+  }
+},
+{
+  "model": "banca.transaccion",
+  "fields": {
+    "user": 17,
+    "fechaValor": "2019-08-01T22:50:33Z",
+    "fechaAplicacion": "2019-08-01T22:50:33Z",
+    "monto": "346.0000",
+    "statusTrans": null,
+    "errorRes": 3,
+    "tipoTrans": 4
+  }
+},
+{
+  "model": "banca.transaccion",
+  "fields": {
+    "user": 17,
+    "fechaValor": "2019-08-01T22:50:33Z",
+    "fechaAplicacion": "2019-08-01T22:50:33Z",
+    "monto": "346.0000",
+    "statusTrans": null,
+    "errorRes": 3,
+    "tipoTrans": 4
+  }
+}
+]

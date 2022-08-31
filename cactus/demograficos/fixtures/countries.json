@@ -1,0 +1,1745 @@
+[
+{
+  "model": "demograficos.country",
+  "pk": 1,
+  "fields": {
+    "country": "AF:Afganist\u00e1n"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 2,
+  "fields": {
+    "country": "AL:Albania"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 3,
+  "fields": {
+    "country": "DE:Alemania"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 4,
+  "fields": {
+    "country": "AO:Angola"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 5,
+  "fields": {
+    "country": "AI:Anguila"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 6,
+  "fields": {
+    "country": "AQ:Ant\u00e1rtida"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 7,
+  "fields": {
+    "country": "AG:Antigua y Barbuda"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 8,
+  "fields": {
+    "country": "SA:Arabia Saudita"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 9,
+  "fields": {
+    "country": "DZ:Argelia"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 10,
+  "fields": {
+    "country": "AR:Argentina"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 11,
+  "fields": {
+    "country": "AM:Armenia"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 12,
+  "fields": {
+    "country": "AW:Aruba"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 13,
+  "fields": {
+    "country": "AU:Australia"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 14,
+  "fields": {
+    "country": "AT:Austria"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 15,
+  "fields": {
+    "country": "AZ:Azerbaiy\u00e1n"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 16,
+  "fields": {
+    "country": "BS:Bahamas"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 17,
+  "fields": {
+    "country": "BD:Banglad\u00e9s"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 18,
+  "fields": {
+    "country": "BB:Barbados"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 19,
+  "fields": {
+    "country": "BH:Bar\u00e9in"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 20,
+  "fields": {
+    "country": "BE:B\u00e9lgica"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 21,
+  "fields": {
+    "country": "BZ:Belice"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 22,
+  "fields": {
+    "country": "BJ:Ben\u00edn"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 23,
+  "fields": {
+    "country": "BM:Bermudas"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 24,
+  "fields": {
+    "country": "BY:Bielorrusia"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 25,
+  "fields": {
+    "country": "MM:Birmania"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 26,
+  "fields": {
+    "country": "BO:Bolivia"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 27,
+  "fields": {
+    "country": "BQ:Bonaire, San Eustaquio y Saba"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 28,
+  "fields": {
+    "country": "BA:Bosnia y Herzegovina"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 29,
+  "fields": {
+    "country": "BW:Botsuana"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 30,
+  "fields": {
+    "country": "BR:Brasil"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 31,
+  "fields": {
+    "country": "BN:Brun\u00e9i"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 32,
+  "fields": {
+    "country": "BG:Bulgaria"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 33,
+  "fields": {
+    "country": "BF:Burkina Faso"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 34,
+  "fields": {
+    "country": "BI:Burundi"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 35,
+  "fields": {
+    "country": "BT:But\u00e1n"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 36,
+  "fields": {
+    "country": "CV:Cabo Verde"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 37,
+  "fields": {
+    "country": "KH:Camboya"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 38,
+  "fields": {
+    "country": "CM:Camer\u00fan"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 39,
+  "fields": {
+    "country": "CA:Canad\u00e1"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 40,
+  "fields": {
+    "country": "QA:Catar"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 41,
+  "fields": {
+    "country": "CZ:Chequia"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 42,
+  "fields": {
+    "country": "CL:Chile"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 43,
+  "fields": {
+    "country": "CN:China"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 44,
+  "fields": {
+    "country": "CO:Colombia"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 45,
+  "fields": {
+    "country": "KM:Comoras"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 46,
+  "fields": {
+    "country": "CG:Congo"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 47,
+  "fields": {
+    "country": "KP:Corea del Norte"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 48,
+  "fields": {
+    "country": "KR:Corea del Sur"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 49,
+  "fields": {
+    "country": "CR:Costa Rica"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 50,
+  "fields": {
+    "country": "CI:Costa de Marfil"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 51,
+  "fields": {
+    "country": "HR:Croacia"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 52,
+  "fields": {
+    "country": "CU:Cuba"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 53,
+  "fields": {
+    "country": "CW:Curazao"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 54,
+  "fields": {
+    "country": "DK:Dinamarca"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 55,
+  "fields": {
+    "country": "DM:Dominica"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 56,
+  "fields": {
+    "country": "EC:Ecuador"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 57,
+  "fields": {
+    "country": "EG:Egipto"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 58,
+  "fields": {
+    "country": "SV:El Salvador"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 59,
+  "fields": {
+    "country": "AE:Emiratos \u00c1rabes Unidos"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 60,
+  "fields": {
+    "country": "ER:Eritrea"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 61,
+  "fields": {
+    "country": "SK:Eslovaquia"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 62,
+  "fields": {
+    "country": "SI:Eslovenia"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 63,
+  "fields": {
+    "country": "ES:Espa\u00f1a"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 64,
+  "fields": {
+    "country": "PS:Estado de Palestina"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 65,
+  "fields": {
+    "country": "FM:Estados Federados de Micronesia"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 66,
+  "fields": {
+    "country": "US:Estados Unidos"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 67,
+  "fields": {
+    "country": "EE:Estonia"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 68,
+  "fields": {
+    "country": "ET:Etiop\u00eda"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 69,
+  "fields": {
+    "country": "PH:Filipinas"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 70,
+  "fields": {
+    "country": "FI:Finlandia"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 71,
+  "fields": {
+    "country": "FJ:Fiyi"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 72,
+  "fields": {
+    "country": "FR:Francia"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 73,
+  "fields": {
+    "country": "GA:Gab\u00f3n"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 74,
+  "fields": {
+    "country": "GM:Gambia"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 75,
+  "fields": {
+    "country": "GE:Georgia"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 76,
+  "fields": {
+    "country": "GH:Ghana"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 77,
+  "fields": {
+    "country": "GI:Gibraltar"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 78,
+  "fields": {
+    "country": "GD:Granada"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 79,
+  "fields": {
+    "country": "GR:Grecia"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 80,
+  "fields": {
+    "country": "GL:Groenlandia"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 81,
+  "fields": {
+    "country": "GP:Guadalupe"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 82,
+  "fields": {
+    "country": "GU:Guam"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 83,
+  "fields": {
+    "country": "GT:Guatemala"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 84,
+  "fields": {
+    "country": "GF:Guayana Francesa"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 85,
+  "fields": {
+    "country": "GG:Guernsey"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 86,
+  "fields": {
+    "country": "GN:Guinea"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 87,
+  "fields": {
+    "country": "GQ:Guinea Ecuatorial"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 88,
+  "fields": {
+    "country": "GW:Guinea-Bis\u00e1u"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 89,
+  "fields": {
+    "country": "GY:Guyana"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 90,
+  "fields": {
+    "country": "HT:Hait\u00ed"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 91,
+  "fields": {
+    "country": "HN:Honduras"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 92,
+  "fields": {
+    "country": "HK:Hong Kong"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 93,
+  "fields": {
+    "country": "HU:Hungr\u00eda"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 94,
+  "fields": {
+    "country": "IN:India"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 95,
+  "fields": {
+    "country": "ID:Indonesia"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 96,
+  "fields": {
+    "country": "IQ:Irak"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 97,
+  "fields": {
+    "country": "IR:Ir\u00e1n"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 98,
+  "fields": {
+    "country": "IE:Irlanda"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 99,
+  "fields": {
+    "country": "BV:Isla Bouvet"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 100,
+  "fields": {
+    "country": "NF:Isla Norfolk"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 101,
+  "fields": {
+    "country": "IM:Isla de Man"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 102,
+  "fields": {
+    "country": "CX:Isla de Navidad"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 103,
+  "fields": {
+    "country": "IS:Islandia"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 104,
+  "fields": {
+    "country": "KY:Islas Caimanes"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 105,
+  "fields": {
+    "country": "CC:Islas Cocos (Keeling)"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 106,
+  "fields": {
+    "country": "CK:Islas Cook"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 107,
+  "fields": {
+    "country": "FO:Islas Feroe"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 108,
+  "fields": {
+    "country": "GS:Islas Georgias del Sur y Sandwich del Sur"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 109,
+  "fields": {
+    "country": "HM:Islas Heard y McDonald"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 110,
+  "fields": {
+    "country": "FK:Islas Malvinas"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 111,
+  "fields": {
+    "country": "MP:Islas Marianas del Norte"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 112,
+  "fields": {
+    "country": "MH:Islas Marshall"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 113,
+  "fields": {
+    "country": "PN:Islas Pitcairn"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 114,
+  "fields": {
+    "country": "SB:Islas Salom\u00f3n"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 115,
+  "fields": {
+    "country": "TC:Islas Turcas y Caicos"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 116,
+  "fields": {
+    "country": "UM:Islas Ultramarinas de Estados Unidos"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 117,
+  "fields": {
+    "country": "VG:Islas V\u00edrgenes Brit\u00e1nicas"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 118,
+  "fields": {
+    "country": "VI:Islas V\u00edrgenes de los Estados Unidos"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 119,
+  "fields": {
+    "country": "AX:Islas de \u00c5land"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 120,
+  "fields": {
+    "country": "IL:Israel"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 121,
+  "fields": {
+    "country": "IT:Italia"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 122,
+  "fields": {
+    "country": "JM:Jamaica"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 123,
+  "fields": {
+    "country": "JP:Jap\u00f3n"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 124,
+  "fields": {
+    "country": "JE:Jersey"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 125,
+  "fields": {
+    "country": "JO:Jordania"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 126,
+  "fields": {
+    "country": "KZ:Kazajist\u00e1n"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 127,
+  "fields": {
+    "country": "KE:Kenia"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 128,
+  "fields": {
+    "country": "KG:Kirguist\u00e1n"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 129,
+  "fields": {
+    "country": "KI:Kiribati"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 130,
+  "fields": {
+    "country": "KW:Kuwait"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 131,
+  "fields": {
+    "country": "LA:Laos"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 132,
+  "fields": {
+    "country": "LS:Lesoto"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 133,
+  "fields": {
+    "country": "LV:Letonia"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 134,
+  "fields": {
+    "country": "LB:L\u00edbano"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 135,
+  "fields": {
+    "country": "LR:Liberia"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 136,
+  "fields": {
+    "country": "LY:Libia"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 137,
+  "fields": {
+    "country": "LI:Liechtenstein"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 138,
+  "fields": {
+    "country": "LT:Lituania"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 139,
+  "fields": {
+    "country": "LU:Luxemburgo"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 140,
+  "fields": {
+    "country": "MO:Macao"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 141,
+  "fields": {
+    "country": "MK:Macedonia del Norte"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 142,
+  "fields": {
+    "country": "MG:Madagascar"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 143,
+  "fields": {
+    "country": "MY:Malasia"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 144,
+  "fields": {
+    "country": "MW:Malaui"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 145,
+  "fields": {
+    "country": "MV:Maldivas"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 146,
+  "fields": {
+    "country": "ML:Mal\u00ed"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 147,
+  "fields": {
+    "country": "MT:Malta"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 148,
+  "fields": {
+    "country": "MA:Marruecos"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 149,
+  "fields": {
+    "country": "MQ:Martinica"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 150,
+  "fields": {
+    "country": "MU:Mauricio"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 151,
+  "fields": {
+    "country": "MR:Mauritania"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 152,
+  "fields": {
+    "country": "YT:Mayotte"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 153,
+  "fields": {
+    "country": "MX:M\u00e9xico"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 154,
+  "fields": {
+    "country": "MD:Moldavia"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 155,
+  "fields": {
+    "country": "MC:M\u00f3naco"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 156,
+  "fields": {
+    "country": "MN:Mongolia"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 157,
+  "fields": {
+    "country": "ME:Montenegro"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 158,
+  "fields": {
+    "country": "MS:Montserrat"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 159,
+  "fields": {
+    "country": "MZ:Mozambique"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 160,
+  "fields": {
+    "country": "NA:Namibia"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 161,
+  "fields": {
+    "country": "NR:Nauru"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 162,
+  "fields": {
+    "country": "NP:Nepal"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 163,
+  "fields": {
+    "country": "NI:Nicaragua"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 164,
+  "fields": {
+    "country": "NE:N\u00edger"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 165,
+  "fields": {
+    "country": "NG:Nigeria"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 166,
+  "fields": {
+    "country": "NU:Niue"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 167,
+  "fields": {
+    "country": "NO:Noruega"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 168,
+  "fields": {
+    "country": "NC:Nueva Caledonia"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 169,
+  "fields": {
+    "country": "NZ:Nueva Zelanda"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 170,
+  "fields": {
+    "country": "OM:Om\u00e1n"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 171,
+  "fields": {
+    "country": "NL:Pa\u00edses Bajos"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 172,
+  "fields": {
+    "country": "PK:Pakist\u00e1n"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 173,
+  "fields": {
+    "country": "PW:Palaos"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 174,
+  "fields": {
+    "country": "PA:Panam\u00e1"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 175,
+  "fields": {
+    "country": "PG:Pap\u00faa Nueva Guinea"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 176,
+  "fields": {
+    "country": "PY:Paraguay"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 177,
+  "fields": {
+    "country": "PE:Per\u00fa"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 178,
+  "fields": {
+    "country": "PF:Polinesia Francesa"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 179,
+  "fields": {
+    "country": "PL:Polonia"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 180,
+  "fields": {
+    "country": "PT:Portugal"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 181,
+  "fields": {
+    "country": "AD:Principado de Andorra"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 182,
+  "fields": {
+    "country": "PR:Puerto Rico"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 183,
+  "fields": {
+    "country": "GB:Reino Unido"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 184,
+  "fields": {
+    "country": "CD:Rep\u00fablica Democr\u00e1tica del Congo"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 185,
+  "fields": {
+    "country": "DO:Rep\u00fablica Dominicana"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 186,
+  "fields": {
+    "country": "TZ:Rep\u00fablica Unida de Tanzania"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 187,
+  "fields": {
+    "country": "CF:Rep\u00fablica de \u00c1frica Central"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 188,
+  "fields": {
+    "country": "CY:Rep\u00fablica de Chipre"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 189,
+  "fields": {
+    "country": "DJ:Rep\u00fablica de Yibuti"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 190,
+  "fields": {
+    "country": "TD:Rep\u00fablica del Chad"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 191,
+  "fields": {
+    "country": "RE:Reuni\u00f3n"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 192,
+  "fields": {
+    "country": "RW:Ruanda"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 193,
+  "fields": {
+    "country": "RO:Ruman\u00eda"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 194,
+  "fields": {
+    "country": "RU:Rusia"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 195,
+  "fields": {
+    "country": "EH:Sahara Occidental"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 196,
+  "fields": {
+    "country": "WS:Samoa"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 197,
+  "fields": {
+    "country": "AS:Samoa Americana"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 198,
+  "fields": {
+    "country": "BL:San Bartolom\u00e9"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 199,
+  "fields": {
+    "country": "KN:San Crist\u00f3bal y Nieves"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 200,
+  "fields": {
+    "country": "SM:San Marino"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 201,
+  "fields": {
+    "country": "MF:San Mart\u00edn (Parte Francesa)"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 202,
+  "fields": {
+    "country": "SX:San Mart\u00edn (Parte Holandesa)"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 203,
+  "fields": {
+    "country": "PM:San Pedro y Miquel\u00f3n"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 204,
+  "fields": {
+    "country": "VC:San Vicente y las Granadinas"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 205,
+  "fields": {
+    "country": "SH:Santa Elena, Ascensi\u00f3n y Trist\u00e1n de Acu\u00f1a"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 206,
+  "fields": {
+    "country": "LC:Santa Luc\u00eda"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 207,
+  "fields": {
+    "country": "VA:Santa Sede"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 208,
+  "fields": {
+    "country": "ST:Santo Tom\u00e9 y Pr\u00edncipe"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 209,
+  "fields": {
+    "country": "SN:Senegal"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 210,
+  "fields": {
+    "country": "RS:Serbia"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 211,
+  "fields": {
+    "country": "SC:Seychelles"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 212,
+  "fields": {
+    "country": "SL:Sierra Leona"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 213,
+  "fields": {
+    "country": "SG:Singapur"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 214,
+  "fields": {
+    "country": "SY:Siria"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 215,
+  "fields": {
+    "country": "SO:Somalia"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 216,
+  "fields": {
+    "country": "LK:Sri Lanka"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 217,
+  "fields": {
+    "country": "SZ:Suazilandia"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 218,
+  "fields": {
+    "country": "ZA:Sud\u00e1frica"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 219,
+  "fields": {
+    "country": "SD:Sud\u00e1n"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 220,
+  "fields": {
+    "country": "SS:Sud\u00e1n del Sur"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 221,
+  "fields": {
+    "country": "SE:Suecia"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 222,
+  "fields": {
+    "country": "CH:Suiza"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 223,
+  "fields": {
+    "country": "SR:Surinam"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 224,
+  "fields": {
+    "country": "SJ:Svalbard y Jan Mayen"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 225,
+  "fields": {
+    "country": "TH:Tailandia"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 226,
+  "fields": {
+    "country": "TW:Taiw\u00e1n"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 227,
+  "fields": {
+    "country": "TJ:Tayikist\u00e1n"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 228,
+  "fields": {
+    "country": "IO:Territorio brit\u00e1nico del oc\u00e9ano \u00cdndico"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 229,
+  "fields": {
+    "country": "TF:Tierras Australes y Ant\u00e1rticas Francesas"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 230,
+  "fields": {
+    "country": "TL:Timor Oriental"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 231,
+  "fields": {
+    "country": "TG:Togo"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 232,
+  "fields": {
+    "country": "TK:Tokelau"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 233,
+  "fields": {
+    "country": "TO:Tonga"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 234,
+  "fields": {
+    "country": "TT:Trinidad yTobago"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 235,
+  "fields": {
+    "country": "TN:T\u00fanez"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 236,
+  "fields": {
+    "country": "TM:Turkmenist\u00e1n"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 237,
+  "fields": {
+    "country": "TR:Turqu\u00eda"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 238,
+  "fields": {
+    "country": "TV:Tuvalu"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 239,
+  "fields": {
+    "country": "UA:Ucrania"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 240,
+  "fields": {
+    "country": "UG:Uganda"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 241,
+  "fields": {
+    "country": "UY:Uruguay"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 242,
+  "fields": {
+    "country": "UZ:Uzbekist\u00e1n"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 243,
+  "fields": {
+    "country": "VU:Vanuatu"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 244,
+  "fields": {
+    "country": "VE:Venezuela"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 245,
+  "fields": {
+    "country": "VN:Vietnam"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 246,
+  "fields": {
+    "country": "WF:Wallis y Futuna"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 247,
+  "fields": {
+    "country": "YE:Yemen"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 248,
+  "fields": {
+    "country": "ZM:Zambia"
+  }
+},
+{
+  "model": "demograficos.country",
+  "pk": 249,
+  "fields": {
+    "country": "ZW:Zimbabue"
+  }
+}
+]

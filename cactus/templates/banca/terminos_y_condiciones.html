@@ -1,0 +1,438 @@
+{% load cuenta_extras %}
+<!DOCTYPE HTML>
+<HTML>
+
+<HEAD>
+    <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <TITLE>estado de cuenta inguz</TITLE>
+    <META name="" content="">
+    <STYLE type="text/css">
+        body{
+            font-family: 'proxima-nova';
+            font-size: 13.2px;
+        }
+        p{
+            font-size: 13.2px;
+        }
+        h1{
+            font-size: 13.2px;
+        }
+        h2{
+            font-size: 13.2px;
+        }
+        .comisiones{ width: 100%; position: relative; }
+        .container{ width: 90%; margin: 0 auto; position:relative; } 
+        .pagination{ width: 100%; position: absolute; left: 50%; margin-top: 41px; }
+        .pagination2{ width: 100%; position: absolute; left: 50%; margin-top: 90px; }
+        .pagination3{ width: 100%; position: absolute; left: 50%; margin-top: 56px; }
+        .pagination4{ width: 100%; position: absolute; left: 50%; margin-top: 150px; }
+        .pagination5{ width: 100%; position: absolute; left: 50%; margin-top: 135px; }
+        .pagination6{ width: 100%; position: absolute; left: 50%; margin-top: 220px; }
+
+        .contrato{ text-align: justify; font-size: 15px; font-weight: bold;}
+        .title{ text-align: center; font-weight: bold;}
+        .text{ text-align: justify;}
+
+        .list_dec{ font-weight: bold; text-align: left; center; }
+
+        .list_sub_dec{ list-style: lower-alpha; text-align: justify; width: 100%;}
+        .sub_list_style{ text-align: justify; width: 100%; list-style: lower-roman; }
+        .list_title{ font-weight: bold; }
+
+        .check_style{ list-style: none; text-align: justify; width: 100%; }
+        ul .check_style:before{ content: '✓'; padding-right: 5px; }
+
+        .bold{ font-weight: bold; }
+
+        table, th, td{ border: 1px solid black; border-collapse: collapse; }
+        th { text-align: center; background: #ccc; }
+        .first_c{ width: 65%; }
+        .center_t{ text-align: center; }
+
+        .non_style{ text-align: justify; list-style: none; margin-left: -40px; }
+
+        .table_middle{ margin-left: 40px;}
+
+        .reca{ width: 40%; float: right; }
+        .datos_i{ margin-top: 110px}
+        .contrato{ width: 100%;}
+        .datos_info{ width: 50%; padding: 15px; font-weight: 300;}
+        .datos_user{ width: 50%; padding: 15px font-weight: 300; }
+    </STYLE>
+</HEAD>
+
+<BODY>
+    <section class="comisiones">
+        <div class="container">
+            <h1 class="title">
+                TÉRMINOS Y CONDICIONES
+                <br>
+                INGUZ DIGITAL, S.A.P.I. DE C.V., Institución de Fondos de Pago Electrónico
+            </h1>
+            <p class="text">
+                Términos y Condiciones de uso de la plataforma operada por Inguz Digital, S.A.P.I. de C.V., Institución de Fondos de Pago Electrónico (“Inguz”), para la prestación de los servicios de emisión, administración, redención y transmisión de Fondos de Pago Electrónico (los “Términos y Condiciones”) que ofrece Inguz a través de su plataforma App Inguz (la “Plataforma”).
+            </p>
+            <p class="text">
+                Los presentes Términos y Condiciones y, el Contrato de Emisión y Depósito Mercantil de Fondos de Pagó Electrónico (el “Contrato de Emisión de Fondos”), son celebrados por una parte Inguz y por la otra Usted, por su propio derecho (“Usted”, el “Cliente” o el “Usuario” indistintamente; y conjuntamente con Inguz, las “Partes”). Asimismo, al dar clic en aceptar, Usted manifiesta expresamente que está actuando por cuenta propia, por lo cual acepta plenamente los presentes Términos y Condiciones.
+            </p>
+            <p class="text">
+                Por favor, lea atentamente estos Términos y Condiciones, así como cualquier otro documento relacionado con los mismos, puesto que, comprenderán la totalidad de los acuerdos entre Usted e Inguz en la prestación de los servicios que más adelante se indican.
+            </p>
+            <p class="text">
+                USTED A TRAVÉS DE SU FIRMA ELECTRÓNICA Y AL HACER CLIC EN “ACEPTAR” Y AL ACCEDER O USAR LOS SERVICIOS QUE A CONTINUACIÓN SE DESCRIBEN, ACEPTA ESTOS TÉRMINOS Y CONDICIONES, ASÍ COMO CUALQUIER OTRO DOCUMENTO, INCORPORADO POR REFERENCIA, RELACIONADO CON LOS MISMOS. ASIMISMO, USTED, AL HACER CLIC EN “ACEPTAR”, DECLARA Y GARANTIZA QUE TIENE LA CAPACIDAD JURÍDICA Y FACULTAD SUFICIENTE PARA UTILIZAR ESTA PLATAFORMA, SIN QUE EXISTA NINGÚN IMPEDIMENTO LEGAL AL RESPECTO.
+            </p>
+            <p class="text">
+                Ni el Gobierno Federal ni las entidades de la administración pública paraestatal podrán responsabilizarse o garantizar los recursos de los Clientes que sean utilizados en las Operaciones que celebren con las ITF o frente a otros, así como tampoco asumirán alguna responsabilidad por las obligaciones contraídas por las ITF o por algún Cliente frente a otro, en virtud de las Operaciones que celebren.
+            </p>
+            <p class="text">
+                El uso que Usted haga de la Plataforma está sujeto a los presentes Términos y Condiciones y al Contrato de Emisión de Fondos, los cuales rigen el acuerdo vinculante entre Usted e Inguz para la prestación de los servicios que más adelante se indican. Si usted no está de acuerdo en sujetarse a estos Términos y Condiciones y al Contrato de Emisión de Fondos, no los acepte y no utilice esta Plataforma.
+            </p>
+            <h2 class="list_dec">
+                I. Usos y restricciones de la Plataforma
+            </h2>
+            <p>
+                <u>
+                Usos
+                </u>
+            </p>
+            <p class="text">
+                La Plataforma es el nuevo medio que las personas tienen para realizar las transacciones financieras. En ella, las personas pueden guardar su dinero; transferir fondos, transferir fondos de pago electrónico entre los usuarios y recibir dinero; comprar y cobrar productos y servicios; realizar compras por internet y pagar sus servicios más comunes. Todo desde la comodidad de su teléfono celular, así como la disposición de su dinero en efectivo.
+            </p>
+            <p class="text">
+                Las operaciones y/o servicios que el cliente puede realizar a través de la Plataforma son los siguientes:
+            </p>
+            <ul>
+                <li>
+                    Apertura de la cuenta.
+                </li>
+                <li>
+                    Activación de la cuenta.
+                </li>
+                <span class="pagination"> 1 </span>
+                <li>
+                    Transferencias de fondos de pago electrónico.
+                </li>
+                </br>
+                </br>
+                <li>
+                    Transferencias de fondos desde la cuenta y hacia la cuenta, utilizando SPEI.
+                </li>
+                <li>
+                    Compras de bienes y servicios en establecimientos y comercios, utilizando CoDi®.
+                </li>
+                <li>
+                    Compras de bienes y servicios en internet, utilizando CoDi®.
+                </li>
+                <li>
+                    Pago de servicios tales como, compra de tiempo aire, pago de luz, pago de servicios de televisión por cable, etc.
+                </li>
+                <li>
+                    Consulta y descarga de documentos legales del cliente.
+                </li>
+                <li>
+                    Consulta del saldo de la cuenta.
+                </li>
+                <li>
+                    Consulta y descarga de movimientos y saldos del cliente en su estado de cuenta.
+                </li>
+                <li>
+                    Atención a clientes para consultas y aclaraciones, a través del chat de la Plataforma. En cada caso se levantará un folio al cliente con el tiempo de respuesta correspondiente a la consulta y/o aclaración.
+                </li>
+                <li>
+                    Disposición en Efectivo (a través de los socios comerciales establecidos por Inguz para tal efecto).
+                </li>
+            </ul>
+            <p class="text">
+                <u>Restricciones</u>
+            </p>
+            <p class="text">
+                Solo se podrá abrir una cuenta por cliente, relacionada a solo un teléfono celular, en Pesos mexicanos y solo para personas de nacionalidad mexicana.
+            </p>
+            <p class="text">
+                La Plataforma solo permite abrir Cuentas Nivel 3 (según dicho término se define en el Contrato de Emisión de Fondos), según la regulación establecida para las Instituciones de Fondos de Pago Electrónico. Dichas cuentas tienen requerimientos de información y restricciones en las operaciones diferentes, los cuales a la fecha son los siguientes:
+            </p>
+            <p class="text">
+                De conformidad con el Aviso de Privacidad de Inguz, el Usuarios deberá proporcionar a través de la Plataforma la siguiente información a efecto de abrir la Cuenta:
+            </p>
+            <ul class="sub_list">
+                <li class="sub_list_style">
+                    Apellido paterno, apellido materno y nombre o nombres sin abreviaturas;
+                </i>
+                <li class="sub_list_style">
+                    Género;
+                </i>    
+                <li class="sub_list_style">
+                    Fecha de nacimiento;
+                </i>
+                <li class="sub_list_style">
+                    Entidad Federativa de nacimiento;
+                </i>
+                <li class="sub_list_style">
+                    País de nacimiento;
+                </i>
+                <li class="sub_list_style">
+                    Nacionalidad;
+                </i>
+                <li class="sub_list_style">
+                    Clave de elector;
+                </i>
+                <li class="sub_list_style">
+                    Domicilio completo;
+                </i>
+                <li class="sub_list_style">
+                    Ocupación;
+                </i>
+                <li class="sub_list_style">
+                    Clave Única de Registro de Población (CURP);
+                </i>
+                <li class="sub_list_style">
+                    Registro Federal de Contribuyentes (RFC);
+                </i>
+                <li class="sub_list_style">
+                    Firma Electrónica;
+                </i>
+                <li class="sub_list_style">
+                    Número telefónico;
+                </i>
+                <li class="sub_list_style">
+                    Correo electrónico;
+                </i>
+                <li class="sub_list_style">
+                    Número de cuenta bancaria y Clave Bancaria Estandarizada (CLABE) - En una entidad financiera mexicana o extranjera autorizada para recibir depósitos; así como, aquella autorizada para la conversión de Fondos de Pago Electrónicos
+                </i>
+                <li class="sub_list_style">
+                    Manifestación expresa de que actúa por cuenta propia;
+                </i>
+                <li class="sub_list_style">
+                    Geolocalización;
+                </i>
+                <li class="sub_list_style">
+                    Versión digital de los documentos probatorios de los datos de identificación.
+                </i>
+            </ul>
+            <p class="text">
+                Las Cuentas contarán con las siguientes restricciones de operación:
+            </p>
+            <ul>
+                <span class="pagination2"> 2 </span>
+                <li>
+                    Las Cuentas no tienen límite de depósitos mensuales. Inguz llevará un reporte diario de aquellas cuentas que reciban depósitos mayores a $50,000.00 M.N. (Cincuenta mil Pesos 00/100 Moneda Nacional) al mes.
+                </li>
+                </br>
+                </br>
+                <li>
+                    El monto máximo de depósitos en efectivo por cliente es de 10,000 (diez mil) UDIs al mes.
+                </li>
+                <li>
+                    El monto máximo de retiros en efectivo por cliente es de 1,500 (mil quinientas) UDIs al día.
+                </li>
+                <li>
+                    El monto máximo de depósitos en efectivo por cliente es de 4,000 (cuatro mil) UDIs al día.
+                </li>
+                <li>
+                    La transferencia de recursos al mes es ilimitada. Inguz llevará un reporte diario de todas las cuentas cuyas transferencias en el mes exceda el monto promedio de las transferencias del mes anterior.
+                <li>
+                    El saldo máximo por cuenta es ilimitada. Inguz llevará un reporte diario de aquellas cuentas que mantengan un saldo mayor mensual a $50,000.00 M.N. (Cincuenta mil Pesos 00/100 Moneda Nacional).
+                </li>
+                <li>
+                    El número de operaciones al día es ilimitado. Inguz tiene una alerta interna y reporte diario de aquellas cuentas que mantengan más de 3 (tres) operaciones al día, sin importar que éstas sean depósitos, retiros, transferencias, compras, cobros, domiciliaciones o pago de servicios.
+                </li>
+            </ul>
+            <h2 class="list_dec">
+                II. Comisiones
+            </h2>
+            <p class="text">
+                Inguz no cobrará ninguna comisión por apertura de cuenta. Tampoco cobrará ninguna comisión por transferencias de dinero de o hacia las cuentas del Cliente, ni por las operaciones realizadas con el código QR CoDi®, es decir, compras y cobros en establecimientos y personas que cuenten con esta tecnología.
+            </p>
+            <p class="text">
+                Inguz únicamente cobrará las siguientes comisiones por los conceptos que se indican:
+            </p>
+            <table>
+                <tr>
+                     <th class="first_c">
+                        <span class="bold">
+                        Concepto
+                        </span>
+                    </th>
+                    <th class="center_t">
+                        <span class="bold">
+                        Comisión
+                        </span>
+                    </th>
+                </tr>
+                <tr>
+                    <td class="first_c">
+                        Pago de servicios
+                    </td>
+                    <td class="center_t">
+                        $ 4.00
+                    </td>
+                </tr>
+                <tr>
+                    <td class="frist_c">
+                        Redención de fondos de pago electrónico (entrega de recursos en efectivo) a través de ventanilla Scotiabank
+                    </td>
+                    <td class="center_t">
+                        $ 24.00
+                    </td>
+                </tr>
+                <tr>
+                    <td class="first_c">
+                        Emisión de fondos de pago electrónico (recepción de recursos en efectivo) a través de ventanilla Scotiabank
+                    </td>
+                    <td class="center_t">
+                        $ 18.00
+                    </td>
+                </tr>
+                <tr>
+                    <td class="first_c">
+                        Envío de transferencias a cuentas de otros bancos vía SPEI (A partir de la segunda operación del día)
+                    </td>
+                    <td class="center_t">
+                        $ 7.52
+                    </td>
+                </tr>
+            </table>
+            <h2 class="list_dec">
+                III. Domiciliaciones
+            </h2>
+            <p class="text">
+                Inguz ofrece al Cliente el servicio de domiciliación con cargo a su cuenta de Inguz, para lo cual atendrá de las solicitudes de contratación de domiciliaciones que el Cliente le presente a través de la Plataforma de Inguz y de conformidad con el Contrato de Emisión de Fondos.
+            </p>
+            <p class="text">
+                A efecto de llevar a cabo la contratación de la domiciliación, Inguz solicitará al cliente la información señalada en el anexo “Formato para la Contratación del Servicio de Domiciliación”, adjunto al Contrato de Emisión de Fondos.
+            </p>
+            <p class="text">
+                El Cliente, en caso de considerarlo necesario, podrá solicitar la cancelación de la Domiciliación en cualquier momento a través de la Plataforma de Inguz. La cancelación de las Domiciliaciones surtirá efectos en un plazo no mayor a 3 (tres) días Hábiles Bancarios contados a partir de la fecha en que Inguz reciba la solicitud de cancelación correspondiente. Una vez realizada la cancelación de la domiciliación Inguz se abstendrá de realizar cargo alguno a la cuenta de fondos de pago electrónico el Cliente en relación con dicha domiciliación.
+            </p>
+            <span class="pagination3"> 3 </span>
+            <p class="text">
+                En caso de que Usted solicite la terminación del Contrato de Emisión de Fondos celebrado con Usted, Inguz cancelará, sin responsabilidad los servicios de domiciliación contratados en la fecha de dicha solicitud, con independencia de quién conserve la autorización de los cargos correspondientes.
+            </p>
+            <p class="text">
+                <u>Cargos no reconocidos por domiciliaciones.</u>
+            </p>
+            <p class="text">
+                En caso de que el Cliente no reconozca un cargo domiciliado a su cuenta, el Cliente podrá presentar la objeción correspondiente en un plazo de 90 (noventa) Días Hábiles Bancarios contados a partir de la fecha en la que se realizó el cargo respectivo.
+            </p>
+            <p class="text">
+                Si el Cliente realiza la objeción dentro de los primeros 60 (sesenta) Días Hábiles Bancarios, Inguz le abonará la cantidad reclamada a más tardar el Día Hábil Bancario siguiente a la recepción de la objeción.
+            </p>
+            <p class="text">
+                Sea el caso que la objeción se realice después de los 60 (sesenta) Días Hábiles Bancarios y dentro de los 90 (noventa) Días Hábiles Bancarios siguientes del plazo anteriormente mencionado, se deberá de resolver la procedencia de la reclamación en un plazo máximo de 20 (veinte) Días Hábiles Bancarios.
+            </p>
+            <p class="text">
+                En el evento de no resultar procedente la objeción del Cliente, se le cargará al Cliente el abono respectivo.
+            </p>
+            <h2 class="list_dec">
+                IV. Responsabilidad
+            </h2>
+            <p class="text">
+                El internet puede estar sujeto a violaciones de seguridad. Inguz no se hace responsable de los daños ocasionados en el equipo de cómputo o teléfonos móviles de los usuarios como consecuencia de cualquier violación de seguridad, virus, errores, alteraciones intervenciones no autorizadas, fraudes, errores, omisiones, interrupciones, eliminaciones, defectos, demoras en el funcionamiento o la transmisión, fallos en la línea del equipo o cualquier otro fallo técnico o de otro tipo. Usted debe considerar también que el envío de correos electrónicos a través del internet puede ser un medio no seguro, y Usted debe considerar esto antes de enviar a Inguz cualquier información por correo electrónico. Inguz no hace ninguna declaración o garantía de ningún tipo respecto a la idoneidad, funcionalidad, disponibilidad, u operación de la Plataforma, en forma distinta a la diseñada.
+            </p>
+            <p class="text">
+                Inguz cuenta con la infraestructura y controles internos necesarios para proporcionar sus servicios de forma segura. Asimismo, cuenta con las medidas y políticas en materia de control de riesgos operativos, y contables, así como de seguridad de información, incluyendo políticas que garanticen la confidencialidad, disponibilidad, soporte tecnológico seguro e integridad de la información y prevención de fraudes y ataques cibernéticos apropiados y requeridos por la regulación aplicable.
+            </p>
+            <p class="text">
+                La Plataforma puede estar temporalmente no disponible de tiempo en tiempo debido a mantenimiento de actualización, preventivo, correctivo o por cualquier otra razón. En dicho caso, se le dará aviso a Usted a través de la Plataforma, correo electrónico y/o mensaje texto de acuerdo con lo indicado por el Cliente en la Plataforma, una vez se haya reestablecido el servicio.
+            </p>
+            <p class="text">
+                Inguz se hace responsable frente a Usted, por los errores, defectos, mal funcionamiento, fraudes e incidentes de seguridad directamente imputables a Inguz, por culpa o negligencia grave.
+            </p>
+            <span class="pagination4"> 4 </span>
+            <p class="text">
+                Es responsabilidad de Usted llevar a cabo todas las medidas necesarias, razonables y apropiadas para mantener de manera confidencial y segura su número de cuenta, claves de acceso y datos de identificación personal, así como aquellos códigos, que en su caso, se utilicen para la vinculación del dispositivo móvil mediante el cual se autorizará el ingresó a la Plataforma. En caso de pérdida, robo u olvido de alguno de estos datos o claves de acceso, Inguz no será encontrado responsable respecto de los daños acontecidos.
+            </p>
+            <p class="text">
+                En caso de robo, extravío u olvido de las claves de acceso a la Plataforma, se deberá de: (i) ir a la pantalla de inicio de sesión y seleccionar la opción “No recuerdo mi contraseña; (ii) responder a su pregunta secreta e introducir su número de teléfono celular a 10 (diez) dígitos, y presionar la opción “Validar”; (iii) introducir una nueva contraseña y confirmarla inmediatamente, apegándose a los requisitos de caracteres que le solicite el sistema; (iv) presionar la opción “Validar”. A partir de ese momento, Usted podrá iniciar sesión en la Plataforma.
+            </p>
+            <p class="text">
+                Usted declara y garantiza que cuando proporcione cualquier información la Plataforma, solamente será información verdadera, precisa, actual y completa.
+            </p>
+            <h2 class="list_dec">
+                V. Horarios de disponibilidad de las operaciones y servicios de la Plataforma
+            </h2>
+            <p class="text">
+                La Plataforma de Inguz se encontrará disponible las 24 horas; los 7 días a la semana. Por lo cual, el Usuario tendrá a acceso a todos los servicios que ofrece Inguz a través de la Plataforma en cualquier momento que lo considere necesario.
+            </p>
+            <h2 class="list_dec">
+                VI. Indemnización
+            </h2>
+            <p class="text">
+                AL UTILIZAR LA PLATAFORMA, USTED ACEPTA DEFENDERNOS, INDEMNIZARNOS Y MANTENERNOS LIBRES DE CUALQUIER RECLAMACIÓN RESPECTO A DICHO USO, AL IGUAL QUE A NUESTROS ACCIONISTAS, FUNCIONARIOS, DIRECTORES, EMPLEADOS, AGENTES, SUCESORES Y CESIONARIOS Y COMPAÑÍAS CONTROLADAS, CONTROLADAS Y AFILIADAS, RESPECTO DE TODAS Y CADA UNA DE LAS RECLAMACIONES, DEMANDAS, PÉRDIDAS, DAÑOS, O GASTOS RELACIONADOS CON, O QUE RESULTEN DE SUS OPERACIONES COMERCIALES, INCLUIDOS, ENTRE OTROS, LOS HONORARIOS Y COSTOS DE LOS ABOGADOS.
+            </p>
+            <h2 class="list_dec">
+                VII. Jurisdicción
+            </h2>
+            <p class="text">
+                Inguz opera la Plataforma en los Estados Unidos Mexicanos. El acceso a la Plataforma desde territorios en los que el contenido de la misma pueda ser ilegal, está prohibido en virtud de la legislación local. Si accede a esta Plataforma desde otros lugares, lo hace por iniciativa propia y Usted es el único responsable del cumplimiento de las leyes locales aplicables. Estos Términos y Condiciones deben ser interpretados y aplicados de conformidad con las leyes de la Ciudad de México (sin tener en cuenta los principios de conflicto de leyes que puedan causar la aplicación de las leyes de cualquier otra jurisdicción). Cualquier acción presentada por Usted con respecto a estos Términos y Condiciones o el de la Plataforma o la Información, debe ser alegada en los tribunales locales de la Ciudad de México, renunciando a cualquier otra jurisdicción que por cualquier razón pudiera corresponderles.
+            </p>
+            <h2 class="list_dec">
+                VIII. Violaciones y políticas adicionales
+            </h2>
+            <p class="text">
+                Inguz determinará el cumplimiento de Usted hacia estos Términos y Condiciones de manera unilateral y a su entera discreción, y su decisión será definitiva y vinculante. Cualquier violación de estos Términos y Condiciones puede resultar en una restricción parcial o total de la Plataforma, y puede ser denunciado con las autoridades gubernamentales. Ninguna renuncia a cualquiera de estos Términos y Condiciones tendrá efecto a menos que se haga por escrito y esté firmada por un representante legal de Inguz. Usted está informado y consciente que Inguz hará valer enérgicamente sus derechos conforme a las disposiciones legales aplicables.
+            </p>
+            <span class="pagination5"> 5 </span>
+            <p class="text">
+                Si cualquier disposición de estos Términos y Condiciones es declarada inválida por cualquier tribunal con jurisdicción competente, la invalidez de dicha disposición no afectará la validez del resto de las disposiciones de estos Términos y Condiciones, las cuales permanecerán en pleno vigor y efecto. Los títulos de las secciones en estos Términos y Condiciones son sólo como referencia y no tienen ningún efecto legal.
+            </p>
+            <h2 class="list_dec">
+                IX. Modificación a los Términos y Condiciones
+            </h2>
+            <p class="text">
+                Inguz se reserva el derecho, a su entera discreción, de modificar, alterar, o cambiar de cualquier modo estos Términos y Condiciones. En caso de realizar cualquier modificación a los mismos, se le dará aviso a Usted con 30 (treinta) días naturales de anticipación a través de esta Plataforma. Adicionalmente se le avisará que existe una modificación al Contrato de Emisión de Fondos, a través de los medios de comunicación oficiales establecidos en el mismo y a través de pantallas emergentes dentro de esta misma Plataforma. Especificando la dirección de nuestra página de internet en donde el Usuario podrá consultar las modificaciones y la nueva versión de los Términos y Condiciones, y en su caso, del Contrato de Emisión de Fondos y/o cualquier otro documento relacionado con la Cuenta del Usuario.
+            </p>
+            <p class="text">
+                En caso de no estar de acuerdo con las modificaciones, podrá solicitar la terminación del contrato a través de esta Plataforma, dentro de los 30 (treinta) días posteriores al aviso de la modificación sin responsabilidad alguna a su cargo, y bajo las condiciones pactadas originalmente.
+            </p>
+            <p class="text">
+                Usted acepta que Inguz no será responsable ante Usted ni ante ningún tercero que reclame cualquier daño por o a través de Usted, que resulte de la modificación o suspensión de los servicios de Inguz.
+            </p>
+            <h2 class="list_dec">
+                X. Datos de contacto
+            </h2>
+            <p class="text">
+                Si tiene alguna pregunta, comentario, o inquietud acerca de nuestra Plataforma, o de estos Términos y Condiciones, puede comunicarse con nosotros por correo electrónico a <a href="mailto:servicioaclientes@inguzmx.com">servicioaclientes@inguzmx.com</a>
+            </p>
+            <h2 class="list_dec">
+                XI. Medios de comunicación con los Usuarios en caso de fallas
+            </h2>
+            <p class="text">
+                Inguz lo notificará cualquier fallo o intermitencia que se presente en el servicio proporcionado a través de pantallas emergentes dentro de esta misma Plataforma y a través de la dirección de correo electrónico autorizada por Usted para tal efecto. Así mismo notificará la falla o intermitencia en el servicio vía mensaje instantáneo de esta Plataforma. El mensaje se presentará al principio del inicio de sesión, previo a que el cliente ingrese sus credenciales de acceso.
+            </p>
+            <p class="text">
+                Inguz hará de su conocimiento sus opciones de continuidad del servicio, a través de su dirección de correo electrónico. En caso de no recibir dicha información podrá comunicarse con nosotros a través de nuestro correo y número de atención a clientes.
+            </p>
+            <table class="table_middle">
+                <tr>
+                    <td>
+                        <b>
+                            Correo electrónico
+                        </b>
+                    </td>
+                    <td>
+                        <a href="mailto:servicioaclientes@inguzmx.com">
+                            servicioaclientes@inguzmx.com
+                        </a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <b>
+                            Números de atención
+                        </b>
+                    </td>
+                    <td>
+                        (55) 2162 5017 / (55) 2162 5124
+                    </td>
+                </tr>
+            </table>
+            <p class="text">
+                La última versión revisada de estos Términos y Condiciones corresponde al 29 de junio de 2022.
+            </p>
+            <span class="pagination6"> 6 </span>
+        </div> 
+    </section>
+</BODY>
+</HTML>

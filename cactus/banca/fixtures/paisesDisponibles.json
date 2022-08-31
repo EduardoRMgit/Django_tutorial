@@ -1,0 +1,1 @@
+[{"model": "banca.paisesdisponibles", "pk": 1, "fields": {"paises": "MX"}}, {"model": "banca.paisesdisponibles", "pk": 2, "fields": {"paises": "AL"}}]

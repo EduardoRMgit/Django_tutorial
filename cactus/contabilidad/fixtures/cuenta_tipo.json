@@ -1,0 +1,1822 @@
+[
+    {
+        "fields": {
+            "cuenta": 20,
+            "regla_abono": "1.04",
+            "regla_cargo": "0",
+            "tipo": 2
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 1
+    },
+    {
+        "fields": {
+            "cuenta": 10,
+            "regla_abono": "5.22",
+            "regla_cargo": "7.52",
+            "tipo": 2
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 2
+    },
+    {
+        "fields": {
+            "cuenta": 2,
+            "regla_abono": "monto+7.52",
+            "regla_cargo": "monto+7.52",
+            "tipo": 2
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 3
+    },
+    {
+        "fields": {
+            "cuenta": 3,
+            "regla_abono": "0",
+            "regla_cargo": "0.72",
+            "tipo": 2
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 4
+    },
+    {
+        "fields": {
+            "cuenta": 4,
+            "regla_abono": "5.22",
+            "regla_cargo": "5.22",
+            "tipo": 2
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 5
+    },
+    {
+        "fields": {
+            "cuenta": 5,
+            "regla_abono": "monto+7.52",
+            "regla_cargo": "monto+7.52",
+            "tipo": 2
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 6
+    },
+    {
+        "fields": {
+            "cuenta": 7,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 2
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 8
+    },
+    {
+        "fields": {
+            "cuenta": 22,
+            "regla_abono": "6.48",
+            "regla_cargo": "0",
+            "tipo": 2
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 9
+    },
+    {
+        "fields": {
+            "cuenta": 8,
+            "regla_abono": "0",
+            "regla_cargo": "4.5",
+            "tipo": 2
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 10
+    },
+    {
+        "fields": {
+            "cuenta": 10,
+            "regla_abono": "5.22",
+            "regla_cargo": "0",
+            "tipo": 1
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 11
+    },
+    {
+        "fields": {
+            "cuenta": 2,
+            "regla_abono": "0",
+            "regla_cargo": "monto",
+            "tipo": 1
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 12
+    },
+    {
+        "fields": {
+            "cuenta": 3,
+            "regla_abono": "0",
+            "regla_cargo": "0.72",
+            "tipo": 1
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 13
+    },
+    {
+        "fields": {
+            "cuenta": 4,
+            "regla_abono": "5.22",
+            "regla_cargo": "5.22",
+            "tipo": 1
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 14
+    },
+    {
+        "fields": {
+            "cuenta": 5,
+            "regla_abono": "monto",
+            "regla_cargo": "0",
+            "tipo": 1
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 15
+    },
+    {
+        "fields": {
+            "cuenta": 7,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 1
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 17
+    },
+    {
+        "fields": {
+            "cuenta": 8,
+            "regla_abono": "0",
+            "regla_cargo": "4.50",
+            "tipo": 1
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 18
+    },
+    {
+        "fields": {
+            "cuenta": 11,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 1
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 19
+    },
+    {
+        "fields": {
+            "cuenta": 11,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 2
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 20
+    },
+    {
+        "fields": {
+            "cuenta": 12,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 1
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 21
+    },
+    {
+        "fields": {
+            "cuenta": 13,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 1
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 22
+    },
+    {
+        "fields": {
+            "cuenta": 14,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 1
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 23
+    },
+    {
+        "fields": {
+            "cuenta": 15,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 1
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 24
+    },
+    {
+        "fields": {
+            "cuenta": 17,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 1
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 25
+    },
+    {
+        "fields": {
+            "cuenta": 9,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 1
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 26
+    },
+    {
+        "fields": {
+            "cuenta": 12,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 2
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 27
+    },
+    {
+        "fields": {
+            "cuenta": 13,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 2
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 28
+    },
+    {
+        "fields": {
+            "cuenta": 14,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 2
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 29
+    },
+    {
+        "fields": {
+            "cuenta": 19,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 2
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 30
+    },
+    {
+        "fields": {
+            "cuenta": 15,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 2
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 31
+    },
+    {
+        "fields": {
+            "cuenta": 21,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 2
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 32
+    },
+    {
+        "fields": {
+            "cuenta": 17,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 2
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 33
+    },
+    {
+        "fields": {
+            "cuenta": 9,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 2
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 34
+    },
+    {
+        "fields": {
+            "cuenta": 11,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 3
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 35
+    },
+    {
+        "fields": {
+            "cuenta": 10,
+            "regla_abono": "12+1.92",
+            "regla_cargo": "12+1.92+6.48+1.04",
+            "tipo": 3
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 36
+    },
+    {
+        "fields": {
+            "cuenta": 2,
+            "regla_abono": "12+1.92+6.48+1.04",
+            "regla_cargo": "monto+12+1.92+6.48+1.04",
+            "tipo": 3
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 37
+    },
+    {
+        "fields": {
+            "cuenta": 12,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 3
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 38
+    },
+    {
+        "fields": {
+            "cuenta": 3,
+            "regla_abono": "0",
+            "regla_cargo": "1.92",
+            "tipo": 3
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 39
+    },
+    {
+        "fields": {
+            "cuenta": 13,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 3
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 40
+    },
+    {
+        "fields": {
+            "cuenta": 4,
+            "regla_abono": "12+1.92",
+            "regla_cargo": "12+1.92",
+            "tipo": 3
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 41
+    },
+    {
+        "fields": {
+            "cuenta": 14,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 3
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 42
+    },
+    {
+        "fields": {
+            "cuenta": 5,
+            "regla_abono": "monto",
+            "regla_cargo": "0",
+            "tipo": 3
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 43
+    },
+    {
+        "fields": {
+            "cuenta": 19,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 3
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 44
+    },
+    {
+        "fields": {
+            "cuenta": 20,
+            "regla_abono": "1.92+1.04",
+            "regla_cargo": "0",
+            "tipo": 3
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 45
+    },
+    {
+        "fields": {
+            "cuenta": 15,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 3
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 46
+    },
+    {
+        "fields": {
+            "cuenta": 7,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 3
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 47
+    },
+    {
+        "fields": {
+            "cuenta": 21,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 3
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 48
+    },
+    {
+        "fields": {
+            "cuenta": 22,
+            "regla_abono": "12+6.48",
+            "regla_cargo": "0",
+            "tipo": 3
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 49
+    },
+    {
+        "fields": {
+            "cuenta": 17,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 3
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 50
+    },
+    {
+        "fields": {
+            "cuenta": 8,
+            "regla_abono": "0",
+            "regla_cargo": "12",
+            "tipo": 3
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 51
+    },
+    {
+        "fields": {
+            "cuenta": 9,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 3
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 52
+    },
+    {
+        "fields": {
+            "cuenta": 11,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 4
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 53
+    },
+    {
+        "fields": {
+            "cuenta": 10,
+            "regla_abono": "0",
+            "regla_cargo": "6.48+1.04",
+            "tipo": 4
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 54
+    },
+    {
+        "fields": {
+            "cuenta": 2,
+            "regla_abono": "6.48+1.04",
+            "regla_cargo": "monto+6.48+1.04",
+            "tipo": 4
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 55
+    },
+    {
+        "fields": {
+            "cuenta": 14,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 4
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 56
+    },
+    {
+        "fields": {
+            "cuenta": 5,
+            "regla_abono": "monto",
+            "regla_cargo": "0",
+            "tipo": 4
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 57
+    },
+    {
+        "fields": {
+            "cuenta": 19,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 4
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 58
+    },
+    {
+        "fields": {
+            "cuenta": 20,
+            "regla_abono": "1.04",
+            "regla_cargo": "0",
+            "tipo": 4
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 59
+    },
+    {
+        "fields": {
+            "cuenta": 15,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 4
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 60
+    },
+    {
+        "fields": {
+            "cuenta": 7,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 4
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 61
+    },
+    {
+        "fields": {
+            "cuenta": 21,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 4
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 62
+    },
+    {
+        "fields": {
+            "cuenta": 22,
+            "regla_abono": "6.48",
+            "regla_cargo": "0",
+            "tipo": 4
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 63
+    },
+    {
+        "fields": {
+            "cuenta": 9,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 4
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 64
+    },
+    {
+        "fields": {
+            "cuenta": 11,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 5
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 65
+    },
+    {
+        "fields": {
+            "cuenta": 10,
+            "regla_abono": "7.00+1.12",
+            "regla_cargo": "7.00+6.48+1.04+1.12",
+            "tipo": 5
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 66
+    },
+    {
+        "fields": {
+            "cuenta": 2,
+            "regla_abono": "monto+7.00+6.48+1.04+1.12",
+            "regla_cargo": "monto+7.00+6.48+1.04+1.12",
+            "tipo": 5
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 67
+    },
+    {
+        "fields": {
+            "cuenta": 12,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 5
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 68
+    },
+    {
+        "fields": {
+            "cuenta": 3,
+            "regla_abono": "0",
+            "regla_cargo": "1.12",
+            "tipo": 5
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 69
+    },
+    {
+        "fields": {
+            "cuenta": 13,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 5
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 70
+    },
+    {
+        "fields": {
+            "cuenta": 4,
+            "regla_abono": "7.00+1.12",
+            "regla_cargo": "7.00+1.12",
+            "tipo": 5
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 71
+    },
+    {
+        "fields": {
+            "cuenta": 14,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 5
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 72
+    },
+    {
+        "fields": {
+            "cuenta": 5,
+            "regla_abono": "monto+7.00+6.48+1.04+1.12",
+            "regla_cargo": "monto+7.00+6.48+1.04+1.12",
+            "tipo": 5
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 73
+    },
+    {
+        "fields": {
+            "cuenta": 19,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 5
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 74
+    },
+    {
+        "fields": {
+            "cuenta": 20,
+            "regla_abono": "1.04+1.12",
+            "regla_cargo": "0",
+            "tipo": 5
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 75
+    },
+    {
+        "fields": {
+            "cuenta": 15,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 5
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 76
+    },
+    {
+        "fields": {
+            "cuenta": 7,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 5
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 77
+    },
+    {
+        "fields": {
+            "cuenta": 21,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 5
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 78
+    },
+    {
+        "fields": {
+            "cuenta": 22,
+            "regla_abono": "7.00+6.48",
+            "regla_cargo": "0",
+            "tipo": 5
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 79
+    },
+    {
+        "fields": {
+            "cuenta": 17,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 5
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 80
+    },
+    {
+        "fields": {
+            "cuenta": 8,
+            "regla_abono": "0",
+            "regla_cargo": "7.00",
+            "tipo": 5
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 81
+    },
+    {
+        "fields": {
+            "cuenta": 9,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 5
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 82
+    },
+    {
+        "fields": {
+            "cuenta": 23,
+            "regla_abono": "monto",
+            "regla_cargo": "monto",
+            "tipo": 5
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 83
+    },
+    {
+        "fields": {
+            "cuenta": 24,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 1
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 84
+    },
+    {
+        "fields": {
+            "cuenta": 25,
+            "regla_abono": "monto",
+            "regla_cargo": "monto",
+            "tipo": 1
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 85
+    },
+    {
+        "fields": {
+            "cuenta": 24,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 2
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 86
+    },
+    {
+        "fields": {
+            "cuenta": 25,
+            "regla_abono": "monto+7.52",
+            "regla_cargo": "monto+7.52",
+            "tipo": 2
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 87
+    },
+    {
+        "fields": {
+            "cuenta": 11,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 6
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 88
+    },
+    {
+        "fields": {
+            "cuenta": 10,
+            "regla_abono": "12+1.92",
+            "regla_cargo": "12+6.48+1.04+1.92",
+            "tipo": 6
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 89
+    },
+    {
+        "fields": {
+            "cuenta": 12,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 6
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 90
+    },
+    {
+        "fields": {
+            "cuenta": 3,
+            "regla_abono": "0",
+            "regla_cargo": "1.92",
+            "tipo": 6
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 91
+    },
+    {
+        "fields": {
+            "cuenta": 19,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 6
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 94
+    },
+    {
+        "fields": {
+            "cuenta": 20,
+            "regla_abono": "1.04+1.92",
+            "regla_cargo": "0",
+            "tipo": 6
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 95
+    },
+    {
+        "fields": {
+            "cuenta": 15,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 6
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 96
+    },
+    {
+        "fields": {
+            "cuenta": 7,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 6
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 97
+    },
+    {
+        "fields": {
+            "cuenta": 21,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 6
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 98
+    },
+    {
+        "fields": {
+            "cuenta": 22,
+            "regla_abono": "12+6.48",
+            "regla_cargo": "0",
+            "tipo": 6
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 99
+    },
+    {
+        "fields": {
+            "cuenta": 8,
+            "regla_abono": "0",
+            "regla_cargo": "12",
+            "tipo": 6
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 100
+    },
+    {
+        "fields": {
+            "cuenta": 17,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 6
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 101
+    },
+    {
+        "fields": {
+            "cuenta": 9,
+            "regla_abono": null,
+            "regla_cargo": null,
+            "tipo": 6
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 102
+    },
+    {
+        "fields": {
+            "cuenta": 13,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 6
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 103
+    },
+    {
+        "fields": {
+            "cuenta": 4,
+            "regla_abono": "12+6.48",
+            "regla_cargo": "12+6.48",
+            "tipo": 6
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 104
+    },
+    {
+        "fields": {
+            "cuenta": 14,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 6
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 105
+    },
+    {
+        "fields": {
+            "cuenta": 5,
+            "regla_abono": "monto+12+6.48+1.04+1.92",
+            "regla_cargo": "monto+12+6.48+1.04+1.92",
+            "tipo": 6
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 106
+    },
+    {
+        "fields": {
+            "cuenta": 2,
+            "regla_abono": "monto+12+6.48+1.04+1.92",
+            "regla_cargo": "monto+12+6.48+1.04+1.92",
+            "tipo": 6
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 107
+    },
+    {
+        "fields": {
+            "cuenta": 23,
+            "regla_abono": "monto",
+            "regla_cargo": "monto",
+            "tipo": 6
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 108
+    },
+    {
+        "fields": {
+            "cuenta": 11,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 7
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 109
+    },
+    {
+        "fields": {
+            "cuenta": 10,
+            "regla_abono": "5.22",
+            "regla_cargo": "0",
+            "tipo": 7
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 110
+    },
+    {
+        "fields": {
+            "cuenta": 2,
+            "regla_abono": "0",
+            "regla_cargo": "monto",
+            "tipo": 7
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 111
+    },
+    {
+        "fields": {
+            "cuenta": 12,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 7
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 112
+    },
+    {
+        "fields": {
+            "cuenta": 3,
+            "regla_abono": "0",
+            "regla_cargo": "0.72",
+            "tipo": 7
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 113
+    },
+    {
+        "fields": {
+            "cuenta": 13,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 7
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 114
+    },
+    {
+        "fields": {
+            "cuenta": 4,
+            "regla_abono": "5.22",
+            "regla_cargo": "5.22",
+            "tipo": 7
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 115
+    },
+    {
+        "fields": {
+            "cuenta": 14,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 7
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 116
+    },
+    {
+        "fields": {
+            "cuenta": 5,
+            "regla_abono": "monto",
+            "regla_cargo": "0",
+            "tipo": 7
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 117
+    },
+    {
+        "fields": {
+            "cuenta": 24,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 7
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 118
+    },
+    {
+        "fields": {
+            "cuenta": 25,
+            "regla_abono": "monto",
+            "regla_cargo": "monto",
+            "tipo": 7
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 119
+    },
+    {
+        "fields": {
+            "cuenta": 15,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 7
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 120
+    },
+    {
+        "fields": {
+            "cuenta": 7,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 7
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 121
+    },
+    {
+        "fields": {
+            "cuenta": 8,
+            "regla_abono": "0",
+            "regla_cargo": "4.5",
+            "tipo": 7
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 122
+    },
+    {
+        "fields": {
+            "cuenta": 17,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 7
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 123
+    },
+    {
+        "fields": {
+            "cuenta": 9,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 7
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 124
+    },
+    {
+        "fields": {
+            "cuenta": 11,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 8
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 125
+    },
+    {
+        "fields": {
+            "cuenta": 10,
+            "regla_abono": "monto+5.22+5.22+29.75",
+            "regla_cargo": "monto*1.145",
+            "tipo": 8
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 126
+    },
+    {
+        "fields": {
+            "cuenta": 12,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 8
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 127
+    },
+    {
+        "fields": {
+            "cuenta": 3,
+            "regla_abono": "0",
+            "regla_cargo": "1.44",
+            "tipo": 8
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 128
+    },
+    {
+        "fields": {
+            "cuenta": 13,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 8
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 129
+    },
+    {
+        "fields": {
+            "cuenta": 4,
+            "regla_abono": "5.22+5.22",
+            "regla_cargo": "5.22+5.22",
+            "tipo": 8
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 130
+    },
+    {
+        "fields": {
+            "cuenta": 14,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 8
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 131
+    },
+    {
+        "fields": {
+            "cuenta": 5,
+            "regla_abono": "monto*2.145",
+            "regla_cargo": "monto*2.145",
+            "tipo": 8
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 132
+    },
+    {
+        "fields": {
+            "cuenta": 15,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 8
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 133
+    },
+    {
+        "fields": {
+            "cuenta": 7,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 8
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 134
+    },
+    {
+        "fields": {
+            "cuenta": 17,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 8
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 135
+    },
+    {
+        "fields": {
+            "cuenta": 8,
+            "regla_abono": "0",
+            "regla_cargo": "9",
+            "tipo": 8
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 136
+    },
+    {
+        "fields": {
+            "cuenta": 9,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 8
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 137
+    },
+    {
+        "fields": {
+            "cuenta": 11,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 9
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 138
+    },
+    {
+        "fields": {
+            "cuenta": 10,
+            "regla_abono": "5.22+5.22",
+            "regla_cargo": "6.48+1.04",
+            "tipo": 9
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 139
+    },
+    {
+        "fields": {
+            "cuenta": 2,
+            "regla_abono": "6.48+1.04+monto+50.75",
+            "regla_cargo": "monto",
+            "tipo": 9
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 140
+    },
+    {
+        "fields": {
+            "cuenta": 12,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 9
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 141
+    },
+    {
+        "fields": {
+            "cuenta": 3,
+            "regla_abono": "0",
+            "regla_cargo": "1.44",
+            "tipo": 9
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 142
+    },
+    {
+        "fields": {
+            "cuenta": 13,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 9
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 143
+    },
+    {
+        "fields": {
+            "cuenta": 4,
+            "regla_abono": "5.22+5.22",
+            "regla_cargo": "5.22+5.22",
+            "tipo": 9
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 144
+    },
+    {
+        "fields": {
+            "cuenta": 14,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 9
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 145
+    },
+    {
+        "fields": {
+            "cuenta": 5,
+            "regla_abono": "6.48+1.04+monto+monto+50.75",
+            "regla_cargo": "6.48+1.04+monto+monto+50.75",
+            "tipo": 9
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 146
+    },
+    {
+        "fields": {
+            "cuenta": 24,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 9
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 147
+    },
+    {
+        "fields": {
+            "cuenta": 25,
+            "regla_abono": "monto",
+            "regla_cargo": "6.48+1.04+monto+50.75",
+            "tipo": 9
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 148
+    },
+    {
+        "fields": {
+            "cuenta": 19,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 9
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 149
+    },
+    {
+        "fields": {
+            "cuenta": 20,
+            "regla_abono": "1.04",
+            "regla_cargo": "0",
+            "tipo": 9
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 150
+    },
+    {
+        "fields": {
+            "cuenta": 15,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 9
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 151
+    },
+    {
+        "fields": {
+            "cuenta": 7,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 9
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 152
+    },
+    {
+        "fields": {
+            "cuenta": 21,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 9
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 153
+    },
+    {
+        "fields": {
+            "cuenta": 22,
+            "regla_abono": "6.48",
+            "regla_cargo": "0",
+            "tipo": 9
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 154
+    },
+    {
+        "fields": {
+            "cuenta": 17,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 9
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 155
+    },
+    {
+        "fields": {
+            "cuenta": 8,
+            "regla_abono": "0",
+            "regla_cargo": "4.5+4.5",
+            "tipo": 9
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 156
+    },
+    {
+        "fields": {
+            "cuenta": 9,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 9
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 157
+    },
+    {
+        "fields": {
+            "cuenta": 26,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 8
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 158
+    },
+    {
+        "fields": {
+            "cuenta": 27,
+            "regla_abono": "monto",
+            "regla_cargo": "monto",
+            "tipo": 8
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 159
+    },
+    {
+        "fields": {
+            "cuenta": 28,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 8
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 160
+    },
+    {
+        "fields": {
+            "cuenta": 29,
+            "regla_abono": "50.75",
+            "regla_cargo": "50.75",
+            "tipo": 8
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 161
+    },
+    {
+        "fields": {
+            "cuenta": 30,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 8
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 162
+    },
+    {
+        "fields": {
+            "cuenta": 31,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 8
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 163
+    },
+    {
+        "fields": {
+            "cuenta": 32,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 8
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 164
+    },
+    {
+        "fields": {
+            "cuenta": 33,
+            "regla_abono": "monto*0.125*0.16",
+            "regla_cargo": "0",
+            "tipo": 8
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 165
+    },
+    {
+        "fields": {
+            "cuenta": 34,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 8
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 166
+    },
+    {
+        "fields": {
+            "cuenta": 35,
+            "regla_abono": "monto*0.125*0.16",
+            "regla_cargo": "monto*0.125*0.16",
+            "tipo": 8
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 167
+    },
+    {
+        "fields": {
+            "cuenta": 36,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 8
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 168
+    },
+    {
+        "fields": {
+            "cuenta": 37,
+            "regla_abono": "monto*0.125",
+            "regla_cargo": "0",
+            "tipo": 8
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 169
+    },
+    {
+        "fields": {
+            "cuenta": 38,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 8
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 170
+    },
+    {
+        "fields": {
+            "cuenta": 39,
+            "regla_abono": "50.75-monto*0.125*0.16",
+            "regla_cargo": "50.75-monto*0.125*0.16",
+            "tipo": 8
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 171
+    },
+    {
+        "fields": {
+            "cuenta": 40,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 8
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 172
+    },
+    {
+        "fields": {
+            "cuenta": 41,
+            "regla_abono": "0",
+            "regla_cargo": "monto*0.125*0.48",
+            "tipo": 8
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 173
+    },
+    {
+        "fields": {
+            "cuenta": 42,
+            "regla_abono": "0",
+            "regla_cargo": "monto*0.125*0.12",
+            "tipo": 8
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 174
+    },
+    {
+        "fields": {
+            "cuenta": 43,
+            "regla_abono": "0",
+            "regla_cargo": "monto*0.125*0.08",
+            "tipo": 8
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 175
+    },
+    {
+        "fields": {
+            "cuenta": 44,
+            "regla_abono": "0",
+            "regla_cargo": "0",
+            "tipo": 8
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 176
+    },
+    {
+        "fields": {
+            "cuenta": 45,
+            "regla_abono": "monto*0.125*0.48",
+            "regla_cargo": "0",
+            "tipo": 8
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 177
+    },
+    {
+        "fields": {
+            "cuenta": 46,
+            "regla_abono": "monto*0.125*0.12",
+            "regla_cargo": "0",
+            "tipo": 8
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 178
+    },
+    {
+        "fields": {
+            "cuenta": 47,
+            "regla_abono": "monto*0.125*0.08",
+            "regla_cargo": "0",
+            "tipo": 8
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 179
+    },
+    {
+        "fields": {
+            "cuenta": 48,
+            "regla_abono": "0",
+            "regla_cargo": "29.75",
+            "tipo": 8
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 180
+    },
+    {
+        "fields": {
+            "cuenta": 11,
+            "regla_abono": "monto",
+            "regla_cargo": "0",
+            "tipo": 16
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 181
+    },
+    {
+        "fields": {
+            "cuenta": 10,
+            "regla_abono": "monto",
+            "regla_cargo": "0",
+            "tipo": 16
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 182
+    },
+    {
+        "fields": {
+            "cuenta": 2,
+            "regla_abono": "0",
+            "regla_cargo": "monto",
+            "tipo": 16
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 183
+    },
+    {
+        "fields": {
+            "cuenta": 11,
+            "regla_abono": "0",
+            "regla_cargo": "monto",
+            "tipo": 15
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 184
+    },
+    {
+        "fields": {
+            "cuenta": 10,
+            "regla_abono": "0",
+            "regla_cargo": "monto",
+            "tipo": 15
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 185
+    },
+    {
+        "fields": {
+            "cuenta": 2,
+            "regla_abono": "monto",
+            "regla_cargo": "0",
+            "tipo": 15
+        },
+        "model": "contabilidad.cuentatipo",
+        "pk": 186
+    }
+]

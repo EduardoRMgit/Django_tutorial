@@ -1,0 +1,16 @@
+[
+{
+  "model": "demograficos.indicedisponible",
+  "pk": 1,
+  "fields": {
+    "porcentaje": 10.0
+  }
+},
+{
+  "model": "demograficos.indicedisponible",
+  "pk": 2,
+  "fields": {
+    "porcentaje": 20.0
+  }
+}
+]

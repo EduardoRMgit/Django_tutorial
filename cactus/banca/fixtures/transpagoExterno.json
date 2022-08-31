@@ -1,0 +1,1 @@
+[{"model": "banca.transpagoexterno", "pk": 1, "fields": {"transpago": 1, "fechaTrans": "2019-08-01T23:11:16Z", "errorCode": "4567", "noAutorizacion": "4567"}}, {"model": "banca.transpagoexterno", "pk": 2, "fields": {"transpago": 2, "fechaTrans": "2019-08-01T23:11:23Z", "errorCode": "865", "noAutorizacion": "97"}}]

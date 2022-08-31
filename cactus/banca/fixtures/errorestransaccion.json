@@ -1,0 +1,162 @@
+[
+{
+  "model": "banca.errorestransaccion",
+  "pk": 1,
+  "fields": {
+    "codigo": "-1",
+    "mensaje": "Rastreo_Duplicado",
+    "codigo_ext": "-1",
+    "mensaje_ext": "Rastreo_Duplicado"
+  }
+},
+{
+  "model": "banca.errorestransaccion",
+  "pk": 2,
+  "fields": {
+    "codigo": "-2",
+    "mensaje": "Orden_Duplicada",
+    "codigo_ext": "-2",
+    "mensaje_ext": "Orden_Duplicada"
+  }
+},
+{
+  "model": "banca.errorestransaccion",
+  "pk": 3,
+  "fields": {
+    "codigo": "-5",
+    "mensaje": "Dato obligatorio {institucion contraparte}",
+    "codigo_ext": "-5",
+    "mensaje_ext": "Dato obligatorio {institucion contraparte}"
+  }
+},
+{
+  "model": "banca.errorestransaccion",
+  "pk": 4,
+  "fields": {
+    "codigo": "-6",
+    "mensaje": "Empresa_Invalida O Institucion_Operante_Invalida",
+    "codigo_ext": "-6",
+    "mensaje_ext": "Empresa_Invalida O Institucion_Operante_Invalida"
+  }
+},
+{
+  "model": "banca.errorestransaccion",
+  "pk": 5,
+  "fields": {
+    "codigo": "-9",
+    "mensaje": "Institucion_Invalida",
+    "codigo_ext": "-9",
+    "mensaje_ext": "Institucion_Invalida"
+  }
+},
+{
+  "model": "banca.errorestransaccion",
+  "pk": 6,
+  "fields": {
+    "codigo": "-10",
+    "mensaje": "Medio_Entrega_Invalido",
+    "codigo_ext": "-10",
+    "mensaje_ext": "Medio_Entrega_Invalido"
+  }
+},
+{
+  "model": "banca.errorestransaccion",
+  "pk": 7,
+  "fields": {
+    "codigo": "-12",
+    "mensaje": "Tipo_Operacion_Invalida",
+    "codigo_ext": "-12",
+    "mensaje_ext": "Tipo_Operacion_Invalida"
+  }
+},
+{
+  "model": "banca.errorestransaccion",
+  "pk": 8,
+  "fields": {
+    "codigo": "-16",
+    "mensaje": "Fecha_Operacion_Invalida",
+    "codigo_ext": "-16",
+    "mensaje_ext": "Fecha_Operacion_Invalida"
+  }
+},
+{
+  "model": "banca.errorestransaccion",
+  "pk": 9,
+  "fields": {
+    "codigo": "-20",
+    "mensaje": "Monto_Invalido",
+    "codigo_ext": "-20",
+    "mensaje_ext": "Monto_Invalido"
+  }
+},
+{
+  "model": "banca.errorestransaccion",
+  "pk": 10,
+  "fields": {
+    "codigo": "-21",
+    "mensaje": "Digito_Verificador_Invalido",
+    "codigo_ext": "-21",
+    "mensaje_ext": "Digito_Verificador_Invalido"
+  }
+},
+{
+  "model": "banca.errorestransaccion",
+  "pk": 11,
+  "fields": {
+    "codigo": "-22",
+    "mensaje": "Institucion_No_Coincide_En_Clabe",
+    "codigo_ext": "-22",
+    "mensaje_ext": "Institucion_No_Coincide_En_Clabe"
+  }
+},
+{
+  "model": "banca.errorestransaccion",
+  "pk": 12,
+  "fields": {
+    "codigo": "-23",
+    "mensaje": "Longitud_Clabe_Incorrecta",
+    "codigo_ext": "-23",
+    "mensaje_ext": "Longitud_Clabe_Incorrecta"
+  }
+},
+{
+  "model": "banca.errorestransaccion",
+  "pk": 13,
+  "fields": {
+    "codigo": "-26",
+    "mensaje": "Longitud_Rastreo_Invalida",
+    "codigo_ext": "-26",
+    "mensaje_ext": "Longitud_Rastreo_Invalida"
+  }
+},
+{
+  "model": "banca.errorestransaccion",
+  "pk": 14,
+  "fields": {
+    "codigo": "-34",
+    "mensaje": "Valor inv\u00e1lido. Se aceptan caracteres a-z,A-Z,0-9",
+    "codigo_ext": "-34",
+    "mensaje_ext": "Valor inv\u00e1lido. Se aceptan caracteres a-z,A-Z,0-9"
+  }
+},
+{
+  "model": "banca.errorestransaccion",
+  "pk": 15,
+  "fields": {
+    "codigo": "0",
+    "mensaje": "Otros",
+    "codigo_ext": "0",
+    "mensaje_ext": "Otros"
+  }
+},
+{
+  "model": "banca.errorestransaccion",
+  "pk": 16,
+  "fields": {
+    "codigo": "-11",
+    "mensaje": "Error_STP",
+    "codigo_ext": "-11",
+    "mensaje_ext": "Error_Stp"
+  }
+}
+]

@@ -1,0 +1,119 @@
+[
+{
+  "model": "demograficos.docadjunto",
+  "pk": 1,
+  "fields": {
+    "imagen": "demograficos/docs/credencial-actual.jpg",
+    "ruta": "www.urldeamazonS3.com",
+    "tipo": 1,
+    "validado": true,
+    "user": 1,
+    "orden": true,
+    "fechaCreado": "2019-08-13T19:02:23.845Z"
+  }
+},
+{
+  "model": "demograficos.docadjunto",
+  "pk": 2,
+  "fields": {
+    "imagen": "demograficos/docs/INE_reverso.jpg",
+    "ruta": "www.rutadeinereverso.com",
+    "tipo": 2,
+    "validado": true,
+    "user": 1,
+    "orden": false,
+    "fechaCreado": "2019-08-13T19:04:05.028Z"
+  }
+},
+{
+  "model": "demograficos.docadjunto",
+  "pk": 3,
+  "fields": {
+    "imagen": "demograficos/docs/compr_dom.jpg",
+    "ruta": "www.rutadefotodecomprobantededomicilio.com",
+    "tipo": 3,
+    "validado": true,
+    "user": 1,
+    "orden": true,
+    "fechaCreado": "2019-08-13T19:04:48.964Z"
+  }
+},
+{
+  "model": "demograficos.docadjunto",
+  "pk": 4,
+  "fields": {
+    "imagen": "demograficos/docs/credencial-actual.jpg",
+    "ruta": "WWW.OTRARUTADEINE.COM",
+    "tipo": 1,
+    "validado": true,
+    "user": 2,
+    "orden": true,
+    "fechaCreado": "2019-08-13T19:06:37.066Z"
+  }
+},
+{
+  "model": "demograficos.docadjunto",
+  "pk": 5,
+  "fields": {
+    "imagen": "",
+    "ruta": "www.rutadeinereversodos.com",
+    "tipo": 2,
+    "validado": true,
+    "user": 2,
+    "orden": true,
+    "fechaCreado": "2019-08-13T19:07:05.444Z"
+  }
+},
+{
+  "model": "demograficos.docadjunto",
+  "pk": 6,
+  "fields": {
+    "imagen": "",
+    "ruta": "www.comprobantededom.com",
+    "tipo": 3,
+    "validado": true,
+    "user": 2,
+    "orden": true,
+    "fechaCreado": "2019-08-13T19:07:47.856Z"
+  }
+},
+{
+  "model": "demograficos.docadjunto",
+  "pk": 7,
+  "fields": {
+    "imagen": "demograficos/docs/credencial-actual.jpg",
+    "ruta": "www.urldeamazonS3.com",
+    "tipo": 1,
+    "validado": true,
+    "user": 6,
+    "orden": true,
+    "fechaCreado": "2019-08-13T19:02:23.845Z"
+  }
+},
+{
+  "model": "demograficos.docadjunto",
+  "pk": 8,
+  "fields": {
+    "imagen": "demograficos/docs/INE_reverso.jpg",
+    "ruta": "www.rutadeinereverso.com",
+    "tipo": 2,
+    "validado": true,
+    "user": 6,
+    "orden": false,
+    "fechaCreado": "2019-08-13T19:04:05.028Z"
+  }
+},
+{
+  "model": "demograficos.docadjunto",
+  "pk": 9,
+  "fields": {
+    "imagen": "demograficos/docs/compr_dom.jpg",
+    "ruta": "www.rutadefotodecomprobantededomicilio.com",
+    "tipo": 3,
+    "validado": true,
+    "user": 6,
+    "orden": true,
+    "fechaCreado": "2019-08-13T19:04:48.964Z"
+  }
+}
+]

@@ -1,0 +1,32 @@
+[
+    {
+        "model": "contabilidad.cuentasaldo",
+        "pk": 1,
+        "fields": {
+            "codigo": null,
+            "nombre": "Inguz STP",
+            "clabe": "646180218000000008",
+            "saldo": "500.0000"
+        }
+    },
+    {
+        "model": "contabilidad.cuentasaldo",
+        "pk": 2,
+        "fields": {
+            "codigo": null,
+            "nombre": "Scotia Terceros",
+            "clabe": "25600126235",
+            "saldo": "500.0000"
+        }
+    },
+    {
+        "model": "contabilidad.cuentasaldo",
+        "pk": 3,
+        "fields": {
+            "codigo": null,
+            "nombre": "Scotia Propia",
+            "clabe": "25600126234",
+            "saldo": "64504.6000"
+        }
+    }
+]

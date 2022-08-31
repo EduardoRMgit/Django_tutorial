@@ -1,0 +1,8 @@
+#Hacer un servicio para ser accedido en tu cluster que utiliza un direccion publica de fuera
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ include "django.name" . }}-postgres
+spec:
+  type: ExternalName
+  externalName: {{ .Values.rdsExternal }}

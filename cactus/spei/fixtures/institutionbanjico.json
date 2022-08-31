@@ -1,0 +1,932 @@
+[
+{
+  "model": "spei.institutionbanjico",
+  "pk": 1,
+  "fields": {
+    "name": "Banco Nacional de M\u00e9xico, S.A., Instituci\u00f3n deBanca M\u00faltiple, Grupo Financiero Banamex",
+    "short_name": "BANAMEX",
+    "short_id": "002",
+    "long_id": "40002"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 2,
+  "fields": {
+    "name": "Banco Nacional de Comercio Exterior, Sociedad Nacional de Cr\u00e9dito, Instituci\u00f3n de Banca de Desarrollo",
+    "short_name": "BANCOMEXT",
+    "short_id": "006",
+    "long_id": "37006"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 3,
+  "fields": {
+    "name": "Banco Nacional de Obras y Servicios P\u00fablicos, Sociedad Nacional de Cr\u00e9dito, Instituci\u00f3n de Banca de Desarrollo",
+    "short_name": "BANOBRAS",
+    "short_id": "009",
+    "long_id": "37009"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 4,
+  "fields": {
+    "name": "BBVA Bancomer, S.A., Instituci\u00f3n de Banca M\u00faltiple, Grupo Financiero BBVA Bancomer",
+    "short_name": "BBVA BANCOMER",
+    "short_id": "012",
+    "long_id": "40012"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 5,
+  "fields": {
+    "name": "Banco Santander (M\u00e9xico), S.A., Instituci\u00f3n de Banca M\u00faltiple, Grupo Financiero Santander",
+    "short_name": "SANTANDER",
+    "short_id": "014",
+    "long_id": "40014"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 6,
+  "fields": {
+    "name": "Banco Nacional del Ej\u00e9rcito, Fuerza A\u00e9rea y Armada, Sociedad Nacional de Cr\u00e9dito, Instituci\u00f3n de Banca de Desarrollo",
+    "short_name": "BANJERCITO",
+    "short_id": "019",
+    "long_id": "37019"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 7,
+  "fields": {
+    "name": "HSBC M\u00e9xico, S.A., instituci\u00f3n De Banca M\u00faltiple, Grupo Financiero HSBC",
+    "short_name": "HSBC",
+    "short_id": "021",
+    "long_id": "40021"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 8,
+  "fields": {
+    "name": "Banco del Baj\u00edo, S.A., Instituci\u00f3n de Banca M\u00faltiple",
+    "short_name": "BAJIO",
+    "short_id": "030",
+    "long_id": "40030"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 9,
+  "fields": {
+    "name": "IXE Banco, S.A., Instituci\u00f3n de Banca M\u00faltiple, IXE Grupo Financiero",
+    "short_name": "IXE",
+    "short_id": "032",
+    "long_id": "40072"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 10,
+  "fields": {
+    "name": "Banco Inbursa, S.A., Instituci\u00f3n de Banca M\u00faltiple, Grupo Financiero Inbursa",
+    "short_name": "INBURSA",
+    "short_id": "036",
+    "long_id": "40036"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 11,
+  "fields": {
+    "name": "Banco Interacciones, S.A., Instituci\u00f3n de Banca M\u00faltiple",
+    "short_name": "INTERACCIONES",
+    "short_id": "037",
+    "long_id": "40037"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 12,
+  "fields": {
+    "name": "Banca Mifel, S.A., Instituci\u00f3n de Banca M\u00faltiple, Grupo Financiero Mifel",
+    "short_name": "MIFEL",
+    "short_id": "042",
+    "long_id": "40042"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 13,
+  "fields": {
+    "name": "Scotiabank Inverlat, S.A.",
+    "short_name": "SCOTIABANK",
+    "short_id": "044",
+    "long_id": "40044"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 14,
+  "fields": {
+    "name": "Banco Regional de Monterrey, S.A., Instituci\u00f3n de Banca M\u00faltiple, Banregio Grupo Financiero",
+    "short_name": "BANREGIO",
+    "short_id": "058",
+    "long_id": "40058"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 15,
+  "fields": {
+    "name": "Banco Invex, S.A., Instituci\u00f3n de Banca M\u00faltiple, Invex Grupo Financiero",
+    "short_name": "INVEX",
+    "short_id": "059",
+    "long_id": "40059"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 16,
+  "fields": {
+    "name": "Bansi, S.A., Instituci\u00f3n de Banca M\u00faltiple",
+    "short_name": "BANSI",
+    "short_id": "060",
+    "long_id": "40060"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 17,
+  "fields": {
+    "name": "Banca Afirme, S.A., Instituci\u00f3n de Banca M\u00faltiple",
+    "short_name": "AFIRME",
+    "short_id": "062",
+    "long_id": "40062"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 18,
+  "fields": {
+    "name": "Banco Mercantil del Norte, S.A., Instituci\u00f3n de Banca M\u00faltiple, Grupo Financiero Banorte",
+    "short_name": "BANORTE",
+    "short_id": "072",
+    "long_id": "40072"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 19,
+  "fields": {
+    "name": "American Express Bank (M\u00e9xico), S.A., Instituci\u00f3n de Banca M\u00faltiple",
+    "short_name": "AMERICAN EXPRESS",
+    "short_id": "103",
+    "long_id": "40103"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 20,
+  "fields": {
+    "name": "Bank of America M\u00e9xico, S.A.,Instituci\u00f3n de Banca M\u00faltiple, Grupo Financiero Bank of America",
+    "short_name": "BAMSA",
+    "short_id": "106",
+    "long_id": "40106"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 21,
+  "fields": {
+    "name": "Bank of Tokyo-Mitsubishi UFJ (M\u00e9xico), S.A.",
+    "short_name": "TOKYO",
+    "short_id": "108",
+    "long_id": "40108"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 22,
+  "fields": {
+    "name": "Banco J.P. Morgan, S.A., Instituci\u00f3n de Banca M\u00faltiple, J.P. Morgan Grupo Financiero",
+    "short_name": "JP MORGAN",
+    "short_id": "110",
+    "long_id": "40110"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 23,
+  "fields": {
+    "name": "Banco Monex, S.A., Instituci\u00f3n de Banca M\u00faltiple",
+    "short_name": "BMONEX",
+    "short_id": "112",
+    "long_id": "40112"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 24,
+  "fields": {
+    "name": "Banco Ve Por Mas, S.A. Instituci\u00f3n de Banca M\u00faltiple",
+    "short_name": "VE POR MAS",
+    "short_id": "113",
+    "long_id": "40113"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 25,
+  "fields": {
+    "name": "Deutsche Bank M\u00e9xico, S.A., Instituci\u00f3n de Banca M\u00faltiple",
+    "short_name": "DEUTSCHE",
+    "short_id": "124",
+    "long_id": "40124"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 26,
+  "fields": {
+    "name": "Banco Credit Suisse (M\u00e9xico), S.A. Instituci\u00f3n de Banca M\u00faltiple, Grupo Financiero Credit Suisse (M\u00e9xico)",
+    "short_name": "CREDIT SUISSE",
+    "short_id": "126",
+    "long_id": "40126"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 27,
+  "fields": {
+    "name": "Banco Azteca, S.A. Instituci\u00f3n de Banca M\u00faltiple.",
+    "short_name": "AZTECA",
+    "short_id": "127",
+    "long_id": "40127"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 28,
+  "fields": {
+    "name": "Banco Autofin M\u00e9xico, S.A. Instituci\u00f3n de Banca M\u00faltiple",
+    "short_name": "AUTOFIN",
+    "short_id": "128",
+    "long_id": "40128"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 29,
+  "fields": {
+    "name": "Barclays Bank M\u00e9xico, S.A., Instituci\u00f3n de Banca M\u00faltiple, Grupo Financiero Barclays M\u00e9xico",
+    "short_name": "BARCLAYS",
+    "short_id": "129",
+    "long_id": "40129"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 30,
+  "fields": {
+    "name": "Banco Compartamos, S.A., Instituci\u00f3n de Banca M\u00faltiple",
+    "short_name": "COMPARTAMOS",
+    "short_id": "130",
+    "long_id": "40130"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 31,
+  "fields": {
+    "name": "Banco Ahorro Famsa, S.A., Instituci\u00f3n de Banca M\u00faltiple",
+    "short_name": "BANCO FAMSA",
+    "short_id": "131",
+    "long_id": "40131"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 32,
+  "fields": {
+    "name": "Banco Multiva, S.A., Instituci\u00f3n de Banca M\u00faltiple, Multivalores Grupo Financiero",
+    "short_name": "BMULTIVA",
+    "short_id": "132",
+    "long_id": "40132"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 33,
+  "fields": {
+    "name": "Banco Actinver, S.A. Instituci\u00f3n de Banca M\u00faltiple, Grupo Financiero Actinver",
+    "short_name": "ACTINVER",
+    "short_id": "133",
+    "long_id": "40133"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 34,
+  "fields": {
+    "name": "Nacional Financiera, Sociedad Nacional de Cr\u00e9dito, Instituci\u00f3n de Banca de Desarrollo",
+    "short_name": "NAFIN",
+    "short_id": "135",
+    "long_id": "37135"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 35,
+  "fields": {
+    "name": "Inter Banco, S.A. Instituci\u00f3n de Banca M\u00faltiple",
+    "short_name": "INTERBANCO",
+    "short_id": "136",
+    "long_id": "40136"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 36,
+  "fields": {
+    "name": "BanCoppel, S.A., Instituci\u00f3n de Banca M\u00faltiple",
+    "short_name": "BANCOPPEL",
+    "short_id": "137",
+    "long_id": "40137"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 37,
+  "fields": {
+    "name": "ABC Capital, S.A., Instituci\u00f3n de Banca M\u00faltiple",
+    "short_name": "ABC CAPITAL",
+    "short_id": "138",
+    "long_id": "40138"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 38,
+  "fields": {
+    "name": "Consubanco, S.A. Instituci\u00f3n de Banca M\u00faltiple",
+    "short_name": "CONSUBANCO",
+    "short_id": "140",
+    "long_id": "40140"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 39,
+  "fields": {
+    "name": "Volkswagen Bank, S.A., Instituci\u00f3n de Banca M\u00faltiple",
+    "short_name": "VOLKSWAGEN",
+    "short_id": "141",
+    "long_id": "40141"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 40,
+  "fields": {
+    "name": "CIBanco, S.A.",
+    "short_name": "CIBANCO",
+    "short_id": "143",
+    "long_id": "40143"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 41,
+  "fields": {
+    "name": "Banco Base, S.A., Instituci\u00f3n de Banca M\u00faltiple",
+    "short_name": "BBASE",
+    "short_id": "145",
+    "long_id": "40145"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 42,
+  "fields": {
+    "name": "Banco del Ahorro Nacional y Servicios Financieros, Sociedad Nacional de Cr\u00e9dito, Instituci\u00f3n de Banca de Desarrollo",
+    "short_name": "BANSEFI",
+    "short_id": "166",
+    "long_id": "37166"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 43,
+  "fields": {
+    "name": "Sociedad Hipotecaria Federal, Sociedad Nacional de Cr\u00e9dito, Instituci\u00f3n de Banca de Desarrollo",
+    "short_name": "HIPOTECARIA FEDERAL",
+    "short_id": "168",
+    "long_id": "37168"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 44,
+  "fields": {
+    "name": "Monex Casa de Bolsa, S.A. de C.V. Monex Grupo Financiero",
+    "short_name": "MONEXCB",
+    "short_id": "600",
+    "long_id": "90600"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 45,
+  "fields": {
+    "name": "GBM Grupo Burs\u00e1til Mexicano, S.A. de C.V. Casa de Bolsa",
+    "short_name": "GBM",
+    "short_id": "601",
+    "long_id": "90601"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 46,
+  "fields": {
+    "name": "Masari Casa de Bolsa, S.A.",
+    "short_name": "MASARI",
+    "short_id": "602",
+    "long_id": "90602"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 47,
+  "fields": {
+    "name": "Value, S.A. de C.V. Casa de Bolsa",
+    "short_name": "VALUE",
+    "short_id": "605",
+    "long_id": "90605"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 48,
+  "fields": {
+    "name": "Estructuradores del Mercado de Valores Casa de Bolsa, S.A. de C.V.",
+    "short_name": "ESTRUCTURADORES",
+    "short_id": "606",
+    "long_id": "90606"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 49,
+  "fields": {
+    "name": "Vector Casa de Bolsa, S.A. de C.V.",
+    "short_name": "VECTOR",
+    "short_id": "608",
+    "long_id": "90608"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 50,
+  "fields": {
+    "name": "Casa de Bolsa Finamex, S.A. de C.V.",
+    "short_name": "FINAMEX",
+    "short_id": "616",
+    "long_id": "90616"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 51,
+  "fields": {
+    "name": "Valores Mexicanos Casa de Bolsa, S.A. de C.V.",
+    "short_name": "VALMEX",
+    "short_id": "617",
+    "long_id": "90617"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 52,
+  "fields": {
+    "name": "Profuturo G.N.P., S.A. de C.V., Afore",
+    "short_name": "PROFUTURO",
+    "short_id": "620",
+    "long_id": "90620"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 53,
+  "fields": {
+    "name": "Actinver Casa de Bolsa, S.A. de C.V.",
+    "short_name": "CB ACTINVER",
+    "short_id": "621",
+    "long_id": "90621"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 54,
+  "fields": {
+    "name": "Skandia Vida, S.A. de C.V.",
+    "short_name": "SKANDIA",
+    "short_id": "623",
+    "long_id": "90623"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 55,
+  "fields": {
+    "name": "Zurich Compa\u00f1\u00eda de Seguros, S.A.",
+    "short_name": "ZURICH",
+    "short_id": null,
+    "long_id": null
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 56,
+  "fields": {
+    "name": "Zurich Compa\u00f1\u00eda de Seguros, S.A.",
+    "short_name": "ZURICH",
+    "short_id": "627",
+    "long_id": "90627"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 57,
+  "fields": {
+    "name": "Zurich Vida, Compa\u00f1\u00eda de Seguros, S.A.",
+    "short_name": "ZURICHVI",
+    "short_id": "628",
+    "long_id": "90628"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 58,
+  "fields": {
+    "name": "Intercam Casa de Bolsa, S.A. de C.V.",
+    "short_name": "CB INTERCAM",
+    "short_id": "630",
+    "long_id": "90630"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 59,
+  "fields": {
+    "name": "CI Casa de Bolsa, S.A. de C.V.",
+    "short_name": "CI BOLSA",
+    "short_id": "631",
+    "long_id": "90631"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 60,
+  "fields": {
+    "name": "Fincom\u00fan, Servicios Financieros Comunitarios, S.A. de C.V.",
+    "short_name": "FINCOMUN",
+    "short_id": "634",
+    "long_id": "90634"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 61,
+  "fields": {
+    "name": "HDI Seguros, S.A. de C.V.",
+    "short_name": "HDI SEGUROS",
+    "short_id": "636",
+    "long_id": "90636"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 62,
+  "fields": {
+    "name": "Order Express Casa de Cambio, S.A. de C.V",
+    "short_name": "ORDER",
+    "short_id": "637",
+    "long_id": "90637"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 63,
+  "fields": {
+    "name": "Akala, S.A. de C.V., Sociedad Financiera Popular",
+    "short_name": "AKALA",
+    "short_id": "638",
+    "long_id": "90638"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 64,
+  "fields": {
+    "name": "Operadora de Recursos Reforma, S.A. de C.V., S.F.P.",
+    "short_name": "REFORMA",
+    "short_id": "642",
+    "long_id": "90642"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 65,
+  "fields": {
+    "name": "Sistema de Transferencias y Pagos STP, S.A. de C.V.SOFOM ENR",
+    "short_name": "STP",
+    "short_id": "646",
+    "long_id": "90646"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 66,
+  "fields": {
+    "name": "Evercore Casa de Bolsa, S.A. de C.V.",
+    "short_name": "EVERCORE",
+    "short_id": "648",
+    "long_id": "90648"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 67,
+  "fields": {
+    "name": "Skandia Operadora de Fondos, S.A. de C.V.",
+    "short_name": "OSKNDIA",
+    "short_id": "649",
+    "long_id": "90649"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 68,
+  "fields": {
+    "name": "Seguros Monterrey New York Life, S.A de C.V",
+    "short_name": "SEGMTY",
+    "short_id": "651",
+    "long_id": null
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 69,
+  "fields": {
+    "name": "Soluci\u00f3n Asea, S.A. de C.V., Sociedad Financiera Popular",
+    "short_name": "ASEA",
+    "short_id": "652",
+    "long_id": "90652"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 70,
+  "fields": {
+    "name": "Kuspit Casa de Bolsa, S.A. de C.V.",
+    "short_name": "KUSPIT",
+    "short_id": "653",
+    "long_id": "90653"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 71,
+  "fields": {
+    "name": "J.P. SOFIEXPRESS, S.A. de C.V., S.F.P.",
+    "short_name": "SOFIEXPRESS",
+    "short_id": "655",
+    "long_id": "90655"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 72,
+  "fields": {
+    "name": "UNAGRA, S.A. de C.V., S.F.P.",
+    "short_name": "UNAGRA",
+    "short_id": "656",
+    "long_id": "90656"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 73,
+  "fields": {
+    "name": "OPCIONES EMPRESARIALES DEL NORESTE, S.A. DE C.V., S.F.P.",
+    "short_name": "OPCIONES EMPRESARIALES DEL NOROESTE",
+    "short_id": "659",
+    "long_id": null
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 74,
+  "fields": {
+    "name": "Cls Bank International",
+    "short_name": "CLS",
+    "short_id": "901",
+    "long_id": "90901"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 75,
+  "fields": {
+    "name": "SD. Indeval, S.A. de C.V.",
+    "short_name": "INDEVAL",
+    "short_id": "902",
+    "long_id": "90902"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 76,
+  "fields": {
+    "name": "Libertad Servicios Financieros, S.A. De C.V.",
+    "short_name": "LIBERTAD",
+    "short_id": "670",
+    "long_id": "90670"
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 77,
+  "fields": {
+    "name": "The Royal Bank of Scotland M\u00e9xico, S.A., Instituci\u00f3n de Banca M\u00faltiple",
+    "short_name": "THE ROYAL BANK",
+    "short_id": "102",
+    "long_id": null
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 78,
+  "fields": {
+    "name": "ING Bank (M\u00e9xico), S.A., Instituci\u00f3n de Banca M\u00faltiple, ING Grupo Financiero",
+    "short_name": "ING",
+    "short_id": "116",
+    "long_id": null
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 79,
+  "fields": {
+    "name": "Banco Wal-Mart de M\u00e9xico Adelante, S.A., Instituci\u00f3n de Banca M\u00faltiple",
+    "short_name": "WAL-MART",
+    "short_id": "134",
+    "long_id": null
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 80,
+  "fields": {
+    "name": "UBS Bank M\u00e9xico, S.A., Instituci\u00f3n de Banca M\u00faltiple, UBS Grupo Financiero",
+    "short_name": "UBS BANK",
+    "short_id": "139",
+    "long_id": null
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 81,
+  "fields": {
+    "name": "Casa de Cambio Tiber, S.A. de C.V.",
+    "short_name": "TIBER",
+    "short_id": "607",
+    "long_id": null
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 82,
+  "fields": {
+    "name": "B y B, Casa de Cambio, S.A. de C.V.",
+    "short_name": "B&B",
+    "short_id": "610",
+    "long_id": null
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 83,
+  "fields": {
+    "name": "Acciones y Valores Banamex, S.A. de C.V., Casa de Bolsa",
+    "short_name": "ACCIVAL",
+    "short_id": "614",
+    "long_id": null
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 84,
+  "fields": {
+    "name": "Merrill Lynch M\u00e9xico, S.A. de C.V. Casa de Bolsa",
+    "short_name": "MERRILL LYNCH",
+    "short_id": "615",
+    "long_id": null
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 85,
+  "fields": {
+    "name": "Unica Casa de Cambio, S.A. de C.V.",
+    "short_name": "UNICA",
+    "short_id": "618",
+    "long_id": null
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 86,
+  "fields": {
+    "name": "MAPFRE Tepeyac, S.A.",
+    "short_name": "MAPFRE",
+    "short_id": "619",
+    "long_id": null
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 87,
+  "fields": {
+    "name": "OPERADORA ACTINVER, S.A. DE C.V.",
+    "short_name": "OACTIN",
+    "short_id": "622",
+    "long_id": null
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 88,
+  "fields": {
+    "name": "Deutsche Securities, S.A. de C.V. CASA DE BOLSA",
+    "short_name": "CBDEUTSCHE",
+    "short_id": "626",
+    "long_id": null
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 89,
+  "fields": {
+    "name": "Hipotecaria Su Casita, S.A. de C.V. SOFOM ENR",
+    "short_name": "SU CASITA",
+    "short_id": "629",
+    "long_id": null
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 90,
+  "fields": {
+    "name": "Bulltick Casa de Bolsa, S.A., de C.V.",
+    "short_name": "BULLTICK CB",
+    "short_id": "632",
+    "long_id": null
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 91,
+  "fields": {
+    "name": "Sterling Casa de Cambio, S.A. de C.V.",
+    "short_name": "STERLING",
+    "short_id": "633",
+    "long_id": null
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 92,
+  "fields": {
+    "name": "J.P. Morgan Casa de Bolsa, S.A. de C.V. J.P. Morgan Grupo Financiero",
+    "short_name": "CB JPMORGAN",
+    "short_id": "640",
+    "long_id": null
+  }
+},
+{
+  "model": "spei.institutionbanjico",
+  "pk": 93,
+  "fields": {
+    "name": "Telecomunicaciones de M\u00e9xico",
+    "short_name": "TELECOMM",
+    "short_id": "647",
+    "long_id": null
+  }
+}
+]

@@ -1,0 +1,7 @@
+from .movimientoretiroAdmin import MovimientoRetiroAdmin
+from .movientotransaccionAdmin import MovimientoTransaccionAdmin
+from .moviemientodepositoAdmin import MovimientoDepositoAdmin
+from .archivoAdmin import ArchivoAdmin
+from .respuestaScotiaAdmin import RespuestaScotiaAdmin
+from .comisionScotiaAdmin import ComisionesScotiaAdmin
+from .datosFijosPDFAdmin import DatosFijosPDFAdmin

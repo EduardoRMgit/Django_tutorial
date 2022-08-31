@@ -1,0 +1,127 @@
+<!DOCTYPE HTML>
+<HTML>
+
+<HEAD>
+    <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <TITLE>Comprobante</TITLE>
+    <META name="" content="">
+    <STYLE type="text/css">
+        body{
+            font-family: 'Arial', sans-serif;';
+            font-size: 16px;
+        }
+        p{
+            font-size: 16px;
+        }
+        h1{
+            font-size: 16px;
+        }
+        h2{
+            font-size: 16px;
+        }
+        .comisiones{ width: 100%; }
+        .container{ width: 90%; margin: 0 auto;}
+        .contrato{ text-align: justify; font-weight: bold;}
+        .title{ text-align: center; font-weight: bold;}
+
+        table, th, td{ border-collapse: collapse; margin: 0 auto;  width: 100%;}
+        th, td{ padding: 15px;}
+        th { text-align: center; background: #4f1c68; color: white;}
+        .first_c{ width: 50%; text-align: right; border-top: 1px dashed black; border-bottom: 1px dashed black; }
+        .second_c{ width: 50%; text-align: left; border-top: 1px dashed black; border-bottom: 1px dashed black; color: #black; font-weight: 200;}
+
+        .color_line{ color: #35e5e2; }
+
+        .background{ background: #f5f5f5; }
+
+        .ft0{font: 16px 'Arial';color: #3d425f;line-height: 18px;}
+
+        .space{ margin-bottom: 50px }
+        .space-top{ margin-top: 50px }
+
+    </STYLE>
+</HEAD>
+
+<BODY>
+    <section class="comisiones">
+        <div class="container">
+            <h1 class="title ft0 space" style="font-size: 24px">
+                {{ empresa }} {{ titulo }}
+            </h1>
+            <h2 class="title ft0 space" style="font-size: 20px">
+                Numero de convenio : {{ convenio }}
+            </h2>
+            <table>
+                <tr>
+                    <th colspan="2">
+                        Comprobante
+                    </th>
+                </tr>
+                <tr>
+                    <td class="first_c ft0">
+                        Nombre del titular:
+                    </td>
+                    <td class="second_c">
+                        {{ user.first_name }} {{ user.last_name }}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="first_c ft0 background">
+                        Referencia
+                    </td>
+                    <td class="second_c background">
+                        {{ referencia }}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="first_c ft0">
+                        Importe
+                    </td>
+                    <td class="second_c">
+                        {{ importe }}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="first_c ft0 background">
+                        Vigencia
+                    </td>
+                    <td class="second_c background">
+                        {{ vigencia }}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="first_c ft0">
+                        Id. transacción
+                    </td>
+                    <td class="second_c">
+                        {{ transaccion }}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="first_c ft0 background"> 
+                        Fecha y hora
+                    </td>
+                    <td class="second_c background">
+                        {{ date_to }}
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="space-top">
+            <p>
+                <span class="ft0">
+                    <strong>
+                        Instrucciones
+                    </strong>
+                </span>
+            </p>
+        </div>
+        <hr class="color_line">
+        <div>
+            <p>
+                {{ intrucciones }}
+            </p>
+        </div>
+    </section>
+</BODY>
+</HTML>

@@ -1,0 +1,52 @@
+[
+    {
+    "model": "auth.user",
+    "pk": 17,
+    "fields": {
+      "password": "pbkdf2_sha256$150000$HgZJZ6nl9qWr$JFYlfLH7KS8o0exfDSUkYEOH+iof0ppB7Qc/6RKV2O4=",
+      "last_login": null,
+      "is_superuser": true,
+      "username": "test",
+      "first_name": "Lucia Fernanda",
+      "last_name": "Brativano",
+      "email": "test@test.com",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2020-04-07T10:08:43.293Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "demograficos.direccion",
+    "pk": 5,
+    "fields": {
+      "linea1": "Madero no. 69",
+      "linea2": "Ampliacion Tepepan",
+      "codPostal": "42069",
+      "ciudad": "CDMX",
+      "delegMunicipio": "Tlalpan",
+      "fechaCreacion": "2019-08-16T01:56:04Z",
+      "activo": true,
+      "validado": true,
+      "country": "MX",
+      "user": 17,
+      "tipo_direccion": 1,
+      "entidadFed": 2
+    }
+  },
+  {
+    "model": "demograficos.tipodireccion", 
+    "pk": 1, 
+    "fields": {
+      "tipo": "Casa"
+    }
+  },
+  {
+    "model": "demograficos.entidadfed",
+    "pk": 2, 
+    "fields": {
+      "entidad": "Aguascalientes"
+      }
+  }
+]

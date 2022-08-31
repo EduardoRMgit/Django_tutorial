@@ -1,0 +1,92 @@
+[
+{
+  "model": "demograficos.direccion",
+  "pk": 1,
+  "fields": {
+    "linea1": "Comoporis 189",
+    "linea2": "Col. El Reloj",
+    "codPostal": "02030",
+    "ciudad": "Ciudad Azteca",
+    "delegMunicipio": "Coyoacan",
+    "fechaCreacion": "2019-08-16T01:53:35Z",
+    "activo": true,
+    "validado": true,
+    "country": "MX",
+    "user": 5,
+    "tipo_direccion": 1,
+    "entidadFed": 1
+  }
+},
+{
+  "model": "demograficos.direccion",
+  "pk": 2,
+  "fields": {
+    "linea1": "Av Coyoac\u00e1n 1435 Edificio A Local 5",
+    "linea2": "Col. El Vivo",
+    "codPostal": "03100",
+    "ciudad": "Neza",
+    "delegMunicipio": "Benito Juarez",
+    "fechaCreacion": "2019-08-16T01:54:27Z",
+    "activo": true,
+    "validado": true,
+    "country": "MX",
+    "user": 4,
+    "tipo_direccion": 2,
+    "entidadFed": 1
+  }
+},
+{
+  "model": "demograficos.direccion",
+  "pk": 3,
+  "fields": {
+    "linea1": "Rancho Piomo 889",
+    "linea2": "Oro de Ley",
+    "codPostal": "01928",
+    "ciudad": "Coapa",
+    "delegMunicipio": "Tlalpan",
+    "fechaCreacion": "2019-08-16T01:55:20Z",
+    "activo": true,
+    "validado": true,
+    "country": "MX",
+    "user": 3,
+    "tipo_direccion": 1,
+    "entidadFed": 1
+  }
+},
+{
+  "model": "demograficos.direccion",
+  "pk": 4,
+  "fields": {
+    "linea1": "Prado del Norte",
+    "linea2": "Praderas",
+    "codPostal": "76543",
+    "ciudad": "Jurica",
+    "delegMunicipio": "Quer\u00e9taro",
+    "fechaCreacion": "2019-08-16T01:56:04Z",
+    "activo": true,
+    "validado": true,
+    "country": "MX",
+    "user": 6,
+    "tipo_direccion": 1,
+    "entidadFed": 2
+  }
+},
+{
+  "model": "demograficos.direccion",
+  "pk": 5,
+  "fields": {
+    "linea1": "Madero no. 69",
+    "linea2": "Ampliacion Tepepan",
+    "codPostal": "42069",
+    "ciudad": "CDMX",
+    "delegMunicipio": "Tlalpan",
+    "fechaCreacion": "2019-08-16T01:56:04Z",
+    "activo": true,
+    "validado": true,
+    "country": "MX",
+    "user": 17,
+    "tipo_direccion": 1,
+    "entidadFed": 2
+  }
+}
+]

@@ -1,0 +1,10 @@
+[
+{
+  "model": "demograficos.adminutils",
+  "pk": 1,
+  "fields": {
+    "util": "ApplyValidation",
+    "activo": false
+  }
+}
+]

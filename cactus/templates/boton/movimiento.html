@@ -1,0 +1,17 @@
+{% extends 'admin/change_list.html' %}
+
+ {% block object-tools %}
+    <div>
+      <form action="movimiento/" method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+        <div class="container pt-5">
+            <div class="custom-file mt-5">
+              <input type="file" name="movimiento" class="custom-file-input" id="Movimiento">
+              <button type="submit">Cargar</button>
+            </div>
+        </div>
+        <br>
+      </form>
+
+    {{ block.super }}
+{% endblock %}

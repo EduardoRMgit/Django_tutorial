@@ -1,0 +1,37 @@
+[
+{
+  "model": "banca.statustrans",
+  "pk": 0,
+  "fields": {
+    "nombre": "esperando respuesta"
+  }
+},
+{
+  "model": "banca.statustrans",
+  "pk": 1,
+  "fields": {
+    "nombre": "exito"
+  }
+},
+{
+  "model": "banca.statustrans",
+  "pk": 2,
+  "fields": {
+    "nombre": "devolucion"
+  }
+},
+{
+  "model": "banca.statustrans",
+  "pk": 3,
+  "fields": {
+    "nombre": "verificado"
+  }
+},
+{
+  "model": "banca.statustrans",
+  "pk": 4,
+  "fields": {
+    "nombre": "rechazada"
+  }
+}
+]

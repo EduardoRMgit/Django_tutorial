@@ -1,0 +1,587 @@
+[
+    {
+        "model": "contabilidad.contablecuenta",
+        "pk": 2,
+        "fields": {
+            "codigo": "1102-0002",
+            "orden": 3.0,
+            "nombre": "BANCO CTA. DE TERCEROS",
+            "sobrenombre": "BANCO CTA. DE TERCEROS",
+            "cuenta_padre": 11,
+            "es_cuenta_totales": false,
+            "orden_admin": 10.2
+        }
+    },
+    {
+        "model": "contabilidad.contablecuenta",
+        "pk": 3,
+        "fields": {
+            "codigo": "1107-0001",
+            "orden": 2.2,
+            "nombre": "IVA ACREDITABLE",
+            "sobrenombre": "IVA ACREDITABLE",
+            "cuenta_padre": 12,
+            "es_cuenta_totales": false,
+            "orden_admin": 20.1
+        }
+    },
+    {
+        "model": "contabilidad.contablecuenta",
+        "pk": 4,
+        "fields": {
+            "codigo": "2101-0001",
+            "orden": 2.3,
+            "nombre": "Acreedores por liquidaci\u00f3n de operaciones",
+            "sobrenombre": "PROVEEDORES",
+            "cuenta_padre": 13,
+            "es_cuenta_totales": false,
+            "orden_admin": 60.1
+        }
+    },
+    {
+        "model": "contabilidad.contablecuenta",
+        "pk": 5,
+        "fields": {
+            "codigo": "2102-0001",
+            "orden": 1.2,
+            "nombre": "Acreedores diversos y otras cuentas por pagar",
+            "sobrenombre": "CTA STP",
+            "cuenta_padre": 14,
+            "es_cuenta_totales": false,
+            "orden_admin": 70.1
+        }
+    },
+    {
+        "model": "contabilidad.contablecuenta",
+        "pk": 6,
+        "fields": {
+            "codigo": "2102-0002",
+            "orden": 1.1,
+            "nombre": "CUENTA STP INGUZ",
+            "sobrenombre": "CUENTA STP INGUZ",
+            "cuenta_padre": 14,
+            "es_cuenta_totales": false,
+            "orden_admin": 70.2
+        }
+    },
+    {
+        "model": "contabilidad.contablecuenta",
+        "pk": 7,
+        "fields": {
+            "codigo": "3100-0001",
+            "orden": 0.0,
+            "nombre": "Capital social",
+            "sobrenombre": "CAPITAL ACCIONISTAS",
+            "cuenta_padre": 15,
+            "es_cuenta_totales": false,
+            "orden_admin": 100.1
+        }
+    },
+    {
+        "model": "contabilidad.contablecuenta",
+        "pk": 8,
+        "fields": {
+            "codigo": "5202-0001",
+            "orden": 2.4,
+            "nombre": "Gastos por intereses",
+            "sobrenombre": "COMISIONES",
+            "cuenta_padre": 17,
+            "es_cuenta_totales": false,
+            "orden_admin": 130.1
+        }
+    },
+    {
+        "model": "contabilidad.contablecuenta",
+        "pk": 9,
+        "fields": {
+            "codigo": "TOTAL",
+            "orden": -1.0,
+            "nombre": "TOTALES",
+            "sobrenombre": "TOTALES",
+            "cuenta_padre": null,
+            "es_cuenta_totales": true,
+            "orden_admin": 6660.0
+        }
+    },
+    {
+        "model": "contabilidad.contablecuenta",
+        "pk": 10,
+        "fields": {
+            "codigo": "1102-0001",
+            "orden": 2.1,
+            "nombre": "BANCO",
+            "sobrenombre": "BANCO",
+            "cuenta_padre": 11,
+            "es_cuenta_totales": false,
+            "orden_admin": 10.1
+        }
+    },
+    {
+        "model": "contabilidad.contablecuenta",
+        "pk": 11,
+        "fields": {
+            "codigo": "1102",
+            "orden": -1.0,
+            "nombre": "BANCOS",
+            "sobrenombre": "BANCOS",
+            "cuenta_padre": null,
+            "es_cuenta_totales": false,
+            "orden_admin": 10.0
+        }
+    },
+    {
+        "model": "contabilidad.contablecuenta",
+        "pk": 12,
+        "fields": {
+            "codigo": "1107",
+            "orden": -1.0,
+            "nombre": "Impuestos por recuperar",
+            "sobrenombre": "I.V.A. ACREDITABLE PAGADO",
+            "cuenta_padre": null,
+            "es_cuenta_totales": false,
+            "orden_admin": 20.0
+        }
+    },
+    {
+        "model": "contabilidad.contablecuenta",
+        "pk": 13,
+        "fields": {
+            "codigo": "2101",
+            "orden": -1.0,
+            "nombre": "Otras cuentas por pagar.",
+            "sobrenombre": "PROVEEDORES",
+            "cuenta_padre": null,
+            "es_cuenta_totales": false,
+            "orden_admin": 60.0
+        }
+    },
+    {
+        "model": "contabilidad.contablecuenta",
+        "pk": 14,
+        "fields": {
+            "codigo": "2102",
+            "orden": -1.0,
+            "nombre": "Otras cuentas por pagar",
+            "sobrenombre": "ACREEDORES",
+            "cuenta_padre": null,
+            "es_cuenta_totales": false,
+            "orden_admin": 70.0
+        }
+    },
+    {
+        "model": "contabilidad.contablecuenta",
+        "pk": 15,
+        "fields": {
+            "codigo": "3100",
+            "orden": -1.0,
+            "nombre": "Capital contribuido",
+            "sobrenombre": "CAPITAL SOCIAL",
+            "cuenta_padre": null,
+            "es_cuenta_totales": false,
+            "orden_admin": 100.0
+        }
+    },
+    {
+        "model": "contabilidad.contablecuenta",
+        "pk": 17,
+        "fields": {
+            "codigo": "5202",
+            "orden": -1.0,
+            "nombre": "Gastos por intereses",
+            "sobrenombre": "GASTOS FINANCIEROS",
+            "cuenta_padre": null,
+            "es_cuenta_totales": false,
+            "orden_admin": 130.0
+        }
+    },
+    {
+        "model": "contabilidad.contablecuenta",
+        "pk": 19,
+        "fields": {
+            "codigo": "2104",
+            "orden": -1.0,
+            "nombre": "Contribuciones por pagar",
+            "sobrenombre": "I.V.A. TRASLADADO COBRADO",
+            "cuenta_padre": null,
+            "es_cuenta_totales": false,
+            "orden_admin": 75.0
+        }
+    },
+    {
+        "model": "contabilidad.contablecuenta",
+        "pk": 20,
+        "fields": {
+            "codigo": "2104-0001",
+            "orden": 2.11,
+            "nombre": "Impuesto al valor agregado",
+            "sobrenombre": "IVA TRASLADADO",
+            "cuenta_padre": 19,
+            "es_cuenta_totales": false,
+            "orden_admin": 75.1
+        }
+    },
+    {
+        "model": "contabilidad.contablecuenta",
+        "pk": 21,
+        "fields": {
+            "codigo": "4101",
+            "orden": -1.0,
+            "nombre": "Comisiones y tarifas cobradas",
+            "sobrenombre": "INGRESOS POR SERVCIOS",
+            "cuenta_padre": null,
+            "es_cuenta_totales": false,
+            "orden_admin": 110.0
+        }
+    },
+    {
+        "model": "contabilidad.contablecuenta",
+        "pk": 22,
+        "fields": {
+            "codigo": "4101-0001",
+            "orden": 2.31,
+            "nombre": "Comisiones y tarifas cobradas",
+            "sobrenombre": "INGRESOS (SCOTIA PROPIA)",
+            "cuenta_padre": 21,
+            "es_cuenta_totales": false,
+            "orden_admin": 110.1
+        }
+    },
+    {
+        "model": "contabilidad.contablecuenta",
+        "pk": 23,
+        "fields": {
+            "codigo": "2102-0003",
+            "orden": 1.11,
+            "nombre": "Acreedores diversos y otras cuentas por pagar",
+            "sobrenombre": "Acreedores diversos y otras cuentas por pagar",
+            "cuenta_padre": 14,
+            "es_cuenta_totales": false,
+            "orden_admin": 70.3
+        }
+    },
+    {
+        "model": "contabilidad.contablecuenta",
+        "pk": 24,
+        "fields": {
+            "codigo": "2103",
+            "orden": -1.0,
+            "nombre": "FONDOS DE PAGO ELECTR\u00d3NICO EMITIDOS",
+            "sobrenombre": "FONDOS DE PAGO ELECTR\u00d3NICO EMITIDOS",
+            "cuenta_padre": null,
+            "es_cuenta_totales": false,
+            "orden_admin": 72.0
+        }
+    },
+    {
+        "model": "contabilidad.contablecuenta",
+        "pk": 25,
+        "fields": {
+            "codigo": "2103-0001",
+            "orden": 1.111,
+            "nombre": "PASIVO FOPES CLIENTES",
+            "sobrenombre": "PASIVO FOPES CLIENTES",
+            "cuenta_padre": 24,
+            "es_cuenta_totales": false,
+            "orden_admin": 72.1
+        }
+    },
+    {
+        "model": "contabilidad.contablecuenta",
+        "pk": 26,
+        "fields": {
+            "codigo": "1109",
+            "orden": -1.0,
+            "nombre": "CARTERA DE CREDITO",
+            "sobrenombre": "CARTERA DE CREDITO",
+            "cuenta_padre": null,
+            "es_cuenta_totales": false,
+            "orden_admin": 30.0
+        }
+    },
+    {
+        "model": "contabilidad.contablecuenta",
+        "pk": 27,
+        "fields": {
+            "codigo": "1109-0001",
+            "orden": 2.21,
+            "nombre": "CART DE CREDI VIGENTE",
+            "sobrenombre": "CART DE CREDI VIGENTE",
+            "cuenta_padre": 26,
+            "es_cuenta_totales": false,
+            "orden_admin": 30.1
+        }
+    },
+    {
+        "model": "contabilidad.contablecuenta",
+        "pk": 28,
+        "fields": {
+            "codigo": "1110",
+            "orden": -1.0,
+            "nombre": "CLIENTES DE CARTERA DE CREDITO",
+            "sobrenombre": "CLIENTES DE CARTERA DE CREDITO",
+            "cuenta_padre": null,
+            "es_cuenta_totales": false,
+            "orden_admin": 40.0
+        }
+    },
+    {
+        "model": "contabilidad.contablecuenta",
+        "pk": 29,
+        "fields": {
+            "codigo": "1110-0001",
+            "orden": 2.22,
+            "nombre": "CLIENTES CARTE DE CRED VIGENTE",
+            "sobrenombre": "CLIENTES CARTE DE CRED VIGENTE",
+            "cuenta_padre": 28,
+            "es_cuenta_totales": false,
+            "orden_admin": 40.1
+        }
+    },
+    {
+        "model": "contabilidad.contablecuenta",
+        "pk": 30,
+        "fields": {
+            "codigo": "2100",
+            "orden": -1.0,
+            "nombre": "SPONSOR",
+            "sobrenombre": "SPONSOR",
+            "cuenta_padre": null,
+            "es_cuenta_totales": false,
+            "orden_admin": 50.0
+        }
+    },
+    {
+        "model": "contabilidad.contablecuenta",
+        "pk": 31,
+        "fields": {
+            "codigo": "2100-0001",
+            "orden": 2.23,
+            "nombre": "SPONSOR",
+            "sobrenombre": "SPONSOR",
+            "cuenta_padre": 30,
+            "es_cuenta_totales": false,
+            "orden_admin": 50.1
+        }
+    },
+    {
+        "model": "contabilidad.contablecuenta",
+        "pk": 32,
+        "fields": {
+            "codigo": "2110",
+            "orden": -1.0,
+            "nombre": "IVA TRASL EFEC COBRA DE CARTER",
+            "sobrenombre": "IVA TRASL EFEC COBRA DE CARTER",
+            "cuenta_padre": null,
+            "es_cuenta_totales": false,
+            "orden_admin": 80.0
+        }
+    },
+    {
+        "model": "contabilidad.contablecuenta",
+        "pk": 33,
+        "fields": {
+            "codigo": "2110-0001",
+            "orden": 2.24,
+            "nombre": "IVA TRA EFE COBR DE CARTE VIGE",
+            "sobrenombre": "IVA TRA EFE COBR DE CARTE VIGE",
+            "cuenta_padre": 32,
+            "es_cuenta_totales": false,
+            "orden_admin": 80.1
+        }
+    },
+    {
+        "model": "contabilidad.contablecuenta",
+        "pk": 34,
+        "fields": {
+            "codigo": "2111",
+            "orden": -1.0,
+            "nombre": "IVA TRASL FACTURADO DE CARTERA",
+            "sobrenombre": "IVA TRASL FACTURADO DE CARTERA",
+            "cuenta_padre": null,
+            "es_cuenta_totales": false,
+            "orden_admin": 90.0
+        }
+    },
+    {
+        "model": "contabilidad.contablecuenta",
+        "pk": 35,
+        "fields": {
+            "codigo": "2111-0001",
+            "orden": 2.25,
+            "nombre": "IVA TRA FACTURAD DE CARTE VIGE",
+            "sobrenombre": "IVA TRA FACTURAD DE CARTE VIGE",
+            "cuenta_padre": 34,
+            "es_cuenta_totales": false,
+            "orden_admin": 90.1
+        }
+    },
+    {
+        "model": "contabilidad.contablecuenta",
+        "pk": 36,
+        "fields": {
+            "codigo": "4103",
+            "orden": -1.0,
+            "nombre": "INGRESOS COBRADOS DE CARTERA",
+            "sobrenombre": "INGRESOS COBRADOS DE CARTERA",
+            "cuenta_padre": null,
+            "es_cuenta_totales": false,
+            "orden_admin": 110.0
+        }
+    },
+    {
+        "model": "contabilidad.contablecuenta",
+        "pk": 37,
+        "fields": {
+            "codigo": "4103-0001",
+            "orden": 2.32,
+            "nombre": "INGRE COBR CARTE DE CRED VIGEN",
+            "sobrenombre": "INGRE COBR CARTE DE CRED VIGEN",
+            "cuenta_padre": 36,
+            "es_cuenta_totales": false,
+            "orden_admin": 110.1
+        }
+    },
+    {
+        "model": "contabilidad.contablecuenta",
+        "pk": 38,
+        "fields": {
+            "codigo": "4104",
+            "orden": -1.0,
+            "nombre": "INGRESOS FACTURADOS DE CARTERA",
+            "sobrenombre": "INGRESOS FACTURADOS DE CARTERA",
+            "cuenta_padre": null,
+            "es_cuenta_totales": false,
+            "orden_admin": 120.0
+        }
+    },
+    {
+        "model": "contabilidad.contablecuenta",
+        "pk": 39,
+        "fields": {
+            "codigo": "4104-0001",
+            "orden": 2.33,
+            "nombre": "INGRE FACT CARTE DE CRED VIGEN",
+            "sobrenombre": "INGRE FACT CARTE DE CRED VIGEN",
+            "cuenta_padre": 38,
+            "es_cuenta_totales": false,
+            "orden_admin": 120.1
+        }
+    },
+    {
+        "model": "contabilidad.contablecuenta",
+        "pk": 40,
+        "fields": {
+            "codigo": "8990",
+            "orden": -1.0,
+            "nombre": "CTAS DE ORDEN",
+            "sobrenombre": "CTAS DE ORDEN",
+            "cuenta_padre": null,
+            "es_cuenta_totales": false,
+            "orden_admin": 140.0
+        }
+    },
+    {
+        "model": "contabilidad.contablecuenta",
+        "pk": 41,
+        "fields": {
+            "codigo": "8990-0006",
+            "orden": 6.1,
+            "nombre": "RESERVA (48%)",
+            "sobrenombre": "RESERVA (48%)",
+            "cuenta_padre": 40,
+            "es_cuenta_totales": false,
+            "orden_admin": 140.1
+        }
+    },
+    {
+        "model": "contabilidad.contablecuenta",
+        "pk": 42,
+        "fields": {
+            "codigo": "8990-0007",
+            "orden": 6.2,
+            "nombre": "INTER\u00c9S FONDEADOR (12%)",
+            "sobrenombre": "INTER\u00c9S FONDEADOR (12%)",
+            "cuenta_padre": 40,
+            "es_cuenta_totales": false,
+            "orden_admin": 140.2
+        }
+    },
+    {
+        "model": "contabilidad.contablecuenta",
+        "pk": 43,
+        "fields": {
+            "codigo": "8990-0008",
+            "orden": 6.3,
+            "nombre": "COMISI\u00d3N INGUZ (8%)",
+            "sobrenombre": "COMISI\u00d3N INGUZ (8%)",
+            "cuenta_padre": 40,
+            "es_cuenta_totales": false,
+            "orden_admin": 140.3
+        }
+    },
+    {
+        "model": "contabilidad.contablecuenta",
+        "pk": 44,
+        "fields": {
+            "codigo": "8995",
+            "orden": -1.0,
+            "nombre": "CTAS DE ORDEN",
+            "sobrenombre": "CTAS DE ORDEN",
+            "cuenta_padre": null,
+            "es_cuenta_totales": false,
+            "orden_admin": 150.0
+        }
+    },
+    {
+        "model": "contabilidad.contablecuenta",
+        "pk": 45,
+        "fields": {
+            "codigo": "8995-0006",
+            "orden": 6.4,
+            "nombre": "RESERVA (48%",
+            "sobrenombre": "RESERVA (48%",
+            "cuenta_padre": 44,
+            "es_cuenta_totales": false,
+            "orden_admin": 150.1
+        }
+    },
+    {
+        "model": "contabilidad.contablecuenta",
+        "pk": 46,
+        "fields": {
+            "codigo": "8995-0007",
+            "orden": 6.5,
+            "nombre": "INTER\u00c9S FONDEADOR (12%)",
+            "sobrenombre": "INTER\u00c9S FONDEADOR (12%)",
+            "cuenta_padre": 44,
+            "es_cuenta_totales": false,
+            "orden_admin": 150.2
+        }
+    },
+    {
+        "model": "contabilidad.contablecuenta",
+        "pk": 47,
+        "fields": {
+            "codigo": "8995-0008",
+            "orden": 6.6,
+            "nombre": "COMISI\u00d3N INGUZ (8%)",
+            "sobrenombre": "COMISI\u00d3N INGUZ (8%)",
+            "cuenta_padre": 44,
+            "es_cuenta_totales": false,
+            "orden_admin": 150.3
+        }
+    },
+    {
+        "model": "contabilidad.contablecuenta",
+        "pk": 48,
+        "fields": {
+            "codigo": "1102-0012",
+            "orden": 3.1,
+            "nombre": "RESERVA BANCO",
+            "sobrenombre": "RESERVA BANCO",
+            "cuenta_padre": 11,
+            "es_cuenta_totales": false,
+            "orden_admin": 10.2
+        }
+    }
+]

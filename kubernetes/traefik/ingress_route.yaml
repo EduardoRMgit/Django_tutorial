@@ -1,0 +1,294 @@
+#Archivo donde se definen todos los subdomains y paths que se quieren exponer al publico
+---
+# Redirect to https
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: redirectscheme
+spec:
+  redirectScheme:
+    scheme: https
+
+---
+#CORS HEADERS
+# apiVersion: traefik.containo.us/v1alpha1
+# kind: Middleware
+# metadata:
+#   name: test-header
+# spec:
+#   headers:
+#     accessControlAllowMethods:
+#       - "*"
+#     accessControlAllowHeaders:
+#       - "*"
+#     accessControlMaxAge: 100
+#     accessControlAllowCredentials: true
+#     # accessControlExposeHeaders:
+#     #   - "*"
+#     addVaryHeader: true
+#     # allowedHosts:
+#     #   - "*"
+#     customResponseHeaders:
+#       Access-Control-Allow-Origin: "http://localhost:5000" # Adds
+
+# ---
+# Para atuentificar, usa un secreto codificado primero en htpasswd
+# y luego en base64, ver el secreto para mas info
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: doc-auth
+spec:
+  basicAuth:
+    secret: docsecret
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: inguzweb
+spec:
+  #Los entrypoints son nombrados en el service, pero declarados en el deployment
+  entryPoints:
+    - web
+  routes:
+    # Extrañamente todos los valores puestos dentro de route no deben de llevar
+    # identacion antes del -
+  - match: Host(`inguz.site`)
+    kind: Rule
+    services:
+      # El servicio que vas a exponer
+    - name: cactus-prod
+      #El puerto interno
+      port: 80
+    middlewares:
+    - name: redirectscheme
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: inguztls
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`inguz.site`)
+      kind: Rule
+      services:
+      - name: cactus-prod
+        port: 80
+  tls:
+    certResolver: default
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: inguzstageweb
+spec:
+  entryPoints:
+    - web
+  routes:
+  - match: Host(`staging.inguz.site`)
+    kind: Rule
+    services:
+    - name: cactus-stage
+      port: 80
+    middlewares:
+    - name: redirectscheme
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: inguzstagewebsecure
+spec:
+  entryPoints:
+    - websecure
+  routes:
+  - match: Host(`staging.inguz.site`)
+    kind: Rule
+    services:
+    - name: cactus-stage
+      port: 80
+    middlewares:
+    # - name: doc-auth
+  tls:
+    certResolver: default
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: inguztestweb
+spec:
+  entryPoints:
+    - web
+  routes:
+  - match: Host(`test.inguz.site`)
+    kind: Rule
+    services:
+    - name: cactus-test
+      port: 80
+    middlewares:
+    - name: redirectscheme
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: inguztestwebsecure
+spec:
+  entryPoints:
+    - websecure
+  routes:
+  - match: Host(`test.inguz.site`)
+    kind: Rule
+    services:
+    - name: cactus-test
+      port: 80
+    middlewares:
+    - name: doc-auth
+  tls:
+    certResolver: default
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: grafana
+spec:
+  entryPoints:
+    - web
+  routes:
+  - match: Host(`grafana.inguz.site`)
+    kind: Rule
+    services:
+    - name: loki-stack-grafana-2
+      port: 80
+      namespace: loki
+    middlewares:
+    - name: redirectscheme
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: grafanassl
+spec:
+  entryPoints:
+    - websecure
+  routes:
+  - match: Host(`grafana.inguz.site`)
+    kind: Rule
+    services:
+    - name: loki-stack-grafana-2
+      port: 80
+      namespace: loki
+  tls:
+    certResolver: default
+---
+# apiVersion: traefik.containo.us/v1alpha1
+# kind: IngressRoute
+# metadata:
+#   name: sphinxweb
+# spec:
+#   entryPoints:
+#     - web
+#   routes:
+#   - match: Host(`doc.zygoo.mx`)
+#     kind: Rule
+#     services:
+#     - name: sphinx-service
+#       port: 80
+#     middlewares:
+#     - name: redirectscheme
+
+# ---
+# apiVersion: traefik.containo.us/v1alpha1
+# kind: IngressRoute
+# metadata:
+#   name: sphinxtls
+# spec:
+#   entryPoints:
+#     - websecure
+#   routes:
+#   - match: Host(`doc.zygoo.mx`)
+#     kind: Rule
+#     services:
+#     - name: sphinx-service
+#       port: 80
+#     middlewares:
+#     - name: doc-auth
+#   tls:
+#     certResolver: default
+# ---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: ddeweb
+spec:
+  entryPoints:
+    - web
+  routes:
+  - match: Host(`dde.inguz.site`)
+    kind: Rule
+    services:
+    - name: dde-prod
+      port: 80
+    middlewares:
+      - name: redirectscheme
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: ddetls
+spec:
+  entryPoints:
+    - websecure
+  routes:
+  - match: Host(`dde.inguz.site`)
+    kind: Rule
+    services:
+    - name: dde-prod
+      port: 80
+    middlewares:
+    # - name: doc-auth
+  tls:
+    certResolver: default    
+
+# ---
+# apiVersion: traefik.containo.us/v1alpha1
+# kind: IngressRoute
+# metadata:
+#   name: segurosweb
+# spec:
+#   entryPoints:
+#     - web
+#   routes:
+#   - match: Host(`seguros.inguz.site`)
+#     kind: Rule
+#     services:
+#     - name: seguros-prod
+#       port: 80
+#     middlewares:
+#       - name: redirectscheme
+
+# ---
+# apiVersion: traefik.containo.us/v1alpha1
+# kind: IngressRoute
+# metadata:
+#   name: segurostlsweb
+# spec:
+#   entryPoints:
+#     - websecure
+#   routes:
+#   - match: Host(`seguros.inguz.site`)
+#     kind: Rule
+#     services:
+#     - name: seguros-prod
+#       port: 80
+#     middlewares:
+#     - name: doc-auth
+#   tls:
+#     certResolver: default

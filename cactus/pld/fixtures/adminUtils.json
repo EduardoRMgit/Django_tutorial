@@ -1,0 +1,10 @@
+[
+{
+  "model": "pld.adminutils",
+  "pk": 1,
+  "fields": {
+    "util": "PLD Activo",
+    "activo": true
+  }
+}
+]

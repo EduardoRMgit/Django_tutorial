@@ -1,0 +1,9 @@
+[
+    {
+        "model": "spei.foliostp",
+        "pk": 1,
+        "fields": {
+            "folio": 420
+        }
+    }
+]

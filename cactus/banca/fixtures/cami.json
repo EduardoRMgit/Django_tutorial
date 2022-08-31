@@ -1,0 +1,90 @@
+[
+{
+  "model": "banca.cami",
+  "pk": 1,
+  "fields": {
+    "nombre": "M0",
+    "monto": 0.0,
+    "unidad": null,
+    "pesos": 0.0,
+    "tipo": 1
+  }
+},
+{
+  "model": "banca.cami",
+  "pk": 2,
+  "fields": {
+    "nombre": "M1",
+    "monto": 7500.0,
+    "unidad": "UDIS",
+    "pesos": 47250.0,
+    "tipo": 1
+  }
+},
+{
+  "model": "banca.cami",
+  "pk": 3,
+  "fields": {
+    "nombre": "M2",
+    "monto": 10000.0,
+    "unidad": "UDIS",
+    "pesos": 62000.0,
+    "tipo": 1
+  }
+},
+{
+  "model": "banca.cami",
+  "pk": 4,
+  "fields": {
+    "nombre": "M3",
+    "monto": 5500.0,
+    "unidad": "USD",
+    "pesos": 106000.0,
+    "tipo": 1
+  }
+},
+{
+  "model": "banca.cami",
+  "pk": 5,
+  "fields": {
+    "nombre": "D0",
+    "monto": 0.0,
+    "unidad": null,
+    "pesos": 0.0,
+    "tipo": 0
+  }
+},
+{
+  "model": "banca.cami",
+  "pk": 6,
+  "fields": {
+    "nombre": "D1",
+    "monto": 10000.0,
+    "unidad": "MXN",
+    "pesos": 10000.0,
+    "tipo": 0
+  }
+},
+{
+  "model": "banca.cami",
+  "pk": 7,
+  "fields": {
+    "nombre": "D2",
+    "monto": 24300.0,
+    "unidad": "MXN",
+    "pesos": 24300.0,
+    "tipo": 0
+  }
+},
+{
+  "model": "banca.cami",
+  "pk": 8,
+  "fields": {
+    "nombre": "D3",
+    "monto": 96500.0,
+    "unidad": "MXN",
+    "pesos": 96500.0,
+    "tipo": 0
+  }
+}
+]

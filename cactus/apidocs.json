@@ -1,0 +1,17 @@
+{
+  "name": "Cactus API Docs",
+  "version": "0.1.0",
+  "description": "Documentación las las RESTful APIs de las apps de Cactus",
+  "apidoc": {
+    "title": "Cactus API Docs",
+    "url" : "localhost/banca"
+  },
+  "header": {
+    "title": "My own header title",
+    "filename": "header.md"
+  },
+  "footer": {
+    "title": "My own footer title",
+    "filename": "footer.md"
+  }
+}

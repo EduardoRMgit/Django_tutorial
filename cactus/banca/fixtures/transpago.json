@@ -1,0 +1,36 @@
+[
+{
+  "model": "banca.transpago",
+  "pk": 1,
+  "fields": {
+    "transaccion": 2,
+    "pagoTotal": "456789.0000",
+    "pagoMonto": "6789.0000",
+    "pagoComision": "67890.0000",
+    "pagoComisionIVA": "67890.0000",
+    "lineaDisponible": "7890.0000",
+    "pagadoMonto": "7890.0000",
+    "pagadoComision": "789.0000",
+    "pagadoComisionIVA": "5679.0000",
+    "fechaPago": "2019-08-01T23:00:49Z",
+    "statusTrans": 1
+  }
+},
+{
+  "model": "banca.transpago",
+  "pk": 2,
+  "fields": {
+    "transaccion": 2,
+    "pagoTotal": "98438989.0000",
+    "pagoMonto": "83498.0000",
+    "pagoComision": "7884328.0000",
+    "pagoComisionIVA": "894294389.0000",
+    "lineaDisponible": "784384329.0000",
+    "pagadoMonto": "989389.0000",
+    "pagadoComision": "8438.0000",
+    "pagadoComisionIVA": "8439834.0000",
+    "fechaPago": "2019-08-01T23:01:17Z",
+    "statusTrans": 1
+  }
+}
+]

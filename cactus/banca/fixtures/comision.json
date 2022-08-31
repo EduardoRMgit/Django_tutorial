@@ -1,0 +1,38 @@
+[
+{
+  "model": "banca.comision",
+  "pk": 1,
+  "fields": {
+    "monto": 4.0,
+    "descripcion": "STP",
+    "tipo": 4
+  }
+},
+{
+  "model": "banca.comision",
+  "pk": 2,
+  "fields": {
+    "monto": 0.64,
+    "descripcion": "iva STP",
+    "tipo": 4
+  }
+},
+{
+  "model": "banca.comision",
+  "pk": 3,
+  "fields": {
+    "monto": 6.0,
+    "descripcion": "Cliente",
+    "tipo": 4
+  }
+},
+{
+  "model": "banca.comision",
+  "pk": 4,
+  "fields": {
+    "monto": 0.96,
+    "descripcion": "iva Cliente",
+    "tipo": 4
+  }
+}
+]

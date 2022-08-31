@@ -1,0 +1,1 @@
+// [{"model": "banca.productos", "pk": 1, "fields": {"producto": "Producto Financiero", "institucion": 1, "reglasVencimiento": 1, "paises_disponibles": [1]}}, {"model": "banca.productos", "pk": 2, "fields": {"producto": "Producto dos", "institucion": 2, "reglasVencimiento": 2, "paises_disponibles": [2]}}]

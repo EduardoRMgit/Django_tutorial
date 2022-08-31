@@ -1,0 +1,68 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "django.name" . }}-migrations
+spec:
+  template:
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: Always
+            # command: ['python', 'manage.py', 'migrate']
+          command: ['bash','cleanDataBase.sh']
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+               secretKeyRef:
+                 name: {{ .Values.dbSecret }}
+                 key: user
+
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.dbSecret }}
+                  key: password
+
+{{- if .Values.s3.enabled }}
+            - name: AWS_SECRET_ID
+              valueFrom:
+                secretKeyRef:
+                   name: {{ .Values.s3.secret }}
+                   key: secret
+
+            - name: AWS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                   name: {{ .Values.s3.secret }}
+                   key: id
+{{- end }}
+            - name: SITE
+              value: {{ .Values.site | quote }}
+
+            - name: POSTGRES_HOST
+              value: {{ include "django.name" . }}-postgres
+
+            - name: POSTGRES_PORT
+              value: {{ .Values.dbPort | quote }}
+
+            - name: PRODUCTION
+              value: "true"
+
+            - name: DJANGO_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                   name: django-secret
+                   key: key
+
+            - name: UBUNTUPEM
+              valueFrom:
+                secretKeyRef:
+                   name: ubuntu-key
+                   key: key
+      restartPolicy: OnFailure
+  backoffLimit: 3

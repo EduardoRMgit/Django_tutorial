@@ -1,0 +1,146 @@
+# que version del api de deployment se usa
+apiVersion: apps/v1
+# el tipo de elemento de kubernetes creamos. puede ser un pod, un servicio o un deployments
+# entre otros
+kind: Deployment
+metadata:
+  #Nombre base que tendran todos los pods
+  name: {{ include "django.name" . }}
+  labels:
+{{ include "django.labels" . | indent 4 }}
+spec:
+  #Numero de containers que quieres que se lancen
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "django.name" . }}
+  template:
+    metadata:
+      labels:
+        #tags de los pods, para poder actuar sobre ellos con servicios por ejemplo
+        app.kubernetes.io/name: {{ include "django.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      # Obtienes la clave del registro de docker de un secreto espeial creado por kuberentes
+      # con el comandos
+      # kubectl create secret docker-registry --dry-run=true docker-regcred --docker-server=https://index.docker.io/v1/ --docker-username=netopaas --docker-password=<password> --docker-email=netopaas@gmail.com -o yaml > docker-secret.yaml. Acuerdate de de tener las imagenes en un folder aparte codificadas y con un gitignore
+    {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      containers:
+        # El name: nombre que le pondras al container, porque K8 guarda sus imagenes internamente
+        # la direccion de la imagen, de onde la bajas. este formato es para DockerHub
+        # imagePullPolicy es te puede ahorrar problemas porque a veces haces
+        # cambios pero no quieres cmaibar la versión y esto te permite que se vuelve a bjaar siempre
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{  .Values.service.targetPort }}
+              protocol: TCP
+          # Variables de entorno: son muy utiles pues puedes cambiar el comportamiento
+          # de tu programa por cambiando las variables de entonro que usas.
+          # Ademas es muy seguro que esten guardadas solo en el env y no en un archivo
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.dbSecret }}
+                  key: user
+
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                   name: {{ .Values.dbSecret }}
+                   key: password
+
+            - name: POSTGRES_NAME
+              value: {{ .Values.dbName | quote }}
+
+            - name: STP_PRIVATE_KEY
+              valueFrom:
+                secretKeyRef:
+                   name: {{ .Values.stpSecret }}
+                   key: stp-private-key
+
+            - name: RENAPO_PRIVATE_KEY
+              valueFrom:
+                secretKeyRef:
+                   name: {{ .Values.renapoSecret }}
+                   key: renapo-private-key
+            
+            - name: RENAPO_USER
+              valueFrom:
+                secretKeyRef:
+                   name: {{ .Values.renapoSecret }}
+                   key: user
+
+            - name: RENAPO_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                   name: {{ .Values.renapoSecret }}
+                   key: password
+
+            - name: SITE
+              value: {{ .Values.site | quote }}
+
+            - name: HASH
+              value: {{ .Values.image.tag }}
+
+{{- if .Values.s3.enabled }}
+            - name: AWS_SECRET_ID
+              valueFrom:
+                secretKeyRef:
+                   name: {{ .Values.s3.secret }}
+                   key: secret
+
+            - name: AWS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                   name: {{ .Values.s3.secret }}
+                   key: id
+{{- end }}
+{{- if .Values.twilio.enabled }}
+            - name: TWILIO_SID
+              valueFrom:
+                secretKeyRef:
+                   name: {{ .Values.twilio.secret }}
+                   key: sid
+
+            - name: TWILIO_TOKEN
+              valueFrom:
+                secretKeyRef:
+                   name: {{ .Values.twilio.secret }}
+                   key: token
+{{- end }}
+            - name: POSTGRES_HOST
+              value: {{ include "django.name" . }}-postgres
+
+            - name: POSTGRES_PORT
+              value: {{ .Values.dbPort | quote }}
+
+            - name: PRODUCTION
+              value: "true"
+
+            - name: DJANGO_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                   name: django-secret
+                   key: key
+
+            - name: UBUNTUPEM
+              valueFrom:
+                secretKeyRef:
+                   name: ubuntu-key
+                   key: key
+
+            - name: DEBUG
+              value: {{ .Values.debug | quote }}
+
+            - name: STP_PRIVATE_KEY
+              valueFrom:
+                secretKeyRef:
+                   name: {{ .Values.stpSecret }}
+                   key: stp-private-key
