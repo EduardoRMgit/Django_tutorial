@@ -1,4 +1,4 @@
 flake8
 prettyprint
 rope
--e git://github.com/davidhalter/jedi.git@eabddb9698dcad0b4f9d97ce7e51304286c56394#egg=jedi
+
