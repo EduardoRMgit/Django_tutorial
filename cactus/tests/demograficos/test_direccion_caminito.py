@@ -2,7 +2,7 @@
 <Nombre del programa>
   test_direccion_caminito.py
 <Autor(a)>
-  Damaris A. Zavala 
+  Damaris A. Zavala
 <Iniciado>
   Oct 26, 2020
 <Copyright>
@@ -76,6 +76,7 @@ class TestDireccion(JSONWebTokenTestCase):
         call_command('loaddata', 'usertesting', verbosity=0)
         call_command('loaddata', 'component', verbosity=0)
         call_command('loaddata', 'docAdjuntoTipo', verbosity=0)
+        call_command('loaddata', 'statusRegistro', verbosity=0)
 
         self._client = Client()
         self.user = get_user_model().objects.get(username='test')
