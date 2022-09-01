@@ -1,0 +1,44 @@
+
+# Definición del ambiente virtual de travis. Aquí se define el lenguaje
+# del interprete a correr (python), su versión (2.7). De igual manera, se inicializan
+# las variables de entorno y se definen los comandos a correr
+# TODO: Add coveralls
+branches:
+  only:
+    - master
+    - staging
+    - test
+
+language: python
+
+python:
+      - "3.9"
+
+env:
+    TOXENV=py39
+
+install:
+    - pip install tox
+
+script:
+    tox
+
+after_success:
+    coveralls
+
+notifications:
+  slack:
+    rooms:
+        - invercratos:8rRZeLlvNX25Mz6G1YWq4qqV
+
+    template:
+      - "Build <%{build_url}|#%{build_number}> (<%{compare_url}|%{commit}>) by %{author} %{result} in %{duration}"
+      - "%{build_number} (%{branch} - %{commit} : %{author}): %{message}"
+      - "%{commit_subject}"
+      - "%{commit_message}"
+
+  on_success: always
+  on_failure: always
+  on_start:   always # default: never
+  on_cancel:  always # default: always
+  on_error:   always # default: always

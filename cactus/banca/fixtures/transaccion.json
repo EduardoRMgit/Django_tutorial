@@ -1,6 +1,7 @@
 [
 {
   "model": "banca.transaccion",
+  "pk": 1,
   "fields": {
     "user": 1,
     "fechaValor": "2019-08-01T22:50:33Z",
@@ -13,6 +14,7 @@
 },
 {
   "model": "banca.transaccion",
+  "pk": 2,
   "fields": {
     "user": 2,
     "fechaValor": "2019-08-01T22:50:33Z",
@@ -25,6 +27,7 @@
 },
 {
   "model": "banca.transaccion",
+  "pk": 3,
   "fields": {
     "user": 17,
     "fechaValor": "2019-08-01T22:50:33Z",
@@ -37,6 +40,7 @@
 },
 {
   "model": "banca.transaccion",
+  "pk": 4,
   "fields": {
     "user": 17,
     "fechaValor": "2019-08-01T22:50:33Z",
@@ -49,6 +53,7 @@
 },
 {
   "model": "banca.transaccion",
+  "pk": 5,
   "fields": {
     "user": 17,
     "fechaValor": "2019-08-01T22:50:33Z",
@@ -61,6 +66,7 @@
 },
 {
   "model": "banca.transaccion",
+  "pk": 6,
   "fields": {
     "user": 17,
     "fechaValor": "2019-08-01T22:50:33Z",

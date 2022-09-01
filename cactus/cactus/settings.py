@@ -41,7 +41,7 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'staging.inguz.site',
                  'test.inguz.site',
                  'staging.zygoo.mx', 'test.zygoo.mx',
                  'inguz.site', 'zygoo.mx', '10.195.1.207',
-                 '10.5.1.1', '192.168.87.187']
+                 '10.5.1.1']
 
 RECAPTCHA_PUBLIC_KEY = '6LcTX1AaAAAAAN30Sl2EMuGJHCnbsiX-934v91A7'
 RECAPTCHA_PRIVATE_KEY = '6LcTX1AaAAAAADsgnyMWbEy8H7DTAcVYdqs3KGU3'
@@ -85,7 +85,6 @@ INSTALLED_APPS = [
     'pagos.apps.PagosConfig',
     'pagos.rapydcollect.apps.RapydcollectConfig',
     'scotiabank.apps.ScotiabankConfig',
-    'renapo.apps.RenapoConfig',
 ]
 
 if(PROD):
@@ -143,12 +142,7 @@ CORS_ORIGIN_WHITELIST = ['http://localhost:5000',
                          'https://10.5.1.1:8000',
                          'https://10.5.1.1',
                          'http://10.5.1.1',
-                         'http://10.5.1.1:8000',
-                         'https://192.168.87.187:8000',
-                         'https://192.168.87.187',
-                         'http://192.168.87.187',
-                         'http://192.168.87.187:8000',
-                         ]
+                         'http://10.5.1.1:8000']
 
 
 ROOT_URLCONF = 'cactus.urls'
@@ -283,12 +277,9 @@ else:
     MEDIA_URL = '/media/'
     MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-RENAPO_USER = env.str("RENAPO_USER", "")
-RENAPO_PASSWORD = env.str("RENAPO_PASSWORD", "")
-
 # STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 # higher than the count of fields
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 10240
 
 PASSWORD_RESET_TIMEOUT_DAYS = 2
-DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+DEFAULT_AUTO_FIELD='django.db.models.AutoField'
