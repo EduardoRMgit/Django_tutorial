@@ -2,8 +2,8 @@
 <Nombre del programa>
   test_direccion.py
 <Autor(a)>
-  Damaris A. Zavala <damaris.zavala@erona.io>
-  Daniel Gomez Leon <daniel@erona.io>
+  Damaris A. Zavala 
+  Daniel Gomez Leon
 <Iniciado>
   Oct 26, 2020
 <Copyright>

@@ -22,8 +22,8 @@ django.setup()
 # -- Project information -----------------------------------------------------
 
 project = 'Cactus'
-copyright = '2019, Bratdev'
-author = 'Bratdev'
+copyright = '2019, Invercratos'
+author = 'Invercratos'
 
 # The full version, including alpha/beta/rc tags
 release = '1'
@@ -71,4 +71,4 @@ html_static_path = ['_static']
 
 
 pdf_documents = [('index', u'inguz_docs',
-                 u'The documentaiton for the inguz project', u'Erona'), ]
+                 u'The documentaiton for the inguz project',), ]

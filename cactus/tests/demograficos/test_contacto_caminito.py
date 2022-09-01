@@ -2,7 +2,7 @@
 <Nombre del programa>
   test_direccion.py
 <Autor(a)>
-  Damaris A. Zavala <damaris.zavala@erona.io>
+  Damaris A. Zavala 
 <Iniciado>
   Oct 26, 2020
 <Copyright>
@@ -80,7 +80,6 @@ class TestContacto(JSONWebTokenTestCase):
     @classmethod
     def setUpTestData(cls):
         call_command('loaddata', 'usertesting', verbosity=0)
-        call_command('loaddata', 'institutionbanjico', verbosity=0)
 
         cls._client = Client()
         cls.user = get_user_model().objects.get(username='test')
@@ -97,6 +96,8 @@ class TestContacto(JSONWebTokenTestCase):
                             $token: String!,
                             $nombre: String!,
                             $nombreCompleto: String!,
+                            $apPaterno: String!,
+                            $apMaterno: String!,
                             $banco: String!,
                             $clabe: String!
                         ){
@@ -104,11 +105,18 @@ class TestContacto(JSONWebTokenTestCase):
                             token: $token,
                             nombre: $nombre,
                             nombreCompleto: $nombreCompleto,
+                            apPaterno: $apPaterno,
+                            apMaterno: $apMaterno,
                             banco: $banco,
                             clabe: $clabe
                             ){
                             allContactos{
+                                nombre
+                                nombreCompleto
+                                apPaterno
+                                apMaterno
                                 clabe
+                                banco
                             }
                             }
                         }
@@ -116,8 +124,10 @@ class TestContacto(JSONWebTokenTestCase):
         variables = {'token': str(token_wrong),
                      'nombre': 'miaumiau',
                      'nombreCompleto': 'wazap',
+                     'apPaterno': 'lololo',
+                     'apMaterno': 'lalala',
                      'banco': 'fake',
-                     'clabe': '014122223333444455'}
+                     'clabe': 'noexiste'}
         res = self.client.execute(mutation, variables)
         self.assertEqual(res.errors[0].message,
                          'Error decoding signature')
@@ -125,16 +135,23 @@ class TestContacto(JSONWebTokenTestCase):
 
     # createContacto con variables correctas
         variables2 = {'token': self.token,
-                     'nombre': 'miaumiau',
-                     'nombreCompleto': 'wazap',
-                     'banco': 'fake',
-                     'clabe': '014122223333444455'}
+                      'nombre': 'Julia',
+                      'nombreCompleto': 'Julia A',
+                      'apPaterno': 'Zavala',
+                      'apMaterno': 'Sachez',
+                      'banco': 'bancotest',
+                      'clabe': '111122223333444455'}
         res2 = self.client.execute(mutation, variables2)
         expected_res = {
                 "createContacto": {
                      "allContactos": [
                         {
-                            "clabe": "014122223333444455",
+                            "nombre": "Julia",
+                            "nombreCompleto": "Julia A",
+                            "apPaterno": "",
+                            "apMaterno": "",
+                            "clabe": "111122223333444455",
+                            "banco": "bancotest"
                         }
                       ]
                  }
@@ -223,7 +240,7 @@ class TestContacto(JSONWebTokenTestCase):
         '''
         # (deleteContacto)' <con clabe incorrecta>
         variables6 = {"token": self.token,
-                      "clabe": "014111111111111111"}
+                      "clabe": "111111111111111111"}
         res6 = self.client.execute(mutation3, variables6)
         self.assertEqual(res6.errors[0].message,
                          'Contacto matching query does not exist.')
@@ -234,7 +251,7 @@ class TestContacto(JSONWebTokenTestCase):
         token_wrong3 = ''.join(
             (random.choice(letters_and_digits) for i in range(158)))
         variables7 = {"token": str(token_wrong3),
-                      "clabe": "014122223333444455"}
+                      "clabe": "111122223333444455"}
         res7 = self.client.execute(mutation3, variables7)
         self.assertEqual(res7.errors[0].message,
                          'Error decoding signature')
@@ -242,7 +259,7 @@ class TestContacto(JSONWebTokenTestCase):
 
         # deleteContacto con variables correctas
         variables8 = {"token": self.token,
-                      "clabe": "014122223333444455"}
+                      "clabe": "111122223333444455"}
         res8 = self.client.execute(mutation3, variables8)
         expected_res = {
                     "deleteContacto": {

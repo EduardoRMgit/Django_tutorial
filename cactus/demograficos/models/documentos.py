@@ -120,7 +120,7 @@ def send_doc_ocr(user, doc):
 
     # Ask for username and password
     input_name = 'inguz'
-    input_pwd = 'WelcomeToBratDev'
+    input_pwd = ''
 
     payload = {'username': input_name, 'password': input_pwd}
     headers = {'content-type': 'application/json'}

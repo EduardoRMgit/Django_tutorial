@@ -2,7 +2,7 @@
 <Nombre del programa>
   test_device.py
 <Autor(a)>
-  Damaris A. Zavala <damaris.zavala@erona.io>
+  Damaris A. Zavala 
 <Iniciado>
   Oct 26, 2020
 <Copyright>
