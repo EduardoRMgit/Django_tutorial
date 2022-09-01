@@ -2,7 +2,7 @@
 <Nombre del programa>
   test_direccion.py
 <Autor(a)>
-  Damaris A. Zavala 
+  Damaris A. Zavala
   Daniel Gomez Leon
 <Iniciado>
   Oct 26, 2020
