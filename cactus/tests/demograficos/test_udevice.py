@@ -49,7 +49,7 @@ class TestUpdateDevice(JSONWebTokenTestCase):
         """creamos a otro usuario y tratamos de registrar el mismo /
         dispositivo"""
 
-        other = get_user_model().objects.create(username='test2')
+        other = get_user_model().objects.create(username='testUdevice')
         self.login_user(other, device_id)
         other_tel = Telefono.objects.create(user=other, telefono='55555555')
         self.register_device(telefono=other_tel, device_id=device_id)
