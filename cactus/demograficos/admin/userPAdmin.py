@@ -170,6 +170,7 @@ class UserProfileAdmin(PasswordResetUserAdmin):
                    )
 
     list_display = ('Uprofile',
+                    'get_saldo',
                     'get_estado',
                     'get_curp',
                     'get_rfc',
@@ -179,6 +180,10 @@ class UserProfileAdmin(PasswordResetUserAdmin):
     list_select_related = ('Uprofile', )
 
     list_per_page = 25
+
+    def get_saldo(self, obj):
+        return obj.Uprofile.saldo_cuenta
+    get_saldo.short_description = 'Saldo cuenta'
 
     def get_cuenta_clabe(self, obj):
         return obj.Uprofile.cuentaClabe
