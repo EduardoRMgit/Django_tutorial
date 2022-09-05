@@ -273,7 +273,6 @@ class ClienteAdmin(UserProfileAdmin):
         UserComportamientoMensualInline,
         UserContactoInline,
         ProfileComponentInline,
-        DocAdjuntoInLine,
         BeneficiarioInLine
         )
 
