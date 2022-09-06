@@ -75,7 +75,6 @@ class DocAdjunto(models.Model):
 def imagen(sender, instance, created, **kwargs):
     if created:
         user_ = User.objects.get(id=instance.user_id)
-        from demograficos.models import UserProfile
         uprofile = user_.Uprofile
         if instance.tipo_id == 1:
             uprofile.ineCaptura = instance.imagen
