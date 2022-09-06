@@ -186,7 +186,7 @@ def pago(data_pago):
     str_firma = firma.decode("utf-8")
 
     site = os.getenv("SITE", "local")
-    if site == "test":
+    if site == "prod":
         url = 'https://prod.stpmex.com:7002/speiws/rest/ordenPago/registra'
     else:
         url = 'https://demo.stpmex.com:7024/speiws/rest/ordenPago/registra'
@@ -284,7 +284,7 @@ def registra_cuenta_persona_fisica(data):
 
     # TODO verificar URLs
     site = os.getenv("SITE", "local")
-    if site == "test":
+    if site == "prod":
         url = 'https://prod.stpmex.com:7002/speiws/rest/cuentaModule/fisica'
     else:
         url = 'https://demo.stpmex.com:7024/speiws/rest/cuentaModule/fisica'

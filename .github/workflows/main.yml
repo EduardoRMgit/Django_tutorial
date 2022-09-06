@@ -5,7 +5,7 @@ on:
     - 'documentation/**'
     - 'mugres/**'
     branches:
-      - master
+      - main
       - staging
       - test
 name: Deploy Production to Amazon EKS with helm
@@ -77,7 +77,7 @@ jobs:
         fi;
 
     - name: Run Helm tools
-      uses: brattdev/kube-tools@v1
+      uses:  stefanprodan/kube-tools@v1
       env:
         IMAGE_TAG: ${{ github.sha }}
       with:
@@ -89,9 +89,10 @@ jobs:
           helm package kubernetes/charts/$REPO
           echo "Set vars for deploy"
           echo "Brancha  ${GITHUB_REF##*/}"
-          if [[ ${GITHUB_REF##*/} == master ]] ; then
+          if [[ ${GITHUB_REF##*/} == main ]] ; then
             export SUFFIX=prod
-            export DB=kubernetes-django-east2.c4csey4k0tc5.us-east-2.rds.amazonaws.com
+            export DB=cactus-prod-db.c4csey4k0tc5.us-east-2.rds.amazonaws.com
+            # kubernetes-django-east2.c4csey4k0tc5.us-east-2.rds.amazonaws.com
             export DEBUG=false
           elif [[ ${GITHUB_REF##*/} == staging ]] ; then
             echo "IN STAGING"

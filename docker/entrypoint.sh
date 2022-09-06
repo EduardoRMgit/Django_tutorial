@@ -35,5 +35,15 @@ if [[ $SITE == 'test' ]] ; then
     scp -i neto.pem my_ip ubuntu@192.168.66.224:test_ip_${HASH}_$(hostname)
 fi;
 
+if [[ $SITE == 'prod' ]] ; then
+    cat /etc/hosts | grep cactus-$SITE > my_ip
+    # scotia
+    scp -i neto.pem my_ip ubuntu@192.168.93.229:prod_ip
+    # stp
+    scp -i neto.pem my_ip ubuntu@192.168.66.211:prod_ip_${HASH}_$(hostname)
+    scp -i neto.pem my_ip ubuntu@192.168.84.232:prod_ip_${HASH}_$(hostname)
+    scp -i neto.pem my_ip ubuntu@192.168.66.224:prod_ip_${HASH}_$(hostname)
+fi;
+
 # Standard
 gunicorn --bind 0.0.0.0:8000 -t 2400 cactus.wsgi --log-level debug

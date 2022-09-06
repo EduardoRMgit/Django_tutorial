@@ -30,7 +30,7 @@ ingress:
 
 dbSecret: postgres-credentials
 dbPort: 5432
-dbName: brattdev
+dbName: inguz
 
 stpSecret: stp-private-key
 
