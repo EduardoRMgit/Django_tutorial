@@ -69,12 +69,12 @@ class DocAdjunto(models.Model):
     def __str__(self):
         return "{} de {}".format(self.tipo, self.user)
 
+
 # Guarda la imagen subida a algun usuario para verla directo desde user profile
 @receiver(post_save, sender=DocAdjunto)
 def imagen(sender, instance, created, **kwargs):
     if created:
         user_ = User.objects.get(id=instance.user_id)
-        from demograficos.models import UserProfile
         uprofile = user_.Uprofile
         if instance.tipo_id == 1:
             uprofile.ineCaptura = instance.imagen
