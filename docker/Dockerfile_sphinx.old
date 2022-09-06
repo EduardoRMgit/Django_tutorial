@@ -1,0 +1,22 @@
+# Imagen temporal para correr el sphinx make
+FROM netopaas/brattdev:cactus0.1 as django_app
+
+COPY docs/ /docs/
+
+RUN pip install sphinx
+RUN pip install sphinx_rtd_theme
+RUN pip install rst2pdf
+
+WORKDIR /docs
+RUN mkdir _build
+RUN sphinx-build -b pdf . ./_build
+RUN make html
+
+#Imagen con nginx que es un webserver al que le copiamos los docs de sphinx en html
+FROM nginx
+
+COPY --from=django_app docs/_build/html /usr/share/nginx/html
+
+VOLUME /usr/share/nginx/html
+
+VOLUME /etc/nginx

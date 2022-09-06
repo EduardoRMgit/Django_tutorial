@@ -1,0 +1,28 @@
+---
+# que version del api de deployment se usa
+ apiVersion: apps/v1beta2
+# el tipo de elemento de kubernetes creamos. puede ser un pod, un servicio o un deployments
+# entre otros
+ kind: Deployment
+ metadata:
+   name: sphinx-site
+ spec:
+   replicas: 1
+   selector:
+     matchLabels:
+       static: web
+   template:
+     metadata:
+       labels:
+         name: sphinx-site
+         static: web
+     spec:
+       imagePullSecrets:
+         - name: dockerhubkey
+       containers:
+         - name: sphinx-site
+           image: netopaas/brattdev:sphinxdoc
+#           workingDir: /cactus/
+           ports:
+             - containerPort: 80
+               protocol: TCP
