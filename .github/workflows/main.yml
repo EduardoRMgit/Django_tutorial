@@ -104,7 +104,7 @@ jobs:
             export DB=cactus-test-db.c4csey4k0tc5.us-east-2.rds.amazonaws.com
             export DEBUG=true
           fi;
-          if [[ $NEW_RELEASE == true ]] ; then
+          if [[ $NEW_RELEASE == false ]] ; then
             if helm list -q | grep -q $REPO-$SUFFIX; then
               echo "Checking if previous release is present"
               echo $(helm list -q)
