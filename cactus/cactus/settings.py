@@ -91,7 +91,7 @@ if(PROD):
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': env.str('POSTGRES_NAME', 'brattdev'),
+            'NAME': env.str('POSTGRES_NAME', 'inguz'),
             'USER': env.str('POSTGRES_USER'),
             'PASSWORD': env.str('POSTGRES_PASSWORD'),
             'HOST': env.str('POSTGRES_HOST'),
@@ -132,8 +132,6 @@ CORS_ORIGIN_WHITELIST = ['http://localhost:5000',
                          'http://localhost:9000',
                          'http://127.0.0.1:9000',
                          'http://127.0.0.1:5000',
-                         'https://lastres.herokuapp.com',
-                         'https://development--lastres.netlify.app',
                          'https://inguz.netlify.app',
                          'https://10.195.1.207:8000',
                          'https://10.195.1.207',
