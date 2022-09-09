@@ -28,6 +28,10 @@ spec:
                   name: {{ .Values.dbSecret }}
                   key: password
 
+            - name: POSTGRES_NAME
+              value: {{ .Values.dbName | quote }}
+
+
 {{- if .Values.s3.enabled }}
             - name: AWS_SECRET_ID
               valueFrom:
