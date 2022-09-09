@@ -106,12 +106,12 @@ jobs:
             export DEBUG=true
           fi;
           if [[ $NEW_RELEASE == true ]] ; then
-            if helm list -q | grep -q $REPO-$SUFFIX; then
-              echo "Checking if previous release is present"
-              echo $(helm list -q)
-              echo "Delete previous chart because it is present"
-              helm del $REPO-$SUFFIX
-            fi;
+            # if helm list -q | grep -q $REPO-$SUFFIX; then
+            #   echo "Checking if previous release is present"
+            #   echo $(helm list -q)
+            #   echo "Delete previous chart because it is present"
+            #   helm del $REPO-$SUFFIX
+            # fi;
             echo "Install helm chart"
             helm upgrade $REPO-$SUFFIX --install --force $REPO-0.1.0.tgz \
             --set rdsExternal=$DB \
