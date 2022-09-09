@@ -1,15 +1,3 @@
-"""
-<Nombre del programa>
-  test_device.py
-<Autor(a)>
-  Damaris A. Zavala <damaris.zavala@erona.io>
-<Iniciado>
-  Oct 26, 2020
-<Copyright>
-  See LICENSE for licensing information.
-<Propósito>
-  Codigo para pruebas de mutaciones.
-"""
 from graphql_jwt.testcases import JSONWebTokenTestCase
 
 

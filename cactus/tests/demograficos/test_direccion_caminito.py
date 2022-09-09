@@ -1,16 +1,3 @@
-"""
-<Nombre del programa>
-  test_direccion_caminito.py
-<Autor(a)>
-  Damaris A. Zavala <damaris.zavala@erona.io>
-<Iniciado>
-  Oct 26, 2020
-<Copyright>
-  See LICENSE for licensing information.
-<Propósito>
-  Codigo para pruebas de mutaciones.
-"""
-
 from graphql_jwt.testcases import JSONWebTokenTestCase
 from django.test import Client
 from django.core.management import call_command
