@@ -38,10 +38,10 @@ SECRET_KEY = 'nqmxj(1i%0i%5w1we&va-r8l7uyr6dbm$q6^x3#!5#364d1ox8'
 DEBUG = env.bool('DEBUG', True)
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'staging.inguz.site',
-                 'test.inguz.site',
+                 'test.inguz.site', 'prod.inguz.site',
                  'staging.zygoo.mx', 'test.zygoo.mx',
                  'inguz.site', 'zygoo.mx', '10.195.1.207',
-                 '10.5.1.1']
+                 '10.5.1.1', ]
 
 RECAPTCHA_PUBLIC_KEY = '6LcTX1AaAAAAAN30Sl2EMuGJHCnbsiX-934v91A7'
 RECAPTCHA_PRIVATE_KEY = '6LcTX1AaAAAAADsgnyMWbEy8H7DTAcVYdqs3KGU3'
