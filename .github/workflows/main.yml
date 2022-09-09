@@ -77,7 +77,7 @@ jobs:
         fi;
 
     - name: Run Helm tools
-      uses:  stefanprodan/kube-tools@v1
+      uses: Inguz-Digital-IFPE/kube-tools@v1
       env:
         IMAGE_TAG: ${{ github.sha }}
       with:
