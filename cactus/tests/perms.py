@@ -1,5 +1,5 @@
 def load_groups(verbose=False):
-    if verbose:
+    if(verbose):
         print("Loading groups and perms")
 
     from django.contrib.auth.models import Permission, Group
@@ -27,7 +27,7 @@ def load_groups(verbose=False):
         new_group.permissions.add(perm)
 
     new_group.save()
-    if verbose:
+    if(verbose):
         print("Done admin")
 
     new_group2 = Group.objects.get_or_create(name='PLD')[0]
@@ -46,7 +46,7 @@ def load_groups(verbose=False):
 
     new_group2.save()
 
-    if verbose:
+    if(verbose):
         print("Done PLD")
 
     new_group3 = Group.objects.get_or_create(name='Finanzas')[0]
@@ -64,7 +64,7 @@ def load_groups(verbose=False):
         new_group3.permissions.add(perm)
 
     new_group3.save()
-    if verbose:
+    if(verbose):
         print("Done Finanzas")
 
     new_group4 = Group.objects.get_or_create(name='Operativo')[0]
@@ -83,7 +83,7 @@ def load_groups(verbose=False):
         new_group4.permissions.add(perm)
 
     new_group4.save()
-    if verbose:
+    if(verbose):
         print("Done Operativo")
 
     new_group5 = Group.objects.get_or_create(name='ServicioClient')[0]
@@ -101,7 +101,7 @@ def load_groups(verbose=False):
         new_group5.permissions.add(perm)
 
     new_group5.save()
-    if verbose:
+    if(verbose):
         print("Done ServicioClient")
 
 

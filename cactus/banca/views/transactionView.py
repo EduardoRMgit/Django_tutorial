@@ -21,6 +21,8 @@ from django.http import (JsonResponse,
 
 from django.template.loader import render_to_string
 
+from django.utils.dateparse import parse_datetime
+
 from spei.models import StpTransaction
 from banca.models import Transaccion, StatusTrans, SaldoReservado
 from banca.serializers import DetailSerializer, EstadoSerializer
@@ -40,11 +42,11 @@ def _sum_montos(transes):
     suma = 0
     for trans in transes:
         if trans.tipoTrans.salida:
-            suma -= float("{:.2f}".format(trans.monto))
+            suma -= float(trans.monto)
         else:
-            suma += float("{:.2f}".format(trans.monto))
+            suma += float(trans.monto)
 
-    return round(suma, 2)
+    return suma
 
 
 def _sum_before(trans):
@@ -71,19 +73,21 @@ def _divide_trans(transes):
     for i in range(0, size):
         trans = transes[i]
         trans_5.append(trans)
+
         if i != 0:
             if trans.tipoTrans.salida:
                 new_sum -= float(trans.monto)
             else:
                 new_sum += float(trans.monto)
+
         sum_5.append(new_sum)
         moder = i % 4
-        if moder == 0 and i != 0:
+        if(moder == 0 and i != 0):
             trans_list.append(trans_5)
             sum_list.append(sum_5)
             trans_5 = []
             sum_5 = []
-        if i == size - 1:
+        if(i == size - 1):
             trans_list.append(trans_5)
             sum_list.append(sum_5)
 
@@ -123,8 +127,7 @@ def statusStp(estado, stpId):
                 transaction.statusTrans = status
                 transaction.save()
 
-                user_profile.saldo_cuenta += float(
-                    "{:.2f}".format(reservado.saldo_reservado))
+                user_profile.saldo_cuenta += float(reservado.saldo_reservado)
                 user_profile.save()
 
                 msg_logg = "[STP cambioestado] {} {}. Trans ID: {}".format(
@@ -226,25 +229,41 @@ class TransactionDetail(APIView):  # generics.CreateAPIView):
 
 
 def parse_dates_cuenta(req):
+    date_from = None
+    date_to = None
     is_cuenta = False
 
-    month = req.get("month")
-    year = req.get("year")
+    datefrom_string = req.get("date_from", "")
+    dateto_string = req.get("date_to", "")
 
-    if month:
+    month_string = req.get("month", "")
+    year_string = req.get("year", "")
+
+    if (not datefrom_string or not dateto_string) \
+            and (month_string and year_string):
         try:
-            cuenta_month = month
-            year = year
+            month = int(month_string)
+            year = int(year_string)
 
+            cuenta_month = timezone.now().month
             if month != cuenta_month:
                 is_cuenta = True
         except ValueError:
             raise ValueError("Month and Year must be parsable to ints")
 
-        date_from = timezone.datetime(day=1, month=month, year=year)
+        date_from = timezone.datetime(year, month, 1)
+        date_from = date_from.replace(
+            tzinfo=timezone.get_current_timezone())
         date_to = date_from.replace(day=last_day_of_month(date_from))
 
-    if not month:
+    if not month_string or not year_string \
+            and (datefrom_string and dateto_string):
+
+        datefrom_string += "T00:00:00"
+        dateto_string += "T00:00:00"
+
+        date_from = parse_datetime(datefrom_string)
+        date_to = parse_datetime(dateto_string)
 
         date_from = date_from.replace(
             tzinfo=timezone.get_current_timezone())
@@ -272,16 +291,14 @@ def upload_s3(file, user):
     file_path = os.path.join('docs/', file_path)
     params['Key'] = file_path
     file_url = media_storage.bucket.meta.\
-        client.generate_presigned_url(
-            'get_object',
+        client.generate_presigned_url('get_object',
             Params=params, ExpiresIn=300, HttpMethod=None)
 
     return file_url
 
 
-def build_html_cuenta(
-                      user, date_from, date_to,
-                      is_cuenta, cut_off_date, month):
+def build_html_cuenta(user, date_from, date_to,
+        is_cuenta, cut_off_date, month):
 
     transes = Transaccion.objects.filter(user=user)
     transes = transes.\
@@ -290,44 +307,35 @@ def build_html_cuenta(
 
     # Calculate saldos, days and get mod5 list
     trans_list, sum_list = _divide_trans(transes)
-
     sum_depositos = _sum_montos(transes.filter(tipoTrans__salida=False))
     sum_retiros = _sum_montos(transes.filter(tipoTrans__salida=True))
 
     if sum_list:
         if trans_list[0][0].tipoTrans.salida:
-            saldo_initial = float(
-                "%.2f" % round(sum_list[0][0], 2)) + float(
-                    "%.2f" % round(trans_list[0][0].monto, 2))
+            saldo_initial = sum_list[0][0] + float(trans_list[0][0].monto)
         else:
-            saldo_initial = float(
-                "%.2f" % round(sum_list[0][0], 2)) - float(
-                    "%.2f" % round(trans_list[0][0].monto, 2))
+            saldo_initial = sum_list[0][0] - float(trans_list[0][0].monto)
         saldo_final = sum_list[-1][-1]
     else:
         saldo_initial = saldo_final = 0
-    saldo_initial = "%.2f" % round(saldo_initial, 2)
-    saldo_final = "%.2f" % round(saldo_final, 2)
-    sum_depositos = "{:.2f}".format(sum_depositos)
-    sum_retiros = "{:.2f}".format(sum_retiros)
+
     days = (date_to - date_from).days + 1
 
     # Rendered
-    html_string = render_to_string(
-        'banca/cuenta.html',
-        {'trans_mod5': trans_list,
-         'date_from': date_from,
-         'date_to': date_to,
-         'cut_off_date': cut_off_date,
-         'month': month,
-         'days': days,
-         'sumas_mod5': sum_list,
-         'saldo_initial': saldo_initial,
-         'saldo_final': saldo_final,
-         'sum_depositos': sum_depositos,
-         'sum_retiros': sum_retiros,
-         'is_cuenta': is_cuenta,
-         'user': user})
+    html_string = render_to_string('banca/cuenta.html',
+                                    {'trans_mod5': trans_list,
+                                    'date_from': date_from,
+                                    'date_to': date_to,
+                                    'cut_off_date': cut_off_date,
+                                    'month': month,
+                                    'days': days,
+                                    'sumas_mod5': sum_list,
+                                    'saldo_initial': saldo_initial,
+                                    'saldo_final': saldo_final,
+                                    'sum_depositos': sum_depositos,
+                                    'sum_retiros': sum_retiros,
+                                    'is_cuenta': is_cuenta,
+                                    'user': user})
 
     return HTML(string=html_string)
 
@@ -373,7 +381,7 @@ def cuenta_pdf(request):
         return HttpResponseBadRequest("Nip must be given")
 
     try:
-        if not user.Uprofile.check_password(nip_string):
+        if(not user.Uprofile.check_password(nip_string)):
             return HttpResponseNotAllowed("Incorrect NIP")
     except TypeError:
         return HttpResponseBadRequest("User has no NIP")
@@ -391,20 +399,20 @@ def cuenta_pdf(request):
     if (date_to.month > timezone.now().month and
             date_to.year > timezone.now().year):
         return HttpResponseBadRequest("End date cannot be more than " +
-                                      "present month")
+                                    "present month")
 
     last_day_of_month = calendar.monthrange(date_to.year, date_to.month)[1]
     fecha_dt = str(last_day_of_month) + '/' + str(date_to.month) +\
-        '/' + str(date_to.year)
+         '/' + str(date_to.year)
     cut_off_date = datetime.strptime(fecha_dt, '%d/%m/%Y')
 
     month_period = date_from.month
     months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio',
-              'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
+        'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
     month = months[month_period - 1] + ' ' + str(date_from.year)
     # Model data
     html = build_html_cuenta(user, date_from, date_to,
-                             is_cuenta, cut_off_date, month)
+        is_cuenta, cut_off_date, month)
 
     result = html.write_pdf()
     file = io.BytesIO(result)
@@ -419,7 +427,7 @@ def cuenta_pdf(request):
         })
     else:
         json = {"error": "Debug estado cuenta" +
-                " not implented yet, set USE_S3 in .env to 1"}
+            " not implented yet, set USE_S3 in .env to 1"}
         json_response = JsonResponse(json, status=400)
 
     return json_response

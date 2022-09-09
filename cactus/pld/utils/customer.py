@@ -78,4 +78,4 @@ def llamada1(data):
         msg = 'error en request'
         print("en la funcion llamada1(), msg: ", ex)
 
-    return (bak, msg, stat)
+    return(bak, msg, stat)

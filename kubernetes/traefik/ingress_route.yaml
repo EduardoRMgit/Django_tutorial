@@ -54,7 +54,7 @@ spec:
   routes:
     # Extrañamente todos los valores puestos dentro de route no deben de llevar
     # identacion antes del -
-  - match: Host(`inguz.site`)
+  - match: Host(`prod.inguz.site`)
     kind: Rule
     services:
       # El servicio que vas a exponer
@@ -73,7 +73,7 @@ spec:
   entryPoints:
     - websecure
   routes:
-    - match: Host(`inguz.site`)
+    - match: Host(`prod.inguz.site`)
       kind: Rule
       services:
       - name: cactus-prod

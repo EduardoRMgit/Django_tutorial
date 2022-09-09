@@ -1,7 +1,7 @@
 # Usamos una imagen con django para no tener que volver a cargar todo cuando
 # queramos hacer cambios al Dockerfile
 FROM 906062568112.dkr.ecr.us-east-2.amazonaws.com/cactus:django3.7 AS whole_app
-LABEL maintainer="netopaas@gmail.com"
+LABEL maintainer="farza@invercratos.com"
 
 WORKDIR /cactus
 

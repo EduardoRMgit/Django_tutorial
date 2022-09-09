@@ -42,14 +42,14 @@ if [[ $LOADDATA == true ]] || [[ $PROD == false ]] ; then
 
   # #DEMOGRAFICOS
   ./manage.py shell < tests/perms.py
-  ./manage.py loaddata user.json
+  # ./manage.py loaddata user.json
   ./manage.py loaddata statusRegistro.json
   ./manage.py loaddata statusCuenta.json
   ./manage.py loaddata indiceDisponible.json
   ./manage.py loaddata docAdjuntoTipo.json
   ./manage.py loaddata docAdjunto.json
-  ./manage.py loaddata userProfile.json
-  ./manage.py loaddata userNotas.json
+  # ./manage.py loaddata userProfile.json
+  # ./manage.py loaddata userNotas.json
   ./manage.py loaddata institucion.json
   ./manage.py loaddata tipoTelefono.json
   ./manage.py loaddata proveedorTelefonico.json
@@ -80,16 +80,16 @@ if [[ $LOADDATA == true ]] || [[ $PROD == false ]] ; then
   ./manage.py loaddata codigoconfianza.json
 
   # Transaccion
-  # ./manage.py loaddata transaccion.json
-  # ./manage.py loaddata transpago.json
-  # ./manage.py loaddata transpagoExterno.json
+  ./manage.py loaddata transaccion.json
+  ./manage.py loaddata transpago.json
+  ./manage.py loaddata transpagoExterno.json
 
   # Legal
   ./manage.py loaddata pdflegal.json
 
   # SPEI
   ./manage.py loaddata institutionbanjico.json
-  # ./manage.py loaddata stptrans.json
+  ./manage.py loaddata stptrans.json
   ./manage.py loaddata adminUtils.json
   ./manage.py loaddata folio_stp.json
 

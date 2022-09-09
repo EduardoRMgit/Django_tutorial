@@ -103,9 +103,8 @@ def generateSignatureString(institucionContraparte,
         f"[STP generateSignatureString()] Cadena original: {baseString}")
 
     stp_key_pwd = str.encode(stp_key_pwd)
-
     with open('llavePrivada.pem', 'r') as key:
-        # key = os.getenv('STP_PRIVATE_KEY')
+        # key = os.getenv('STP-PRIVATE-KEY')
         unlockedKey = crypto.load_privatekey(
             crypto.FILETYPE_PEM,
             key.read(),
@@ -146,7 +145,7 @@ def pago(data_pago):
     tipoCuentaOrdenante = "40"  # es 40 por cuenta clabe
     tipoPago = "1"  # tipo de pago 3 a 3
 
-    if (
+    if(
         # False
         timezone.now().time() >= time(17, 0)
         or timezone.now().time() < time(7, 0)
@@ -187,7 +186,7 @@ def pago(data_pago):
     str_firma = firma.decode("utf-8")
 
     site = os.getenv("SITE", "local")
-    if site == "test":
+    if site == "prod":
         url = 'https://prod.stpmex.com:7002/speiws/rest/ordenPago/registra'
     else:
         url = 'https://demo.stpmex.com:7024/speiws/rest/ordenPago/registra'
@@ -285,7 +284,7 @@ def registra_cuenta_persona_fisica(data):
 
     # TODO verificar URLs
     site = os.getenv("SITE", "local")
-    if site == "test":
+    if site == "prod":
         url = 'https://prod.stpmex.com:7002/speiws/rest/cuentaModule/fisica'
     else:
         url = 'https://demo.stpmex.com:7024/speiws/rest/cuentaModule/fisica'

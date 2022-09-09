@@ -196,7 +196,7 @@ class Query(graphene.ObjectType):
     def resolve_pagosdeusuario(self, info, **kwargs):
         user = info.context.user
         pagosdeusuario = Payment.objects.filter(user=user)
-        return pagosdeusuario
+        return(pagosdeusuario)
 
     @login_required
     def resolve_all_method_required_fields(self, info, banco, **kwargs):

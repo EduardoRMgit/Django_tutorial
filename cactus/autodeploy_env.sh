@@ -13,13 +13,13 @@ export MIGRATIONS=true
 export CUSTOM_SHELL=false
 
 # Load the fixtures
-export LOADDATA=true
+export LOADDATA=false
 
 # Upload the static files to a bucket
 export STATIC=false
 
 # For when new settings in the deployment of kubernetes are added
-export NEW_RELEASE=false
+export NEW_RELEASE=true
 
 # Add a new cronjob
 export CRONJOB=true

@@ -666,12 +666,12 @@ urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 We have to build the containers with their respective Dockerfiles:
 
 ```bash
-docker build --rm -t netopaas/brattdev:django3.7 -f docker/Dockerfile_builder . \
-&& docker build --rm -t netopaas/brattdev:cactus0.1 docker/Dockerfile . \
-&& docker build --rm -t netopaas/brattdev:sphinxdoc -f docker/Dockerfile_sphinx .
+docker build --rm -t paquidios/inguz:django3.7 -f docker/Dockerfile_builder . \
+&& docker build --rm -t paquidios/inguz:cactus0.1 docker/Dockerfile . \
+&& docker build --rm -t paquidios/inguz:sphinxdoc -f docker/Dockerfile_sphinx .
 ```
 
-And then push them with `docker push netopaas/brattdev:django3.7`
+And then push them with `docker push paquidios/inguz:django3.7`
 
 Or with the ECR:
 
@@ -697,7 +697,7 @@ Before uploading the helm we have to upload the necessary secrets.
 Where the secret.yaml file was generated via this command:
 
 ```bash
-kubectl create secret docker-registry --dry-run=true docker-regcred --docker-server=https://index.docker.io/v1/ --docker-username=netopaas --docker-password=<password> --docker-email=netopaas@gmail.com -o yaml > docker-secret.yaml
+kubectl create secret docker-registry --dry-run=true docker-regcred --docker-server=https://index.docker.io/v1/ --docker-username=paquidios --docker-password=<password> --docker-email=paquidios@gmail.com -o yaml > docker-secret.yaml
 ```
 
 And it is for pulling the images out of the container registry DockerHub.
@@ -1121,7 +1121,7 @@ args:
   - --entrypoints.websecure.Address=:443
   - --providers.kubernetescrd
   - --certificatesresolvers.default.acme.tlschallenge
-  - --certificatesresolvers.default.acme.email=netopaas@gmail.com
+  - --certificatesresolvers.default.acme.email=paquidios@gmail.com
   - --certificatesresolvers.default.acme.storage=acme.json
 ```
 
@@ -1166,7 +1166,7 @@ with the key `imagePullPolicy: Always`. Just after the image key, like this:
 ```bash
 containers:
   - name: django
-    image: netopaas/brattdev:cactus0.1
+    image: paquidios/inguz:cactus0.1
     imagePullPolicy: Always
 ```
 
@@ -1222,13 +1222,13 @@ Además, puedes correr comandos dentro de la imagen para ver que puede estar mal
 pero ten cuidado que en realidad estas haciendo un container temporal, no
 harás cambios a la imagen en general.
 
-`docker run --rm -it netopaas/brattdev:cactus0.1 /bin/bash`
+`docker run --rm -it paquidios/inguz:cactus0.1 /bin/bash`
 
 If you cant enter with `/bin/bash` just use `sh`
 
 Y si no quieres que se corra el server, overrideas el entrypoint de esta manera:
 
-`docker run --rm -it --entrypoint "/bin/bash" netopaas/brattdev:cactus0.1`
+`docker run --rm -it --entrypoint "/bin/bash" paquidios/inguz:cactus0.1`
 
 Y si quieres acceder al pod ya en el cluster:
 

@@ -7,7 +7,7 @@ conn_params = {'database': 'template1', 'user': os.getenv('POSTGRES_USER'),
                'host': os.getenv('POSTGRES_HOST'),
                'port': os.getenv('POSTGRES_PORT', 5432)}
 
-name = os.getenv('POSTGRES_NAME', 'brattdev')
+name = os.getenv('POSTGRES_NAME', 'inguz')
 
 try:
     conn = psycopg2.connect(**conn_params)

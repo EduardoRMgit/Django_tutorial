@@ -95,11 +95,11 @@ class Telefono(models.Model):
 
     def send_token(self, test=False):
         pin = random.randint(100000, 999999)
-        if test:
+        if(test):
             ssid = []
         else:
             ssid = send_sms(self.country.name,
-                            self.telefono, str(pin))
+                           self.telefono, str(pin))
         PhoneVerification.objects.create(telefono=self,
                                          ssid=ssid,
                                          token=pin)
@@ -114,9 +114,9 @@ class Telefono(models.Model):
         if str(token) == tokenActual.token and delta:
             self.validado = True
             self.save()
-            return True
+            return(True)
         else:
-            return False
+            return(False)
 
     def __str__(self):
         return str(self.telefono)

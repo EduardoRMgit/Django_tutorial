@@ -371,9 +371,9 @@ class Query(object):
     tipo_telefono = graphene.Field(TipoTelefonoType,
                                    tipo_telefono_id=graphene.Int(),
                                    tipo=graphene.String(),
-                                   description="`Query a single object from \
-                                    TipoTelefono Model:` using  \
-                                    tipoTelefonoId(pk) or tipo (string)")
+                                   description="`Query a single object from Tipo\
+                                    Telefono Model:` using tipoTelefonoId(pk) \
+                                    or tipo (string)")
     all_tipo_telefono = graphene.List(TipoTelefonoType,
                                       description="`Query all objects \
                                           from TipoTelefono Model`")
@@ -381,10 +381,10 @@ class Query(object):
     proveedor_telefonico = graphene.Field(ProveedorTelefonicoType,
                                           proveedor_id=graphene.Int(),
                                           proveedor=graphene.String(),
-                                          description="`Query a single object \
-                                            from ProveedorTelefonico Model:` \
-                                            using proveedorId (pk) or  \
-                                            proveedor (string)")
+                                          description="`Query a single object from \
+                                            ProveedorTelefonico Model:` using \
+                                            proveedorId (pk) or proveedor \
+                                            (string)")
     all_proveedor_telefonico = graphene.List(ProveedorTelefonicoType,
                                              description="`Query all objects \
                                              from ProveedorTelefonico Model`")
@@ -520,7 +520,7 @@ class CreateTelefono(graphene.Mutation):
 
         try:
             user = info.context.user
-            if not user.is_anonymous:
+            if(not user.is_anonymous):
                 try:
                     tel = Telefono.objects.filter(telefono=numero)[0]
                     if tel.user != user:
@@ -541,14 +541,14 @@ class CreateTelefono(graphene.Mutation):
                                                   country=paisTel,
                                                   user=user)
 
-                    if proveedor is not None:
+                    if(proveedor is not None):
                         try:
                             prov = ProveedorTelefonico.get(
                                     proveedor__iexact=proveedor)
                         except Exception:
                             prov = ProveedorTelefonico.objects.create(
                                     proveedor=proveedor)
-                            if paisTel is not None:
+                            if(paisTel is not None):
                                 prov.country = paisTel
                                 prov.save()
 
@@ -557,7 +557,7 @@ class CreateTelefono(graphene.Mutation):
 
         except Exception as ex:
             tel = None
-            raise ex
+            raise(ex)
 
         return CreateTelefono(telefono=tel)
 
@@ -575,8 +575,8 @@ class SendSmsPin(graphene.Mutation):
             user = Telefono.objects.filter(telefono=telefono)[0].user
             try:
                 tel = Telefono.objects.filter(user=user, telefono=telefono)
-                if len(tel) < 1:
-                    raise Exception("User has no telefono")
+                if(len(tel) < 1):
+                    raise(Exception("User has no telefono"))
                 tel = tel.filter(activo=True)[0]
 
             except Exception as e:
@@ -628,14 +628,14 @@ class SendSms(graphene.Mutation):
             try:
                 tel = Telefono.objects.filter(user=user)
 
-                if len(tel) < 1:
-                    raise Exception("User has no telefono")
+                if(len(tel) < 1):
+                    raise(Exception("User has no telefono"))
 
                 tel = tel.filter(activo=True)[0]
             except Exception:
-                raise Exception("User has no telefono activo")
+                raise(Exception("User has no telefono activo"))
         else:
-            raise Exception("User must be authed")
+            raise(Exception("User must be authed"))
 
         tel.send_token()
         resp = True
@@ -676,7 +676,7 @@ class UpdateTelefono(graphene.Mutation):
             prefijo=None, userTel=None, proveedor=None):
         try:
             user = info.context.user
-            if not user.is_anonymous:
+            if(not user.is_anonymous):
 
                 tel = Telefono.objects.get(telefono=nuevo_numero)
                 Telefono.objects.filter(user=user).exclude(
@@ -700,7 +700,7 @@ class UpdateTelefono(graphene.Mutation):
 
         except Exception as ex:
             tel = None
-            raise ex
+            raise(ex)
 
         return UpdateTelefono(telefono=tel)
 

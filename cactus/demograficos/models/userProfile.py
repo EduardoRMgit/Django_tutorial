@@ -641,7 +641,6 @@ class UserBeneficiario(models.Model):
     sexo = models.CharField(max_length=1, blank=True, null=True)
     fecha_nacimiento = models.DateField(blank=True, null=True)
     nombre = models.CharField(max_length=30, blank=True)
-    parentesco = models.CharField(max_length=30, blank=True)
     apellido_materno = models.CharField(max_length=30, blank=True, null=True)
     apellido_paterno = models.CharField(max_length=30, blank=True, null=True)
     telefono = models.CharField(max_length=30, null=True, blank=True)
