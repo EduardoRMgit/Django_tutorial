@@ -62,7 +62,7 @@ spec:
 
             # Esta es la parte para hacer tls con Let's encrypt
             - --certificatesresolvers.default.acme.tlschallenge
-            - --certificatesresolvers.default.acme.email=netopaas@gmail.com
+            - --certificatesresolvers.default.acme.email=farza@invercratos.com
             - --certificatesresolvers.default.acme.storage=acme.json
 
             # Tracing

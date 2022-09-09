@@ -1,5 +1,4 @@
 # Cactus
-[![Build Status](https://travis-ci.com/brattdev/Cactus.svg?token=UzKcpqNqhEMe6rucMNj8&branch=master)](https://travis-ci.com/brattdev/Cactus)
 
 [Kubernetes](#Kubernetes)
 
@@ -83,7 +82,7 @@ en un docker registry.
 
 Primero haces una imagen en la carpeta `/builder` con el paquete django
 ya instalado para que cualquier cambio lo podamos hacer sobre una imagen encima.
-La llamamos `brattdev/python3.7_django`. Esto con un `Dockerfile` que debe de
+La llamamos `inguz/python3.7_django`. Esto con un `Dockerfile` que debe de
 estar en la carpeta `builder`
 
 El comando en general es:
@@ -95,11 +94,11 @@ que se borren las imágenes con el mismo nombre.
 
 En este caso:
 
-`docker build --rm -f Dockerfile_builder -t brattdev/python3.7_django .`
+`docker build --rm -f Dockerfile_builder -t inguz/python3.7_django .`
 
 Seguidamente, armas la imagen de la app de django que debe de estar al lado de manage.py
 
-`docker build --rm -t netopaas/brattdev:cactus0.1 .`
+`docker build --rm -t paquidios/inguz:cactus0.1 .`
 
 Puedes correr el cluster con su deployment, servicio e ingress de una corriendo:
 
@@ -126,7 +125,7 @@ Esto cambiará cuando ya esté en la nube.
 
 Solo debes de armar la imagen después de haber armado las otras docs
 
-`docker build -t netopaas/brattdev:sphinxdoc -f Dockerfile_sphinx .`
+`docker build -t paquidios/inguz:sphinxdoc -f Dockerfile_sphinx .`
 
 Y usar los manifest en la carpeta `cluster_sphinx` para k8
 
@@ -168,11 +167,11 @@ Además, puedes correr comandos dentro de la imagen para ver que puede estar mal
 pero ten cuidado que en realidad estas haciendo un container temporal, no
 harás cambios a la imagen en general.
 
-`docker run --rm -it netopaas/brattdev:cactus0.1 sh`
+`docker run --rm -it paquidios/inguz:cactus0.1 sh`
 
 Y si no quieres que se corra el server, overrideas el entrypoint de esta manera:
 
-`docker run --rm -it --entrypoint "sh" netopaas/brattdev:cactus0.1`
+`docker run --rm -it --entrypoint "sh" paquidios/inguz:cactus0.1`
 
 Y si quieres acceder al pod ya en el cluster:
 

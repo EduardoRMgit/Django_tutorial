@@ -161,7 +161,7 @@ str_firma = firma.decode("utf-8")
 print('\nFIRMAD', str_firma)
 
 site = os.getenv("SITE", "local")
-if site == "test":
+if site == "prod":
     url = 'http://prod.stpmex.com:7002/speiws/rest/ordenPago/registra'
 else:
     url = 'https://demo.stpmex.com:7024/speiws/rest/ordenPago/registra'
