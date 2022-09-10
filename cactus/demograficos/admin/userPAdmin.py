@@ -273,7 +273,8 @@ class ClienteAdmin(UserProfileAdmin):
         UserComportamientoMensualInline,
         UserContactoInline,
         ProfileComponentInline,
-        BeneficiarioInLine
+        DocAdjuntoInLine,
+        BeneficiarioInLine,
         )
 
 # from demograficos.models import UserProfile, Telefono
