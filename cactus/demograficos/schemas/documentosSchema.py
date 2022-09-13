@@ -245,7 +245,7 @@ class Query(object):
     doc_adjunto_tipo = graphene.Field(DocAdjuntoTipoType,
                                       doc_adjunto_tipo_id=graphene.Int(),
                                       tipo=graphene.String(),
-                                      description="`Query a single object from \
+                                      description="`Query a single object from\
                                         DocAdjuntoTipo Model:` using \
                                         docAdjuntoTipoId(pk) or tipo(string)")
     all_doc_adjunto_tipo = graphene.List(DocAdjuntoTipoType,
