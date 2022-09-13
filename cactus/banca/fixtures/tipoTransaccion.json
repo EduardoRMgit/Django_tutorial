@@ -22,8 +22,8 @@
     "pk": 3,
     "fields": {
       "codigo": "3",
-      "nombre": "DDE",
-      "salida": true
+      "nombre": "Depósito Scotiabank",
+      "salida": false
     }
   },
   {
@@ -49,8 +49,8 @@
     "pk": 6,
     "fields": {
       "codigo": "6",
-      "nombre": "Cobro a trav\u00e9s de QR",
-      "salida": false
+      "nombre": "Retiro Scotiabank",
+      "salida": true
     }
   },
   {
@@ -121,8 +121,8 @@
     "pk": 14,
     "fields": {
       "codigo": "14",
-      "nombre": "Depósito Scotiabank",
-      "salida": false
+      "nombre": "DDE",
+      "salida": true
     }
   },
   {
@@ -130,7 +130,7 @@
     "pk": 15,
     "fields": {
       "codigo": "15",
-      "nombre": "Retiro Scotiabank",
+      "nombre": "Cobro a trav\u00e9s de QR",
       "salida": false
     }
   },

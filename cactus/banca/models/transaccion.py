@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.dispatch import receiver
-from django.db.models.signals import post_save
+from django.db.models.signals import pre_save, post_save
 from django.core.validators import MinValueValidator
 from decimal import Decimal
 
@@ -85,13 +85,32 @@ class Transaccion(models.Model):
         return self.user.username
 
 
+@receiver(pre_save, sender=Transaccion)
+def ejecuta_balanza_notCreated(sender, instance, **kwargs):
+    from contabilidad.balanza import balanza
+    exito = StatusTrans.objects.get(nombre="exito")
+    if instance.id and instance.tipoTrans:
+        anterior = Transaccion.objects.get(id=instance.id)
+        if (not anterior.statusTrans == instance.statusTrans) and instance.statusTrans == exito:  # noqa: E501
+            tipo_trans = int(instance.tipoTrans.codigo)
+            if tipo_trans in [1, 2, 3, 6]:
+                balanza(instance, tipo_trans)
+            elif tipo_trans == 13:
+                balanza(instance, 15)  # Inguz-Inguz Recibida
+                balanza(instance, 16)  # Inguz-Inguz Enviada
+
+
 @receiver(post_save, sender=Transaccion)
-def ejecuta_balanza(sender, instance, created, **kwargs):
-    if created and instance.tipoTrans is not None:
-        from contabilidad.balanza import balanza
+def ejecuta_balanza_created(sender, instance, created, **kwargs):
+    from contabilidad.balanza import balanza
+    exito = StatusTrans.objects.get(nombre="exito")
+    if created and instance.statusTrans == exito:
         tipo_trans = int(instance.tipoTrans.codigo)
-        if tipo_trans in [1, 2]:  # Trans Recibida (1) y enviada (2)
+        if tipo_trans in [1, 2, 3, 6]:
             balanza(instance, tipo_trans)
+        elif tipo_trans == 13:
+            balanza(instance, 15)  # Inguz-Inguz Recibida
+            balanza(instance, 16)  # Inguz-Inguz Enviada
 
 
 class TransPago(models.Model):

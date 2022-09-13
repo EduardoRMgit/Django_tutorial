@@ -34,6 +34,8 @@ dbName: brattdev
 
 stpSecret: stp-private-key
 
+renapoSecret: renapo-secret
+
 s3:
   enabled: false
   secret: s3-credentials

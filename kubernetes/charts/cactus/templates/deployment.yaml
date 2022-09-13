@@ -59,11 +59,29 @@ spec:
             - name: POSTGRES_NAME
               value: {{ .Values.dbName | quote }}
 
-            - name: STP-PRIVATE-KEY
+            - name: STP_PRIVATE_KEY
               valueFrom:
                 secretKeyRef:
                    name: {{ .Values.stpSecret }}
                    key: stp-private-key
+
+            - name: RENAPO_PRIVATE_KEY
+              valueFrom:
+                secretKeyRef:
+                   name: {{ .Values.renapoSecret }}
+                   key: renapo-private-key
+            
+            - name: RENAPO_USER
+              valueFrom:
+                secretKeyRef:
+                   name: {{ .Values.renapoSecret }}
+                   key: user
+
+            - name: RENAPO_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                   name: {{ .Values.renapoSecret }}
+                   key: password
 
             - name: SITE
               value: {{ .Values.site | quote }}
@@ -120,3 +138,9 @@ spec:
 
             - name: DEBUG
               value: {{ .Values.debug | quote }}
+
+            - name: STP_PRIVATE_KEY
+              valueFrom:
+                secretKeyRef:
+                   name: {{ .Values.stpSecret }}
+                   key: stp-private-key

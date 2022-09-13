@@ -26,15 +26,15 @@ def listaNegra(data):
     #                 indent=4, separators=(',', ': ')))
 
     if not result:
-        return([k, 'O'])
+        return ([k, 'O'])
 
     validacion = result[-1].get('tipo')
 
     if validacion == 'LISTA NEGRA' or validacion == 'BLOQUEADO':
-        return([k, 'N'])
+        return ([k, 'N'])
 
     if validacion == 'PEP':
-        return([k, 'P'])
+        return ([k, 'P'])
 
     # print('estado desconocido')
-    return([k, 'O'])
+    return ([k, 'O'])

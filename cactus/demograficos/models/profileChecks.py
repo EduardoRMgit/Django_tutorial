@@ -1,5 +1,8 @@
 import datetime
 import re
+import logging
+from demograficos.utils.stringNormalize import normalize
+from renapo.models import Renapo
 from django.db import models
 from django.contrib.auth.models import User
 from demograficos.models.userProfile import (RespuestaSeguridad,
@@ -7,11 +10,13 @@ from demograficos.models.userProfile import (RespuestaSeguridad,
                                              UserProfile)
 from demograficos.models.telefono import Telefono
 from demograficos.models.adminUtils import adminUtils
+from renapo.renapo_call import check_renapo
 from django.forms import ValidationError
 from django.dispatch import receiver
 from django.db.models.signals import post_save
 from demograficos.models.location import UDevice
-from.documentos import sendOCR
+from .documentos import sendOCR
+
 
 """definir aqui todos lo criterios de validación , dependiendo del campo"""
 """Usar infovalidator en cada mutation de user para validar
@@ -81,84 +86,96 @@ class InfoValidator(models.Model):
 
     @staticmethod
     def CURPValidado(curp, user):
-        """pasamos curp a uppercase y comparamos con el patrón reggex"""
-        a_paterno = user.last_name.upper()
-        a_materno = user.Uprofile.apMaterno.upper()
+
+        nombre = normalize(user.first_name.upper())
+        a_paterno = normalize(user.last_name.upper())
+        a_materno = normalize(user.Uprofile.apMaterno.upper())
         curp = curp.upper()
-        pattern = re.compile(r'^([A-Z][AEIOUX][A-Z]{2}\d{2}(?:0[1-9]|1[0-2])'
-                             r'(?:0[1-9]|[12]\d|3[01])[HM](?:AS|B[CS]|C[CLMSH]'
-                             r'|D[FG]|G[TR]|HG|JC|M[CNS]|N[ETL]|OC|PL|Q[TR]'
-                             r'|S[PLR]|T[CSL]|VZ|YN|ZS)[B-DF-HJ-NP-TV-Z]{3}'
-                             r'[A-Z\d])(\d)')
-        result = re.match(pattern, curp)
-        if not result:
-            print('formato de curp no empata el regex')
-            print(result)
-            return False
-        """inicial de a_paterno o X, si no es una letra de [A-Z]"""
-        if curp[0] != a_paterno[0]:
-            if curp[0] != 'X':
-                print('1er dig no coincide con apellido y no es X')
-                return False
-        """primer vocal interna de apellido"""
-        if curp[1] != a_paterno[1:].strip('BCDFGHJKLMNÑPQRSTVWXYZ')[0]:
-            if curp[1] != 'X':
-                print('2do dig no coincido con 1er vocal int de apellido')
-                return False
-        """ inicial del segundo apellido"""
-        if a_materno:
-            if curp[2] != a_materno[0]:
-                print('3er dig no coincide con 2do ap')
-                return False
-        else:
-            if curp[2] != 'X':
-                print('3er dig no coincide con 2do ap y no es X')
-                return False
-        """ inicial del nombre """
-        if curp[3] != user.first_name[0]:
-            print('4to dig no coincido con inicial del nombre')
-            return False
-        """ año nacimiento % 100 , mes y día"""
+
         fNacimiento = str(user.Uprofile.fecha_nacimiento).split('-')
-        año = fNacimiento[0][2] + fNacimiento[0][3]
+        año = fNacimiento[0]
         mes = fNacimiento[1]
         dia = fNacimiento[2]
-        if curp[4]+curp[5] != año:
-            print('digitos 5 y 6 no coinciden con el año de nacimiento')
-            return False
-        if curp[6]+curp[7] != mes:
-            print('digitos 7 y 8 no coiciden con el mes')
-            return False
-        if curp[8] + curp[9] != dia:
-            print('digitos 9 y 10 no coinciden con día')
-            return False
-        """ sexo """
-        if curp[10] != user.Uprofile.sexo:
-            print('digito 10 no coinciden con el sexo')
-            return False
+        nacimiento = "{}/{}/{}".format(dia, mes, año)
 
-        def DigitoVerificador(curp_):
-            dict_ = '0123456789ABCDEFGHIJKLMNÑOPQRSTUVWXYZ'
-            suma = 0
-            digito = 0
-            for i in range(0, 17):
-                suma += dict_.index(curp_[i])*(18-i)
-                digito = 10 - suma % 10
-            return str(digito)
-        """comprobamos dígito verificador"""
-        if DigitoVerificador(curp) == curp[17]:
-            print('curp validado')
-        else:
-            print('dígito verificador no coincide')
-            return False
-        valid = DigitoVerificador(curp) == curp[17]
-        if valid:
-            print('curp validado')
-        return (valid)
+        data, mensaje = check_renapo(curp)
+        valida = True
+
+        try:
+            if data:
+
+                nombre_renapo = normalize(data['nombre_renapo'])
+                ap_pat_renapo = normalize(data['ap_pat_renapo'])
+                ap_mat_renapo = normalize(data['ap_mat_renapo'])
+                fechNac_renapo = data['fechNac_renapo']
+
+                if nombre != nombre_renapo:
+                    valida = False
+                    mensaje = "Nombre no coincide con la \
+                        consulta a RENAPO"
+                if a_paterno != ap_pat_renapo:
+                    valida = False
+                    mensaje = "Apellido paterno no coincide con la \
+                        consulta a RENAPO"
+                if a_materno != ap_mat_renapo:
+                    valida = False
+                    mensaje = "Apellido materno no coincide con la \
+                        consulta a RENAPO"
+                if nacimiento != fechNac_renapo:
+                    valida = False
+                    mensaje = "Fecha de nacimiento no coincide con la \
+                        consulta a RENAPO"
+                existe = Renapo.objects.filter(user=user)
+                if not existe:
+                    Renapo.objects.create(
+                        user=user,
+                        curp=curp,
+                        renapo_resp=data,
+                        renapo_nombre=nombre_renapo,
+                        renapo_ap_pat=ap_pat_renapo,
+                        renapo_ap_mat=ap_mat_renapo,
+                        renapo_nacimiento=fechNac_renapo,
+                        exitoso=valida,
+                        msjError=mensaje
+                    )
+                else:
+                    consulta = existe.first()
+                    consulta.curp = curp
+                    consulta.renapo_resp = data
+                    consulta.renapo_nombre = nombre_renapo
+                    consulta.renapo_ap_pat = ap_pat_renapo
+                    consulta.renapo_ap_mat = ap_mat_renapo
+                    consulta.renapo_nacimiento = fechNac_renapo
+                    consulta.exitoso = valida
+                    consulta.msjError = mensaje
+                    consulta.save()
+            else:
+                valida = False
+                if not existe:
+                    Renapo.objects.create(
+                        user=user,
+                        curp=curp,
+                        renapo_resp=data,
+                        exitoso=valida,
+                        msjError=mensaje
+                    )
+                else:
+                    consulta = existe.first()
+                    consulta.curp = curp
+                    consulta.renapo_resp = data
+                    consulta.exitoso = valida
+                    consulta.msjError = mensaje
+                    consulta.save()
+            return valida, mensaje
+        except Exception as ex:
+            db_logger = logging.getLogger('db')
+            mensaje = "[CONSULTA CURP RENAPO] Falló la validación. Error: \
+                {}.".format(ex)
+            db_logger.error(ex)
 
     @staticmethod
     def RFCValidado(rfc, user):
-        print('VALIDANDO RFC')
+
         """pasamos rfc a uppercase y comparamos con el patrón reggex"""
         pattern = re.compile(r'^([A-ZÑ&]{3,4})?(?:- ?)?(\d{2}(?:0[1-9]'
                              r'|1[0-2])(?:0[1-9]|[12]\d|3[01]))?(?:- ?)'
@@ -253,23 +270,25 @@ class InfoValidator(models.Model):
             fecha_nacimiento = uProfile.fecha_nacimiento
             curp = uProfile.curp
             rfc = uProfile.rfc
+            mensajeCurp = ""
             try:
                 año_nacimiento = fecha_nacimiento.year
             except Exception:
                 valid = False
                 motivo += 'no se envio fecha de nacimiento, '
                 InfoValidator.setComponentValidated(alias, user, valid, motivo)
+                print(motivo)
                 return
             mes = fecha_nacimiento.month
             edad = datetime.date.today().year - año_nacimiento
             if datetime.date.today().month < mes:
                 edad -= 1
             if curp:
-                if not InfoValidator.CURPValidado(curp, user):
+                if not (InfoValidator.CURPValidado(curp, user))[0]:
                     valid = False
-                    motivo += 'curp inválido, '
+                    motivo += 'curp inválido'
                 else:
-                    print(motivo)
+                    mensajeCurp = "curp validado"
             if rfc:
                 if not InfoValidator.RFCValidado(rfc, user):
                     valid = False
@@ -280,8 +299,8 @@ class InfoValidator(models.Model):
             if not (edad > 10 and edad <= 100):
                 valid = False
                 motivo += 'edad inválida'
-            else:
-                print(motivo)
+            InfoValidator.setComponentValidated(alias, user, valid, motivo)
+            return mensajeCurp
         elif concepto == 'DIR':
             """verif c_postal"""
             alias = 'direccion'
@@ -345,6 +364,7 @@ class InfoValidator(models.Model):
 
         elif concepto == 'bloqueo':
             alias = 'bloqueo'
+
         InfoValidator.setComponentValidated(alias, user, valid, motivo)
 
 
@@ -423,7 +443,6 @@ def status_registro(sender, instance, created, **kwargs):
         id_status = StatusRegistro.objects.filter(codigo='02').first().id
         UserProfile.objects.filter(user=instance.user.id).update(
             statusRegistro=id_status)
-
     if instance.component.indice == 2 and instance.status == 'VA':
         id_status = StatusRegistro.objects.filter(codigo='06').first().id
         UserProfile.objects.filter(user=instance.user.id).update(
