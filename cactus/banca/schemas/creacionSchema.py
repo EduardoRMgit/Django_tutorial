@@ -1,7 +1,4 @@
 import graphene
-from graphene import ObjectType
-from graphene_django.types import DjangoObjectType
-from banca.models import Transaccion
 from graphql_jwt.decorators import login_required
 from demograficos.models import Fecha
 from datetime import datetime, timedelta
