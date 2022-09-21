@@ -7,12 +7,6 @@ from demograficos.models import Fecha
 from datetime import datetime, timedelta
 
 
-# class FechaCType(DjangoObjectType):
-#     class Meta:
-#         model = Transaccion
-#         fields = ('fechaValor', )
-
-
 class HistoryType(graphene.ObjectType):
     month = graphene.String()
     year = graphene.String()
@@ -111,7 +105,6 @@ class Query(object):
                     dicc['year'] = start.date().year
                     print(dicc)
                     listf.append(dicc)
-                print(listf)
                 listf = reversed(listf)
                 return listf
         except Exception:
