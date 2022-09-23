@@ -135,9 +135,3 @@ spec:
 
             - name: DEBUG
               value: {{ .Values.debug | quote }}
-
-            - name: STP_PRIVATE_KEY
-              valueFrom:
-                secretKeyRef:
-                   name: {{ .Values.stpSecret }}
-                   key: stp-private-key
