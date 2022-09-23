@@ -30,7 +30,6 @@ jobs:
           source $REPO/autodeploy_env.sh
           echo $IMAGE_DJANGO
           echo "::set-output name=imaged::$(echo $IMAGE_DJANGO)"
-
   deploy:
     name: Deploy
     runs-on: ubuntu-18.04
@@ -51,7 +50,6 @@ jobs:
     - name: Login to Amazon ECR
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
-
 
     - name: Build, tag, and push image to Amazon ECR
       id: build-image
@@ -75,7 +73,6 @@ jobs:
           docker push $ECR_REGISTRY/$REPO:$IMAGE_TAG
           echo "::set-output name=image::$ECR_REGISTRY/$REPO:$IMAGE_TAG"
         fi;
-
     - name: Run Helm tools
       uses: Inguz-Digital-IFPE/kube-tools@v1
       env:
@@ -94,16 +91,19 @@ jobs:
             export DB=cactus-prod-db.c4csey4k0tc5.us-east-2.rds.amazonaws.com
             # kubernetes-django-east2.c4csey4k0tc5.us-east-2.rds.amazonaws.com
             export DEBUG=false
+            export STPSECRET=stpsecretprod
           elif [[ ${GITHUB_REF##*/} == staging ]] ; then
             echo "IN STAGING"
             export SUFFIX=stage
             export DB=cactus-stage-east-2.c4csey4k0tc5.us-east-2.rds.amazonaws.com
             export DEBUG=true
+            export STPSECRET=stpsecrettest
           elif [[ ${GITHUB_REF##*/} == test ]] ; then
             echo "IN TEST"
             export SUFFIX=test
             export DB=cactus-test-db.c4csey4k0tc5.us-east-2.rds.amazonaws.com
             export DEBUG=true
+            export STPSECRET=stpsecrettest
           fi;
           if [[ $NEW_RELEASE == true ]] ; then
             # if helm list -q | grep -q $REPO-$SUFFIX; then
@@ -121,7 +121,8 @@ jobs:
             --set s3.enabled=true \
             --set twilio.enabled=true \
             --set site=$SUFFIX \
-            --set debug=$DEBUG
+            --set debug=$DEBUG \
+            --set stpSecret=$STPSECRET
           else
             kubectl set image deployments/$REPO-$SUFFIX \
               $REPO=906062568112.dkr.ecr.us-east-2.amazonaws.com/$REPO:$IMAGE_TAG
@@ -132,6 +133,7 @@ jobs:
               --set image.tag=$IMAGE_TAG \
               --set s3.enabled=true \
               --set twilio.enabled=true \
+              --set stpSecret=$STPSECRET \
               --set site=$SUFFIX  >> job.yaml
             kubectl delete -f job.yaml --all
             kubectl apply -f job.yaml
@@ -149,5 +151,6 @@ jobs:
             --set image.tag=$IMAGE_TAG \
             --set s3.enabled=true \
             --set twilio.enabled=false \
-            --set site=$SUFFIX
+            --set site=$SUFFIX \
+            --set stpSecret=$STPSECRET
           fi;
