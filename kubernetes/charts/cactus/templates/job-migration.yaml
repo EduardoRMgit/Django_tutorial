@@ -31,6 +31,8 @@ spec:
             - name: POSTGRES_NAME
               value: {{ .Values.dbName | quote }}
 
+            - name: STPSECRET
+              value: {{ .Values.stpSecret | quote }}
 
 {{- if .Values.s3.enabled }}
             - name: AWS_SECRET_ID

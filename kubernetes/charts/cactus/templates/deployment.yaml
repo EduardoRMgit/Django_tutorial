@@ -59,11 +59,8 @@ spec:
             - name: POSTGRES_NAME
               value: {{ .Values.dbName | quote }}
 
-            - name: STP_PRIVATE_KEY
-              valueFrom:
-                secretKeyRef:
-                   name: {{ .Values.stpSecret }}
-                   key: stp-private-key
+            - name: STPSECRET
+              value: {{ .Values.stpSecret | quote }}
 
             - name: RENAPO_PRIVATE_KEY
               valueFrom:

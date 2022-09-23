@@ -32,7 +32,7 @@ dbSecret: postgres-credentials
 dbPort: 5432
 dbName: brattdev
 
-stpSecret: stp-private-key
+stpSecret: private-key
 
 renapoSecret: renapo-secret
 
