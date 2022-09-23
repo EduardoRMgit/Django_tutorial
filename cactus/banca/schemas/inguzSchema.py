@@ -10,6 +10,7 @@ from banca.models import (InguzTransaction, StatusTrans, TipoTransaccion,
 from demograficos.models.userProfile import UserProfile
 from demograficos.models import Contacto
 from banca.schemas.transaccionSchema import UserType
+import logging
 
 
 class InguzType(DjangoObjectType):
@@ -36,7 +37,7 @@ class CreateInguzTransaccion(graphene.Mutation):
                abono,
                concepto,
                nip,):
-
+        db_logger = logging.getLogger("db")
         try:
             ordenante = info.context.user
         except Exception:
@@ -69,18 +70,18 @@ class CreateInguzTransaccion(graphene.Mutation):
         fecha = (datetime.now() +
                  timedelta(hours=24)).strftime('%Y-%m-%d %H:%M:%S')
         claveR = randomString()
-        monto2F = "{:.2f}".format(float(abono))
+        monto2F = "{:.2f}".format(round(float(abono), 2))
         status = StatusTrans.objects.get(nombre="exito")
-        tipo = TipoTransaccion.objects.get(codigo=2)
+        tipo = TipoTransaccion.objects.get(codigo=13)
 
         # Actualizamos saldo del usuario
         if float(abono) <= ordenante.Uprofile.saldo_cuenta:
-            ordenante.Uprofile.saldo_cuenta -= float(abono)
+            ordenante.Uprofile.saldo_cuenta -= round(float(abono), 2)
             ordenante.Uprofile.save()
         else:
             raise Exception("Saldo insuficiente")
 
-        user_contacto.Uprofile.saldo_cuenta += float(abono)
+        user_contacto.Uprofile.saldo_cuenta += round(float(abono), 2)
         user_contacto.Uprofile.save()
         main_trans = Transaccion.objects.create(
             user=ordenante,
@@ -102,7 +103,16 @@ class CreateInguzTransaccion(graphene.Mutation):
         )
 
         print(f"transacción creada: {inguz_transaccion.__dict__}")
-
+        msg = "[Inguz_Inguz] Transaccion exitosa del usuario: {} \
+            con cuenta: {} \
+            a la cuenta: {} \
+            por: ${}".format(
+            ordenante.username,
+            ordenante.Uprofile.cuentaClabe,
+            contacto.clabe,
+            monto2F
+        )
+        db_logger.info(msg)
         return CreateInguzTransaccion(
             inguz_transaccion=inguz_transaccion,
             user=ordenante

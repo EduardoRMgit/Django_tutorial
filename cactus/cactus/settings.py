@@ -85,6 +85,7 @@ INSTALLED_APPS = [
     'pagos.apps.PagosConfig',
     'pagos.rapydcollect.apps.RapydcollectConfig',
     'scotiabank.apps.ScotiabankConfig',
+    'renapo.apps.RenapoConfig',
 ]
 
 if(PROD):
@@ -275,9 +276,12 @@ else:
     MEDIA_URL = '/media/'
     MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+RENAPO_USER = env.str("RENAPO_USER", "")
+RENAPO_PASSWORD = env.str("RENAPO_PASSWORD", "")
+
 # STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 # higher than the count of fields
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 10240
 
 PASSWORD_RESET_TIMEOUT_DAYS = 2
-DEFAULT_AUTO_FIELD='django.db.models.AutoField'
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
