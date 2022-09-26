@@ -1,19 +1,16 @@
 import graphene
-from graphene_django.types import DjangoObjectType
-from banca.models import Transaccion
 from graphql_jwt.decorators import login_required
 from demograficos.models import Fecha
 from datetime import datetime, timedelta
 
 
-class FechaCType(DjangoObjectType):
-    class Meta:
-        model = Transaccion
-        fields = ('fechaValor', )
+class HistoryType(graphene.ObjectType):
+    month = graphene.String()
+    year = graphene.String()
 
 
 class Query(object):
-    history_trans = graphene.List(graphene.String,
+    history_trans = graphene.List(HistoryType,
                                   token=graphene.String(required=True))
 
     '''
@@ -21,52 +18,91 @@ class Query(object):
     query{historyTrans(token: "")}
     Data:
     {
-      "data": {
-        "historyTrans": [
-          "(8, 2022)",
-          "(7, 2022)",
-          "(6, 2022)",
-          "(5, 2022)",
-          "(4, 2022)",
-          "(3, 2022)",
-          "(2, 2022)",
-          "(1, 2022)",
-          "(12, 2021)",
-          "(11, 2021)",
-          "(10, 2021)",
-          "(9, 2021)"
-        ]
+  "data": {
+    "historyTrans": [
+      {
+        "month": "10",
+        "year": "2021"
+      },
+      {
+        "month": "11",
+        "year": "2021"
+      },
+      {
+        "month": "12",
+        "year": "2021"
+      },
+      {
+        "month": "01",
+        "year": "2022"
+      },
+      {
+        "month": "02",
+        "year": "2022"
+      },
+      {
+        "month": "03",
+        "year": "2022"
+      },
+      {
+        "month": "04",
+        "year": "2022"
+      },
+      {
+        "month": "05",
+        "year": "2022"
+      },
+      {
+        "month": "06",
+        "year": "2022"
+      },
+      {
+        "month": "07",
+        "year": "2022"
+      },
+      {
+        "month": "08",
+        "year": "2022"
+      },
+      {
+        "month": "09",
+        "year": "2022"
       }
-    }
+    ]
+  }
+}
     '''
 
     @login_required
-    def resolve_history_trans(self, info, **kwargs):
+    def resolve_history_trans(root, info, **kwargs):
         try:
             user = info.context.user
+            if not user.is_anonymous:
+                listf = []
+                registro = Fecha.objects.get(user=user)
+                registro = registro.creacion
+                start = datetime.now()
+                rmonth = registro.month
+                smonth = start.month
+                if start.year != registro.year:
+                    aniosdiff = start.year - registro.year
+                    if aniosdiff > 1:
+                        mes = 12
+                    else:
+                        b = rmonth + 12
+                        mes = b - smonth
+
+                else:
+                    mes = rmonth - smonth
+                for x in range(0, mes):
+                    dicc = {}
+                    end = start - timedelta(days=1)
+                    start = end.replace(day=1)
+                    dicc['month'] = str(start.date().month).zfill(2)
+                    dicc['year'] = start.date().year
+                    print(dicc)
+                    listf.append(dicc)
+                listf = reversed(listf)
+                return listf
         except Exception:
-            raise Exception('Usuario Inexistente')
-        listf = []
-        registro = Fecha.objects.get(user=user)
-        registro = registro.creacion
-        start = datetime.now()
-        rmonth = registro.month
-        smonth = start.month
-        if start.year != registro.year:
-            aniosdiff = start.year - registro.year
-            if aniosdiff > 1:
-                mes = 12
-            else:
-                b = rmonth + 12
-                mes = b - smonth
-
-        else:
-            mes = rmonth - smonth
-        for x in range(0, mes):
-            end = start - timedelta(days=1)
-            start = end.replace(day=1)
-            fecha = str(start.date().month).zfill(2), start.date().year
-            listf.append(fecha)
-
-        listf = reversed(listf)
-        return listf
+            raise Exception('Bad Credentials')
