@@ -19,7 +19,7 @@ export LOADDATA=false
 export STATIC=false
 
 # For when new settings in the deployment of kubernetes are added
-export NEW_RELEASE=true
+export NEW_RELEASE=false
 
 # Add a new cronjob
 export CRONJOB=true
