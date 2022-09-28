@@ -192,8 +192,8 @@ class CreateTransferenciaScotia(graphene.Mutation):
             raise Exception('Usuario inexistente')
         if UserProfile.objects.filter(user=ordenante).count() == 0:
             raise Exception('Usuario sin perfil')
-        if(ordenante.Uprofile.password):
-            if(not ordenante.Uprofile.check_password(nip)):
+        if ordenante.Uprofile.password:
+            if not ordenante.Uprofile.check_password(nip):
                 raise Exception('Nip esta mal')
         if monto == 0 or monto is None:
             raise Exception('Ingrese un monto válido')
@@ -331,7 +331,7 @@ class CreateRetiroScotia(graphene.Mutation):
         fecha = utc_to_local(timezone.now()).strftime('%Y-%m-%d %H:%M:%S')
         claveR = randomString()
         status = StatusTrans.objects.get(nombre="esperando respuesta")
-        tipo = TipoTransaccion.objects.get(codigo=15)
+        tipo = TipoTransaccion.objects.get(codigo=6)
         reservado_scotia_trans = round(monto, 2)
         fecha_t = utc_to_local(timezone.now()).strftime("%Y%m%d")
 
@@ -471,7 +471,7 @@ class CreateScotiaDeposito(graphene.Mutation):
         fecha = utc_to_local(timezone.now()).strftime('%Y-%m-%d %H:%M:%S')
         claveR = randomString()
         status = StatusTrans.objects.get(nombre="esperando respuesta")
-        tipo = TipoTransaccion.objects.get(codigo=14)
+        tipo = TipoTransaccion.objects.get(codigo=3)
         main_trans = Transaccion.objects.create(
             user=ordenante,
             fechaValor=fecha,

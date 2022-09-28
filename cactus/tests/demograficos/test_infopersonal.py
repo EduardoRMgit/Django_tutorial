@@ -21,22 +21,24 @@ class TestInfopersonal(JSONWebTokenTestCase):
                                     $name:String!,
                                     $lastName_P:String!,
                                     $lastName_M:String!,
+                                    # $birthDate:Date,
                                     $gender:String!,
                                     $nationality:String!,
                                     $city:String!,
                                     $occupation:String!,
-                                    $curp:String!,
-                                    $rfc:String!){
+                                    # $curp:String!,
+                                    $rfc:String){
                 updateInfoPersonal(
                             token: $token,
                             name: $name,
                             lastNameP: $lastName_P,
                             lastNameM: $lastName_M,
+                            # birthDate: $birthDate,
                             gender: $gender,
                             nationality: $nationality,
                             city: $city,
                             occupation: $occupation,
-                            curp: $curp,
+                            # curp: $curp,
                             rfc: $rfc){
                     user{
                         firstName
@@ -47,8 +49,9 @@ class TestInfopersonal(JSONWebTokenTestCase):
                           nacionalidad
                           ciudadNacimiento
                           ocupacion
-                          curp
+                          # curp
                           rfc
+                          # fechaNacimiento
                         }
                     }
                 }
@@ -63,7 +66,9 @@ class TestInfopersonal(JSONWebTokenTestCase):
                      "city": "Neza",
                      "occupation": "tester",
                      "rfc": "VAQD970909H96",
-                     "curp": "asdfg1234567"}
+                     # "curp": "VAQD970909HDFLJN03",
+                     # "birthDate": "1999-08-13"
+                     }
         res = self.client.execute(mutation, variables)
         expected_res = {
             "updateInfoPersonal": {
@@ -76,8 +81,9 @@ class TestInfopersonal(JSONWebTokenTestCase):
                       "nacionalidad": "Mexicano",
                       "ciudadNacimiento": "Neza",
                       "ocupacion": "tester",
-                      "curp": "asdfg1234567",
-                      "rfc": "VAQD970909H96"
+                      # "curp": "VAQD970909HDFLJN03",
+                      "rfc": "VAQD970909H96",
+                      # "fechaNacimiento": "1999-08-13",
                     }
                 }
             }

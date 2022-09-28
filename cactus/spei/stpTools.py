@@ -126,15 +126,18 @@ def randomString(stringLength=10):
 def pago(data_pago):
     env = environ.Env()
     STPSECRET = env.str('STPSECRET', '')
-    from kubernetes import client, config
-    import base64
     try:
-        config.load_kube_config()
+        from kubernetes import client, config
+        import base64
+        try:
+            config.load_kube_config()
+        except Exception:
+            config.load_incluster_config()
+        v1 = client.CoreV1Api()
+        STP_KEY_PWD = v1.read_namespaced_secret(STPSECRET, 'default')
+        STP_KEY_PWD = base64.b64decode(STP_KEY_PWD.data['key']).decode('utf-8')
     except Exception:
-        config.load_incluster_config()
-    v1 = client.CoreV1Api()
-    STP_KEY_PWD = v1.read_namespaced_secret(STPSECRET, 'default')
-    STP_KEY_PWD = base64.b64decode(STP_KEY_PWD.data['key']).decode('utf-8')
+        STP_KEY_PWD = "12345678"
 
     claveRastreo = data_pago['clave_rastreo']
     conceptoPago = data_pago['concepto_pago']
@@ -155,7 +158,7 @@ def pago(data_pago):
     tipoCuentaOrdenante = "40"  # es 40 por cuenta clabe
     tipoPago = "1"  # tipo de pago 3 a 3
 
-    if(
+    if (
         # False
         timezone.now().time() >= time(17, 0)
         or timezone.now().time() < time(7, 0)

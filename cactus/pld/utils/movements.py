@@ -31,4 +31,4 @@ def llamada(request):
     except Exception as ex:
         msg = k['mensaje']
         print("en la funcion llamada(): ", ex)
-    return(msg, r.status_code)
+    return (msg, r.status_code)

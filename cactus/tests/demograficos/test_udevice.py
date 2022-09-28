@@ -84,7 +84,8 @@ class TestUpdateDevice(JSONWebTokenTestCase):
     def register_device(self, telefono, device_id):
         telefono.send_token(test=True)
         pin = telefono.PVTelefono.last().token
-        register_device = """mutation ValidacionTelefono($numero:String!, $pin:String!){
+        register_device = """mutation ValidacionTelefono(
+        $numero:String!, $pin:String!){
         validacionTelefono(numero: $numero, pin: $pin){
             validacion
         }
