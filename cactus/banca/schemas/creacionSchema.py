@@ -93,14 +93,15 @@ class Query(object):
                         mes = b - smonth
 
                 else:
-                    mes = rmonth - smonth
+                  mes = smonth - rmonth
+                  if mes == 0:
+                    mes = 1
                 for x in range(0, mes):
                     dicc = {}
                     end = start - timedelta(days=1)
                     start = end.replace(day=1)
                     dicc['month'] = str(start.date().month).zfill(2)
                     dicc['year'] = start.date().year
-                    print(dicc)
                     listf.append(dicc)
                 listf = reversed(listf)
                 return listf
