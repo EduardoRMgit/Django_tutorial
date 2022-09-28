@@ -1,7 +1,6 @@
 import io
 import calendar
 from datetime import datetime
-from datetime import timedelta
 from weasyprint import HTML
 
 from django.conf import settings
@@ -103,7 +102,7 @@ class FlagKitLegal(graphene.Mutation):
 
         # TODO que se cheque el nip encriptado
         # if(not user.Uprofile.check_password(nip)):
-        if(not user.Uprofile.nip == nip):
+        if not user.Uprofile.nip == nip:
             raise Exception('Nip esta mal')
 
         profile.aceptaContrato = True
@@ -181,36 +180,36 @@ class UrlEdoCuenta(graphene.Mutation):
           'mutation. The new instance of the recently created user.
 
     >>> Mutation Example:
-    mutation{
-        urlPdfLegal(nip:"12345678", month:"5", year:"2020"){
-            url
+    mutation{urlEdoCuenta(
+      token: ""
+      month: 9, nip: "123456", year: 2019) {
+      url
     }}
 
-    mutation{
-        urlPdfLegal(nip:"12345678", dateFrom:"2020-5-1", dateTo:"2020-6-1"){
-            url
-    }}
+    {
+      "data": {
+        "urlEdoCuenta": {
+          "url": "file.pdf"
+        }
+      }
+    }
     """
     url = graphene.String()
 
     class Arguments:
         nip = graphene.String(required=True)
         token = graphene.String(required=True)
-        date_from = graphene.String()
-        date_to = graphene.String()
-        month = graphene.String()
-        year = graphene.String()
+        month = graphene.Int(required=True)
+        year = graphene.Int(required=True)
 
     @login_required
-    def mutate(self, info, nip, token='', date_from='', date_to='',
-            month='', year=''):
+    def mutate(self, info, year, nip, token='', month=''):
         user = info.context.user
         is_cuenta = False
 
         # We make a dict of the dates to conform to the rest method.
         req = {}
-        for variable in ['nip', 'date_from', 'date_to',
-                'month', 'year']:
+        for variable in ['nip', 'month', 'year']:
             req[variable] = eval(variable)
 
         nip_string = req.get("nip", "")
@@ -219,7 +218,7 @@ class UrlEdoCuenta(graphene.Mutation):
             raise GraphQLError("Nip must be given")
 
         try:
-            if(not user.Uprofile.check_password(nip_string)):
+            if not user.Uprofile.check_password(nip_string):
                 raise GraphQLError("Incorrect NIP")
         except TypeError:
             raise GraphQLError("User has no NIP")
@@ -237,7 +236,7 @@ class UrlEdoCuenta(graphene.Mutation):
         if (date_to.month > timezone.now().month and
                 date_to.year > timezone.now().year):
             raise GraphQLError("End date cannot be more than " +
-                                        "present month")
+                               "present month")
 
         last_day_of_month = calendar.monthrange(date_to.year, date_to.month)[1]
         fecha_dt = (
@@ -251,10 +250,9 @@ class UrlEdoCuenta(graphene.Mutation):
                   'Julio', 'Agosto', 'Septiembre',
                   'Octubre', 'Noviembre', 'Diciembre']
         month = months[month_period - 1] + ' ' + str(date_from.year)
-        date_to = date_to + timedelta(days=2)
         # Model data
         html = build_html_cuenta(user, date_from, date_to,
-            is_cuenta, cut_off_date, month)
+                                 is_cuenta, cut_off_date, month)
 
         result = html.write_pdf()
         file = io.BytesIO(result)
@@ -264,7 +262,7 @@ class UrlEdoCuenta(graphene.Mutation):
             return UrlEdoCuenta(url=file_url)
         else:
             raise GraphQLError("Debug estado cuenta" +
-                " not implented yet, set USE_S3 in .env to 1")
+                               " not implented yet, set USE_S3 in .env to 1")
 
 
 class Mutation(graphene.ObjectType):

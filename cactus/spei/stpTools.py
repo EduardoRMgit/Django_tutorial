@@ -155,7 +155,7 @@ def pago(data_pago):
     tipoCuentaOrdenante = "40"  # es 40 por cuenta clabe
     tipoPago = "1"  # tipo de pago 3 a 3
 
-    if(
+    if (
         # False
         timezone.now().time() >= time(17, 0)
         or timezone.now().time() < time(7, 0)

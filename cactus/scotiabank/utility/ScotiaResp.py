@@ -240,7 +240,7 @@ class ParserScotia:
                             ex
                         )
                     else:
-                        msg = "[ScotiaBank-error-FN2] No se identifica el código \
+                        msg = "[ScotiaBank-error-FN2] No se identifica código \
                             de status {} de respuesta en el catálogoTEF para \
                             el retiro con referencia de pago {} por ${}\
                             de la clave de retiro {}. \
@@ -303,7 +303,7 @@ class ParserScotia:
                             ex
                         )
                     else:
-                        msg = "[ScotiaBank-error-FN2] No se identifica el código \
+                        msg = "[ScotiaBank-error-FN2] No se identifica código \
                             de status '{}' de respuesta en el catálogoTEF para\
                              el retiro con referencia de pago {} por ${}\
                             de la clave de retiro {}. \
@@ -436,7 +436,7 @@ class ParserScotia:
                         '%Y-%m-%d %H:%M:%S')
                     status = StatusTrans.objects.get(
                         nombre="exito")
-                    tipo = TipoTransaccion.objects.get(codigo=14)
+                    tipo = TipoTransaccion.objects.get(codigo=3)
                     claveR = randomString()
                     comision = 18
                     main_trans = Transaccion.objects.create(

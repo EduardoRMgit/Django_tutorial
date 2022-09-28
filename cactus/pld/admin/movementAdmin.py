@@ -80,7 +80,7 @@ class MovimientoAdmin(admin.ModelAdmin):
                     self.message_user(request, "{}".format(cod))
                     last.save()
                 except Exception as e:
-                    self.message_user(request, ("Hubo un error en la carga del \
+                    self.message_user(request, ("Error en la carga del \
                     movimiento con id_credito {} en la linea: {}".format(
                         csv['id_credito'][i], i)))
                     print(e)

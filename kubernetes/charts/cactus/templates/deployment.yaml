@@ -61,6 +61,23 @@ spec:
 
             - name: STPSECRET
               value: {{ .Values.stpSecret | quote }}
+            - name: RENAPO_PRIVATE_KEY
+              valueFrom:
+                secretKeyRef:
+                   name: {{ .Values.renapoSecret }}
+                   key: renapo-private-key
+            
+            - name: RENAPO_USER
+              valueFrom:
+                secretKeyRef:
+                   name: {{ .Values.renapoSecret }}
+                   key: user
+
+            - name: RENAPO_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                   name: {{ .Values.renapoSecret }}
+                   key: password
 
             - name: SITE
               value: {{ .Values.site | quote }}
