@@ -80,16 +80,16 @@ if [[ $LOADDATA == true ]] || [[ $PROD == false ]] ; then
   ./manage.py loaddata codigoconfianza.json
 
   # Transaccion
-  ./manage.py loaddata transaccion.json
-  ./manage.py loaddata transpago.json
-  ./manage.py loaddata transpagoExterno.json
+  # ./manage.py loaddata transaccion.json
+  # ./manage.py loaddata transpago.json
+  # ./manage.py loaddata transpagoExterno.json
 
   # Legal
   ./manage.py loaddata pdflegal.json
 
   # SPEI
   ./manage.py loaddata institutionbanjico.json
-  ./manage.py loaddata stptrans.json
+  # ./manage.py loaddata stptrans.json
   ./manage.py loaddata adminUtils.json
   ./manage.py loaddata folio_stp.json
 

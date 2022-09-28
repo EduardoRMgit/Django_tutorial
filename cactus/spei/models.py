@@ -384,6 +384,11 @@ class StpTransaction(models.Model):
         choices=STATUS_CHOICES,
         default=OK
     )
+    conciliado = models.BooleanField(default=False)
+
+    def __str__(self) -> str:
+        txt = "Id Inguz: {} | StpId: {}"
+        return txt.format(self.pk, self.stpId)
 
     def pago(self):
         data_pago = {}
@@ -501,3 +506,122 @@ class FolioStp(models.Model):
         self.save()
 
         return disp
+
+
+class ConciliacionSTP(models.Model):
+    class Meta:
+        verbose_name = "Conciliación STP por fecha"
+        verbose_name_plural = "Conciliación STP por fechas"
+
+    E = 'E'
+    R = 'R'
+
+    TIPO_ORDEN = (
+        (E, ("Enviadas")),
+        (R, ("Recibidas"))
+    )
+
+    fecha_inicio = models.DateField(
+        null=True,
+        blank=True,
+        verbose_name="Fecha inicial")
+    fecha_fin = models.DateField(
+        null=True,
+        blank=True,
+        verbose_name="Fecha final")
+    tipo_orden_conciliacion = models.CharField(
+        max_length=1,
+        choices=TIPO_ORDEN,
+        default=E,
+        verbose_name="Tipo de transacción"
+    )
+    conciliado = models.BooleanField(
+        default=False,
+        verbose_name="Conciliación realizada"
+    )
+    hora_de_conciliacion = models.DateTimeField(
+        default=None,
+        verbose_name="Fecha de la conciliación",
+        null=True,
+        blank=True
+    )
+
+    def __str__(self):
+        txt = "Tipo {} del {} al {} "
+        return txt.format(
+            self.tipo_orden_conciliacion,
+            self.fecha_inicio,
+            self.fecha_fin)
+
+
+class MovimientoConciliacion(models.Model):
+
+    class Meta:
+        verbose_name = "Movimiento Conciliado"
+        verbose_name_plural = "Movimientos Conciliados"
+
+    # estado = models.CharField(max_length=64, null=True, blank=True)
+    # mensaje = models.CharField(max_length=64, null=True, blank=True)
+    idEF = models.CharField(max_length=64, null=True, blank=True)
+    claveRastreo = models.CharField(max_length=64, null=True)
+    conceptoPago = models.CharField(max_length=64, null=True, blank=True)
+    cuentaBeneficiario = models.CharField(max_length=64, null=True,
+                                          blank=True)
+    cuentaOrdenante = models.CharField(max_length=64, null=True, blank=True)
+    empresa = models.CharField(
+        max_length=64,
+        null=True,
+        blank=True
+    )
+    estado = models.CharField(max_length=32, null=True, blank=True)
+    fechaOperacion = models.DateField(auto_now=False, auto_now_add=False)
+    institucionContraparte = models.CharField(max_length=64,
+                                              null=True,
+                                              blank=True)
+    institucionOperante = models.CharField(max_length=50, null=True,
+                                           blank=True)
+    medioEntrega = models.CharField(max_length=64, null=True, blank=True)
+    monto = models.CharField(max_length=64, null=True)
+    nombreBeneficiario = models.CharField(
+        max_length=64,
+        null=True,
+        blank=True)
+    nombreOrdenante = models.CharField(max_length=64, null=True, blank=True)
+    nombreCep = models.CharField(max_length=100, null=True, blank=True)
+    rfcCep = models.CharField(max_length=64, null=True, blank=True)
+    sello = models.CharField(max_length=200, null=True, blank=True)
+    rfcCurpBeneficiario = models.CharField(max_length=64, null=True,
+                                           blank=True)
+    referenciaNumerica = models.CharField(
+        max_length=200,
+        null=True,
+        blank=True)
+    rfcCurpOrdenante = models.CharField(max_length=64, null=True,
+                                        blank=True)
+    tipoCuentaBeneficiario = models.CharField(max_length=64, null=True,
+                                              blank=True)
+    tipoCuentaOrdenante = models.CharField(max_length=64, null=True,
+                                           blank=True)
+    tipoPago = models.IntegerField(blank=True, null=True)
+    tsCaptura = models.CharField(max_length=64, null=True, blank=True)
+    tsLiquidacion = models.CharField(max_length=64, null=True, blank=True)
+    causaDevolucion = models.CharField(max_length=1024, null=True, blank=True)
+    urlCEP = models.CharField(max_length=1024, null=True, blank=True)
+    stpTransaction = models.OneToOneField(
+        StpTransaction,
+        verbose_name="Transacción STP conciliada",
+        related_name="StpConciliada",
+        on_delete=models.DO_NOTHING,
+        null=True,
+        blank=True
+    )
+    conciliacion = models.ForeignKey(
+        ConciliacionSTP,
+        on_delete=models.CASCADE,
+        related_name='ConciliacionSTP'
+    )
+    conciliada = models.BooleanField(default=False)
+
+    def __str__(self):
+        txt = "idEF: {} | {}"
+        return txt.format(self.idEF, self.fechaOperacion)

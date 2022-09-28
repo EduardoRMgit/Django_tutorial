@@ -33,6 +33,7 @@ dbPort: 5432
 dbName: brattdev
 
 stpSecret: private-key
+renapoSecret: renapo-secret
 
 s3:
   enabled: false

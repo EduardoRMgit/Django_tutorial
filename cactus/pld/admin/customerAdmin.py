@@ -89,7 +89,7 @@ class CustomerAdmin(admin.ModelAdmin):
                     self.message_user(request, "{}".format(cod))
                     last.save()
                 except Exception as e:
-                    self.message_user(request, ("Hubo un error en la carga del \
+                    self.message_user(request, ("Error en la carga del \
                     customer con CURP {} en la linea: {}".format(
                         csv['curp'][i], i)))
                     print(e)

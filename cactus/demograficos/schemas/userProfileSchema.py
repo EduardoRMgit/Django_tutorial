@@ -1,4 +1,5 @@
 # flake8: noqa
+from re import U
 import graphene
 import datetime
 import json
@@ -1686,10 +1687,11 @@ class UpdateInfoPersonal(graphene.Mutation):
             else:
                 raise AssertionError("RFC no válido")
             u_profile.save()
-            user.save()
             message = InfoValidator.setCheckpoint(user=user, concepto='IP')
-            if message == 'curp invalido' or message == 'rfc invalido':
-                raise AssertionError(message)
+            if message == "curp validado":
+                u_profile.verificacion_curp = True
+            u_profile.save()
+            user.save()
             try:
                 validities = ComponentValidated.objects.filter(user=user)
             except Exception as e:
@@ -1699,8 +1701,10 @@ class UpdateInfoPersonal(graphene.Mutation):
             print("first_name: ", user.first_name)
             print("last_name: ", user.last_name)
 
+
             try:
-                u_profile.registra_cuenta(user.first_name, user.last_name)
+                if not u_profile.cuentaClabe:
+                    u_profile.registra_cuenta(user.first_name, user.last_name)
             except Exception as ex:
                 AssertionError('Error al registrar la cuenta clabe.',
                                ex)
