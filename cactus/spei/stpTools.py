@@ -4,6 +4,7 @@ import json
 import random
 import string
 import logging
+import environ
 
 from OpenSSL import crypto
 
@@ -123,8 +124,17 @@ def randomString(stringLength=10):
 
 
 def pago(data_pago):
-
-    STP_KEY_PWD = '12345678'
+    env = environ.Env()
+    STPSECRET = env.str('STPSECRET', '')
+    from kubernetes import client, config
+    import base64
+    try:
+        config.load_kube_config()
+    except Exception:
+        config.load_incluster_config()
+    v1 = client.CoreV1Api()
+    STP_KEY_PWD = v1.read_namespaced_secret(STPSECRET, 'default')
+    STP_KEY_PWD = base64.b64decode(STP_KEY_PWD.data['key']).decode('utf-8')
 
     claveRastreo = data_pago['clave_rastreo']
     conceptoPago = data_pago['concepto_pago']
@@ -276,7 +286,18 @@ def firma_cadena_registro_cuenta(data, stp_key_pwd):
 
 
 def registra_cuenta_persona_fisica(data):
-    STP_KEY_PWD = '12345678'
+    env = environ.Env()
+    STPSECRET = env.str('STPSECRET', '')
+    from kubernetes import client, config
+    import base64
+    try:
+        config.load_kube_config()
+    except Exception:
+        config.load_incluster_config()
+    v1 = client.CoreV1Api()
+    STP_KEY_PWD = v1.read_namespaced_secret(STPSECRET, 'default')
+    STP_KEY_PWD = base64.b64decode(STP_KEY_PWD.data['key']).decode('utf-8')
+
     data_registro = data
     firma = firma_cadena_registro_cuenta(data, STP_KEY_PWD)
     str_firma = firma.decode("utf-8")
@@ -309,7 +330,6 @@ def registra_cuenta_persona_fisica(data):
                 "descripcion": "",  (En caso de error (id>0) consultar
                                      el Catálogo de Respuesta Alta de Cuentas
                                      Personas Físicas para su validación)
-
                 "id": 0  ( = 0 El proceso se ejecutó de manera correcta.
                            > 0 Ocurrió un error durante el procesamiento)
             }
