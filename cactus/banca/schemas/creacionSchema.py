@@ -93,9 +93,9 @@ class Query(object):
                         mes = b - smonth
 
                 else:
-                  mes = smonth - rmonth
-                  if mes == 0:
-                    mes = 1
+                    mes = smonth - rmonth
+                    if mes == 0:
+                        mes = 1
                 for x in range(0, mes):
                     dicc = {}
                     end = start - timedelta(days=1)
