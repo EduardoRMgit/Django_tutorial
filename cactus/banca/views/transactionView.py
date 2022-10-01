@@ -27,6 +27,8 @@ from banca.serializers import DetailSerializer, EstadoSerializer
 from demograficos.models import UserProfile
 
 
+trans_entrada = [1, 3, 8, 11, 12, 15, 19]
+
 db_logger = logging.getLogger('db')
 
 
@@ -39,10 +41,12 @@ def last_day_of_month(any_day):
 def _sum_montos(transes):
     suma = 0
     for trans in transes:
-        if trans.tipoTrans.salida:
-            suma -= float("{:.2f}".format(trans.monto))
-        else:
+        if int(trans.tipoTrans.codigo) in trans_entrada:
             suma += float("{:.2f}".format(trans.monto))
+        else:
+            suma -= float("{:.2f}".format(trans.monto))
+
+    return round(suma, 2)
 
     return round(suma, 2)
 
@@ -72,10 +76,10 @@ def _divide_trans(transes):
         trans = transes[i]
         trans_5.append(trans)
         if i != 0:
-            if trans.tipoTrans.salida:
-                new_sum -= float(trans.monto)
-            else:
+            if int(trans.tipoTrans.codigo) in trans_entrada:
                 new_sum += float(trans.monto)
+            else:
+                new_sum -= float(trans.monto)
         sum_5.append(new_sum)
         moder = i % 4
         if moder == 0 and i != 0:
@@ -279,8 +283,7 @@ def upload_s3(file, user):
     return file_url
 
 
-def build_html_cuenta(
-                      user, date_from, date_to,
+def build_html_cuenta(user, date_from, date_to,
                       is_cuenta, cut_off_date, month):
 
     transes = Transaccion.objects.filter(user=user)
@@ -291,17 +294,25 @@ def build_html_cuenta(
     # Calculate saldos, days and get mod5 list
     trans_list, sum_list = _divide_trans(transes)
 
-    sum_depositos = _sum_montos(transes.filter(tipoTrans__salida=False))
-    sum_retiros = _sum_montos(transes.filter(tipoTrans__salida=True))
+    filter_retiros_mes = []
+    filter_depositos_mes = []
+    for trans in transes:
+        if int(trans.tipoTrans.codigo) in trans_entrada:
+            filter_depositos_mes.append(trans)
+        else:
+            filter_retiros_mes.append(trans)
+
+    sum_depositos = _sum_montos(filter_depositos_mes)
+    sum_retiros = _sum_montos(filter_retiros_mes)
 
     if sum_list:
-        if trans_list[0][0].tipoTrans.salida:
+        if int(trans_list[0][0].tipoTrans.codigo) in trans_entrada:
             saldo_initial = float(
-                "%.2f" % round(sum_list[0][0], 2)) + float(
+                "%.2f" % round(sum_list[0][0], 2)) - float(
                     "%.2f" % round(trans_list[0][0].monto, 2))
         else:
             saldo_initial = float(
-                "%.2f" % round(sum_list[0][0], 2)) - float(
+                "%.2f" % round(sum_list[0][0], 2)) + float(
                     "%.2f" % round(trans_list[0][0].monto, 2))
         saldo_final = sum_list[-1][-1]
     else:
@@ -311,6 +322,33 @@ def build_html_cuenta(
     sum_depositos = "{:.2f}".format(sum_depositos)
     sum_retiros = "{:.2f}".format(sum_retiros)
     days = (date_to - date_from).days + 1
+
+    # Calculo del saldo inicial
+
+    hoy = timezone.now()
+    transesTotales = Transaccion.objects.filter(user=user)
+    transesTotales = transesTotales.\
+        filter(fechaValor__gte=(date_from)).\
+        filter(fechaValor__lte=(hoy)).order_by('fechaValor')
+    saldo_actual = UserProfile.objects.filter(user=user).first().saldo_cuenta
+    saldo_inicial = saldo_actual
+    for trans in transesTotales:
+        if int(trans.tipoTrans.codigo) in trans_entrada:
+            saldo_inicial -= float(trans.monto)
+        else:
+            saldo_inicial += float(trans.monto)
+    saldo_final = saldo_inicial
+
+    sum_list = []
+    for trans in transes:
+        if int(trans.tipoTrans.codigo) in trans_entrada:
+            saldo_final += float(trans.monto)
+        else:
+            saldo_final -= float(trans.monto)
+        sum_list.append(saldo_final)
+    sum_list = [sum_list]
+    saldo_inicial = "{:.2f}".format(round(saldo_inicial))
+    saldo_final = "{:.2f}".format(round(saldo_final))
 
     # Rendered
     html_string = render_to_string(
@@ -322,13 +360,12 @@ def build_html_cuenta(
          'month': month,
          'days': days,
          'sumas_mod5': sum_list,
-         'saldo_initial': saldo_initial,
+         'saldo_initial': saldo_inicial,
          'saldo_final': saldo_final,
          'sum_depositos': sum_depositos,
          'sum_retiros': sum_retiros,
          'is_cuenta': is_cuenta,
          'user': user})
-
     return HTML(string=html_string)
 
 
