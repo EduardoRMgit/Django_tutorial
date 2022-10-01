@@ -18,11 +18,11 @@ from datetime import timedelta
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 env = environ.Env()
-if(os.path.isfile(os.path.join(BASE_DIR, '.env')) or
+if (os.path.isfile(os.path.join(BASE_DIR, '.env')) or
    os.path.isfile(env.str('ENV_PATH', ''))):
     env.read_env(env.str('ENV_PATH', os.path.join(BASE_DIR, '.env')))
 PROD = env.bool('PRODUCTION', False)
-if(PROD):
+if (PROD):
     USE_S3 = env.bool('USE_S3', True)
 else:
     USE_S3 = env.bool('USE_S3', False)
@@ -41,7 +41,7 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'staging.inguz.site',
                  'test.inguz.site', 'prod.inguz.site',
                  'staging.zygoo.mx', 'test.zygoo.mx',
                  'inguz.site', 'zygoo.mx', '10.195.1.207',
-                 '10.5.1.1', ]
+                 '10.5.1.1', 'inguzmx.com', ]
 
 RECAPTCHA_PUBLIC_KEY = '6LcTX1AaAAAAAN30Sl2EMuGJHCnbsiX-934v91A7'
 RECAPTCHA_PRIVATE_KEY = '6LcTX1AaAAAAADsgnyMWbEy8H7DTAcVYdqs3KGU3'
@@ -88,7 +88,7 @@ INSTALLED_APPS = [
     'renapo.apps.RenapoConfig',
 ]
 
-if(PROD):
+if (PROD):
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -141,7 +141,9 @@ CORS_ORIGIN_WHITELIST = ['http://localhost:5000',
                          'https://10.5.1.1:8000',
                          'https://10.5.1.1',
                          'http://10.5.1.1',
-                         'http://10.5.1.1:8000']
+                         'http://10.5.1.1:8000',
+                         'http://inguzmx.com',
+                         'https://inguzmx.com', ]
 
 
 ROOT_URLCONF = 'cactus.urls'
@@ -252,7 +254,7 @@ LOGGING = {
 
 # S3
 
-if(USE_S3):
+if (USE_S3):
     AWS_ACCESS_KEY_ID = env.str('AWS_KEY_ID', "")
     AWS_SECRET_ACCESS_KEY = env.str('AWS_SECRET_ID', "")
     AWS_STORAGE_BUCKET_NAME = 'phototest420'
