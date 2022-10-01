@@ -2052,8 +2052,8 @@ class UpdateNip(graphene.Mutation):
                     raise ValueError('NIP debe contener 6 caracteres')
                 else:
                     try:
-                        nip_temporal = user.user_nipTemp.get(
-                                                        activo=True).nip_temp
+                        nip_temporal = user.user_nipTemp.filter(
+                            activo=True).last().nip_temp
                     except Exception:
                         raise ValueError("NIP tempral no está activo")
                     if nip_temporal == old_nip:
