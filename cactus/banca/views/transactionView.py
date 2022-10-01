@@ -285,6 +285,7 @@ def upload_s3(file, user):
 
 def build_html_cuenta(user, date_from, date_to,
                       is_cuenta, cut_off_date, month):
+    date_to = date_to + datetime.timedelta(hours=23, minutes=59, seconds=59)
 
     transes = Transaccion.objects.filter(user=user)
     transes = transes.\
