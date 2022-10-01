@@ -304,21 +304,6 @@ def build_html_cuenta(user, date_from, date_to,
 
     sum_depositos = _sum_montos(filter_depositos_mes)
     sum_retiros = _sum_montos(filter_retiros_mes)
-
-    if sum_list:
-        if int(trans_list[0][0].tipoTrans.codigo) in trans_entrada:
-            saldo_initial = float(
-                "%.2f" % round(sum_list[0][0], 2)) - float(
-                    "%.2f" % round(trans_list[0][0].monto, 2))
-        else:
-            saldo_initial = float(
-                "%.2f" % round(sum_list[0][0], 2)) + float(
-                    "%.2f" % round(trans_list[0][0].monto, 2))
-        saldo_final = sum_list[-1][-1]
-    else:
-        saldo_initial = saldo_final = 0
-    saldo_initial = "%.2f" % round(saldo_initial, 2)
-    saldo_final = "%.2f" % round(saldo_final, 2)
     sum_depositos = "{:.2f}".format(sum_depositos)
     sum_retiros = "{:.2f}".format(sum_retiros)
     days = (date_to - date_from).days + 1
