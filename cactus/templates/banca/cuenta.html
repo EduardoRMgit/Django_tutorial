@@ -621,10 +621,10 @@
                 <TR>
                     <TD class="tr15 td14">
                         <P class="p2 pt_2 ft6">
-                            {% if not transaccion.tipoTrans.salida %}
+                            {% if transaccion.tipoTrans.salida %}
                                 <img src="data:image/png;base64,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" class="menos_transaction">
                             {% endif %}
-                            {% if transaccion.tipoTrans.salida %}
+                            {% if not transaccion.tipoTrans.salida %}
                                 <img src="data:image/png;base64,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" class="menos_transaction">
                             {% endif %}
                             {{ transaccion.fechaValor|date:"d M" }}
@@ -635,19 +635,19 @@
                     </TD>
                     <TD class="tr15 td16">
                         <P class="p2 ft3">
-                        {% if not transaccion.tipoTrans.salida  %} 
+                        {% if transaccion.tipoTrans.salida  %} 
                             {{ transaccion.monto|floatformat:"2" }}
                         {% else %}
-                            &nbsp;
+                            {{ transaccion.monto|floatformat:"2" }}
                         {% endif %} 
                         </P>
                     </TD>
                     <TD class="tr15 td17">
                         <P class="p18 ft6">
-                        {% if transaccion.tipoTrans.salida  %} 
+                        {% if not transaccion.tipoTrans.salida  %} 
                             {{ transaccion.monto|floatformat:"2" }}
                         {% else %}
-                            &nbsp;
+                            {{ transaccion.monto|floatformat:"2" }}
                         {% endif %} 
                         </P>
                     </TD>
