@@ -285,16 +285,14 @@ def upload_s3(file, user):
 
 def build_html_cuenta(user, date_from, date_to,
                       is_cuenta, cut_off_date, month):
+
     date_to = date_to + datetime.timedelta(hours=23, minutes=59, seconds=59)
 
     transes = Transaccion.objects.filter(user=user)
     transes = transes.\
         filter(fechaValor__gte=(date_from)).\
         filter(fechaValor__lte=(date_to)).order_by('fechaValor')
-
-    # Calculate saldos, days and get mod5 list
-    trans_list, sum_list = _divide_trans(transes)
-
+    trans_list = [transes[i:i + 4] for i in range(0, len(transes), 4)]
     filter_retiros_mes = []
     filter_depositos_mes = []
     for trans in transes:
@@ -308,8 +306,6 @@ def build_html_cuenta(user, date_from, date_to,
     sum_depositos = "{:.2f}".format(sum_depositos)
     sum_retiros = "{:.2f}".format(sum_retiros)
     days = (date_to - date_from).days + 1
-
-    # Calculo del saldo inicial
 
     hoy = timezone.now()
     transesTotales = Transaccion.objects.filter(user=user)
@@ -332,7 +328,7 @@ def build_html_cuenta(user, date_from, date_to,
         else:
             saldo_final -= float(trans.monto)
         sum_list.append(saldo_final)
-    sum_list = [sum_list]
+    sum_list = [sum_list[i:i + 4] for i in range(0, len(sum_list), 4)]
     saldo_inicial = "{:.2f}".format(round(saldo_inicial))
     saldo_final = "{:.2f}".format(round(saldo_final))
 
