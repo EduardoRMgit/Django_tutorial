@@ -114,17 +114,17 @@
     {
         "fields": {
             "activo": true,
-            "tipo": "Inguz-Inguz Recibida"
+            "tipo": "Inguz-Inguz Enviada"
         },
         "model": "contabilidad.tipocontablecuenta",
-        "pk": 15
+        "pk": 18
     },
     {
         "fields": {
             "activo": true,
-            "tipo": "Inguz-Inguz Enviada"
+            "tipo": "Inguz-Inguz Recibida"
         },
         "model": "contabilidad.tipocontablecuenta",
-        "pk": 16
+        "pk": 19
     }
 ]

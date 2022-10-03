@@ -1,155 +1,182 @@
 [
-  {
-    "model": "banca.tipotransaccion",
-    "pk": 1,
-    "fields": {
-      "codigo": "1",
-      "nombre": "Transferencia Recibida",
-      "salida": true
-    }
-  },
-  {
-    "model": "banca.tipotransaccion",
-    "pk": 2,
-    "fields": {
-      "codigo": "2",
-      "nombre": "Transferencia Enviada",
-      "salida": false
-    }
-  },
-  {
-    "model": "banca.tipotransaccion",
-    "pk": 3,
-    "fields": {
-      "codigo": "3",
-      "nombre": "Depósito Scotiabank",
-      "salida": false
-    }
-  },
-  {
-    "model": "banca.tipotransaccion",
-    "pk": 4,
-    "fields": {
-      "codigo": "4",
-      "nombre": "STP",
-      "salida": true
-    }
-  },
-  {
-    "model": "banca.tipotransaccion",
-    "pk": 5,
-    "fields": {
-      "codigo": "5",
-      "nombre": "Pago de Servicios",
-      "salida": true
-    }
-  },
-  {
-    "model": "banca.tipotransaccion",
-    "pk": 6,
-    "fields": {
-      "codigo": "6",
-      "nombre": "Retiro Scotiabank",
-      "salida": true
-    }
-  },
-  {
-    "model": "banca.tipotransaccion",
-    "pk": 7,
-    "fields": {
-      "codigo": "7",
-      "nombre": "Pago a trav\u00e9s de QR",
-      "salida": true
-    }
-  },
-  {
-    "model": "banca.tipotransaccion",
-    "pk": 8,
-    "fields": {
-      "codigo": "8",
-      "nombre": "Dep\u00f3sito en Efectivo",
-      "salida": false
-    }
-  },
-  {
-    "model": "banca.tipotransaccion",
-    "pk": 9,
-    "fields": {
-      "codigo": "9",
-      "nombre": "Retiro de Efectivo",
-      "salida": true
-    }
-  },
-  {
-    "model": "banca.tipotransaccion",
-    "pk": 10,
-    "fields": {
-      "codigo": "10",
-      "nombre": "Seguros",
-      "salida": true
-    }
-  },
-  {
-    "model": "banca.tipotransaccion",
-    "pk": 11,
-    "fields": {
-      "codigo": "11",
-      "nombre": "STP Entrada",
-      "salida": true
-    }
-  },
-  {
-    "model": "banca.tipotransaccion",
-    "pk": 12,
-    "fields": {
-      "codigo": "12",
-      "nombre": "DDE Entrada",
-      "salida": false
-    }
-  },
-  {
-    "model": "banca.tipotransaccion",
-    "pk": 13,
-    "fields": {
-      "codigo": "13",
-      "nombre": "Inguz-Inguz Transaccion",
-      "salida": false
-    }
-  },
-  {
-    "model": "banca.tipotransaccion",
-    "pk": 14,
-    "fields": {
-      "codigo": "14",
-      "nombre": "DDE",
-      "salida": true
-    }
-  },
-  {
-    "model": "banca.tipotransaccion",
-    "pk": 15,
-    "fields": {
-      "codigo": "15",
-      "nombre": "Cobro a trav\u00e9s de QR",
-      "salida": false
-    }
-  },
-  {
-    "model": "banca.tipotransaccion",
-    "pk": 16,
-    "fields": {
-      "codigo": "16",
-      "nombre": "Transferencia Interna Scotiabank",
-      "salida": false
-    }
-  },
-  {
-    "model": "banca.tipotransaccion",
-    "pk": 17,
-    "fields": {
-      "codigo": "17",
-      "nombre": "Transferencia Interbancaria Scotiabank",
-      "salida": false
-    }
+{
+  "model": "banca.tipotransaccion",
+  "pk": 1,
+  "fields": {
+    "codigo": "1",
+    "nombre": "Transferencia Recibida",
+    "tipo": "R",
+    "salida": true
   }
+},
+{
+  "model": "banca.tipotransaccion",
+  "pk": 2,
+  "fields": {
+    "codigo": "2",
+    "nombre": "Transferencia Enviada",
+    "tipo": "E",
+    "salida": false
+  }
+},
+{
+  "model": "banca.tipotransaccion",
+  "pk": 3,
+  "fields": {
+    "codigo": "3",
+    "nombre": "Depósito Scotiabank",
+    "tipo": "R",
+    "salida": false
+  }
+},
+{
+  "model": "banca.tipotransaccion",
+  "pk": 4,
+  "fields": {
+    "codigo": "4",
+    "nombre": "STP",
+    "tipo": "E",
+    "salida": true
+  }
+},
+{
+  "model": "banca.tipotransaccion",
+  "pk": 5,
+  "fields": {
+    "codigo": "5",
+    "nombre": "Pago de Servicios",
+    "tipo": "E",
+    "salida": true
+  }
+},
+{
+  "model": "banca.tipotransaccion",
+  "pk": 6,
+  "fields": {
+    "codigo": "6",
+    "nombre": "Retiro Scotiabank",
+    "tipo": "E",
+    "salida": true
+  }
+},
+{
+  "model": "banca.tipotransaccion",
+  "pk": 7,
+  "fields": {
+    "codigo": "7",
+    "nombre": "Pago a través de QR",
+    "tipo": "E",
+    "salida": true
+  }
+},
+{
+  "model": "banca.tipotransaccion",
+  "pk": 8,
+  "fields": {
+    "codigo": "8",
+    "nombre": "Depósito en Efectivo",
+    "tipo": "R",
+    "salida": false
+  }
+},
+{
+  "model": "banca.tipotransaccion",
+  "pk": 9,
+  "fields": {
+    "codigo": "9",
+    "nombre": "Retiro de Efectivo",
+    "tipo": "E",
+    "salida": true
+  }
+},
+{
+  "model": "banca.tipotransaccion",
+  "pk": 10,
+  "fields": {
+    "codigo": "10",
+    "nombre": "Seguros",
+    "tipo": "E",
+    "salida": true
+  }
+},
+{
+  "model": "banca.tipotransaccion",
+  "pk": 11,
+  "fields": {
+    "codigo": "11",
+    "nombre": "STP Entrada",
+    "tipo": "R",
+    "salida": true
+  }
+},
+{
+  "model": "banca.tipotransaccion",
+  "pk": 12,
+  "fields": {
+    "codigo": "12",
+    "nombre": "DDE Entrada",
+    "tipo": "R",
+    "salida": false
+  }
+},
+{
+  "model": "banca.tipotransaccion",
+  "pk": 14,
+  "fields": {
+    "codigo": "14",
+    "nombre": "DDE",
+    "tipo": null,
+    "salida": true
+  }
+},
+{
+  "model": "banca.tipotransaccion",
+  "pk": 15,
+  "fields": {
+    "codigo": "15",
+    "nombre": "Cobro a través de QR",
+    "tipo": "R",
+    "salida": false
+  }
+},
+{
+  "model": "banca.tipotransaccion",
+  "pk": 16,
+  "fields": {
+    "codigo": "16",
+    "nombre": "Transferencia Interna Scotiabank",
+    "tipo": "E",
+    "salida": false
+  }
+},
+{
+  "model": "banca.tipotransaccion",
+  "pk": 17,
+  "fields": {
+    "codigo": "17",
+    "nombre": "Transferencia Interbancaria Scotiabank",
+    "tipo": "E",
+    "salida": false
+  }
+},
+{
+  "model": "banca.tipotransaccion",
+  "pk": 18,
+  "fields": {
+    "codigo": "18",
+    "nombre": "Inguz-Inguz Transaccion Enviada",
+    "tipo": "E",
+    "salida": false
+  }
+},
+{
+  "model": "banca.tipotransaccion",
+  "pk": 19,
+  "fields": {
+    "codigo": "19",
+    "nombre": "Inguz-Inguz Transaccion Recibida",
+    "tipo": "R",
+    "salida": true
+  }
+}
 ]

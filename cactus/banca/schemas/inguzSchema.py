@@ -65,14 +65,15 @@ class CreateInguzTransaccion(graphene.Mutation):
             raise Exception("El abono debe ser mayor a cero")
 
         user_contacto = UserProfile.objects.get(
-                cuentaClabe=contacto.clabe, status="O").user
+            cuentaClabe=contacto.clabe, status="O").user
 
         fecha = (datetime.now() +
                  timedelta(hours=24)).strftime('%Y-%m-%d %H:%M:%S')
         claveR = randomString()
         monto2F = "{:.2f}".format(round(float(abono), 2))
         status = StatusTrans.objects.get(nombre="exito")
-        tipo = TipoTransaccion.objects.get(codigo=13)
+        tipo = TipoTransaccion.objects.get(codigo=18)
+        tipo_recibida = TipoTransaccion.objects.get(codigo=19)
 
         # Actualizamos saldo del usuario
         if float(abono) <= ordenante.Uprofile.saldo_cuenta:
@@ -86,6 +87,7 @@ class CreateInguzTransaccion(graphene.Mutation):
         main_trans = Transaccion.objects.create(
             user=ordenante,
             fechaValor=fecha,
+            fechaAplicacion=fecha,
             monto=float(abono),
             statusTrans=status,
             tipoTrans=tipo,
@@ -102,6 +104,17 @@ class CreateInguzTransaccion(graphene.Mutation):
             transaccion=main_trans
         )
 
+        # Recibida (sin transacción hija)
+        Transaccion.objects.create(
+            user=user_contacto,
+            fechaValor=fecha,
+            fechaAplicacion=fecha,
+            monto=float(abono),
+            statusTrans=status,
+            tipoTrans=tipo_recibida,
+            concepto=concepto,
+            claveRastreo=claveR
+        )
         print(f"transacción creada: {inguz_transaccion.__dict__}")
         msg = "[Inguz_Inguz] Transaccion exitosa del usuario: {} \
             con cuenta: {} \
