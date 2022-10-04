@@ -261,6 +261,11 @@ class UrlEdoCuenta(graphene.Mutation):
             file_url = upload_s3(file, user)
             return UrlEdoCuenta(url=file_url)
         else:
+            # Uncomment to generate PDF in local env
+            #
+            # with open("file.pdf", 'wb') as f:
+            #     f.write(file.getbuffer())
+            #     return UrlEdoCuenta(url="file.pdf")
             raise GraphQLError("Debug estado cuenta" +
                                " not implented yet, set USE_S3 in .env to 1")
 
