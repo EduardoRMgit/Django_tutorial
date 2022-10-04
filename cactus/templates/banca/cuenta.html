@@ -386,7 +386,7 @@
                         <P class="p4 ft9">Resumen Integral</P>
                     </TD>
                     <TD class="tr0 td4">
-                        <P class="p5 ft9">Saldo al anterior</P>
+                        <P class="p5 ft9">Saldo anterior</P>
                     </TD>
                     <TD class="tr0 td5">
                         <P class="p6 ft9">Saldo al corte</P>
@@ -633,24 +633,29 @@
                     <TD class="tr15 td15">
                         <P class="p20 ft6">{{ transaccion.tipoTrans }}</P>
                     </TD>
-                    <TD class="tr15 td16">
-                        <P class="p2 ft3">
-                        {% if transaccion.tipoTrans.salida  %} 
-                            {{ transaccion.monto|floatformat:"2" }}
-                        {% else %}
-                            {{ transaccion.monto|floatformat:"2" }}
-                        {% endif %} 
-                        </P>
-                    </TD>
-                    <TD class="tr15 td17">
-                        <P class="p18 ft6">
-                        {% if not transaccion.tipoTrans.salida  %} 
-                            {{ transaccion.monto|floatformat:"2" }}
-                        {% else %}
-                            {{ transaccion.monto|floatformat:"2" }}
-                        {% endif %} 
-                        </P>
-                    </TD>
+                    {% if transaccion.tipoTrans.salida  %} 
+                        <TD class="tr15 td17">
+                            <P class="p18 ft6">
+                                {{ transaccion.monto|floatformat:"2" }}
+                            </P>
+                        </TD>
+                        <TD class="tr15 td16">
+                            <P class="p2 ft3">
+                                
+                            </P>
+                        </TD>
+                    {% else %}
+                        <TD class="tr15 td17">
+                            <P class="p18 ft6">
+                                
+                            </P>
+                        </TD>
+                        <TD class="tr15 td17">
+                            <P class="p18 ft6">
+                                {{ transaccion.monto|floatformat:"2" }}
+                            </P>
+                        </TD>
+                    {% endif %} 
                     <TD class="tr15 td18">
                         <P class="p19 ft6">{{ sum|floatformat:"2" }}</P>
                     </TD>
