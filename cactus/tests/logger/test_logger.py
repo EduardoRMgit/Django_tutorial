@@ -18,7 +18,7 @@ class LoggerTestCase(TestCase):
 
         # The model where messages are saved
         self.db_logger_model = apps.get_app_config(
-            'django_db_logger').models.get('statuslog')
+            'CactusDBLogger').models.get('statuslog')
 
         # Messages to compare
         self.info_msg = "TEST info message"
