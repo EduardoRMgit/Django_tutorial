@@ -2463,6 +2463,7 @@ class AcceptKitLegal(graphene.Mutation):
             if user.check_password(pwd):
                 try:
                     UP.aceptaKitLegal = datetime.date.today()
+                    UP.save()
                 except Exception:
                     return AcceptKitLegal(success=False)
             else:
