@@ -255,6 +255,14 @@ class UserProfile(AbstractBaseUser):
         default=UN)
     nip = models.CharField(max_length=6, null=True, blank=True)
     aceptaKitLegal = models.DateTimeField(blank=True, null=True)
+    kitComisiones = models.FileField(upload_to='docs/pdfLegal',
+                                      blank=True, null=True)
+    kitTerminos = models.FileField(upload_to='docs/pdfLegal',
+                                    blank=True, null=True)
+    kitPrivacidad = models.FileField(upload_to='docs/pdfLegal',
+                                      blank=True, null=True)
+    kitDeclaraciones = models.FileField(upload_to='docs/pdfLegal',
+                                         blank=True, null=True)
 
     saldo_cuenta = models.FloatField(null=True, blank=True, default=0)
     cuentaClabe = models.CharField(max_length=18, blank=True)
