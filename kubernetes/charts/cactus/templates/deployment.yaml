@@ -60,7 +60,17 @@ spec:
               value: {{ .Values.dbName | quote }}
 
             - name: STPSECRET
-              value: {{ .Values.stpSecret | quote }}
+              valueFrom:
+                secretKeyRef:
+                   name: {{ .Values.stpSecret }}
+                   key: key
+
+            - name: STP_PK
+              valueFrom:
+                secretKeyRef:
+                   name: {{ .Values.stpSecret }}
+                   key: stp_pk
+
             - name: RENAPO_PRIVATE_KEY
               valueFrom:
                 secretKeyRef:
