@@ -333,7 +333,6 @@ def registra_cuenta_persona_fisica(data):
                 "descripcion": "",  (En caso de error (id>0) consultar
                                      el Catálogo de Respuesta Alta de Cuentas
                                      Personas Físicas para su validación)
-
                 "id": 0  ( = 0 El proceso se ejecutó de manera correcta.
                            > 0 Ocurrió un error durante el procesamiento)
             }

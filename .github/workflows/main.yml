@@ -30,7 +30,6 @@ jobs:
           source $REPO/autodeploy_env.sh
           echo $IMAGE_DJANGO
           echo "::set-output name=imaged::$(echo $IMAGE_DJANGO)"
-
   deploy:
     name: Deploy
     runs-on: ubuntu-18.04
@@ -74,7 +73,6 @@ jobs:
           docker push $ECR_REGISTRY/$REPO:$IMAGE_TAG
           echo "::set-output name=image::$ECR_REGISTRY/$REPO:$IMAGE_TAG"
         fi;
-
     - name: Run Helm tools
       uses: Inguz-Digital-IFPE/kube-tools@v1
       env:
@@ -108,12 +106,12 @@ jobs:
             export STPSECRET=stpsecrettest
           fi;
           if [[ $NEW_RELEASE == true ]] ; then
-            # if helm list -q | grep -q $REPO-$SUFFIX; then
-            #   echo "Checking if previous release is present"
-            #   echo $(helm list -q)
-            #   echo "Delete previous chart because it is present"
-            #   helm del $REPO-$SUFFIX
-            # fi;
+            if helm list -q | grep $REPO-$SUFFIX; then
+              echo "Checking if previous release is present"
+              echo $(helm list -q)
+              echo "Delete previous chart because it is present"
+              helm del $REPO-$SUFFIX
+            fi;
             echo "Install helm chart"
             helm upgrade $REPO-$SUFFIX --install --force $REPO-0.1.0.tgz \
             --set rdsExternal=$DB \
@@ -156,3 +154,4 @@ jobs:
             --set site=$SUFFIX \
             --set stpSecret=$STPSECRET
           fi;
+
