@@ -695,11 +695,9 @@ class Query(object):
     def resolve_all_respuesta_seguridad(self, info, **kwargs):
         return RespuestaSeguridad.objects.all()
 
-    @login_required
     def resolve_all_pregunta_seguridad(self, info, **kwargs):
         return PreguntaSeguridad.objects.all()
 
-    @login_required
     def resolve_all_pregunta_seguridad_pwd(self, info, **kwargs):
         return PreguntaSeguridad.objects.filter(tipo_nip=False)
 
