@@ -170,8 +170,8 @@ class InfoValidator(models.Model):
         except Exception as ex:
             db_logger = logging.getLogger('db')
             mensaje = "[CONSULTA CURP RENAPO] Falló la validación. Error: \
-                {}.".format(ex)
-            db_logger.error(ex)
+                {} / mensaje: {} / valida: {}.".format(ex, mensaje, valida)
+            db_logger.error(mensaje)
 
     @staticmethod
     def RFCValidado(rfc, user):
