@@ -691,6 +691,7 @@ class Query(object):
         user = info.context.user
         return user.User_Beneficiario.all()
 
+    @login_required
     def resolve_all_respuesta_seguridad(self, info, **kwargs):
         return RespuestaSeguridad.objects.all()
 
