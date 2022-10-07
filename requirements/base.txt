@@ -43,3 +43,4 @@ django-multi-captcha-admin
 flake8
 django-extensions==3.1.5
 fpdf==1.7.2
+django-auto-logout==0.5.0
