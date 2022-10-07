@@ -60,13 +60,13 @@ spec:
               value: {{ .Values.dbName | quote }}
 
             - name: STPSECRET
+              value: {{ .Values.stpSecret }}
+
+            - name: STP_PK
               valueFrom:
                 secretKeyRef:
                    name: {{ .Values.stpSecret }}
-                   key: key
-
-            - name: STP_PK
-              value: {{ .Values.stpSecret }}
+                   key: stp-pk
 
             - name: RENAPO_PRIVATE_KEY
               valueFrom:
