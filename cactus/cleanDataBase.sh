@@ -42,14 +42,14 @@ if [[ $LOADDATA == true ]] || [[ $PROD == false ]] ; then
 
   # #DEMOGRAFICOS
   ./manage.py shell < tests/perms.py
-  # ./manage.py loaddata user.json
+  ./manage.py loaddata user.json
   ./manage.py loaddata statusRegistro.json
   ./manage.py loaddata statusCuenta.json
   ./manage.py loaddata indiceDisponible.json
   ./manage.py loaddata docAdjuntoTipo.json
   ./manage.py loaddata docAdjunto.json
-  # ./manage.py loaddata userProfile.json
-  # ./manage.py loaddata userNotas.json
+  ./manage.py loaddata userProfile.json
+  ./manage.py loaddata userNotas.json
   ./manage.py loaddata institucion.json
   ./manage.py loaddata tipoTelefono.json
   ./manage.py loaddata proveedorTelefonico.json
