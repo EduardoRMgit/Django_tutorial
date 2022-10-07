@@ -66,10 +66,7 @@ spec:
                    key: key
 
             - name: STP_PK
-              valueFrom:
-                secretKeyRef:
-                   name: {{ .Values.stpSecret }}
-                   key: stp-pk
+              value: {{ .Values.stpSecret }}
 
             - name: RENAPO_PRIVATE_KEY
               valueFrom:
