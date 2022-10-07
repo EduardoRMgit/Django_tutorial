@@ -190,7 +190,8 @@ AUTHENTICATION_BACKENDS = [
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
 GRAPHQL_JWT = {
     'JWT_VERIFY_EXPIRATION': True,
-    'JWT_EXPIRATION_DELTA': timedelta(minutes=1440),
+    'JWT_EXPIRATION_DELTA': timedelta(minutes=5),
+    "JWT_REFRESH_EXPIRATION_DELTA": timedelta(minutes=5),
     'JWT_ALLOW_ARGUMENT': True,
 }
 
@@ -293,6 +294,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 AUTO_LOGOUT = {
     'IDLE_TIME': timedelta(minutes=5),
     'SESSION_TIME': timedelta(hours=8),
-    'MESSAGE': 'Tu sesión ha expirado, por favor inicia sesión nuevamente',
+    'MESSAGE': 'Tu sesión ha expirado, por favor inicia sesión nuevamente.',
     'REDIRECT_TO_LOGIN_IMMEDIATELY': True,
 }
