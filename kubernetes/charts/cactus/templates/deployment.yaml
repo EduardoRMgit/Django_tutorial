@@ -60,10 +60,7 @@ spec:
               value: {{ .Values.dbName | quote }}
 
             - name: STPSECRET
-              valueFrom:
-                secretKeyRef:
-                   name: {{ .Values.stpSecret }}
-                   key: key
+              value: {{ .Values.stpSecret }}
 
             - name: STP_PK
               valueFrom:

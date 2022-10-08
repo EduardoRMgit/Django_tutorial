@@ -37,7 +37,7 @@ fi;
 if [[ $SITE == 'prod' ]] ; then
     # Extract private key from secrets
     echo "${STP_PK}" > llavePrivada.pem
-    export STP_PK=""
+    unset STP_PK
 
     cat /etc/hosts | grep cactus-$SITE > my_ip
     # scotia
@@ -50,7 +50,7 @@ fi;
 
 chmod +w renapo.pem
 rm renapo.pem
-export RENAPO_PRIVATE_KEY=""
+unset RENAPO_PRIVATE_KEY
 
 # Standard
 gunicorn --bind 0.0.0.0:8000 -t 2400 cactus.wsgi --log-level debug

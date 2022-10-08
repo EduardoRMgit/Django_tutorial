@@ -20,9 +20,6 @@
     "statusCuenta": 1,
     "autorizado": true,
     "country": "MX",
-    "ine": 1,
-    "ineReverso": 2,
-    "comprobantedom": 3,
     "indiceDisponible": 1,
     "statusNip": "U",
 
@@ -51,9 +48,6 @@
     "statusCuenta": 1,
     "autorizado": true,
     "country": "MX",
-    "ine": 4,
-    "ineReverso": 5,
-    "comprobantedom": 6,
     "indiceDisponible": 1,
     "statusNip": "U",
 
@@ -83,9 +77,6 @@
     "statusCuenta": null,
     "autorizado": false,
     "country": "",
-    "ine": null,
-    "ineReverso": null,
-    "comprobantedom": null,
     "indiceDisponible": null,
     "statusNip": "U",
 
@@ -114,9 +105,6 @@
     "statusCuenta": null,
     "autorizado": false,
     "country": "",
-    "ine": null,
-    "ineReverso": null,
-    "comprobantedom": null,
     "indiceDisponible": null,
     "statusNip": "U",
 
@@ -145,9 +133,6 @@
     "statusCuenta": null,
     "autorizado": false,
     "country": "",
-    "ine": null,
-    "ineReverso": null,
-    "comprobantedom": null,
     "indiceDisponible": null,
     "statusNip": "U",
 
@@ -176,9 +161,6 @@
     "statusCuenta": null,
     "autorizado": false,
     "country": "",
-    "ine": 1,
-    "ineReverso": 2,
-    "comprobantedom": 3,
     "indiceDisponible": 1,
     "statusNip": "U",
 
@@ -207,9 +189,6 @@
     "statusCuenta": null,
     "autorizado": false,
     "country": "",
-    "ine": null,
-    "ineReverso": null,
-    "comprobantedom": null,
     "indiceDisponible": null,
     "statusNip": "U",
 
@@ -238,9 +217,6 @@
     "statusCuenta": null,
     "autorizado": false,
     "country": "AF",
-    "ine": null,
-    "ineReverso": null,
-    "comprobantedom": null,
     "indiceDisponible": null,
     "statusNip": "U",
 
@@ -269,9 +245,6 @@
     "statusCuenta": null,
     "autorizado": false,
     "country": "AO",
-    "ine": null,
-    "ineReverso": null,
-    "comprobantedom": null,
     "indiceDisponible": null,
     "statusNip": "U",
 
@@ -300,9 +273,6 @@
     "statusCuenta": null,
     "autorizado": false,
     "country": "AI",
-    "ine": null,
-    "ineReverso": null,
-    "comprobantedom": null,
     "indiceDisponible": null,
     "statusNip": "U",
 
@@ -331,9 +301,6 @@
     "statusCuenta": null,
     "autorizado": false,
     "country": "AL",
-    "ine": null,
-    "ineReverso": null,
-    "comprobantedom": null,
     "indiceDisponible": null,
     "statusNip": "U",
 
@@ -362,9 +329,6 @@
     "statusCuenta": null,
     "autorizado": false,
     "country": "AI",
-    "ine": null,
-    "ineReverso": null,
-    "comprobantedom": null,
     "indiceDisponible": null,
     "statusNip": "U",
 
@@ -393,9 +357,6 @@
     "statusCuenta": null,
     "autorizado": false,
     "country": "AL",
-    "ine": null,
-    "ineReverso": null,
-    "comprobantedom": null,
     "indiceDisponible": null,
     "statusNip": "U",
 
@@ -424,9 +385,6 @@
     "statusCuenta": null,
     "autorizado": false,
     "country": "BM",
-    "ine": null,
-    "ineReverso": null,
-    "comprobantedom": null,
     "indiceDisponible": null,
     "statusNip": "U",
 
@@ -455,9 +413,6 @@
     "statusCuenta": null,
     "autorizado": false,
     "country": "CD",
-    "ine": null,
-    "ineReverso": null,
-    "comprobantedom": null,
     "indiceDisponible": null,
     "statusNip": "U",
 
@@ -485,9 +440,6 @@
     "statusCuenta": null,
     "autorizado": false,
     "country": "CD",
-    "ine": null,
-    "ineReverso": null,
-    "comprobantedom": null,
     "indiceDisponible": null,
     "statusNip": "U",
 
@@ -517,9 +469,6 @@
     "statusCuenta": null,
     "autorizado": false,
     "country": "CD",
-    "ine": null,
-    "ineReverso": null,
-    "comprobantedom": null,
     "indiceDisponible": null,
     "statusNip": "U",
     "nip": null,
@@ -556,12 +505,9 @@
     "statusCuenta": null,
     "autorizado": false,
     "country": "CD",
-    "ine": null,
-    "ineReverso": null,
-    "comprobantedom": null,
     "indiceDisponible": null,
     "statusNip": "U",
-    
+
     "saldo_cuenta": 0.0,
     "cuentaClabe": "646180190000000174"
   }
@@ -587,9 +533,6 @@
     "statusCuenta": null,
     "autorizado": false,
     "country": "AI",
-    "ine": null,
-    "ineReverso": null,
-    "comprobantedom": null,
     "indiceDisponible": null,
     "statusNip": "U",
 
