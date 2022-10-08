@@ -43,7 +43,7 @@ class ProfileInline(admin.StackedInline):
     verbose_name_plural = 'Profile'
     fk_name = 'user'
     form = RequiredForm
-    exclude = ('blocked_date', 'password')
+    exclude = ('password',)
 
 
 class RespuestaInline(admin.StackedInline):

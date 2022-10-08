@@ -16,6 +16,64 @@ from spei.schemas import listabancosSchema
 from seguros.schemas import asignar_seguro
 from dde.schemas import (createddeSchema, imagenesddeSchema)
 from pagos.rapydcollect import schemacollect
+from django.contrib.auth.models import User
+from graphene_django.types import DjangoObjectType
+from graphql_jwt import mixins
+from demograficos.models import UserProfile
+from django.contrib.auth import get_user_model
+from cactus.utils import token_auth, unblock_account
+
+
+__all__ = [
+    "JSONWebTokenMutationP",
+]
+
+
+class JSONWebTokenMutationP(mixins.ObtainJSONWebTokenMixin, graphene.Mutation):
+    class Meta:
+        abstract = True
+
+    @classmethod
+    def Field(cls, *args, **kwargs):
+        cls._meta.arguments.update(
+            {
+                get_user_model().USERNAME_FIELD: graphene.String(
+                    required=True),
+                "password": graphene.String(required=True),
+            },
+        )
+        return super().Field(*args, **kwargs)
+
+    @classmethod
+    @token_auth
+    def mutate(cls, root, info, **kwargs):
+        return cls.resolve(root, info, **kwargs)
+
+
+class UserType2(DjangoObjectType):
+    class Meta:
+        model = User
+
+
+class ObtainToken(JSONWebTokenMutationP):
+    user = graphene.Field(UserType2)
+
+    @classmethod
+    def resolve(cls, root, info, **kwargs):
+        user_ = kwargs["username"]
+        _user_ = User.objects.get(username=user_)
+        time_ = _user_.Uprofile.blocked_date
+        try:
+            unblock_account(_user_, time_)
+            _user_ = UserProfile.objects.get(user=_user_, status="O")
+            return cls(user=info.context.user)
+        except Exception as ex:
+            user_ = UserProfile.objects.get(user=_user_)
+            if user_.status == "B":
+                return Exception("Cuenta Bloqueada")
+            elif user_.status == "C":
+                return Exception("Cuenta Cancelada")
+            return ex
 
 
 class Query(transaccionSchema.Query,
@@ -50,7 +108,7 @@ class Mutation(transaccionSchema.Mutation,
                inguzSchema.Mutation,
                ScotiaSchema.Mutation,
                graphene.ObjectType):
-    token_auth = graphql_jwt.ObtainJSONWebToken.Field()
+    token_auth = ObtainToken.Field()
     verify_token = graphql_jwt.Verify.Field()
     refresh_token = graphql_jwt.Refresh.Field()
 

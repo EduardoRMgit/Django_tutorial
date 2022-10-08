@@ -10,7 +10,6 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from banca.models.productos import Productos
 from banca.models.entidades import CodigoConfianza
-from demograficos.models.documentos import DocAdjunto
 from demograficos.models import Direccion
 
 
@@ -226,24 +225,6 @@ class UserProfile(AbstractBaseUser):
     comprobanteDomCaptura = models.ImageField(upload_to='docs/comprobanteDom',
                                               blank=True,
                                               null=True)
-    ine = models.ForeignKey(
-        DocAdjunto,
-        on_delete=models.SET_NULL,
-        blank=True,
-        related_name='ine',
-        null=True)
-    ineReverso = models.ForeignKey(
-        DocAdjunto,
-        on_delete=models.SET_NULL,
-        blank=True,
-        related_name='ine_reverso',
-        null=True)
-    comprobantedom = models.ForeignKey(
-        DocAdjunto,
-        on_delete=models.SET_NULL,
-        blank=True,
-        related_name='comprobante_dom',
-        null=True)
     indiceDisponible = models.ForeignKey(
         IndiceDisponible,
         on_delete=models.SET_NULL,
