@@ -123,6 +123,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_auto_logout.middleware.auto_logout',
 ]
 
 CORS_ORIGIN_ALLOW_ALL = False
@@ -159,6 +160,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django_auto_logout.context_processors.auto_logout_client',
             ],
         },
     },
@@ -188,7 +190,8 @@ AUTHENTICATION_BACKENDS = [
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
 GRAPHQL_JWT = {
     'JWT_VERIFY_EXPIRATION': True,
-    'JWT_EXPIRATION_DELTA': timedelta(minutes=1440),
+    'JWT_EXPIRATION_DELTA': timedelta(hours=12),
+    "JWT_REFRESH_EXPIRATION_DELTA": timedelta(hours=12),
     'JWT_ALLOW_ARGUMENT': True,
 }
 
@@ -287,3 +290,10 @@ DATA_UPLOAD_MAX_NUMBER_FIELDS = 10240
 
 PASSWORD_RESET_TIMEOUT_DAYS = 2
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
+AUTO_LOGOUT = {
+    'IDLE_TIME': timedelta(minutes=5),
+    'SESSION_TIME': timedelta(hours=8),
+    'MESSAGE': 'Tu sesión ha expirado, por favor inicia sesión nuevamente.',
+    'REDIRECT_TO_LOGIN_IMMEDIATELY': True,
+}
