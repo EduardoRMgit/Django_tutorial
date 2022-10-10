@@ -22,6 +22,8 @@ from graphql_jwt import mixins
 from demograficos.models import UserProfile
 from django.contrib.auth import get_user_model
 from cactus.utils import token_auth, unblock_account
+from django.utils import timezone
+from datetime import datetime, timedelta
 
 
 __all__ = [
@@ -63,6 +65,7 @@ class ObtainToken(JSONWebTokenMutationP):
         user_ = kwargs["username"]
         _user_ = User.objects.get(username=user_)
         time_ = _user_.Uprofile.blocked_date
+        compare = timezone.now()
         try:
             unblock_account(_user_, time_)
             _user_ = UserProfile.objects.get(user=_user_, status="O")
@@ -70,7 +73,16 @@ class ObtainToken(JSONWebTokenMutationP):
         except Exception as ex:
             user_ = UserProfile.objects.get(user=_user_)
             if user_.status == "B":
-                return Exception("Cuenta Bloqueada")
+                pasado = (compare - time_)
+                restante = timedelta(minutes=5) - pasado
+                contador = str(restante)
+                minutos = int(contador[3:4])+1
+                if minutos == 1:
+                    minuto = "minuto"
+                else:
+                    minuto = "minutos"
+                return Exception(
+                    f"Cuenta Bloqueada intenta en: {minutos} {minuto}")
             elif user_.status == "C":
                 return Exception("Cuenta Cancelada")
             return ex
