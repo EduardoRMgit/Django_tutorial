@@ -190,8 +190,8 @@ AUTHENTICATION_BACKENDS = [
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
 GRAPHQL_JWT = {
     'JWT_VERIFY_EXPIRATION': True,
-    'JWT_EXPIRATION_DELTA': timedelta(hours=12),
-    "JWT_REFRESH_EXPIRATION_DELTA": timedelta(hours=12),
+    'JWT_EXPIRATION_DELTA': timedelta(minutes=1),
+    "JWT_REFRESH_EXPIRATION_DELTA": timedelta(minutes=3),
     'JWT_ALLOW_ARGUMENT': True,
 }
 
