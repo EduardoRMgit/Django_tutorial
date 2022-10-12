@@ -320,8 +320,6 @@ class TestPreguntaNipPassword(PasswordTestBase):
              }
         }
         res = self.client.execute(mutation, variables)
-        print('/////////////////////////////')
-        print(res)
         self.assertEqual(res.data, expected_res)
         print(" [assert OK] Se asigno pregunta de seguridad a usuario test")
 
