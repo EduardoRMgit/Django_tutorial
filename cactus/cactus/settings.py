@@ -62,7 +62,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'storages',
-    'django_db_logger',
     'graphene_django',
     'graphql_jwt.refresh_token.apps.RefreshTokenConfig',
     'reportlab',
@@ -70,6 +69,7 @@ INSTALLED_APPS = [
     'notifications',
     'django_extensions',
     # Nuestras apps internas
+    'CactusDBLogger',
     'banca.apps.BancaConfig',
     'demograficos.apps.DemograficosConfig',
     'administradores.apps.AdministradoresConfig',
@@ -244,7 +244,7 @@ LOGGING = {
     'handlers': {
         'db_log': {
             'level': 'DEBUG',
-            'class': 'django_db_logger.db_log_handler.DatabaseLogHandler'
+            'class': 'CactusDBLogger.db_log_handler.DatabaseLogHandler'
         },
     },
     'loggers': {
