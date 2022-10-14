@@ -23,7 +23,7 @@ from demograficos.models import UserProfile
 from django.contrib.auth import get_user_model
 from cactus.utils import token_auth, unblock_account
 from django.utils import timezone
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 
 __all__ = [
