@@ -33,14 +33,14 @@ class Login(JSONWebTokenTestCase):
             self.client.execute(self.mutation, self.variables)
         error = self.client.execute(self.mutation, self.variables1)
         self.assertEqual(str(error.errors),
-                         "[GraphQLLocatedError('Cuenta Bloqueada')]")
+            "[GraphQLLocatedError('Cuenta Bloqueada intenta en: 5 minutos')]")
 
     def test_desbloqueo(self):
         for x in range(5):
             self.client.execute(self.mutation, self.variables)
         error = self.client.execute(self.mutation, self.variables1)
         self.assertEqual(str(error.errors),
-                         "[GraphQLLocatedError('Cuenta Bloqueada')]")
+            "[GraphQLLocatedError('Cuenta Bloqueada intenta en: 5 minutos')]")
         user = User.objects.get(username="test")
         user.Uprofile.blocked_date = (
             datetime.datetime.now() - datetime.timedelta(minutes=30))
