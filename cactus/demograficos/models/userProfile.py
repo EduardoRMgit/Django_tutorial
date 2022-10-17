@@ -281,6 +281,7 @@ class UserProfile(AbstractBaseUser):
     verificada = models.BooleanField(default=False)
     cd = models.CharField(max_length=255, null=True, blank=True)
     deOmision = models.CharField(max_length=255, null=True, blank=True)
+    is_active = models.BooleanField(default=True)
 
     class Meta():
         verbose_name_plural = 'Perfil del usuario'

@@ -36,13 +36,15 @@ def token_auth(f):
             password=password,
         )
         if user is None:
+            # if :
             username_ = username
             try:
                 log = User.objects.get(username=username_)
+                valida = User.is_active
+                print(log)
                 intento = log.Uprofile.login_attempts + 1
                 log.Uprofile.login_attempts = intento
                 log.save()
-                log = User.objects.get(username=username_)
                 if log.Uprofile.login_attempts >= 5:
                     log.Uprofile.status = "B"
                     log.Uprofile.blocked_reason = "T"
@@ -54,6 +56,7 @@ def token_auth(f):
                 )
             except Exception:
                 pass
+            # return Exception("Inactive user")
             raise exceptions.JSONWebTokenError(
                 _("Please enter valid credentials"),
             )
