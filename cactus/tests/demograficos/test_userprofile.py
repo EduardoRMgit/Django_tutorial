@@ -60,4 +60,6 @@ class GetUserProfileTest(JWTAuthClientTestCase):
             }
         '''
         my_dict = json.loads(string, object_pairs_hook=OrderedDict)
+        print(res.data)
+        print(my_dict)
         self.assertEqual(res.data, my_dict['data'])
