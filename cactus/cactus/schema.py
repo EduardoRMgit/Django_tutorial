@@ -70,7 +70,7 @@ class ObtainToken(JSONWebTokenMutationP):
         try:
             unblock_account(_user_, time_)
             _user_ = UserProfile.objects.get(user=_user_, status="O")
-            if is_active != False:
+            if is_active is True:
                 return cls(user=info.context.user)
             else:
                 return Exception("Inactive User")

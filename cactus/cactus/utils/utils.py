@@ -36,12 +36,9 @@ def token_auth(f):
             password=password,
         )
         if user is None:
-            # if :
             username_ = username
             try:
                 log = User.objects.get(username=username_)
-                valida = User.is_active
-                print(log)
                 intento = log.Uprofile.login_attempts + 1
                 log.Uprofile.login_attempts = intento
                 log.save()
