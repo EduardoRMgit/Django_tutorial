@@ -5,6 +5,8 @@ from graphql_jwt.shortcuts import get_token
 from django.contrib.auth import get_user_model
 from django.test import Client
 from ..perms import load_groups
+from django.contrib.auth import authenticate
+from django.http import HttpRequest
 
 
 class TestUpdateDevice(JSONWebTokenTestCase):
@@ -21,7 +23,11 @@ class TestUpdateDevice(JSONWebTokenTestCase):
 
         self._client = Client()
         self.user = get_user_model().objects.get(username='test')
-        self._client.login(username=self.user.username)
+        self._pass = "12345678"
+        request = HttpRequest()
+        authenticate(request,
+            username=self.user,
+            password=self._pass)
         self.token = get_token(self.user)
 
     def test_register_device(self):
