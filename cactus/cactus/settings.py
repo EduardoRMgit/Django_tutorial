@@ -68,6 +68,7 @@ INSTALLED_APPS = [
     'rangefilter',
     'notifications',
     'django_extensions',
+    'axes',
     # Nuestras apps internas
     'CactusDBLogger',
     'banca.apps.BancaConfig',
@@ -124,6 +125,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django_auto_logout.middleware.auto_logout',
+    'axes.middleware.AxesMiddleware',
 ]
 
 CORS_ORIGIN_ALLOW_ALL = False
@@ -180,6 +182,7 @@ MULTI_CAPTCHA_ADMIN = {
 }
 
 AUTHENTICATION_BACKENDS = [
+    'axes.backends.AxesStandaloneBackend',
     'graphql_jwt.backends.JSONWebTokenBackend',
     'django.contrib.auth.backends.ModelBackend',
     'cactus.customAuthBackend.EmailBackend',
@@ -297,3 +300,11 @@ AUTO_LOGOUT = {
     'MESSAGE': 'Tu sesión ha expirado, por favor inicia sesión nuevamente.',
     'REDIRECT_TO_LOGIN_IMMEDIATELY': True,
 }
+
+AXES_ONLY_USER_FAILURES = True
+
+AXES_ONLY_ADMIN_SITE = True
+
+AXES_COOLOFF_TIME = timedelta(minutes=10)
+
+AXES_FAILURE_LIMIT = 5

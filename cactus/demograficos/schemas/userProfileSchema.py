@@ -37,6 +37,8 @@ from demograficos.models.documentos import (DocAdjunto, DocAdjuntoTipo,
 from django.utils import timezone
 from banca.models.entidades import CodigoConfianza
 from spei.models import InstitutionBanjico
+from django.contrib.auth import authenticate
+from django.http import HttpRequest
 
 
 # WRAPPERS
@@ -2407,7 +2409,8 @@ class CreateUpdatePreguntaForUser(graphene.Mutation):
         respuesta = graphene.String(required=True)
 
     def mutate(self, info, username, password, respuesta, pregunta_id):
-        user = authenticate(username=username, password=password)
+        request = HttpRequest()
+        user = authenticate(request, username=username, password=password)
         if user is not None:
             pregunta = PreguntaSeguridad.objects.get(pk=pregunta_id)
             respuestas = RespuestaSeguridad.objects.filter(user=user,
