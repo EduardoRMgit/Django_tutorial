@@ -3,7 +3,7 @@ import base64
 
 from Crypto.Cipher import AES
 from cactus.settings import DAPP_SECRET
-from dapp.utility import dapp_secret_
+from dapp.utility.auth import dapp_secret_
 
 
 key = dapp_secret_(DAPP_SECRET)

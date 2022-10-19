@@ -4,7 +4,7 @@ import time
 
 from cactus.settings import DAPP_KEY
 
-from dapp.utility import aes, gcm
+from dapp.utility.encripcion import aes, gcm
 
 
 class Peticiones:
