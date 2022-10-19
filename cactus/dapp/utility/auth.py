@@ -1,7 +1,6 @@
 def dapp_secret_(secret):
     a = 0
     b = 0
-    dapp_secret = "'"
     for d in secret:
         if a == 0:
             dapp_secret = "b'\\x"
