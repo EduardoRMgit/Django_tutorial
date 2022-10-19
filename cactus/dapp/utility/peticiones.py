@@ -27,17 +27,17 @@ class Peticiones:
         return authorization
 
     def payments(self, **kwargs):
-        if 'id' in kwargs:
-            url = 'id={}'.format(
-                kwargs['id']
-            )
-        if 'reference' in kwargs:
-            url = 'reference={}'.format(
-                kwargs['reference']
-            )
         if 'id' in kwargs and 'reference' in kwargs:
             url = 'id={}&reference={}'.format(
                 kwargs['id'], kwargs['reference']
+            )
+        elif 'id' in kwargs:
+            url = 'id={}'.format(
+                kwargs['id']
+            )
+        elif 'reference' in kwargs:
+            url = 'reference={}'.format(
+                kwargs['reference']
             )
         urlComplement = 'payments?{}'.format(
             url
