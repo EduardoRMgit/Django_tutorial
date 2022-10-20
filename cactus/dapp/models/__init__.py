@@ -1,3 +1,9 @@
+from .peticiones import (
+    PaymentInfo,
+    Payments,
+    StoreInfo,
+    CreatePayment
+)
 from .categoryMod import Category
 from .merchantMod import Merchant
 from .ubicacionMod import UbicacionT

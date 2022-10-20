@@ -11,3 +11,9 @@ from .createpayment import CreatepayAdmin
 from .realizarpa import RealizarPAdmin
 from .codigoAdmin import CodigoAdmin
 from .reembolsoAdmin import ReembolsoAdmin
+from .peticionesAdmin import (
+    PaymentInfoAdmin,
+    StoreInfoAdmin,
+    PaymentsAdmin,
+    CreatePayment
+)
