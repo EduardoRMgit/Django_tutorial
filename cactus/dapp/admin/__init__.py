@@ -9,3 +9,5 @@ from .refunds import RefundAdmin
 from .payment import PaymentAdmin
 from .createpayment import CreatepayAdmin
 from .realizarpa import RealizarPAdmin
+from .codigoAdmin import CodigoAdmin
+from .reembolsoAdmin import ReembolsoAdmin
