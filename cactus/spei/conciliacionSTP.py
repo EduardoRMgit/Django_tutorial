@@ -13,8 +13,20 @@ from datetime import timedelta, datetime
 
 
 def generateSignatureConciliationSTP(tipo_orden_conciliacion, fecha):
+    import base64
+    import environ
 
-    stp_key_pwd = "12345678"
+    from kubernetes import client, config
+
+    env = environ.Env()
+    STPSECRET = env.str('STPSECRET', '')
+    try:
+        config.load_kube_config()
+    except Exception:
+        config.load_incluster_config()
+    v1 = client.CoreV1Api()
+    STP_KEY_PWD = v1.read_namespaced_secret(STPSECRET, 'default')
+    STP_KEY_PWD = base64.b64decode(STP_KEY_PWD.data['key']).decode('utf-8')
     baseString = (
         "||"
         "{empresa}"
@@ -24,10 +36,10 @@ def generateSignatureConciliationSTP(tipo_orden_conciliacion, fecha):
         "{fechaOperacion}"
         "||"
     ).format(empresa="ZYGOO",
-                          tipoOrden=tipo_orden_conciliacion,
-                          fechaOperacion=(fecha.strftime("%Y%m%d")))
+             tipoOrden=tipo_orden_conciliacion,
+             fechaOperacion=(fecha.strftime("%Y%m%d")))
 
-    stp_key_pwd = str.encode(stp_key_pwd)
+    stp_key_pwd = str.encode(STP_KEY_PWD)
     with open('llavePrivada.pem', 'r') as key:
         unlockedKey = crypto.load_privatekey(
             crypto.FILETYPE_PEM,
