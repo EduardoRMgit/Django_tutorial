@@ -21,12 +21,15 @@ def generateSignatureConciliationSTP(tipo_orden_conciliacion, fecha):
     env = environ.Env()
     STPSECRET = env.str('STPSECRET', '')
     try:
-        config.load_kube_config()
+        try:
+            config.load_kube_config()
+        except Exception:
+            config.load_incluster_config()
+        v1 = client.CoreV1Api()
+        STP_KEY_PWD = v1.read_namespaced_secret(STPSECRET, 'default')
+        STP_KEY_PWD = base64.b64decode(STP_KEY_PWD.data['key']).decode('utf-8')
     except Exception:
-        config.load_incluster_config()
-    v1 = client.CoreV1Api()
-    STP_KEY_PWD = v1.read_namespaced_secret(STPSECRET, 'default')
-    STP_KEY_PWD = base64.b64decode(STP_KEY_PWD.data['key']).decode('utf-8')
+        STP_KEY_PWD = "12345678"
     baseString = (
         "||"
         "{empresa}"
