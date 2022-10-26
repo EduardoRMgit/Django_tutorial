@@ -82,17 +82,53 @@ def conciliacion_stp(objeto):
         if status == 200:
             conci = json.loads(resp.content)['datos']
             for c in conci:
-                if not (MovimientoConciliacion.objects.filter(idEF=c['idEF'])):
-                    fecha = datetime.strptime(str(
-                        c['fechaOperacion']), "%Y%m%d")
-                    trans = StpTransaction.objects.filter(stpId=str(c['idEF']))
-                    if trans:
-                        trans.update(conciliado=True)
-                        trans = trans.first()
-                        estado = True
-                    else:
-                        trans = None
-                        estado = False
+                fecha = datetime.strptime(str(
+                    c['fechaOperacion']), "%Y%m%d")
+                trans = StpTransaction.objects.filter(stpId=str(c['idEF']))
+                if trans:
+                    trans.update(conciliado=True)
+                    trans = trans.first()
+                    estado = True
+                else:
+                    trans = None
+                    estado = False
+
+                try:
+                    update = MovimientoConciliacion.objects.get(
+                        idEF=c['idEF']
+                    )
+                    update.claveRastreo = c['claveRastreo']
+                    update.conceptoPago = c['conceptoPago']
+                    update.cuentaBeneficiario = c['cuentaBeneficiario']
+                    update.cuentaOrdenante = c['cuentaOrdenante']
+                    update.empresa = c['empresa']
+                    update.estado = c['estado']
+                    update.fechaOperacion = fecha
+                    update.institucionContraparte = c['institucionContraparte']
+                    update.institucionOperante = c['institucionOperante']
+                    update.medioEntrega = c['medioEntrega']
+                    update.monto = c['monto']
+                    update.nombreBeneficiario = c['nombreBeneficiario']
+                    update.nombreOrdenante = c['nombreOrdenante']
+                    update.nombreCep = c['nombreCep']
+                    update.rfcCep = c['rfcCep']
+                    update.sello = c['sello']
+                    update.rfcCurpBeneficiario = c['rfcCurpBeneficiario']
+                    update.referenciaNumerica = c['referenciaNumerica']
+                    update.rfcCurpOrdenante = c['rfcCurpOrdenante']
+                    update.tipoCuentaBeneficiario = c['tipoCuentaBeneficiario']
+                    update.tipoCuentaOrdenante = c['tipoCuentaOrdenante']
+                    update.tipoPago = c['tipoPago']
+                    update.tsCaptura = c['tsCaptura']
+                    update.tsLiquidacion = c['tsLiquidacion']
+                    update.causaDevolucion = c['causaDevolucion']
+                    update.urlCEP = c['urlCEP']
+                    update.conciliacion = objeto
+                    update.stpTransaction = trans
+                    update.conciliada = estado
+                    update.save()
+
+                except MovimientoConciliacion.DoesNotExist:
                     MovimientoConciliacion.objects.create(
                         idEF=c['idEF'],
                         claveRastreo=c['claveRastreo'],
