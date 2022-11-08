@@ -13,5 +13,5 @@ def dapp_secret_(secret):
         b += 1
     dapp_secret = dapp_secret + "'"
     dapp_secret = dapp_secret.replace("&", "")
-    dapp_secret = eval(dapp_secret)
+    # dapp_secret = eval(dapp_secret)
     return dapp_secret
