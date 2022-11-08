@@ -36,7 +36,7 @@ def GeneraRetiro(movimientos):
     try:
         fecha_t = hoy.strftime("%Y%m%d")
         numero_convenio = "17244"
-        referencia_empresa = "1702"
+        referencia_empresa = "1753"
         cuenta_cargo = '25600126235'
 
         name = "H2HJDF000000{}001{}{}.1001007FN100{}.txt".format(
@@ -206,7 +206,7 @@ def GeneraTransferencia(movimientos):
     try:
         fecha_t = fecha_t.strftime("%Y%m%d")
         numero_convenio = '7640'
-        referencia_empresa = "1702"
+        referencia_empresa = "1753"
         dias_vigencia = '001'
         cuenta_cargo = '25600126235'
 

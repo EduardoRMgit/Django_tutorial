@@ -27,6 +27,7 @@ urlpatterns = [
     path('', include('scotiabank.urls')),
     path("chat/", web_chat),
     path('', include('demograficos.urls')),
+    path('', include('dapp.urls')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
