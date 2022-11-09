@@ -66,10 +66,14 @@ class ObtainToken(JSONWebTokenMutationP):
         _user_ = User.objects.get(username=user_)
         time_ = _user_.Uprofile.blocked_date
         compare = timezone.now()
+        is_active = _user_.Uprofile.is_active
         try:
             unblock_account(_user_, time_)
             _user_ = UserProfile.objects.get(user=_user_, status="O")
-            return cls(user=info.context.user)
+            if is_active is True:
+                return cls(user=info.context.user)
+            else:
+                return Exception("Inactive User")
         except Exception as ex:
             user_ = UserProfile.objects.get(user=_user_)
             if user_.status == "B":

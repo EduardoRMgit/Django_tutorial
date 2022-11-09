@@ -87,6 +87,7 @@ INSTALLED_APPS = [
     'pagos.rapydcollect.apps.RapydcollectConfig',
     'scotiabank.apps.ScotiabankConfig',
     'renapo.apps.RenapoConfig',
+    'dapp.apps.DappConfig',
 ]
 
 if (PROD):
@@ -308,3 +309,6 @@ AXES_ONLY_ADMIN_SITE = True
 AXES_COOLOFF_TIME = timedelta(minutes=10)
 
 AXES_FAILURE_LIMIT = 5
+
+DAPP_KEY = env.str('DAPP_KEY', "dapp_key")
+DAPP_SECRET = env.str('DAPP_SECRET', "dapp_secret")
