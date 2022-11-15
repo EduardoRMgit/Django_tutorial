@@ -35,6 +35,9 @@ def token_auth(f):
             username=username,
             password=password,
         )
+        user.last_login = timezone.now()
+        user.save()
+
         if user is None:
             username_ = username
             try:
