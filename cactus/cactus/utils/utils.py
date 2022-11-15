@@ -35,8 +35,6 @@ def token_auth(f):
             username=username,
             password=password,
         )
-        user.last_login = timezone.now()
-        user.save()
 
         if user is None:
             username_ = username
@@ -60,6 +58,9 @@ def token_auth(f):
             raise exceptions.JSONWebTokenError(
                 _("Please enter valid credentials"),
             )
+
+        user.last_login = timezone.now()
+        user.save()
 
         if hasattr(context, "user"):
             context.user = user
