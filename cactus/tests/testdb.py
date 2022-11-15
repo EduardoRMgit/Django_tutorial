@@ -19,3 +19,4 @@ def load_min_test():
     call_command('loaddata', 'paisesDisponibles', verbosity=0)
     call_command('loaddata', 'transaccion', verbosity=0)
     call_command('loaddata', 'statusRegistro', verbosity=0)
+    call_command('loaddata', 'avatar', verbosity=0)
