@@ -4,6 +4,11 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+import pytesseract
+from PIL import Image
+from pytesseract import Output
+import io
+import requests
 
 
 # Catalogo de documentos adjuntos
@@ -76,12 +81,79 @@ def imagen(sender, instance, created, **kwargs):
     if created:
         user_ = User.objects.get(id=instance.user_id)
         uprofile = user_.Uprofile
+        # curp = uprofile.curp
         if instance.tipo_id == 1:
             uprofile.ineCaptura = instance.imagen
+            url = "{}{}".format(
+                'http://127.0.0.1:8000/media/', instance.imagen)
+            response = requests.get(url)
+            img = Image.open(io.BytesIO(response.content))
+            config_tesseract = '--tessdata-dir tessdata'
+            result = pytesseract.image_to_data(img,
+                                               config=config_tesseract,
+                                               lang='spa',
+                                               output_type=Output.DICT)
+            list = []
+            list.append(result)
+            print(list)
+            min_confidence = 40
+            listf = []
+            for i in range(0, len(result['text'])):
+                confidence = result['conf'][i]
+                if confidence > min_confidence:
+                    text = []
+                    text = result['text'][i]
+                    # print(text)
+                    # dicc['key'] = text
+                    listf.append(text)
+            # print(listf)
+            # print(curp)
+            # for x in listf:
+            #     if (x == ''):
+            #         print("Curp valido")
         elif instance.tipo_id == 2:
             uprofile.ineReversoCaptura = instance.imagen
+            url = "{}{}".format(
+                'http://127.0.0.1:8000/media/', instance.imagen)
+            response = requests.get(url)
+            img = Image.open(io.BytesIO(response.content))
+            config_tesseract = '--tessdata-dir tessdata'
+            result = pytesseract.image_to_data(img,
+                                               config=config_tesseract,
+                                               output_type=Output.DICT)
+            print(result)
+            list = []
+            list.append(result)
+            print(list)
+            min_confidence = 15
+            for i in range(0, len(result['text'])):
+                confidence = result['conf'][i]
+                if confidence > min_confidence:
+                    text = result['text'][i]
+                    dict = {}
+                    dict = text
+                    print(text)
+                    print(dict)
         elif instance.tipo_id == 3:
             uprofile.comprobanteDomCaptura = instance.imagen
+            # url = "{}{}".format(
+            #     'http://127.0.0.1:8000/media/', instance.imagen)
+            # response = requests.get(url)
+            # img = Image.open(io.BytesIO(response.content))
+            # config_tesseract = '--tessdata-dir tessdata'
+            # result = pytesseract.image_to_data(img,
+            #                                    config=config_tesseract,
+            #                                    output_type=Output.DICT)
+            # print(result)
+            # list = []
+            # list.append(result)
+            # print(list)
+            # min_confidence = 80
+            # for i in range(0, len(result['text'])):
+            #     confidence = result['conf'][i]
+            #     if confidence > min_confidence:
+            #         text = result['text'][i]
+            #         print(text)
         uprofile.save()
 
 
