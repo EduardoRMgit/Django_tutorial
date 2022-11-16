@@ -26,7 +26,8 @@ from demograficos.models.userProfile import (RespuestaSeguridad,
                                              INE_Info,
                                              INE_Reg_Attempt,
                                              RestorePassword,
-                                             Parentesco)
+                                             Parentesco,
+                                             Avatar)
 from demograficos.models.telefono import Telefono
 from demograficos.models.contactos import Contacto
 from demograficos.models.profileChecks import (ComponentValidated,
@@ -855,7 +856,7 @@ class Query(object):
         user = info.context.user
         if not user.is_anonymous:
             UP = UserProfile.objects.filter(user=user)
-            if(len(UP) == 1):
+            if (len(UP) == 1):
                 return UP[0]
             return None
         return None
@@ -1223,7 +1224,6 @@ class Query(object):
         return ComponentValidated.objects.get(component=component_id,
                                               user=user)
 
-
     def resolve_all_parentesco(self, info, **kwargs):
         return Parentesco.objects.all()
 
@@ -1329,7 +1329,7 @@ class CreateUser(graphene.Mutation):
                 stat = StatusRegistro.objects.get(pk=1)
                 UP.statusRegistro = stat
                 site = os.getenv("SITE", "local")
-                if((site == "test") | (site == "stage")):
+                if ((site == "test") | (site == "stage")):
                     UP.saldo_cuenta = 0  # Verificar ambientes de desarrollo
                 UP.usuarioCodigoConfianza = codigoconfianza
                 UP.save()
@@ -1477,7 +1477,7 @@ class CreateDevice(graphene.Mutation):
                brand=None):
 
         user = info.context.user
-        if(user.__str__() == "AnonymousUser"):
+        if (user.__str__() == "AnonymousUser"):
             user = None
 
         if not create:
@@ -1699,11 +1699,10 @@ class UpdateInfoPersonal(graphene.Mutation):
                 validities = ComponentValidated.objects.filter(user=user)
             except Exception as e:
                 raise AssertionError('no se ha podido establecer checkpoint',
-                    e)
+                                     e)
 
             print("first_name: ", user.first_name)
             print("last_name: ", user.last_name)
-
 
             try:
                 if not u_profile.cuentaClabe:
@@ -1778,12 +1777,12 @@ class CreateBeneficiario(graphene.Mutation):
             if user.User_Beneficiario.count() > 0:
                 raise Exception('User already has a beneficiary')
             beneficiario = UserBeneficiario.objects.create(
-                                nombre=name,
-                                parentesco=parentesco,
-                                user=user,
-                                participacion=100,
-                                fecha_nacimiento=fecha_nacimiento,
-                            )
+                nombre=name,
+                parentesco=parentesco,
+                user=user,
+                participacion=100,
+                fecha_nacimiento=fecha_nacimiento,
+            )
             try:
                 InfoValidator.setCheckpoint(user=user, concepto='CBN',
                                             beneficiario=beneficiario)
@@ -1920,15 +1919,15 @@ class TokenAuthPregunta(graphene.Mutation):
         pregunta = PreguntaSeguridad.objects.get(pk=pregunta_id)
         user = User.objects.get(username=username)
         RespuestaSeguridad.objects.get(
-                                    user=user,
-                                    pregunta=pregunta,
-                                    respuesta_secreta=respuesta_secreta,
-                                    tipo_nip=False)
+            user=user,
+            pregunta=pregunta,
+            respuesta_secreta=respuesta_secreta,
+            tipo_nip=False)
         pin = randint(100000, 999999)
         RestorePassword.objects.filter(user=user).delete()
         RestorePassword.objects.create(user=user,
-                                        passTemporal=pin,
-                                        activo=True)
+                                       passTemporal=pin,
+                                       activo=True)
         return TokenAuthPregunta(token=get_token(user), pin=pin)
 
 
@@ -1946,10 +1945,10 @@ class TokenAuthPreguntaNip(graphene.Mutation):
         pregunta = PreguntaSeguridad.objects.get(pk=pregunta_id)
         user = User.objects.get(username=username)
         RespuestaSeguridad.objects.get(
-                                    user=user,
-                                    pregunta=pregunta,
-                                    respuesta_secreta=respuesta_secreta,
-                                    tipo_nip=True)
+            user=user,
+            pregunta=pregunta,
+            respuesta_secreta=respuesta_secreta,
+            tipo_nip=True)
 
         up = UserProfile.objects.get(user=user)
         up.statusNip = 'U'
@@ -2005,8 +2004,8 @@ class RecoverPassword(graphene.Mutation):
         if not user.is_anonymous:
             try:
                 pass_temporal = RestorePassword.objects.filter(
-                                                              user=user,
-                                                              activo=True)[0]
+                    user=user,
+                    activo=True)[0]
                 if pass_temporal.validate(pin):
                     user.set_password(new_password)
                     pass_temporal.activo = False
@@ -2107,8 +2106,8 @@ mutation{
             }
             nombre
             nombreCompleto
-          	apPaterno
-          	apMaterno
+                apPaterno
+                apMaterno
             banco
             clabe
             }
@@ -2148,7 +2147,7 @@ mutation{
         user = info.context.user
         try:
             name_banco = InstitutionBanjico.objects.get(
-                    short_id=str(clabe[:3])).short_name
+                short_id=str(clabe[:3])).short_name
         except Exception as e:
             raise AssertionError(
                 'CLABE inválida, no existe banco válido para esa CLABE:',
@@ -2501,7 +2500,7 @@ class ReceiveOCR(graphene.Mutation):
         except Exception as e:
             errores = 'Error OCR {}'.format(e)
         extraccion, _ = DocExtraction.objects.get_or_create(
-                                                     documento=documento)
+            documento=documento)
         extraccion.validacion = validacion
         extraccion.diccionario = dict_foto
         extraccion.detalles = detalles
@@ -2682,6 +2681,27 @@ class ValidaCodi(graphene.Mutation):
         return ValidaCodi(details='Validado')
 
 
+class UrlAvatar(graphene.Mutation):
+    """
+    ``UrlAvatar (Mutation): Gets the signed url for the user image profile
+      (avatar)``
+    """
+    url = graphene.String()
+
+    class Arguments:
+        token = graphene.String(required=True)
+
+    @login_required
+    def mutate(self, info, token):
+        user = info.context.user
+        try:
+            avatar_url = user.Uprofile.avatar.avatar_img.url
+        except Exception:
+            avatar_url = "Sin avatar"
+
+        return UrlAvatar(url=avatar_url)
+
+
 class Mutation(graphene.ObjectType):
     delete_pregunta_seguridad = BorrarPreguntaSeguridad.Field()
     create_user = CreateUser.Field()
@@ -2714,3 +2734,4 @@ class Mutation(graphene.ObjectType):
     cancelacion_cuenta = CancelacionCuenta.Field()
     registro_codi = RegistroCodi.Field()
     valida_codi = ValidaCodi.Field()
+    url_avatar = UrlAvatar.Field()
