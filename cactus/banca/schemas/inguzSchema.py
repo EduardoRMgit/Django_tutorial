@@ -66,7 +66,6 @@ class CreateInguzTransaccion(graphene.Mutation):
 
         user_contacto = UserProfile.objects.get(
                 cuentaClabe=contacto.clabe, status="O").user
-
         fecha = (datetime.now() +
                  timedelta(hours=24)).strftime('%Y-%m-%d %H:%M:%S')
         claveR = randomString()
@@ -112,6 +111,12 @@ class CreateInguzTransaccion(graphene.Mutation):
             contacto.clabe,
             monto2F
         )
+        contacto = Contacto.objects.get(pk=contacto.id,
+                                        verificacion="O",
+                                        user=ordenante)
+        no_transaccion = contacto.no_transacciones + 1
+        contacto.no_transacciones = no_transaccion
+        contacto.save()
         db_logger.info(msg)
         return CreateInguzTransaccion(
             inguz_transaccion=inguz_transaccion,
