@@ -30,6 +30,7 @@ class Contacto(models.Model):
         related_name='Contactos_Usuario',
         on_delete=models.CASCADE,
     )
+    frecuencia = models.PositiveSmallIntegerField(default=0)
 
     def __str__(self):
         return self.nombre
