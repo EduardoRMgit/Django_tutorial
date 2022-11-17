@@ -117,7 +117,6 @@ class ContactosType(DjangoObjectType):
     class Meta:
         model = Contacto
 
-
 class ValidacionType(DjangoObjectType):
     class Meta:
         model = Telefono
@@ -147,6 +146,10 @@ class ParentescoType(DjangoObjectType):
     class Meta:
         model = Parentesco
 
+class AvatarType(graphene.ObjectType):
+    id = graphene.Int()
+    name = graphene.String()
+    url = graphene.String()
 
 class Query(object):
     """
@@ -325,7 +328,41 @@ class Query(object):
     all_parentesco = graphene.List(ParentescoType,
                                    description="Query all the objects from the\
                                    Parentesco Model")
+    all_avatars = graphene.List(AvatarType,
+                                   description="Query all the objects from the\
+                                   Avatar Model")
     # Initiating resolvers for type all Queries
+
+    def resolve_all_avatars(self, info, **kwargs):
+        """``allAvatars (Query): Query all the objects from Avatar Model``
+
+            Arguments:
+                - none
+
+            Fields to query:
+                - same from Avatar query.
+
+            >>> Query Example:
+            query{
+            allAvatars {
+                id
+                name
+                url
+                }
+            }
+        """
+        avatars = Avatar.objects.all()
+        qs = []
+        for avatar in avatars:
+            dicc = {}
+            dicc['id'] = avatar.id
+            dicc['name'] = avatar.name
+            try:
+                dicc['url'] = str(avatar.avatar_img.url)
+            except Exception:
+                dicc['url'] = "Objeto sin imagen"
+            qs.append(dicc)
+        return qs
 
     def resolve_all_user_profile(self, info, **kwargs):
         """``allUserProfile (Query): Query all the objects from UserProfile Model``
@@ -1329,7 +1366,7 @@ class CreateUser(graphene.Mutation):
                 stat = StatusRegistro.objects.get(pk=1)
                 UP.statusRegistro = stat
                 site = os.getenv("SITE", "local")
-                if ((site == "test") | (site == "stage")):
+                if ((site == "test") | (site == "stage") | (site == "prod")):
                     UP.saldo_cuenta = 0  # Verificar ambientes de desarrollo
                 UP.usuarioCodigoConfianza = codigoconfianza
                 UP.save()
@@ -1633,6 +1670,7 @@ class UpdateInfoPersonal(graphene.Mutation):
         curp = graphene.String()
         rfc = graphene.String()
         correo = graphene.String()
+        avatarId = graphene.Int()
 
     def mutate(
             self, info, token,
@@ -1649,6 +1687,7 @@ class UpdateInfoPersonal(graphene.Mutation):
             curp=None,
             rfc=None,
             correo=None,
+            avatarId=None,
     ):
         if name is not None:
             name = name.strip()
@@ -1682,6 +1721,14 @@ class UpdateInfoPersonal(graphene.Mutation):
             u_profile.ocupacion = (
                 occupation if occupation else u_profile.ocupacion)
             u_profile.curp = curp if curp else u_profile.curp
+            u_profile.avatar = avatarId if avatarId else u_profile.avatar
+            try:
+                if u_profile.avatar:
+                    u_profile.avatar_url = u_profile.avatar.avatar_img.url
+                else:
+                    u_profile.avatar_url = None
+            except Exception:
+                u_profile.avatar_url = None
             rfc_valida = rfc if rfc else u_profile.rfc
             if rfc_valida is None or rfc_valida == "null":
                 u_profile.rfc = u_profile.curp[:10]

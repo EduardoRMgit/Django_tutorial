@@ -1,8 +1,15 @@
 from django.db import models
 from django.contrib.auth.models import User
+from demograficos.models import UserProfile
+from django.dispatch import receiver
+from django.db.models.signals import pre_save
 
 
 class Contacto(models.Model):
+
+    class Meta():
+        verbose_name_plural = 'Lista de Contactos'
+
     OK = 'O'
     PEP = 'P'
     LISTANEGRA = 'N'
@@ -18,6 +25,16 @@ class Contacto(models.Model):
     ap_paterno = models.CharField(max_length=30, default='')
     ap_materno = models.CharField(max_length=30, default='')
     banco = models.CharField(max_length=69)
+    alias_inguz = models.CharField(
+        max_length=30,
+        blank=True,
+        null=True
+    )
+    avatar_url = models.URLField(
+        max_length=600,
+        null=True,
+        blank=True
+    )
     clabe = models.CharField(max_length=18)
     activo = models.BooleanField(default=True)
     verificacion = models.CharField(
@@ -35,8 +52,18 @@ class Contacto(models.Model):
     def __str__(self):
         return self.nombre
 
-    class Meta():
-        verbose_name_plural = 'Lista de Contactos'
+
+@receiver(pre_save, sender=Contacto)
+def get_inguz(sender, instance, **kwargs):
+    if instance.clabe[:10] == "6461802180":
+        try:
+            contacto = UserProfile.objects.get(
+                cuentaClabe=instance.clabe, status="O").user
+            instance.alias_inguz = contacto.Uprofile.alias
+            instance.avatar_url = contacto.Uprofile.avatar.avatar_img.url
+            print(instance.avatar_url)
+        except Exception:
+            instance.alias_inguz = "Cuenta inguz no encontrada"
 
 
 # TODO ARREGLAR ESTA CHINGADERA PARA QUE SI FUNCIONE

@@ -101,7 +101,7 @@ def uProfilenuller(klass):
 
 class Avatar(models.Model):
 
-    avatar_img = models.ImageField(upload_to='docs/avatars',
+    avatar_img = models.ImageField(upload_to='avatars',
                                    blank=True,
                                    null=True)
     name = models.CharField(max_length=128,
@@ -194,6 +194,13 @@ class UserProfile(AbstractBaseUser):
         on_delete=models.CASCADE,
         related_name='Uprofile'
     )
+
+    alias = models.CharField(
+        max_length=30,
+        null=True,
+        blank=True
+    )
+
     blocked_reason = models.CharField(
         max_length=1,
         choices=BLOCKED_REASONS,
@@ -303,6 +310,11 @@ class UserProfile(AbstractBaseUser):
                                on_delete=models.CASCADE,
                                null=True,
                                blank=True)
+    avatar_url = models.URLField(
+        max_length=600,
+        null=True,
+        blank=True
+    )
 
     class Meta():
         verbose_name_plural = 'Perfil del usuario'
