@@ -1721,13 +1721,16 @@ class UpdateInfoPersonal(graphene.Mutation):
             u_profile.ocupacion = (
                 occupation if occupation else u_profile.ocupacion)
             u_profile.curp = curp if curp else u_profile.curp
-            u_profile.avatar = avatarId if avatarId else u_profile.avatar
-            try:
-                if u_profile.avatar:
+            if avatarId:
+                try:
+                    avatarObject = Avatar.objects.get(id=avatarId)
+                    u_profile.avatar = (
+                        avatarObject if avatarObject else u_profile.avatar)
                     u_profile.avatar_url = u_profile.avatar.avatar_img.url
-                else:
+                except Exception:
                     u_profile.avatar_url = None
-            except Exception:
+                    raise AssertionError("Imagen de perfil inválida")
+            else:
                 u_profile.avatar_url = None
             rfc_valida = rfc if rfc else u_profile.rfc
             if rfc_valida is None or rfc_valida == "null":
