@@ -19,6 +19,7 @@ class TestInfopersonal(JSONWebTokenTestCase):
         mutation = '''
         mutation UpdateInfoPersonal($token:String!,
                                     $name:String!,
+                                    $alias:String!,
                                     $lastName_P:String!,
                                     $lastName_M:String!,
                                     # $birthDate:Date,
@@ -31,6 +32,7 @@ class TestInfopersonal(JSONWebTokenTestCase):
                 updateInfoPersonal(
                             token: $token,
                             name: $name,
+                            alias: $alias,
                             lastNameP: $lastName_P,
                             lastNameM: $lastName_M,
                             # birthDate: $birthDate,
@@ -44,6 +46,7 @@ class TestInfopersonal(JSONWebTokenTestCase):
                         firstName
                         lastName
                         Uprofile{
+                          alias
                           apMaterno
                           sexo
                           nacionalidad
@@ -59,6 +62,7 @@ class TestInfopersonal(JSONWebTokenTestCase):
         '''
         variables = {"token": self.token,
                      "name": "TestName",
+                     "alias": "TestAlias",
                      "lastName_P": "ApellidoPTest",
                      "lastName_M": "ApellidoMTest",
                      "gender": "trans",
@@ -76,6 +80,7 @@ class TestInfopersonal(JSONWebTokenTestCase):
                     "firstName": "TestName",
                     "lastName": "ApellidoPTest",
                     "Uprofile": {
+                      "alias": "TestAlias",
                       "apMaterno": "ApellidoMTest",
                       "sexo": "trans",
                       "nacionalidad": "Mexicano",
