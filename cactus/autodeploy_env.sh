@@ -4,7 +4,7 @@
 export IMAGE_DJANGO=true
 
 # Also build the python packages
-export IMAGE_PIP=true
+export IMAGE_PIP=false
 
 # Run the migrate command.
 export MIGRATIONS=true
@@ -19,7 +19,7 @@ export LOADDATA=false
 export STATIC=false
 
 # For when new settings in the deployment of kubernetes are added
-export NEW_RELEASE=false
+export NEW_RELEASE=true
 
 # Add a new cronjob
 export CRONJOB=true
