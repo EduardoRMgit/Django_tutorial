@@ -1746,9 +1746,11 @@ class UpdateInfoPersonal(graphene.Mutation):
             elif alias and alias == u_profile.alias:
                 pass
             else:
-                raise AssertionError (
-                    "Debes de ingresar un Alias a tu perfil"
-                )
+                # Genero Alias temporal para no romper la app actual
+                u_profile.alias = str(user.first_name.split()[0]) + str(user.id)
+                # raise AssertionError (
+                #     "Debes de ingresar un Alias a tu perfil"
+                # )
             if avatarId:
                 try:
                     avatarObject = Avatar.objects.get(id=avatarId)
