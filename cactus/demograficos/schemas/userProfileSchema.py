@@ -32,7 +32,8 @@ from demograficos.models.telefono import Telefono
 from demograficos.models.contactos import Contacto
 from demograficos.models.profileChecks import (ComponentValidated,
                                                ProfileComponent,
-                                               InfoValidator)
+                                               InfoValidator,
+                                               register_device)
 from demograficos.models.documentos import (DocAdjunto, DocAdjuntoTipo,
                                             DocExtraction)
 from django.utils import timezone
@@ -1346,8 +1347,13 @@ class CreateUser(graphene.Mutation):
                password=None, test=False):
         try:
             user = User.objects.get(username=username)
-            return CreateUser(user=None)
+            return Exception("Ya existe un usuario con ese número")
         except Exception:
+            try:
+                telefono = Telefono.objects.filter(
+                    telefono=username, validado=True).last()
+            except Exception:
+                raise Exception("Teléfono validado inexistente")
             if password is not None:
                 if codigo_referencia is None:
                     codigoconfianza = None
@@ -1361,6 +1367,7 @@ class CreateUser(graphene.Mutation):
                 username = username.strip()
                 user = User.objects.create(username=username)
                 user.set_password(password)
+                user.is_active = True
                 user.save()
                 UP = UserProfile.objects.get(user=user)
                 stat = StatusRegistro.objects.get(pk=1)
@@ -1370,6 +1377,18 @@ class CreateUser(graphene.Mutation):
                     UP.saldo_cuenta = 0  # Verificar ambientes de desarrollo
                 UP.usuarioCodigoConfianza = codigoconfianza
                 UP.save()
+                if not test:
+                    telefono.user = user
+                    telefono.save()
+                    try:
+                        register_device(user=user)
+                    except Exception as e:
+                        motivo = str(e)
+                        valid = False
+                        InfoValidator.setComponentValidated('telefono',
+                                                            user,
+                                                            valid,
+                                                            motivo)
                 return CreateUser(user=user, codigoconfianza=codigoconfianza)
             else:
                 return CreateUser(user=None)
@@ -2111,6 +2130,7 @@ class UpdateNip(graphene.Mutation):
                     if nip_temporal == old_nip:
                         UP.set_password(new_nip)
                         UP.statusNip = 'A'
+                        UP.enrolamiento = True
                     else:
                         raise ValueError('nip no coincide con el temporal')
             elif (UP.statusNip == 'A'):

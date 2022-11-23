@@ -75,6 +75,8 @@ class Telefono(models.Model):
 
     user = models.ForeignKey(
         User,
+        null=True,
+        blank=True,
         on_delete=models.CASCADE,
         related_name='user_telefono'
     )
