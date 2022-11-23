@@ -315,6 +315,7 @@ class UserProfile(AbstractBaseUser):
         null=True,
         blank=True
     )
+    enrolamiento = models.BooleanField(default=False)
 
     class Meta():
         verbose_name_plural = 'Perfil del usuario'
