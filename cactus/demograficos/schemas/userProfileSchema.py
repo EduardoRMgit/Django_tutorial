@@ -41,7 +41,10 @@ from banca.models.entidades import CodigoConfianza
 from spei.models import InstitutionBanjico
 from django.contrib.auth import authenticate
 from django.http import HttpRequest
+import logging
 
+
+db_logger = logging.getLogger("db")
 
 # WRAPPERS
 class RespuestaType(DjangoObjectType):
@@ -1389,6 +1392,9 @@ class CreateUser(graphene.Mutation):
                                                             user,
                                                             valid,
                                                             motivo)
+                        msg = "[Enrolamiento] Falla en register_device al \
+                            crear user. Error: {}.".format(e)
+                        db_logger.error(msg)
                 return CreateUser(user=user, codigoconfianza=codigoconfianza)
             else:
                 return CreateUser(user=None)

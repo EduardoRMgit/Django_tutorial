@@ -10,6 +10,9 @@ from graphql_jwt.shortcuts import get_user_by_token
 
 from demograficos.models.profileChecks import InfoValidator as Validator
 from demograficos.models import GeoLocation, GeoDevice, UserLocation
+import logging
+
+db_logger = logging.getLogger("db")
 
 
 class LoggingGraphQLView(GraphQLView):
@@ -77,7 +80,7 @@ class LoggingGraphQLView(GraphQLView):
             device = user.udevices.get(activo=True)
             if device.uuid != uuid:
                 print('setting screen to emergency for user {}'.format(
-                                                                     username))
+                    username))
                 Validator.setComponentValidated(alias='dispositivo',
                                                 user=user,
                                                 valid=False,
@@ -87,7 +90,10 @@ class LoggingGraphQLView(GraphQLView):
             else:
                 pass
                 # print('normal start for user {}'.format(username))
-        except Exception:
+        except Exception as e:
+            msg = "[Inicio de sesión] No se pudo obtener device activo en \
+                Udevices.Error: {}.".format(e)
+            db_logger.info(msg)
             pass
             # print('normal start for user {}'.format(username))
 
