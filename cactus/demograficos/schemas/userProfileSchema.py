@@ -1758,11 +1758,14 @@ class UpdateInfoPersonal(graphene.Mutation):
             else:
                 u_profile.avatar_url = None
             rfc_valida = rfc if rfc else u_profile.rfc
-            if rfc_valida is None or rfc_valida == "null":
+            if not u_profile.curp:
+                pass
+            elif (rfc_valida is None or rfc_valida == "null") \
+                and u_profile.curp:
                 u_profile.rfc = u_profile.curp[:10]
             elif (u_profile.rfc) == u_profile.curp[:10]:
                 pass
-            elif (InfoValidator.RFCValidado(rfc_valida, user) == rfc_valida):
+            elif u_profile.curp and (InfoValidator.RFCValidado(rfc_valida, user) == rfc_valida):
                 u_profile.rfc = rfc_valida
             else:
                 raise AssertionError("RFC no válido")
@@ -1777,7 +1780,6 @@ class UpdateInfoPersonal(graphene.Mutation):
             except Exception as e:
                 raise AssertionError('no se ha podido establecer checkpoint',
                                      e)
-
             print("first_name: ", user.first_name)
             print("last_name: ", user.last_name)
 
