@@ -1347,7 +1347,7 @@ class CreateUser(graphene.Mutation):
                password=None, test=False):
         try:
             user = User.objects.get(username=username)
-            return CreateUser(user=user)
+            return Exception("Ya existe un usuario con ese número")
         except Exception:
             try:
                 telefono = Telefono.objects.filter(
@@ -1377,15 +1377,18 @@ class CreateUser(graphene.Mutation):
                     UP.saldo_cuenta = 0  # Verificar ambientes de desarrollo
                 UP.usuarioCodigoConfianza = codigoconfianza
                 UP.save()
-                try:
-                    register_device(user=user)
-                except Exception as e:
-                    motivo = str(e)
-                    valid = False
-                    InfoValidator.setComponentValidated('telefono',
-                                                        user,
-                                                        valid,
-                                                        motivo)
+                if not test:
+                    try:
+                        telefono.user = user
+                        telefono.save()
+                        register_device(user=user)
+                    except Exception as e:
+                        motivo = str(e)
+                        valid = False
+                        InfoValidator.setComponentValidated('telefono',
+                                                            user,
+                                                            valid,
+                                                            motivo)
                 return CreateUser(user=user, codigoconfianza=codigoconfianza)
             else:
                 return CreateUser(user=None)
