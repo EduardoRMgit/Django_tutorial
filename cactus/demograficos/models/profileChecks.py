@@ -18,13 +18,21 @@ from demograficos.models.location import UDevice
 from .documentos import sendOCR
 
 
+db_logger = logging.getLogger("db")
+
+
 """definir aqui todos lo criterios de validación , dependiendo del campo"""
 """Usar infovalidator en cada mutation de user para validar
 e.g approved = InfoValidator.test(nip) , if approved setear el componente"""
 
 
 def register_device(user):
-    uuid = user.location.last().device.uuid
+    try:
+        uuid = user.location.last().device.uuid
+    except Exception as e:
+        msg = "[Register device] Fallo al obtener el uuid. Error: {} \
+            .".format(e)
+        db_logger.error(msg)
     UDevice.objects.filter(user=user).exclude(uuid=uuid).update(activo=False)
     device, created = UDevice.objects.get_or_create(uuid=uuid, activo=True)
     if not created:
@@ -356,10 +364,14 @@ class InfoValidator(models.Model):
             except Exception as e:
                 motivo += str(e)
                 InfoValidator.setComponentValidated(
-                                                alias='dispositivo',
-                                                user=user,
-                                                valid=False,
-                                                motivo=motivo)
+                    alias='dispositivo',
+                    user=user,
+                    valid=False,
+                    motivo=motivo
+                )
+                msg = "[Enrolamiento] Falla al usar register_device en set \
+                    checkpoint con alias 'dispositivo'. Error: {}".format(e)
+                db_logger.error(msg)
                 raise Exception(e)
 
         elif concepto == 'bloqueo':

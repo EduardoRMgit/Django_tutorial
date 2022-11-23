@@ -6,6 +6,10 @@ from demograficos.models.telefono import (TipoTelefono,
                                           Telefono,
                                           PhoneVerification)
 from django.core.exceptions import ObjectDoesNotExist
+from demograficos.models.profileChecks import InfoValidator
+import logging
+
+db_logger = logging.getLogger("db")
 
 
 class TipoTelefonoType(DjangoObjectType):
@@ -724,16 +728,32 @@ class ValidacionTelefono(graphene.Mutation):
     class Arguments:
         numero = graphene.String(required=True)
         pin = graphene.String(required=True)
+        enrolamiento = graphene.Boolean()
         test = graphene.Boolean()
         register_device = graphene.Boolean()
 
-    def mutate(self, info, pin, numero, test=False, register_device=True):
+    def mutate(self, info, pin, numero, test=False, register_device=True,
+               enrolamiento=False):
         try:
             tel = Telefono.objects.filter(telefono=numero).last()
         except Exception:
             Exception('Número no registrado')
         if test or tel.is_valid(pin):
-            tel.validado = True
+            if enrolamiento:
+                tel.validado = True
+            else:
+                try:
+                    tel = Telefono.objects.get(telefono=numero)
+                    user = tel.user
+                    InfoValidator.setCheckpoint(
+                        user=user, concepto='TEL',
+                        register=register_device
+                    )
+                    user.is_active = True
+                    user.save()
+                except Exception as e:
+                    db_logger.error("[ValidacionTelefono] Error: {e}")
+                    return ValidacionTelefono(validacion=str(e))
         else:
             return ValidacionTelefono(validacion="Incorrecto")
         res = "Validado"
