@@ -1351,7 +1351,7 @@ class CreateUser(graphene.Mutation):
         except Exception:
             try:
                 telefono = Telefono.objects.filter(
-                    telefono=username, validado = True).last()
+                    telefono=username, validado=True).last()
             except Exception:
                 raise Exception("Teléfono validado inexistente")
             if password is not None:
@@ -1378,9 +1378,9 @@ class CreateUser(graphene.Mutation):
                 UP.usuarioCodigoConfianza = codigoconfianza
                 UP.save()
                 if not test:
+                    telefono.user = user
+                    telefono.save()
                     try:
-                        telefono.user = user
-                        telefono.save()
                         register_device(user=user)
                     except Exception as e:
                         motivo = str(e)
