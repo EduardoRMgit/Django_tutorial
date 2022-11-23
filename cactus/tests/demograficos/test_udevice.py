@@ -39,8 +39,9 @@
 #         telefono = Telefono.objects.create(user=user, activo=True,
 #                                            telefono=numero)
 
-#         """aseguramos que despues de iniciar sesion y registrar el dipositivo,
-#             el usuario tiene exactamente un dispositivo udevice activo"""
+#         """aseguramos que despues de iniciar sesion y registrar el /
+#         dipositivo, el usuario tiene exactamente un dispositivo /
+#         udevice activo"""
 
 #         self.login_user(user, device_id)
 #         self.register_device(telefono, device_id)
@@ -48,8 +49,8 @@
 
 #         uuid = user.location.last().device.uuid
 
-#         """nos aseguramos que el uuid capturado en el middleware coincide con /
-#         el registrado después de la mutación"""
+#         """nos aseguramos que el uuid capturado en el middleware coincide /
+#         con el registrado después de la mutación"""
 #         self.assertTrue(user.udevices.get(activo=True).uuid == uuid)
 
 #         """creamos a otro usuario y tratamos de registrar el mismo /
@@ -63,8 +64,8 @@
 #         self.assertTrue(
 #                 other.componentvalidated_set.filter(status='IN').count() > 0)
 
-#         """autenticamos al usuario desde otro dispositivo y aseguramos que se /
-#         active la pantalla de emergencia"""
+#         """autenticamos al usuario desde otro dispositivo y aseguramos que /
+#         se active la pantalla de emergencia"""
 
 #         self.login_user(user, device_id + '0')
 #         component = user.componentvalidated_set.get(status='IN').component
