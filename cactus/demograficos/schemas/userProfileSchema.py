@@ -1760,7 +1760,7 @@ class UpdateInfoPersonal(graphene.Mutation):
             rfc_valida = rfc if rfc else u_profile.rfc
             if rfc_valida is None or rfc_valida == "null":
                 u_profile.rfc = u_profile.curp[:10]
-            elif len(u_profile.rfc) == 10:
+            elif (u_profile.rfc) == u_profile.curp[:10]:
                 pass
             elif (InfoValidator.RFCValidado(rfc_valida, user) == rfc_valida):
                 u_profile.rfc = rfc_valida
