@@ -5,7 +5,6 @@ from demograficos.models.telefono import (TipoTelefono,
                                           ProveedorTelefonico,
                                           Telefono,
                                           PhoneVerification)
-from django.core.exceptions import ObjectDoesNotExist
 from demograficos.models.profileChecks import InfoValidator
 import logging
 
@@ -577,9 +576,9 @@ class SendSmsPin(graphene.Mutation):
     def mutate(self, info, telefono, registro_nuevo):
         if registro_nuevo:
             try:
-                Telefono.objects.get(telefono=telefono).user
+                Telefono.objects.get(telefono=telefono, validado=True).user
                 raise Exception("Este teléfono ya pertenece a un usuario")
-            except ObjectDoesNotExist:
+            except Exception:
                 tel = Telefono.objects.create(
                     telefono=telefono,
                     activo=False,
