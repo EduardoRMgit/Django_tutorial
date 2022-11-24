@@ -576,7 +576,10 @@ class SendSmsPin(graphene.Mutation):
     def mutate(self, info, telefono, registro_nuevo):
         if registro_nuevo:
             try:
-                Telefono.objects.get(telefono=telefono, validado=True).user
+                Telefono.objects.filter(
+                    telefono=telefono,
+                    validado=True
+                ).exclude(user=None).last().user
                 raise Exception("Este teléfono ya pertenece a un usuario")
             except Exception:
                 tel = Telefono.objects.create(
@@ -739,7 +742,14 @@ class ValidacionTelefono(graphene.Mutation):
             Exception('Número no registrado')
         if test or tel.is_valid(pin):
             if enrolamiento:
+                tel = Telefono.objects.filter(
+                    telefono=numero,
+                    activo=False,
+                    valido=False,
+                ).last()
                 tel.validado = True
+                tel.activo = False
+                tel.save()
             else:
                 try:
                     tel = Telefono.objects.get(telefono=numero)
@@ -750,14 +760,15 @@ class ValidacionTelefono(graphene.Mutation):
                     )
                     user.is_active = True
                     user.save()
+                    tel.activo = True
+                    tel.validado = True
+                    tel.save()
                 except Exception as e:
-                    db_logger.error("[ValidacionTelefono] Error: {e}")
+                    db_logger.error(f"[ValidacionTelefono] Error: {e}")
                     return ValidacionTelefono(validacion=str(e))
         else:
             return ValidacionTelefono(validacion="Incorrecto")
         res = "Validado"
-        tel.activo = True
-        tel.save()
 
         return ValidacionTelefono(validacion=res)
 
