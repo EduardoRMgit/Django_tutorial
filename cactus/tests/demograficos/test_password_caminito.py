@@ -228,7 +228,7 @@ class TestPreguntaNipPassword(PasswordTestBase):
         # UpdateNip <con token correcto>
         variables2 = {"token": self.token,
                       "oldNip": nip_temp,
-                      "newNip": "111111"}
+                      "newNip": "1111"}
         res2 = self.client.execute(mutation2, variables2)
         expected_res2 = {
                 "updateNip": {
