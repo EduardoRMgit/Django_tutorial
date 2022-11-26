@@ -114,8 +114,7 @@ class CreateInguzTransaccion(graphene.Mutation):
         contacto = Contacto.objects.get(pk=contacto.id,
                                         verificacion="O",
                                         user=ordenante)
-        no_transaccion = contacto.no_transacciones + 1
-        contacto.no_transacciones = no_transaccion
+        contacto.frecuencia = int(contacto.frecuencia) + 1
         contacto.save()
         db_logger.info(msg)
         return CreateInguzTransaccion(
