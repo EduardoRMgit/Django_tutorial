@@ -2133,8 +2133,8 @@ class UpdateNip(graphene.Mutation):
                 raise ValueError('nuevo nip no debe coincidir con el viejo')
             UP = UserProfile.objects.get(user=user)
             if UP.statusNip == 'U':
-                if len(new_nip) != 6:
-                    raise ValueError('NIP debe contener 6 caracteres')
+                if len(new_nip) != 4:
+                    raise ValueError('NIP debe contener 4 caracteres')
                 else:
                     try:
                         nip_temporal = user.user_nipTemp.filter(
