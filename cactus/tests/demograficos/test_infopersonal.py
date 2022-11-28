@@ -51,7 +51,7 @@ class TestInfopersonal(JSONWebTokenTestCase):
                           ciudadNacimiento
                           ocupacion
                           # curp
-                          rfc
+                          # rfc
                           # fechaNacimiento
                         }
                     }
@@ -66,7 +66,7 @@ class TestInfopersonal(JSONWebTokenTestCase):
                      "nationality": "Mexicano",
                      "city": "Neza",
                      "occupation": "tester",
-                     "rfc": "VAQD970909H96",
+                     # "rfc": "VAQD970909H96",
                      # "curp": "VAQD970909HDFLJN03",
                      # "birthDate": "1999-08-13"
                      }
@@ -84,7 +84,7 @@ class TestInfopersonal(JSONWebTokenTestCase):
                       "ciudadNacimiento": "Neza",
                       "ocupacion": "tester",
                       # "curp": "VAQD970909HDFLJN03",
-                      "rfc": "VAQD970909H96",
+                      # "rfc": "VAQD970909H96",
                       # "fechaNacimiento": "1999-08-13",
                     }
                 }

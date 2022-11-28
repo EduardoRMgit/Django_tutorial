@@ -443,9 +443,13 @@ class StpTransaction(models.Model):
 
 @receiver(post_save, sender=StpTransaction)
 def save_ListaNegra(sender, instance, **kwargs):
+    print("instance.nombreBeneficiario:", instance.nombreBeneficiario)
     data = {
         'id_entidad': 5500,
-        'name': instance.nombreBeneficiario,
+        "nombre": instance.nombreBeneficiario,
+        "tipo_busqueda": "normal",
+        "tipo_persona": "FISICA"
+
     }
     resp = listaNegra(data)
 

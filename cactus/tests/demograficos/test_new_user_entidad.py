@@ -39,6 +39,7 @@ class TestNewUserReferencia(JSONWebTokenTestCase):
                 createUser(
                     username: $username,
                     password: $password,
+                    test: true,
                     codigoReferencia: $codigoReferencia,
                         ){
                     user{

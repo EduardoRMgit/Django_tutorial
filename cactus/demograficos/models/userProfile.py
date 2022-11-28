@@ -315,6 +315,7 @@ class UserProfile(AbstractBaseUser):
         null=True,
         blank=True
     )
+    enrolamiento = models.BooleanField(default=False)
 
     class Meta():
         verbose_name_plural = 'Perfil del usuario'
@@ -737,7 +738,7 @@ class NipTemporal(models.Model):
 
     def save(self, check=None, *args, **kwargs):
         if check is None:
-            self.nip_temp = randint(100000, 999999)
+            self.nip_temp = randint(1000, 9999)
             super().save(*args, **kwargs)
 
     def __str__(self):

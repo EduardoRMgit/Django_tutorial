@@ -6,6 +6,9 @@ from demograficos.models.telefono import (TipoTelefono,
                                           Telefono,
                                           PhoneVerification)
 from demograficos.models.profileChecks import InfoValidator
+import logging
+
+db_logger = logging.getLogger("db")
 
 
 class TipoTelefonoType(DjangoObjectType):
@@ -568,26 +571,39 @@ class SendSmsPin(graphene.Mutation):
 
     class Arguments:
         telefono = graphene.String(required=True)
+        registro_nuevo = graphene.Boolean(required=False)
 
-    def mutate(self, info, telefono):
-        resp = False
-        try:
-            user = Telefono.objects.filter(telefono=telefono)[0].user
+    def mutate(self, info, telefono, registro_nuevo):
+        if registro_nuevo:
             try:
-                tel = Telefono.objects.filter(user=user, telefono=telefono)
-                if len(tel) < 1:
-                    raise Exception("User has no telefono")
-                tel = tel.filter(activo=True)[0]
+                Telefono.objects.get(telefono=telefono, validado=True).user
+                raise Exception("Este teléfono ya pertenece a un usuario")
+            except Exception:
+                tel = Telefono.objects.create(
+                    telefono=telefono,
+                    activo=False,
+                    validado=False,
+                )
+                tel.send_token()
+                return SendSms(resp=True)
 
-            except Exception as e:
-                return Exception(str(e) + "User has no telefono activo")
+        else:
+            try:
+                user = Telefono.objects.filter(telefono=telefono)[0].user
+                try:
+                    tel = Telefono.objects.filter(user=user, telefono=telefono)
+                    if len(tel) < 1:
+                        raise Exception("User has no telefono")
+                    tel = tel.filter(activo=True)[0]
 
-        except Exception as ex:
-            raise Exception('numero de telefono no existe ' + str(ex))
+                except Exception as e:
+                    return Exception(str(e) + "User has no telefono activo")
 
-        tel.send_token()
-        resp = True
-        return SendSms(resp=resp)
+            except Exception as ex:
+                raise Exception('numero de telefono no existe ' + str(ex))
+
+            tel.send_token()
+            return SendSms(resp=True)
 
 
 class SendSms(graphene.Mutation):
@@ -711,26 +727,35 @@ class ValidacionTelefono(graphene.Mutation):
     class Arguments:
         numero = graphene.String(required=True)
         pin = graphene.String(required=True)
+        enrolamiento = graphene.Boolean()
         test = graphene.Boolean()
         register_device = graphene.Boolean()
 
-    def mutate(self, info, pin, numero, test=False, register_device=True):
-        tel = Telefono.objects.get(telefono=numero)
-        user = tel.user
-        # si la siguiente validacion falla
-        res = "Usuario no encontrado"
+    def mutate(self, info, pin, numero, test=False, register_device=True,
+               enrolamiento=False):
+        try:
+            tel = Telefono.objects.filter(telefono=numero).last()
+        except Exception:
+            Exception('Número no registrado')
         if test or tel.is_valid(pin):
-            try:
-                InfoValidator.setCheckpoint(
-                                            user=user, concepto='TEL',
-                                            register=register_device)
-            except Exception as e:
-                return ValidacionTelefono(validacion=str(e))
+            if enrolamiento:
+                tel.validado = True
+            else:
+                try:
+                    tel = Telefono.objects.get(telefono=numero)
+                    user = tel.user
+                    InfoValidator.setCheckpoint(
+                        user=user, concepto='TEL',
+                        register=register_device
+                    )
+                    user.is_active = True
+                    user.save()
+                except Exception as e:
+                    db_logger.error("[ValidacionTelefono] Error: {e}")
+                    return ValidacionTelefono(validacion=str(e))
         else:
             return ValidacionTelefono(validacion="Incorrecto")
         res = "Validado"
-        user.is_active = True
-        user.save()
         tel.activo = True
         tel.save()
 
