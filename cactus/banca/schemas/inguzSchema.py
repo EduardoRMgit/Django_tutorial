@@ -1,6 +1,6 @@
 import graphene
-from datetime import datetime, timedelta
 from spei.stpTools import randomString
+from django.utils import timezone
 
 from graphene_django.types import DjangoObjectType
 from graphql_jwt.decorators import login_required
@@ -65,9 +65,8 @@ class CreateInguzTransaccion(graphene.Mutation):
             raise Exception("El abono debe ser mayor a cero")
 
         user_contacto = UserProfile.objects.get(
-                cuentaClabe=contacto.clabe, status="O").user
-        fecha = (datetime.now() +
-                 timedelta(hours=24)).strftime('%Y-%m-%d %H:%M:%S')
+            cuentaClabe=contacto.clabe, status="O").user
+        fecha = timezone.now()
         claveR = randomString()
         monto2F = "{:.2f}".format(round(float(abono), 2))
         status = StatusTrans.objects.get(nombre="exito")
@@ -114,7 +113,7 @@ class CreateInguzTransaccion(graphene.Mutation):
         contacto = Contacto.objects.get(pk=contacto.id,
                                         verificacion="O",
                                         user=ordenante)
-        contacto.frecuencia = contacto.frecuencia + 1
+        contacto.frecuencia = int(contacto.frecuencia) + 1
         contacto.save()
         db_logger.info(msg)
         return CreateInguzTransaccion(
