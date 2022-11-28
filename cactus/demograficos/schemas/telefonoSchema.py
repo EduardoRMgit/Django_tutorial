@@ -1,6 +1,7 @@
 import graphene
 # from django.contrib.auth.models import User
 from graphene_django.types import DjangoObjectType
+from django.contrib.auth.models import User
 from demograficos.models.telefono import (TipoTelefono,
                                           ProveedorTelefonico,
                                           Telefono,
@@ -582,6 +583,9 @@ class SendSmsPin(graphene.Mutation):
                 ).exclude(user=None).last().user
                 raise Exception("Este teléfono ya pertenece a un usuario")
             except Exception:
+                Telefono.objects.filter(
+                    telefono=telefono,
+                    user=None).delete()
                 tel = Telefono.objects.create(
                     telefono=telefono,
                     activo=False,
@@ -592,7 +596,9 @@ class SendSmsPin(graphene.Mutation):
 
         else:
             try:
-                user = Telefono.objects.filter(telefono=telefono)[0].user
+                user = User.objects.get(username=telefono)
+                user = Telefono.objects.filter(
+                    telefono=telefono, user=user).last().user
                 try:
                     tel = Telefono.objects.filter(user=user, telefono=telefono)
                     if len(tel) < 1:
