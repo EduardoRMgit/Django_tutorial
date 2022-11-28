@@ -44,6 +44,7 @@ class TestInfopersonal(JSONWebTokenTestCase):
                         firstName
                         lastName
                         Uprofile{
+                          alias
                           apMaterno
                           sexo
                           nacionalidad
@@ -76,6 +77,7 @@ class TestInfopersonal(JSONWebTokenTestCase):
                     "firstName": "TestName",
                     "lastName": "ApellidoPTest",
                     "Uprofile": {
+                      "alias": "TestName17",
                       "apMaterno": "ApellidoMTest",
                       "sexo": "trans",
                       "nacionalidad": "Mexicano",

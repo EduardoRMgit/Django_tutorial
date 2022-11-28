@@ -760,6 +760,16 @@ class Query(object):
     @login_required
     def resolve_all_contactos(self, info, **kwargs):
         user = info.context.user
+        for contacto in user.Contactos_Usuario.all():
+            if contacto.clabe[:10] == "6461802180":
+                try:
+                    contacto_user = UserProfile.objects.get(
+                        cuentaClabe=contacto.clabe, status="O").user
+                    contacto.alias_inguz = contacto_user.Uprofile.alias
+                    contacto.avatar_url = contacto_user.Uprofile.avatar.avatar_img.url
+                except Exception:
+                    contacto.alias_inguz = "Cuenta inguz no encontrada"
+                contacto.save()
         return user.Contactos_Usuario.all()
 
     @login_required
@@ -1681,6 +1691,7 @@ class UpdateInfoPersonal(graphene.Mutation):
 
     class Arguments:
         token = graphene.String(required=True)
+        alias = graphene.String()
         name = graphene.String()
         gender = graphene.String()
         name = graphene.String()
@@ -1698,24 +1709,27 @@ class UpdateInfoPersonal(graphene.Mutation):
         avatarId = graphene.Int()
 
     def mutate(
-            self, info, token,
-            name=None,
-            gender=None,
-            last_name_p=None,
-            last_name_m=None,
-            birth_date=None,
-            nationality=None,
-            country=None,
-            city=None,
-            numero_INE=None,
-            occupation=None,
-            curp=None,
-            rfc=None,
-            correo=None,
-            avatarId=None,
+        self, info, token,
+        alias = None,
+        name=None,
+        gender=None,
+        last_name_p=None,
+        last_name_m=None,
+        birth_date=None,
+        nationality=None,
+        country=None,
+        city=None,
+        numero_INE=None,
+        occupation=None,
+        curp=None,
+        rfc=None,
+        correo=None,
+        avatarId=None,
     ):
         if name is not None:
             name = name.strip()
+        if alias is not None:
+            alias = alias.strip()
         if gender is not None:
             gender = gender.strip()
         if last_name_p is not None:
@@ -1746,6 +1760,22 @@ class UpdateInfoPersonal(graphene.Mutation):
             u_profile.ocupacion = (
                 occupation if occupation else u_profile.ocupacion)
             u_profile.curp = curp if curp else u_profile.curp
+            alias = alias if alias else u_profile.alias
+            if alias and alias != u_profile.alias:
+                if UserProfile.objects.filter(alias=alias).count() == 0:
+                    u_profile.alias = alias if alias else u_profile.alias
+                else:
+                    raise AssertionError (
+                        "El Alias elegido ya pertenece a otro usuario"
+                    )
+            elif alias and alias == u_profile.alias:
+                pass
+            else:
+                # Genero Alias temporal para no romper la app actual
+                u_profile.alias = str(user.first_name.split()[0]) + str(user.id)
+                # raise AssertionError (
+                #     "Debes de ingresar un Alias a tu perfil"
+                # )
             if avatarId:
                 try:
                     avatarObject = Avatar.objects.get(id=avatarId)
