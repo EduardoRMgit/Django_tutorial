@@ -751,11 +751,8 @@ class ValidacionTelefono(graphene.Mutation):
                 tel = Telefono.objects.filter(
                     telefono=numero,
                     activo=False,
-                    validado=False,
+                    validado=True,
                 ).last()
-                tel.validado = True
-                tel.activo = False
-                tel.save()
             else:
                 try:
                     tel = Telefono.objects.get(telefono=numero)
