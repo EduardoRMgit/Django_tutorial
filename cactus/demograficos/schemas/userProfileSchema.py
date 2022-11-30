@@ -2349,7 +2349,7 @@ class VerifyAddContactos(graphene.Mutation):
                             ap_paterno=ap_paterno,
                             ap_materno=ap_materno,
                             nombreCompleto=nombre_completo,
-                            banco="Inguz",
+                            banco="STP",
                             clabe=clabe,
                             user=user,
                             es_inguz=True
