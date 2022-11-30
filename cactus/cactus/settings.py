@@ -315,3 +315,5 @@ DAPP_SECRET = env.str('DAPP_SECRET',
                       "0f8d831dddfac45b0ae56e0cadb92a293f39adbd5d957519cbbca22e37ab2173")
 
 SITE = os.getenv("SITE", "local")
+
+PREFIJO_CUENTA_INGUZ = "6461802180"

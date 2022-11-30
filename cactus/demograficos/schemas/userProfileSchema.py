@@ -1,17 +1,23 @@
 # flake8: noqa
-from re import U
+import logging
 import graphene
 import datetime
 import json
 import os
+
+from re import U
 from random import randint
 
 from graphene_django.types import DjangoObjectType
 from graphql_jwt.decorators import login_required
 from graphql_jwt.shortcuts import get_token
 
+from django.contrib.auth import authenticate
+from django.http import HttpRequest
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
+from django.utils import timezone
+
 from demograficos.models.userProfile import (RespuestaSeguridad,
                                              PreguntaSeguridad,
                                              UserProfile,
@@ -36,17 +42,18 @@ from demograficos.models.profileChecks import (ComponentValidated,
                                                register_device)
 from demograficos.models.documentos import (DocAdjunto, DocAdjuntoTipo,
                                             DocExtraction)
-from django.utils import timezone
+
 from banca.models.entidades import CodigoConfianza
+from banca.utils.clabe import es_cuenta_inguz
+
 from spei.models import InstitutionBanjico
-from django.contrib.auth import authenticate
-from django.http import HttpRequest
-import logging
 
 
 db_logger = logging.getLogger("db")
 
 # WRAPPERS
+
+
 class RespuestaType(DjangoObjectType):
     class Meta:
         model = RespuestaSeguridad
@@ -121,6 +128,7 @@ class ContactosType(DjangoObjectType):
     class Meta:
         model = Contacto
 
+
 class ValidacionType(DjangoObjectType):
     class Meta:
         model = Telefono
@@ -150,10 +158,12 @@ class ParentescoType(DjangoObjectType):
     class Meta:
         model = Parentesco
 
+
 class AvatarType(graphene.ObjectType):
     id = graphene.Int()
     name = graphene.String()
     url = graphene.String()
+
 
 class Query(object):
     """
@@ -333,7 +343,7 @@ class Query(object):
                                    description="Query all the objects from the\
                                    Parentesco Model")
     all_avatars = graphene.List(AvatarType,
-                                   description="Query all the objects from the\
+                                description="Query all the objects from the\
                                    Avatar Model")
     # Initiating resolvers for type all Queries
 
@@ -761,7 +771,7 @@ class Query(object):
     def resolve_all_contactos(self, info, **kwargs):
         user = info.context.user
         for contacto in user.Contactos_Usuario.all():
-            if contacto.clabe[:10] == "6461802180":
+            if es_cuenta_inguz(contacto.clabe):
                 try:
                     contacto_user = UserProfile.objects.get(
                         cuentaClabe=contacto.clabe, status="O").user
@@ -1365,7 +1375,7 @@ class CreateUser(graphene.Mutation):
             try:
                 telefono = Telefono.objects.filter(
                     telefono=username,
-                    activo = False,
+                    activo=False,
                     validado=True).last()
             except Exception:
                 raise Exception("El teléfono no ha sido validado")
@@ -1714,7 +1724,7 @@ class UpdateInfoPersonal(graphene.Mutation):
 
     def mutate(
         self, info, token,
-        alias = None,
+        alias=None,
         name=None,
         gender=None,
         last_name_p=None,
@@ -1769,14 +1779,15 @@ class UpdateInfoPersonal(graphene.Mutation):
                 if UserProfile.objects.filter(alias=alias).count() == 0:
                     u_profile.alias = alias if alias else u_profile.alias
                 else:
-                    raise AssertionError (
+                    raise AssertionError(
                         "El Alias elegido ya pertenece a otro usuario"
                     )
             elif alias and alias == u_profile.alias:
                 pass
             else:
                 # Genero Alias temporal para no romper la app actual
-                u_profile.alias = str(user.first_name.split()[0]) + str(user.id)
+                u_profile.alias = str(
+                    user.first_name.split()[0]) + str(user.id)
                 # raise AssertionError (
                 #     "Debes de ingresar un Alias a tu perfil"
                 # )
@@ -1795,7 +1806,7 @@ class UpdateInfoPersonal(graphene.Mutation):
             if not u_profile.curp:
                 pass
             elif (rfc_valida is None or rfc_valida == "null") \
-                and u_profile.curp:
+                    and u_profile.curp:
                 u_profile.rfc = u_profile.curp[:10]
             elif (u_profile.rfc) == u_profile.curp[:10]:
                 pass
@@ -2266,7 +2277,9 @@ mutation{
             raise AssertionError(
                 'CLABE inválida, no existe banco válido para esa CLABE:',
                 e)
-        if Contacto.objects.filter(user=user, clabe=clabe, activo=True).count() > 0:
+        if Contacto.objects.filter(user=user,
+                                   clabe=clabe,
+                                   activo=True).count() > 0:
             raise ValueError(
                 "Ya tienes esta CLABE guardada en otro contacto")
         if not user.is_anonymous:
@@ -2276,13 +2289,15 @@ mutation{
             clabe = clabe.strip()
             nombre_completo = str(nombre) + " " + str(
                 ap_paterno) + " " + str(ap_materno)
+            es_inguz = es_cuenta_inguz(clabe)
             contacto = Contacto.objects.create(nombre=nombre,
                                                ap_paterno=ap_paterno,
                                                ap_materno=ap_materno,
                                                nombreCompleto=nombre_completo,
                                                banco=name_banco,
                                                clabe=clabe,
-                                               user=user)
+                                               user=user,
+                                               es_inguz=es_inguz)
             # contacto.save()
         return CreateContacto(
             contacto=contacto,
