@@ -748,14 +748,7 @@ class ValidacionTelefono(graphene.Mutation):
             Exception('Número no registrado')
         if test or tel.is_valid(pin):
             if enrolamiento:
-                tel = Telefono.objects.filter(
-                    telefono=numero,
-                    activo=False,
-                    valido=False,
-                ).last()
-                tel.validado = True
-                tel.activo = False
-                tel.save()
+                pass
             else:
                 try:
                     tel = Telefono.objects.get(telefono=numero)
