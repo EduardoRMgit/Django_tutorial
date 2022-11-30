@@ -47,6 +47,8 @@ import logging
 db_logger = logging.getLogger("db")
 
 # WRAPPERS
+
+
 class RespuestaType(DjangoObjectType):
     class Meta:
         model = RespuestaSeguridad
@@ -121,6 +123,7 @@ class ContactosType(DjangoObjectType):
     class Meta:
         model = Contacto
 
+
 class ValidacionType(DjangoObjectType):
     class Meta:
         model = Telefono
@@ -150,10 +153,25 @@ class ParentescoType(DjangoObjectType):
     class Meta:
         model = Parentesco
 
+
 class AvatarType(graphene.ObjectType):
     id = graphene.Int()
     name = graphene.String()
     url = graphene.String()
+
+
+class ContactoInguzType(graphene.ObjectType):
+    id = graphene.Int()
+    alias = graphene.String()
+    username = graphene.String()
+    nombre = graphene.String()
+
+    def resolve_alias(self, info):
+        return self.Uprofile.alias
+
+    def resolve_nombre(self, info):
+        return self.get_full_name()
+
 
 class Query(object):
     """
@@ -333,7 +351,7 @@ class Query(object):
                                    description="Query all the objects from the\
                                    Parentesco Model")
     all_avatars = graphene.List(AvatarType,
-                                   description="Query all the objects from the\
+                                description="Query all the objects from the\
                                    Avatar Model")
     # Initiating resolvers for type all Queries
 
@@ -1365,7 +1383,7 @@ class CreateUser(graphene.Mutation):
             try:
                 telefono = Telefono.objects.filter(
                     telefono=username,
-                    activo = False,
+                    activo=False,
                     validado=True).last()
             except Exception:
                 raise Exception("El teléfono no ha sido validado")
@@ -1714,7 +1732,7 @@ class UpdateInfoPersonal(graphene.Mutation):
 
     def mutate(
         self, info, token,
-        alias = None,
+        alias=None,
         name=None,
         gender=None,
         last_name_p=None,
@@ -1769,14 +1787,15 @@ class UpdateInfoPersonal(graphene.Mutation):
                 if UserProfile.objects.filter(alias=alias).count() == 0:
                     u_profile.alias = alias if alias else u_profile.alias
                 else:
-                    raise AssertionError (
+                    raise AssertionError(
                         "El Alias elegido ya pertenece a otro usuario"
                     )
             elif alias and alias == u_profile.alias:
                 pass
             else:
                 # Genero Alias temporal para no romper la app actual
-                u_profile.alias = str(user.first_name.split()[0]) + str(user.id)
+                u_profile.alias = str(
+                    user.first_name.split()[0]) + str(user.id)
                 # raise AssertionError (
                 #     "Debes de ingresar un Alias a tu perfil"
                 # )
@@ -1795,7 +1814,7 @@ class UpdateInfoPersonal(graphene.Mutation):
             if not u_profile.curp:
                 pass
             elif (rfc_valida is None or rfc_valida == "null") \
-                and u_profile.curp:
+                    and u_profile.curp:
                 u_profile.rfc = u_profile.curp[:10]
             elif (u_profile.rfc) == u_profile.curp[:10]:
                 pass
@@ -2287,6 +2306,69 @@ mutation{
         return CreateContacto(
             contacto=contacto,
             all_contactos=user.Contactos_Usuario.all())
+
+
+class VerifyAddContactos(graphene.Mutation):
+    contactos = graphene.List(ContactosType)
+    creados = graphene.List(ContactosType)
+    disponibles = graphene.List(ContactoInguzType)
+
+    class Arguments:
+        agenda = graphene.List(graphene.String)
+        token = graphene.String(required=True)
+        agregar = graphene.Boolean()
+
+    @login_required
+    def mutate(self, info, token, agenda, agregar=False):
+        user = info.context.user
+        clabes_agenda = list(map(
+            lambda contacto: contacto.clabe,
+            user.Contactos_Usuario.all()))
+        usuarios_inguz = User.objects.filter(
+            username__in=agenda).filter(
+                is_staff=True).exclude(
+                    username=user.username).exclude(
+                        Uprofile__cuentaClabe__in=clabes_agenda)
+
+        if agregar:
+            lista_creados = []
+            for usuario_inguz in usuarios_inguz:
+                clabe = usuario_inguz.Uprofile.cuentaClabe.strip()
+
+                # Validamos para que no se duplique
+                if Contacto.objects.filter(
+                        user=user, clabe=clabe, activo=True).count() == 0:
+                    try:
+                        nombre = usuario_inguz.first_name.strip()
+                        ap_paterno = usuario_inguz.last_name.strip()
+                        ap_materno = usuario_inguz.Uprofile.apMaterno.strip()
+                        nombre_completo = str(nombre) + " " + str(
+                            ap_paterno) + " " + str(ap_materno)
+                        contacto = Contacto.objects.create(
+                            nombre=nombre,
+                            ap_paterno=ap_paterno,
+                            ap_materno=ap_materno,
+                            nombreCompleto=nombre_completo,
+                            banco="Inguz",
+                            clabe=clabe,
+                            user=user,
+                            es_inguz=True
+                        )
+                        if contacto:
+                            lista_creados.append(contacto)
+                    except Exception as ex:
+                        print("ex: ", ex)
+                        msg = "[VerifyAddContactos] Error al crear contacto {}"
+                        msg = msg.format(ex)
+                        db_logger.error(msg)
+            return VerifyAddContactos(
+                contactos=user.Contactos_Usuario.all(),
+                creados=lista_creados)
+
+        return VerifyAddContactos(
+            contactos=user.Contactos_Usuario.all(),
+            disponibles=usuarios_inguz,
+            creados=[])
 
 
 class UpdateContacto(graphene.Mutation):
@@ -2849,3 +2931,4 @@ class Mutation(graphene.ObjectType):
     registro_codi = RegistroCodi.Field()
     valida_codi = ValidaCodi.Field()
     url_avatar = UrlAvatar.Field()
+    verify_add_contactos = VerifyAddContactos.Field()
