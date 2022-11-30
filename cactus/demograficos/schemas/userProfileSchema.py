@@ -1,17 +1,23 @@
 # flake8: noqa
-from re import U
+import logging
 import graphene
 import datetime
 import json
 import os
+
+from re import U
 from random import randint
 
 from graphene_django.types import DjangoObjectType
 from graphql_jwt.decorators import login_required
 from graphql_jwt.shortcuts import get_token
 
+from django.contrib.auth import authenticate
+from django.http import HttpRequest
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
+from django.utils import timezone
+
 from demograficos.models.userProfile import (RespuestaSeguridad,
                                              PreguntaSeguridad,
                                              UserProfile,
@@ -36,12 +42,11 @@ from demograficos.models.profileChecks import (ComponentValidated,
                                                register_device)
 from demograficos.models.documentos import (DocAdjunto, DocAdjuntoTipo,
                                             DocExtraction)
-from django.utils import timezone
+
 from banca.models.entidades import CodigoConfianza
+from banca.utils.clabe import es_cuenta_inguz
+
 from spei.models import InstitutionBanjico
-from django.contrib.auth import authenticate
-from django.http import HttpRequest
-import logging
 
 
 db_logger = logging.getLogger("db")
@@ -779,7 +784,7 @@ class Query(object):
     def resolve_all_contactos(self, info, **kwargs):
         user = info.context.user
         for contacto in user.Contactos_Usuario.all():
-            if contacto.clabe[:10] == "6461802180":
+            if es_cuenta_inguz(contacto.clabe):
                 try:
                     contacto_user = UserProfile.objects.get(
                         cuentaClabe=contacto.clabe, status="O").user
@@ -2285,7 +2290,9 @@ mutation{
             raise AssertionError(
                 'CLABE inválida, no existe banco válido para esa CLABE:',
                 e)
-        if Contacto.objects.filter(user=user, clabe=clabe, activo=True).count() > 0:
+        if Contacto.objects.filter(user=user,
+                                   clabe=clabe,
+                                   activo=True).count() > 0:
             raise ValueError(
                 "Ya tienes esta CLABE guardada en otro contacto")
         if not user.is_anonymous:
@@ -2295,13 +2302,15 @@ mutation{
             clabe = clabe.strip()
             nombre_completo = str(nombre) + " " + str(
                 ap_paterno) + " " + str(ap_materno)
+            es_inguz = es_cuenta_inguz(clabe)
             contacto = Contacto.objects.create(nombre=nombre,
                                                ap_paterno=ap_paterno,
                                                ap_materno=ap_materno,
                                                nombreCompleto=nombre_completo,
                                                banco=name_banco,
                                                clabe=clabe,
-                                               user=user)
+                                               user=user,
+                                               es_inguz=es_inguz)
             # contacto.save()
         return CreateContacto(
             contacto=contacto,
