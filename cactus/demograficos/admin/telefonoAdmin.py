@@ -79,10 +79,6 @@ class TelefonoAdmin(admin.ModelAdmin):
                     'get_ssid',
                     )
 
-    def get_user(self, obj):
-        return obj.Telefono.user
-    get_user.short_description = 'User'
-
     def get_ssid(self, obj):
         try:
             ssids = ""
