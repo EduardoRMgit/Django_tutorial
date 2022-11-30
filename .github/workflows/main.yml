@@ -16,7 +16,7 @@ env:
 jobs:
   checkout:
     name: Checkout
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     outputs:
         imaged1: ${{steps.imaged.outputs.imaged}}
 
@@ -32,7 +32,7 @@ jobs:
           echo "::set-output name=imaged::$(echo $IMAGE_DJANGO)"
   deploy:
     name: Deploy
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     needs: checkout
     if: ${{needs.checkout.outputs.imaged1 == 'true'}}
 
