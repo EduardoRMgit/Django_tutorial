@@ -57,12 +57,6 @@ class TelefonoAdmin(admin.ModelAdmin):
     )
 
     search_fields = ('telefono',
-                     'country',
-                     'activo',
-                     'validado',
-                     'user',
-                     # 'proveedorTelefonico',
-                     # 'tipoTelefono',
                      )
 
     list_filter = ('country',
