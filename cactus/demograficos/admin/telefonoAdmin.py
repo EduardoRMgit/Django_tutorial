@@ -61,8 +61,8 @@ class TelefonoAdmin(admin.ModelAdmin):
                      'activo',
                      'validado',
                      'user',
-                     'proveedorTelefonico',
-                     'tipoTelefono',
+                     # 'proveedorTelefonico',
+                     # 'tipoTelefono',
                      )
 
     list_filter = ('country',
@@ -85,6 +85,10 @@ class TelefonoAdmin(admin.ModelAdmin):
                     'get_ssid',
                     )
 
+    def get_user(self, obj):
+        return obj.Telefono.user
+    get_user.short_description = 'User'
+
     def get_ssid(self, obj):
         try:
             ssids = ""
@@ -102,4 +106,4 @@ class TelefonoAdmin(admin.ModelAdmin):
 admin.site.register(Telefono, TelefonoAdmin)
 admin.site.register(ProveedorTelefonico)
 admin.site.register(TipoTelefono)
-# admin.site.register(PhoneVerification, PhoneVeriicationAdmin)
+admin.site.register(PhoneVerification, PhoneVeriicationAdmin)
