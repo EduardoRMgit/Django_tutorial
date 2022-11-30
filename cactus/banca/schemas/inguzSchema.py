@@ -6,7 +6,7 @@ from graphene_django.types import DjangoObjectType
 from graphql_jwt.decorators import login_required
 
 from banca.models import (InguzTransaction, StatusTrans, TipoTransaccion,
-                          Transaccion)
+                          Transaccion, NotificacionCobro)
 from demograficos.models.userProfile import UserProfile
 from demograficos.models import Contacto
 from banca.schemas.transaccionSchema import UserType
@@ -28,6 +28,7 @@ class CreateInguzTransaccion(graphene.Mutation):
         abono = graphene.String(required=True)
         concepto = graphene.String(required=True)
         nip = graphene.String(required=True)
+        cobro_id = graphene.Int()
 
     @login_required
     def mutate(self,
@@ -36,7 +37,8 @@ class CreateInguzTransaccion(graphene.Mutation):
                contacto,
                abono,
                concepto,
-               nip,):
+               nip,
+               cobro_id=None):
         db_logger = logging.getLogger("db")
         try:
             ordenante = info.context.user
@@ -99,6 +101,15 @@ class CreateInguzTransaccion(graphene.Mutation):
             contacto=contacto,
             transaccion=main_trans
         )
+
+        if cobro_id is not None:
+            cobro = NotificacionCobro.objects.filter(pk=cobro_id)
+            if cobro.count() == 0:
+                raise Exception(f"No existe cobro con ID {cobro_id}")
+            cobro = cobro.first()
+            cobro.status = NotificacionCobro.LIQUIDADO
+            cobro.transaccion = inguz_transaccion
+            cobro.save()
 
         print(f"transacción creada: {inguz_transaccion.__dict__}")
         msg = "[Inguz_Inguz] Transaccion exitosa del usuario: {} \

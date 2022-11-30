@@ -47,6 +47,8 @@ import logging
 db_logger = logging.getLogger("db")
 
 # WRAPPERS
+
+
 class RespuestaType(DjangoObjectType):
     class Meta:
         model = RespuestaSeguridad
@@ -121,6 +123,7 @@ class ContactosType(DjangoObjectType):
     class Meta:
         model = Contacto
 
+
 class ValidacionType(DjangoObjectType):
     class Meta:
         model = Telefono
@@ -150,10 +153,12 @@ class ParentescoType(DjangoObjectType):
     class Meta:
         model = Parentesco
 
+
 class AvatarType(graphene.ObjectType):
     id = graphene.Int()
     name = graphene.String()
     url = graphene.String()
+
 
 class Query(object):
     """
@@ -333,7 +338,7 @@ class Query(object):
                                    description="Query all the objects from the\
                                    Parentesco Model")
     all_avatars = graphene.List(AvatarType,
-                                   description="Query all the objects from the\
+                                description="Query all the objects from the\
                                    Avatar Model")
     # Initiating resolvers for type all Queries
 
@@ -1365,7 +1370,7 @@ class CreateUser(graphene.Mutation):
             try:
                 telefono = Telefono.objects.filter(
                     telefono=username,
-                    activo = False,
+                    activo=False,
                     validado=True).last()
             except Exception:
                 raise Exception("El teléfono no ha sido validado")
@@ -1714,7 +1719,7 @@ class UpdateInfoPersonal(graphene.Mutation):
 
     def mutate(
         self, info, token,
-        alias = None,
+        alias=None,
         name=None,
         gender=None,
         last_name_p=None,
@@ -1769,14 +1774,15 @@ class UpdateInfoPersonal(graphene.Mutation):
                 if UserProfile.objects.filter(alias=alias).count() == 0:
                     u_profile.alias = alias if alias else u_profile.alias
                 else:
-                    raise AssertionError (
+                    raise AssertionError(
                         "El Alias elegido ya pertenece a otro usuario"
                     )
             elif alias and alias == u_profile.alias:
                 pass
             else:
                 # Genero Alias temporal para no romper la app actual
-                u_profile.alias = str(user.first_name.split()[0]) + str(user.id)
+                u_profile.alias = str(
+                    user.first_name.split()[0]) + str(user.id)
                 # raise AssertionError (
                 #     "Debes de ingresar un Alias a tu perfil"
                 # )
@@ -2283,6 +2289,7 @@ mutation{
                                                banco=name_banco,
                                                clabe=clabe,
                                                user=user)
+
             # contacto.save()
         return CreateContacto(
             contacto=contacto,
