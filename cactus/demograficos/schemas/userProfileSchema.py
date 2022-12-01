@@ -165,6 +165,19 @@ class AvatarType(graphene.ObjectType):
     url = graphene.String()
 
 
+class ContactoInguzType(graphene.ObjectType):
+    id = graphene.Int()
+    alias = graphene.String()
+    username = graphene.String()
+    nombre = graphene.String()
+
+    def resolve_alias(self, info):
+        return self.Uprofile.alias
+
+    def resolve_nombre(self, info):
+        return self.get_full_name()
+
+
 class Query(object):
     """
         >>> Query (Pregunstas Secretas) Example:
@@ -2315,6 +2328,69 @@ mutation{
             all_contactos=user.Contactos_Usuario.all())
 
 
+class VerifyAddContactos(graphene.Mutation):
+    contactos = graphene.List(ContactosType)
+    creados = graphene.List(ContactosType)
+    disponibles = graphene.List(ContactoInguzType)
+
+    class Arguments:
+        agenda = graphene.List(graphene.String)
+        token = graphene.String(required=True)
+        agregar = graphene.Boolean()
+
+    @login_required
+    def mutate(self, info, token, agenda, agregar=False):
+        user = info.context.user
+        clabes_agenda = list(map(
+            lambda contacto: contacto.clabe,
+            user.Contactos_Usuario.all()))
+        usuarios_inguz = User.objects.filter(
+            username__in=agenda).filter(
+                is_staff=True).exclude(
+                    username=user.username).exclude(
+                        Uprofile__cuentaClabe__in=clabes_agenda)
+
+        if agregar:
+            lista_creados = []
+            for usuario_inguz in usuarios_inguz:
+                clabe = usuario_inguz.Uprofile.cuentaClabe.strip()
+
+                # Validamos para que no se duplique
+                if Contacto.objects.filter(
+                        user=user, clabe=clabe, activo=True).count() == 0:
+                    try:
+                        nombre = usuario_inguz.first_name.strip()
+                        ap_paterno = usuario_inguz.last_name.strip()
+                        ap_materno = usuario_inguz.Uprofile.apMaterno.strip()
+                        nombre_completo = str(nombre) + " " + str(
+                            ap_paterno) + " " + str(ap_materno)
+                        contacto = Contacto.objects.create(
+                            nombre=nombre,
+                            ap_paterno=ap_paterno,
+                            ap_materno=ap_materno,
+                            nombreCompleto=nombre_completo,
+                            banco="STP",
+                            clabe=clabe,
+                            user=user,
+                            es_inguz=True
+                        )
+                        if contacto:
+                            lista_creados.append(contacto)
+                    except Exception as ex:
+                        print("ex: ", ex)
+                        msg = "[VerifyAddContactos] Error al crear contacto {}"
+                        msg = msg.format(ex)
+                        db_logger.error(msg)
+            return VerifyAddContactos(
+                contactos=user.Contactos_Usuario.all(),
+                creados=lista_creados)
+
+        return VerifyAddContactos(
+            contactos=user.Contactos_Usuario.all(),
+            disponibles=usuarios_inguz,
+            creados=[])
+
+
 class UpdateContacto(graphene.Mutation):
     """
         ``updateContactos (Mutation): Updates a Contacto``
@@ -2875,3 +2951,4 @@ class Mutation(graphene.ObjectType):
     registro_codi = RegistroCodi.Field()
     valida_codi = ValidaCodi.Field()
     url_avatar = UrlAvatar.Field()
+    verify_add_contactos = VerifyAddContactos.Field()
