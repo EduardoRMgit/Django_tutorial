@@ -65,9 +65,7 @@ class TestBeneficiario(JSONWebTokenTestCase):
                   "id": "1",
         }
 
-        print("kkkkkkkkkkkkkkkkkkkkkkkkkkkk")
         res = self.client.execute(mutation, variables)
-        print(res)
         my_dict = res.data['createBeneficiario']['beneficiario']
         my_dict_ = json.dumps(my_dict)
         expected_res_ = json.dumps(expected_res)
