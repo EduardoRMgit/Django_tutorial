@@ -21,6 +21,8 @@ class TestBeneficiario(JSONWebTokenTestCase):
         mutation = '''
         mutation createBeneficiario($token:String!,
                                     $name:String!,
+                                    $apellidopat:String!,
+                                    $apellidomat:String,
                                     $parentesco:Int!,
                                     $calle:String!,
                                     $numeroexterior:String!,
@@ -32,6 +34,8 @@ class TestBeneficiario(JSONWebTokenTestCase):
                 createBeneficiario(
                   token: $token,
                   name: $name,
+                  apellidomat: $apellidomat,
+                  apellidopat: $apellidopat,
                   parentesco: $parentesco,
                   calle: $calle,
                   numeroexterior: $numeroexterior,
@@ -52,6 +56,8 @@ class TestBeneficiario(JSONWebTokenTestCase):
         variables = {
                     "token": self.token,
                     "name": "Aurora",
+                    "apellidopat": "perez",
+                    "apellidomat": "paz",
                     "parentesco": 3,
                     "calle": "avenida siempre viva",
                     "numeroexterior": "420",

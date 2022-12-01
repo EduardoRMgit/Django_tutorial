@@ -1884,6 +1884,8 @@ class CreateBeneficiario(graphene.Mutation):
     class Arguments:
         token = graphene.String(required=True)
         name = graphene.String(required=True)
+        apellidopat = graphene.String()
+        apellidomat = graphene.String()
         parentesco = graphene.Int(required=True)
         fecha_nacimiento = graphene.Date()
         calle = graphene.String()
@@ -1900,6 +1902,8 @@ class CreateBeneficiario(graphene.Mutation):
                info,
                token,
                name,
+               apellidopat,
+               apellidomat,
                parentesco,
                calle,
                numeroexterior,
@@ -1920,6 +1924,8 @@ class CreateBeneficiario(graphene.Mutation):
             beneficiario = UserBeneficiario.objects.create(
                 nombre=name,
                 parentesco=parentesco,
+                apellido_paterno=apellidopat,
+                apellido_materno=apellidomat,
                 user=user,
                 participacion=100,
                 fecha_nacimiento=fecha_nacimiento,
