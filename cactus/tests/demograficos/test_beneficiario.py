@@ -21,11 +21,26 @@ class TestBeneficiario(JSONWebTokenTestCase):
         mutation = '''
         mutation createBeneficiario($token:String!,
                                     $name:String!,
-                                    $parentesco:Int!){
+                                    $parentesco:Int!,
+                                    $calle:String!,
+                                    $numeroexterior:String!,
+                                    $numerointerior:String!,
+                                    $codigopostal:String!,
+                                    $colonia:String!,
+                                    $municipio:String!,
+                                    $estado: String!,){
                 createBeneficiario(
                   token: $token,
                   name: $name,
                   parentesco: $parentesco,
+                  calle: $calle,
+                  numeroexterior: $numeroexterior,
+                  numerointerior: $numerointerior,
+                  codigopostal: $codigopostal,
+                  colonia: $colonia,
+                  municipio: $municipio,
+                  estado: $estado,
+
                 ){
                   beneficiario{
                     nombre
@@ -37,13 +52,22 @@ class TestBeneficiario(JSONWebTokenTestCase):
         variables = {
                     "token": self.token,
                     "name": "Aurora",
-                    "parentesco": 3}
+                    "parentesco": 3,
+                    "calle": "avenida siempre viva",
+                    "numeroexterior": "420",
+                    "numerointerior": "66",
+                    "codigopostal": "10910",
+                    "colonia": "col",
+                    "municipio": "Tlalpan",
+                    "estado": "CDMX"}
         expected_res = {
                   "nombre": "Aurora",
                   "id": "1",
         }
 
+        print("kkkkkkkkkkkkkkkkkkkkkkkkkkkk")
         res = self.client.execute(mutation, variables)
+        print(res)
         my_dict = res.data['createBeneficiario']['beneficiario']
         my_dict_ = json.dumps(my_dict)
         expected_res_ = json.dumps(expected_res)

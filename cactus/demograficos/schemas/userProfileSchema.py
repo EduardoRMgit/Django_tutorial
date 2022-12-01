@@ -1886,13 +1886,30 @@ class CreateBeneficiario(graphene.Mutation):
         name = graphene.String(required=True)
         parentesco = graphene.Int(required=True)
         fecha_nacimiento = graphene.Date()
+        calle = graphene.String()
+        numeroexterior = graphene.String()
+        numerointerior = graphene.String()
+        codigopostal = graphene.String()
+        colonia = graphene.String()
+        municipio = graphene.String()
+        estado = graphene.String()
+        
+
 
     def mutate(self,
                info,
                token,
                name,
                parentesco,
-               fecha_nacimiento=None):
+               calle,
+               numeroexterior,
+               numerointerior,
+               codigopostal,
+               colonia,
+               municipio,
+               estado,
+               fecha_nacimiento=None,
+               ):
         user = info.context.user
         if not user.is_anonymous:
             if name is not None:
@@ -1906,6 +1923,15 @@ class CreateBeneficiario(graphene.Mutation):
                 user=user,
                 participacion=100,
                 fecha_nacimiento=fecha_nacimiento,
+                direccion_L1=calle,
+                dir_num_ext=numeroexterior,
+                dir_num_int=numerointerior,
+                dir_CP=codigopostal,
+                dir_colonia=colonia,
+                dir_municipio=municipio,
+                dir_estado= estado,
+
+
             )
             try:
                 InfoValidator.setCheckpoint(user=user, concepto='CBN',
