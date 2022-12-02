@@ -2,6 +2,8 @@ from graphql_jwt.testcases import JSONWebTokenTestCase
 from graphql_jwt.shortcuts import get_token
 from django.contrib.auth import get_user_model
 from django.core.management import call_command
+from demograficos.models import Avatar
+from django.core.files.images import ImageFile
 
 
 class TestInfopersonal(JSONWebTokenTestCase):
@@ -11,6 +13,11 @@ class TestInfopersonal(JSONWebTokenTestCase):
         call_command('loaddata', 'adminUtils', verbosity=0)
         call_command('loaddata', 'usertesting', verbosity=0)
         call_command('loaddata', 'statusRegistro', verbosity=0)
+        Avatar.objects.create(
+            avatar_img=ImageFile(open("Zygoovertical-01.jpg", "rb")),
+            name="test",
+            description="test"
+        )
 
         self.user = get_user_model().objects.get(username='test')
         self.token = get_token(self.user)
