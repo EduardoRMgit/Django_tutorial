@@ -747,11 +747,10 @@ class ValidacionTelefono(graphene.Mutation):
         except Exception:
             Exception('Número no registrado')
         if test or tel.is_valid(pin):
-            if enrolamiento:
-                pass
-            else:
+            if not enrolamiento:
                 try:
-                    tel = Telefono.objects.get(telefono=numero)
+                    tel = Telefono.objects.filter(telefono=numero).exclude(
+                        user=None).last()
                     user = tel.user
                     InfoValidator.setCheckpoint(
                         user=user, concepto='TEL',
@@ -765,9 +764,9 @@ class ValidacionTelefono(graphene.Mutation):
                 except Exception as e:
                     db_logger.error(f"[ValidacionTelefono] Error: {e}")
                     return ValidacionTelefono(validacion=str(e))
+            res = "Validado"
         else:
             return ValidacionTelefono(validacion="Incorrecto")
-        res = "Validado"
 
         return ValidacionTelefono(validacion=res)
 
