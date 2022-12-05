@@ -749,7 +749,8 @@ class ValidacionTelefono(graphene.Mutation):
         if test or tel.is_valid(pin):
             if not enrolamiento:
                 try:
-                    tel = Telefono.objects.get(telefono=numero)
+                    tel = Telefono.objects.filter(telefono=numero).exclude(
+                        user=None).last()
                     user = tel.user
                     InfoValidator.setCheckpoint(
                         user=user, concepto='TEL',
