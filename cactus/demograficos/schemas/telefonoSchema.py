@@ -577,8 +577,7 @@ class SendSmsPin(graphene.Mutation):
     def mutate(self, info, telefono, registro_nuevo):
         if registro_nuevo:
             if User.objects.filter(username=telefono).count() > 0:
-                raise Exception("Telefono ya registrado en una cuenta \
-                    Inguz")
+                raise Exception("Telefono ya registrado en una cuenta Inguz")
             Telefono.objects.filter(
                 telefono=telefono,
                 user=None).delete()
@@ -742,10 +741,10 @@ class ValidacionTelefono(graphene.Mutation):
             tel = Telefono.objects.get(telefono=numero)
         except Exception:
             raise Exception('Número no registrado')
+        if enrolamiento:
+            if User.objects.filter(username=numero).count() > 0:
+                raise Exception('Número con cuenta Inguz existente')
         if test or tel.is_valid(pin):
-            if enrolamiento:
-                if User.objects.filter(username=numero).count() > 0:
-                    raise Exception('Número con cuenta Inguz existente')
             if not enrolamiento:
                 try:
                     tel = Telefono.objects.filter(telefono=numero).exclude(
