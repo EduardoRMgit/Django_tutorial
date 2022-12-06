@@ -1420,18 +1420,6 @@ class CreateUser(graphene.Mutation):
                     telefono.validado = True
                     telefono.activo = True
                     telefono.save()
-                    try:
-                        register_device(user=user)
-                    except Exception as e:
-                        motivo = str(e)
-                        valid = False
-                        InfoValidator.setComponentValidated('telefono',
-                                                            user,
-                                                            valid,
-                                                            motivo)
-                        msg = "[Enrolamiento] Falla en register_device al \
-                            crear user. Error: {}.".format(e)
-                        db_logger.error(msg)
                 return CreateUser(user=user, codigoconfianza=codigoconfianza)
             else:
                 return CreateUser(user=None)
@@ -1847,6 +1835,19 @@ class UpdateInfoPersonal(graphene.Mutation):
             except Exception as ex:
                 AssertionError('Error al registrar la cuenta clabe.',
                                ex)
+            if not u_profile.enrolamiento:
+                try:
+                    register_device(user=user)
+                except Exception as e:
+                    motivo = str(e)
+                    valid = False
+                    InfoValidator.setComponentValidated('telefono',
+                                                        user,
+                                                        valid,
+                                                        motivo)
+                    msg = "[Enrolamiento] Falla en register_device al \
+                        crear user. Error: {}.".format(e)
+                    db_logger.error(msg)
 
         return UpdateInfoPersonal(user=user, profile_valid=validities)
 
