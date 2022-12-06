@@ -8,6 +8,7 @@ from ..testdb import load_min_test
 from django.core.management import call_command
 from django.contrib.auth import authenticate
 from django.http import HttpRequest
+from demograficos.models import Telefono
 
 
 class DemograficosTestBase(JSONWebTokenTestCase):
@@ -21,6 +22,12 @@ class DemograficosTestBase(JSONWebTokenTestCase):
         call_command('loaddata', 'direccion', verbosity=0)
         call_command('loaddata', 'component', verbosity=0)
         call_command('loaddata', 'institutionbanjico', verbosity=0)
+        call_command('loaddata', 'statusRegistro', verbosity=0)
+        Telefono.objects.create(
+            telefono="5513125668",
+            activo=True,
+            validado=True
+        )
 
         self._client = Client()
         self.user = get_user_model().objects.get(username='test')
