@@ -23,9 +23,8 @@ class InguzType(DjangoObjectType):
 
 class Query(graphene.ObjectType):
     url_imagen_comprobante_inguz = graphene.List(InguzType,
-                                    token=graphene.String(required=True),
-                                    id_transaccion=graphene.Int(
-                                        required=True))
+                                   token=graphene.String(required=True),
+                                   id_transaccion=graphene.Int(required=True))
 
     def resolve_url_imagen_comprobante_inguz(self, info, **kwargs):
         id = kwargs.get("id_transaccion")
