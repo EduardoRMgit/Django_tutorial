@@ -93,6 +93,7 @@ class ObtainToken(JSONWebTokenMutationP):
 
 
 class Query(transaccionSchema.Query,
+            inguzSchema.Query,
             productoSchema.Query,
             userProfileSchema.Query,
             telefonoSchema.Query,

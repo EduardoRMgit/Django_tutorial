@@ -13,11 +13,27 @@ from banca.models import (InguzTransaction, StatusTrans, TipoTransaccion,
 from demograficos.models.userProfile import UserProfile
 from demograficos.models import Contacto
 from spei.stpTools import randomString
+from django.core.files.images import ImageFile
 
 
 class InguzType(DjangoObjectType):
     class Meta:
         model = InguzTransaction
+
+
+class Query(graphene.ObjectType):
+    url_imagen = graphene.List(InguzType,
+                               token=graphene.String(required=True),
+                               id_transaccion=graphene.Int(required=True))
+
+    def resolve_url_imagen(self, info, **kwargs):
+        id = kwargs.get("id_transaccion")
+        transaccion = InguzTransaction.objects.filter(id=id)
+        trans = transaccion.count()
+        if trans != 0:
+            return InguzTransaction.objects.filter(id=id)
+        else:
+            raise Exception("Transaccion Invalida")
 
 
 class CreateInguzTransaccion(graphene.Mutation):
@@ -99,7 +115,8 @@ class CreateInguzTransaccion(graphene.Mutation):
             ordenante=ordenante,
             fechaOperacion=fecha,
             contacto=contacto,
-            transaccion=main_trans
+            transaccion=main_trans,
+            comprobante_img=ImageFile(open("Zygoovertical-01.jpg", "rb"))
         )
 
         print(f"transacción creada: {inguz_transaccion.__dict__}")
