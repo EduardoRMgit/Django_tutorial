@@ -22,11 +22,12 @@ class InguzType(DjangoObjectType):
 
 
 class Query(graphene.ObjectType):
-    url_imagen = graphene.List(InguzType,
-                               token=graphene.String(required=True),
-                               id_transaccion=graphene.Int(required=True))
+    url_imagen_comprobante_inguz = graphene.List(InguzType,
+                                    token=graphene.String(required=True),
+                                    id_transaccion=graphene.Int(
+                                        required=True))
 
-    def resolve_url_imagen(self, info, **kwargs):
+    def resolve_url_imagen_comprobante_inguz(self, info, **kwargs):
         id = kwargs.get("id_transaccion")
         transaccion = InguzTransaction.objects.filter(id=id)
         trans = transaccion.count()
