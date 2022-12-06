@@ -1388,7 +1388,7 @@ class CreateUser(graphene.Mutation):
             try:
                 telefono = Telefono.objects.filter(
                     telefono=username,
-                    activo=False,
+                    activo=True,
                     validado=True).last()
             except Exception:
                 raise Exception("El teléfono no ha sido validado")
