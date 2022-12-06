@@ -8,6 +8,7 @@ from django.test import TestCase, Client
 
 # from ..testdb import load_min_test
 from django.core.management import call_command
+from demograficos.models import Telefono
 
 
 class UsersTestCase(TestCase):
@@ -21,6 +22,16 @@ class UsersTestCase(TestCase):
         self._client = Client()
         self._user1 = None
         self._user2 = None
+        Telefono.objects.create(
+            telefono="5551029634",
+            activo=True,
+            validado=True
+        )
+        Telefono.objects.create(
+            telefono="5551029635",
+            activo=True,
+            validado=True
+        )
 
     def test_create_first_user(self):
         username = "5551029634"

@@ -743,7 +743,7 @@ class ValidacionTelefono(graphene.Mutation):
     def mutate(self, info, pin, numero, test=False, register_device=True,
                enrolamiento=False):
         try:
-            tel = Telefono.objects.filter(telefono=numero).last()
+            tel = Telefono.objects.get(telefono=numero)
         except Exception:
             Exception('Número no registrado')
         if test or tel.is_valid(pin):
