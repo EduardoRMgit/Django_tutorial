@@ -1386,10 +1386,10 @@ class CreateUser(graphene.Mutation):
             return Exception("Ya existe un usuario con ese número")
         except Exception:
             try:
-                telefono = Telefono.objects.filter(
+                telefono = Telefono.objects.get(
                     telefono=username,
                     activo=True,
-                    validado=True).last()
+                    validado=True)
             except Exception:
                 raise Exception("El teléfono no ha sido validado")
             if password is not None:
