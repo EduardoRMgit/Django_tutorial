@@ -15,6 +15,7 @@ from graphql_jwt.shortcuts import get_token
 from django.contrib.auth import authenticate
 from django.http import HttpRequest
 from django.contrib.auth.models import User
+from demograficos.models import GeoLocation, GeoDevice, UserLocation
 from django.contrib.auth import authenticate
 from django.utils import timezone
 
@@ -1381,6 +1382,11 @@ class CreateUser(graphene.Mutation):
 
     def mutate(self, info, username, codigo_referencia=None,
                password=None, test=False):
+        uuid = info.context.headers.get("Device-Id")
+        lat = info.context.headers.get("Location-Lat")
+        lon = info.context.headers.get("Location-Lon")
+        if not (lat and lon and uuid) and not test:
+            raise Exception ("Faltan headers en la petición")
         try:
             user = User.objects.get(username=username)
             return Exception("Ya existe un usuario con ese número")
@@ -1420,6 +1426,21 @@ class CreateUser(graphene.Mutation):
                     telefono.validado = True
                     telefono.activo = True
                     telefono.save()
+                    geo = GeoLocation.objects.create(
+                        lat=lat,
+                        lon=lon,
+                    )
+                    device = GeoDevice.objects.create(
+                        uuid=uuid,
+                        username=username,
+                    )
+                    UserLocation.objects.create(
+                        user=user,
+                        location=geo,
+                        device=device,
+                        date=timezone.now()
+                    )
+                    register_device(user=user)
                 return CreateUser(user=user, codigoconfianza=codigoconfianza)
             else:
                 return CreateUser(user=None)
@@ -1835,20 +1856,6 @@ class UpdateInfoPersonal(graphene.Mutation):
             except Exception as ex:
                 AssertionError('Error al registrar la cuenta clabe.',
                                ex)
-            if not u_profile.enrolamiento:
-                try:
-                    register_device(user=user)
-                except Exception as e:
-                    motivo = str(e)
-                    valid = False
-                    InfoValidator.setComponentValidated('telefono',
-                                                        user,
-                                                        valid,
-                                                        motivo)
-                    msg = "[Enrolamiento] Falla en register_device al \
-                        crear user. Error: {}.".format(e)
-                    db_logger.error(msg)
-
         return UpdateInfoPersonal(user=user, profile_valid=validities)
 
 
