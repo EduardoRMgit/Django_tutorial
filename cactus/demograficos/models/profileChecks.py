@@ -27,34 +27,28 @@ e.g approved = InfoValidator.test(nip) , if approved setear el componente"""
 
 
 def register_device(user):
-    uuid = ""
     try:
         uuid = user.location.last().device.uuid
     except Exception as e:
         msg = "[Register device] Fallo al obtener el uuid. Error: {} \
             .".format(e)
         db_logger.error(msg)
-    try:
-        UDevice.objects.filter(user=user).exclude(uuid=uuid).update(
-            activo=False)
-        device, created = UDevice.objects.get_or_create(uuid=uuid, activo=True)
-        if not created:
-            other = device.user
-            if other == user:
-                return
-            if other.is_active:
-                raise Exception('dispositivo ocupado por usuario activo')
-            device.activo = False
-            device = UDevice.objects.create(uuid=uuid, user=user)
-            print('dispositivo {} se ha asignado al usuario {}'.format(
-                uuid, user))
+    UDevice.objects.filter(user=user).exclude(uuid=uuid).update(activo=False)
+    device, created = UDevice.objects.get_or_create(uuid=uuid, activo=True)
+    if not created:
+        other = device.user
+        if other == user:
             return
-        device.user = user
-        device.save()
-        print('dispositivo {} se ha registrado por el usuario {}'.format(uuid,
-                                                                        user))
-    except Exception as e:
-        db_logger.error(f"[register_device] Error: {e}")
+        if other.is_active:
+            raise Exception('dispositivo ocupado por usuario activo')
+        device.activo = False
+        device = UDevice.objects.create(uuid=uuid, user=user)
+        print('dispositivo {} se ha asignado al usuario {}'.format(uuid, user))
+        return
+    device.user = user
+    device.save()
+    print('dispositivo {} se ha registrado por el usuario {}'.format(uuid,
+        user))
 
 
 class InfoValidator(models.Model):

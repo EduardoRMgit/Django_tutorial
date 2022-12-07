@@ -21,20 +21,7 @@ class LoggingGraphQLView(GraphQLView):
             data = self.parse_body(request)
             token = str.encode(data['variables']['token'])
             user = get_user_by_token(token)
-            username = user.username
-        except Exception:
-            try:
-                username = request.headers['username']
-            except Exception:
-                try:
-                    username = data['variables']['username']
-                except Exception:
-                    try:
-                        username = json.loads(data['variables'])['username']
-                    except Exception:
-                        username = None
-        try:
-            user = User.objects.get(username=username)
+            username = user.username if user.username else None
         except Exception:
             return super().dispatch(request, *args, **kwargs)
         last_location = UserLocation.objects.filter(user=user).last()
@@ -62,7 +49,6 @@ class LoggingGraphQLView(GraphQLView):
                 if dist > max_dist + 100:
                     # Crear warning
                     pass
-
         device_id = request.headers.get("Device-Id")
         if device_id:
             device = GeoDevice.objects.create(uuid=device_id)
