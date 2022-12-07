@@ -154,4 +154,3 @@ jobs:
             --set site=$SUFFIX \
             --set stpSecret=$STPSECRET
           fi;
-

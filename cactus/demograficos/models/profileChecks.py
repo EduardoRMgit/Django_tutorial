@@ -48,7 +48,7 @@ def register_device(user):
     device.user = user
     device.save()
     print('dispositivo {} se ha registrado por el usuario {}'.format(uuid,
-                                                                     user))
+        user))
 
 
 class InfoValidator(models.Model):

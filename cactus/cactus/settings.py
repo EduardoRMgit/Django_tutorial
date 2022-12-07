@@ -295,12 +295,6 @@ DATA_UPLOAD_MAX_NUMBER_FIELDS = 10240
 PASSWORD_RESET_TIMEOUT_DAYS = 2
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
-AUTO_LOGOUT = {
-    'IDLE_TIME': timedelta(minutes=5),
-    'SESSION_TIME': timedelta(hours=8),
-    'MESSAGE': 'Tu sesión ha expirado, por favor inicia sesión nuevamente.',
-    'REDIRECT_TO_LOGIN_IMMEDIATELY': True,
-}
 
 AXES_ONLY_USER_FAILURES = True
 
@@ -316,4 +310,22 @@ DAPP_SECRET = env.str('DAPP_SECRET',
 
 SITE = os.getenv("SITE", "local")
 
+if SITE == "local":
+    idle_time = 120
+elif SITE == "stage":
+    idle_time = 30
+elif SITE == "test":
+    idle_time = 5
+elif SITE == "prod":
+    idle_time = 5
+
+AUTO_LOGOUT = {
+    'IDLE_TIME': timedelta(minutes=idle_time),
+    'SESSION_TIME': timedelta(hours=8),
+    'MESSAGE': 'Tu sesión ha expirado, por favor inicia sesión nuevamente.',
+    'REDIRECT_TO_LOGIN_IMMEDIATELY': True,
+}
+
 PREFIJO_CUENTA_INGUZ = "6461802180"
+
+URL_IMAGEN = "https://phototest420.s3.amazonaws.com/docs/docs/banca/comprobantes/comprobante_ejemplo.jpeg"

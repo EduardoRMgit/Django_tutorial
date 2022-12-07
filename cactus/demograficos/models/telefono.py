@@ -115,6 +115,7 @@ class Telefono(models.Model):
             datetime.timedelta(hours=2)
         if str(token) == tokenActual.token and delta:
             self.validado = True
+            self.activo = True
             self.save()
             return True
         else:

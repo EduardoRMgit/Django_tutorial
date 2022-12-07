@@ -576,23 +576,18 @@ class SendSmsPin(graphene.Mutation):
 
     def mutate(self, info, telefono, registro_nuevo):
         if registro_nuevo:
-            try:
-                Telefono.objects.filter(
-                    telefono=telefono,
-                    validado=True
-                ).exclude(user=None).last().user
-                raise Exception("Este teléfono ya pertenece a un usuario")
-            except Exception:
-                Telefono.objects.filter(
-                    telefono=telefono,
-                    user=None).delete()
-                tel = Telefono.objects.create(
-                    telefono=telefono,
-                    activo=False,
-                    validado=False,
-                )
-                tel.send_token()
-                return SendSms(resp=True)
+            if User.objects.filter(username=telefono).count() > 0:
+                raise Exception("Telefono ya registrado en una cuenta Inguz")
+            Telefono.objects.filter(
+                telefono=telefono,
+                user=None).delete()
+            tel = Telefono.objects.create(
+                telefono=telefono,
+                activo=False,
+                validado=False,
+            )
+            tel.send_token()
+            return SendSms(resp=True)
 
         else:
             try:
@@ -743,15 +738,17 @@ class ValidacionTelefono(graphene.Mutation):
     def mutate(self, info, pin, numero, test=False, register_device=True,
                enrolamiento=False):
         try:
-            tel = Telefono.objects.filter(telefono=numero).last()
+            tel = Telefono.objects.get(telefono=numero)
         except Exception:
-            Exception('Número no registrado')
+            raise Exception('Número no registrado')
+        if enrolamiento:
+            if User.objects.filter(username=numero).count() > 0:
+                raise Exception('Número con cuenta Inguz existente')
         if test or tel.is_valid(pin):
-            if enrolamiento:
-                pass
-            else:
+            if not enrolamiento:
                 try:
-                    tel = Telefono.objects.get(telefono=numero)
+                    tel = Telefono.objects.filter(telefono=numero).exclude(
+                        user=None).last()
                     user = tel.user
                     InfoValidator.setCheckpoint(
                         user=user, concepto='TEL',
@@ -765,9 +762,9 @@ class ValidacionTelefono(graphene.Mutation):
                 except Exception as e:
                     db_logger.error(f"[ValidacionTelefono] Error: {e}")
                     return ValidacionTelefono(validacion=str(e))
+            res = "Validado"
         else:
             return ValidacionTelefono(validacion="Incorrecto")
-        res = "Validado"
 
         return ValidacionTelefono(validacion=res)
 
