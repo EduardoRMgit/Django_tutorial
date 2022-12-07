@@ -99,6 +99,7 @@ class TestNewUserReferencia(JSONWebTokenTestCase):
                 createUser(
                     username: $username,
                     password: $password,
+                    test: true,
                     codigoReferencia: $codigoReferencia,
                     ){
                     user{
@@ -128,6 +129,7 @@ class TestNewUserReferencia(JSONWebTokenTestCase):
             $codigoReferencia: String!) {
                 createUser(
                     username: $username,
+                    test: true,
                     codigoReferencia: $codigoReferencia,
                 ){
                     user{
@@ -160,6 +162,7 @@ class TestNewUserReferencia(JSONWebTokenTestCase):
             $codigoReferencia: String!) {
                 createUser(
                     username: $username,
+                    test: true,
                     codigoReferencia: $codigoReferencia,
                 ){
                     user{
