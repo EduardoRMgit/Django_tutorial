@@ -1,4 +1,3 @@
-import json
 import math
 
 from django.http import HttpResponseForbidden
