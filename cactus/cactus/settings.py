@@ -327,3 +327,5 @@ AUTO_LOGOUT = {
 }
 
 PREFIJO_CUENTA_INGUZ = "6461802180"
+
+URL_IMAGEN = "https://phototest420.s3.amazonaws.com/docs/docs/banca/comprobantes/comprobante_ejemplo.jpeg"

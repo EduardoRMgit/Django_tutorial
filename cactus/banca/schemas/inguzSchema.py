@@ -13,6 +13,10 @@ from banca.models import (InguzTransaction, StatusTrans, TipoTransaccion,
 from demograficos.models.userProfile import UserProfile
 from demograficos.models import Contacto
 from spei.stpTools import randomString
+from django.conf import settings
+
+
+URL_IMAGEN = settings.URL_IMAGEN
 
 
 class InguzType(DjangoObjectType):
@@ -99,7 +103,7 @@ class CreateInguzTransaccion(graphene.Mutation):
             ordenante=ordenante,
             fechaOperacion=fecha,
             contacto=contacto,
-            transaccion=main_trans
+            transaccion=main_trans,
         )
 
         print(f"transacción creada: {inguz_transaccion.__dict__}")
@@ -124,6 +128,26 @@ class CreateInguzTransaccion(graphene.Mutation):
         )
 
 
+class UrlImagenComprobanteInguz(graphene.Mutation):
+
+    url = graphene.String()
+
+    class Arguments:
+        token = graphene.String(required=True)
+        id = graphene.Int(required=True)
+
+    def mutate(self, info, token, id):
+        user = info.context.user
+        if not user.is_anonymous:
+            transaccion = InguzTransaction.objects.get(id=id)
+            transaccion.comprobante_img = URL_IMAGEN
+            transaccion.url_comprobante = URL_IMAGEN
+            transaccion.save()
+            url = transaccion.url_comprobante
+            return UrlImagenComprobanteInguz(url=url)
+
+
 # 4
 class Mutation(graphene.ObjectType):
     create_inguz_transaccion = CreateInguzTransaccion.Field()
+    url_imagen_comprobante_inguz = UrlImagenComprobanteInguz.Field()

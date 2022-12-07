@@ -81,7 +81,11 @@ jobs:
         command: |
           source $REPO/autodeploy_env.sh
           echo "Configure Kubernetes"
-          aws eks update-kubeconfig --name $REPO-eksctl
+          if [[ ${GITHUB_REF##*/} == staging ]] || [[ ${GITHUB_REF##*/} == test ]] ; then
+            aws eks update-kubeconfig --name $REPO-staging-eksctl
+          elif [[ ${GITHUB_REF##*/} == main ]] ; then
+            aws eks update-kubeconfig --name $REPO-eksctl
+          fi;
           echo "Package contents"
           helm package kubernetes/charts/$REPO
           echo "Set vars for deploy"
@@ -154,4 +158,3 @@ jobs:
             --set site=$SUFFIX \
             --set stpSecret=$STPSECRET
           fi;
-
