@@ -81,11 +81,7 @@ jobs:
         command: |
           source $REPO/autodeploy_env.sh
           echo "Configure Kubernetes"
-          if [[ ${GITHUB_REF##*/} == staging ]] || [[ ${GITHUB_REF##*/} == test ]] ; then
-            aws eks update-kubeconfig --name $REPO-staging-eksctl
-          elif [[ ${GITHUB_REF##*/} == main ]] ; then
-            aws eks update-kubeconfig --name $REPO-eksctl
-          fi;
+          aws eks update-kubeconfig --name $REPO-eksctl
           echo "Package contents"
           helm package kubernetes/charts/$REPO
           echo "Set vars for deploy"
