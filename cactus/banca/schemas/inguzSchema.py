@@ -140,6 +140,7 @@ class UrlImagenComprobanteInguz(graphene.Mutation):
         user = info.context.user
         if not user.is_anonymous:
             transaccion = InguzTransaction.objects.get(id=id)
+            transaccion.comprobante_img = URL_IMAGEN
             transaccion.url_comprobante = URL_IMAGEN
             transaccion.save()
             url = transaccion.url_comprobante
