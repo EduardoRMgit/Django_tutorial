@@ -13,27 +13,15 @@ from banca.models import (InguzTransaction, StatusTrans, TipoTransaccion,
 from demograficos.models.userProfile import UserProfile
 from demograficos.models import Contacto
 from spei.stpTools import randomString
-from django.core.files.images import ImageFile
+from django.conf import settings
+
+
+URL_IMAGEN = settings.URL_IMAGEN
 
 
 class InguzType(DjangoObjectType):
     class Meta:
         model = InguzTransaction
-
-
-class Query(graphene.ObjectType):
-    url_imagen_comprobante_inguz = graphene.List(InguzType,
-                                   token=graphene.String(required=True),
-                                   id_transaccion=graphene.Int(required=True))
-
-    def resolve_url_imagen_comprobante_inguz(self, info, **kwargs):
-        id = kwargs.get("id_transaccion")
-        transaccion = InguzTransaction.objects.filter(id=id)
-        trans = transaccion.count()
-        if trans != 0:
-            return InguzTransaction.objects.filter(id=id)
-        else:
-            raise Exception("Transaccion Invalida")
 
 
 class CreateInguzTransaccion(graphene.Mutation):
@@ -116,7 +104,6 @@ class CreateInguzTransaccion(graphene.Mutation):
             fechaOperacion=fecha,
             contacto=contacto,
             transaccion=main_trans,
-            comprobante_img=ImageFile(open("Zygoovertical-01.jpg", "rb"))
         )
 
         print(f"transacción creada: {inguz_transaccion.__dict__}")
@@ -141,6 +128,25 @@ class CreateInguzTransaccion(graphene.Mutation):
         )
 
 
+class UrlImagenComprobanteInguz(graphene.Mutation):
+
+    url = graphene.String()
+
+    class Arguments:
+        token = graphene.String(required=True)
+        id = graphene.Int(required=True)
+
+    def mutate(self, info, token, id):
+        user = info.context.user
+        if not user.is_anonymous:
+            transaccion = InguzTransaction.objects.get(id=id)
+            transaccion.url_comprobante = URL_IMAGEN
+            transaccion.save()
+            url = transaccion.url_comprobante
+            return UrlImagenComprobanteInguz(url=url)
+
+
 # 4
 class Mutation(graphene.ObjectType):
     create_inguz_transaccion = CreateInguzTransaccion.Field()
+    url_imagen_comprobante_inguz = UrlImagenComprobanteInguz.Field()

@@ -50,6 +50,11 @@ class InguzTransaction(models.Model):
         blank=True,
         null=True
     )
+    url_comprobante = models.URLField(
+        max_length=600,
+        blank=True,
+        null=True
+    )
 
     def __str__(self):
         return self.ordenante.Uprofile.cuentaClabe
