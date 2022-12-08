@@ -2601,14 +2601,15 @@ class BuscadorUsuarioInguz(graphene.Mutation):
     class Arguments:
         token = graphene.String(required=True)
         alias = graphene.String(graphene.String)
+        max_coincidencias =graphene.Int()
 
     @login_required
-    def mutate(self, info, token, alias):
+    def mutate(self, info, token, alias, max_coincidencias=15):
         query = UserProfile.objects.filter(
             alias__contains=alias).exclude(
                 alias__contains=(info.context.user.Uprofile.alias))
-        if query.count() > 15:
-            query = query[:15]
+        if query.count() > max_coincidencias:
+            query = query[:max_coincidencias]
         return BuscadorUsuarioInguz(query)
 
 class CreateUpdatePregunta(graphene.Mutation):
