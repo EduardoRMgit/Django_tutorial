@@ -171,13 +171,16 @@ class ContactoInguzType(graphene.ObjectType):
     alias = graphene.String()
     username = graphene.String()
     nombre = graphene.String()
-    avatar_url = graphene.String()
+    url = graphene.String()
 
     def resolve_alias(self, info):
         return self.Uprofile.alias
 
     def resolve_nombre(self, info):
         return self.get_full_name()
+
+    def resolve_url(self, info):
+        return self.Uprofile.avatar_url
 
 
 class Query(object):
