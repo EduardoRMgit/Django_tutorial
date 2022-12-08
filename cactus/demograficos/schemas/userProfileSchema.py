@@ -2604,10 +2604,12 @@ class BuscadorUsuarioInguz(graphene.Mutation):
 
     @login_required
     def mutate(self, info, token, alias):
-        return BuscadorUsuarioInguz(
-            UserProfile.objects.filter(alias__contains=alias).exclude(
-                alias__contains=(info.context.user.Uprofile.alias)
-            ))
+        query = UserProfile.objects.filter(
+            alias__contains=alias).exclude(
+                alias__contains=(info.context.user.Uprofile.alias))
+        if query.count() > 15:
+            query = query[:15]
+        return BuscadorUsuarioInguz(query)
 
 class CreateUpdatePregunta(graphene.Mutation):
     respuesta = graphene.Field(RespuestaType)
