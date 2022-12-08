@@ -2604,8 +2604,8 @@ class BuscadorUsuarioInguz(graphene.Mutation):
     @login_required
     def mutate(self, info, token, alias):
         return BuscadorUsuarioInguz(
-            UserProfile.objects.filter(alias=alias).exclude(
-                alias=(info.context.user.Uprofile.alias)
+            UserProfile.objects.filter(alias__iexact=alias).exclude(
+                alias__iexact=(info.context.user.Uprofile.alias)
             ))
 
 class CreateUpdatePregunta(graphene.Mutation):
