@@ -2404,6 +2404,66 @@ class VerifyAddContactos(graphene.Mutation):
             creados=[])
 
 
+class BlockContacto(graphene.Mutation):
+
+    contacto = graphene.Field(ContactosType)
+    details = graphene.String()
+
+    class Arguments:
+        token = graphene.String(required=True)
+        bloquear = graphene.Boolean(required=True)
+        clabe = graphene.String(required=True)
+
+    def mutate(self, info, token, bloquear, clabe):
+
+        user = info.context.user
+        if Contacto.objects.filter(user=user,
+                                   clabe=clabe,
+                                   activo=True).count() > 0:
+            contacto = Contacto.objects.filter(clabe=clabe).update(
+                                                                bloqueado=True)
+            contacto = Contacto.objects.filter(clabe=clabe).first()
+            print(contacto)
+            return BlockContacto(contacto=contacto, details='Contacto Bloqueado')
+        else:
+            print(clabe)
+            usuario_inguz = UserProfile.objects.filter(cuentaClabe=clabe)
+            print(usuario_inguz)
+            if usuario_inguz.count() == 0:
+                raise AssertionError('No existe el usuario con esta clabe')
+            usuario_inguz = usuario_inguz.first()
+            es_inguz = es_cuenta_inguz(clabe)
+            try:
+                nombre_banco = InstitutionBanjico.objects.get(
+                    short_id=str(clabe[:3])).short_name
+            except Exception as e:
+                raise AssertionError(
+                    'CLABE invalida, no existe banco valido para esa CLABE:', e)
+            try:
+                nombre = usuario_inguz.user.first_name.strip()
+                ap_paterno = usuario_inguz.user.last_name.strip()
+                ap_materno = usuario_inguz.apMaterno.strip()
+                nombre_completo = str(nombre) + " " + str(
+                    ap_paterno) + " " + str(ap_materno)
+                contacto = Contacto.objects.create(
+                    nombre=nombre,
+                    ap_paterno=ap_paterno,
+                    ap_materno=ap_materno,
+                    nombreCompleto=nombre_completo,
+                    banco=nombre_banco,
+                    clabe=clabe,
+                    user=user,
+                    es_inguz=es_inguz,
+                    bloqueado=True
+                )
+            except Exception as ex:
+                print("ex: ", ex)
+                msg = "[BlockContacto] Error al crear contacto {}"
+                msg = msg.format(ex)
+                db_logger.error(msg)
+        return BlockContacto(contacto=contacto, details='Contacto Bloqueado')
+
+
 class UpdateContacto(graphene.Mutation):
     """
         ``updateContactos (Mutation): Updates a Contacto``
@@ -2965,3 +3025,4 @@ class Mutation(graphene.ObjectType):
     valida_codi = ValidaCodi.Field()
     url_avatar = UrlAvatar.Field()
     verify_add_contactos = VerifyAddContactos.Field()
+    block_contacto = BlockContacto.Field()
