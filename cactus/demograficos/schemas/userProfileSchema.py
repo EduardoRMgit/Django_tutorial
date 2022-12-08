@@ -171,12 +171,16 @@ class ContactoInguzType(graphene.ObjectType):
     alias = graphene.String()
     username = graphene.String()
     nombre = graphene.String()
+    url = graphene.String()
 
     def resolve_alias(self, info):
         return self.Uprofile.alias
 
     def resolve_nombre(self, info):
         return self.get_full_name()
+
+    def resolve_url(self, info):
+        return self.Uprofile.avatar_url
 
 
 class Query(object):
@@ -386,7 +390,7 @@ class Query(object):
             dicc['id'] = avatar.id
             dicc['name'] = avatar.name
             try:
-                dicc['url'] = str(avatar.avatar_img.url)
+                dicc['url'] = str((avatar.avatar_img.url).split("?")[0])
             except Exception:
                 dicc['url'] = "Objeto sin imagen"
             qs.append(dicc)
@@ -790,7 +794,13 @@ class Query(object):
                     contacto_user = UserProfile.objects.get(
                         cuentaClabe=contacto.clabe, status="O").user
                     contacto.alias_inguz = contacto_user.Uprofile.alias
-                    contacto.avatar_url = contacto_user.Uprofile.avatar.avatar_img.url
+                    if contacto_user.Uprofile.avatar:
+                        contacto.avatar_url = (
+                            contacto_user.Uprofile.avatar.avatar_img.url
+                        ).split("?")[0]
+                    else:
+                        contacto.avatar_url = (Avatar.objects.get(
+                            id=1).avatar_img.url).split("?")[0]
                 except Exception:
                     contacto.alias_inguz = "Cuenta inguz no encontrada"
                 contacto.save()
@@ -932,6 +942,10 @@ class Query(object):
         if not user.is_anonymous:
             UP = UserProfile.objects.filter(user=user)
             if (len(UP) == 1):
+                if UP[0].avatar:
+                    url = UP[0].avatar.avatar_img.url
+                    UP[0].avatar_url = url.split("?")[0]
+                    UP[0].save()
                 return UP[0]
             return None
         return None
@@ -1816,14 +1830,16 @@ class UpdateInfoPersonal(graphene.Mutation):
             if avatarId:
                 try:
                     avatarObject = Avatar.objects.get(id=avatarId)
-                    u_profile.avatar = (
-                        avatarObject if avatarObject else u_profile.avatar)
-                    u_profile.avatar_url = u_profile.avatar.avatar_img.url
+                    u_profile.avatar = avatarObject
+                    u_profile.avatar_url = (
+                        u_profile.avatar.avatar_img.url).split("?")[0]
                 except Exception:
-                    u_profile.avatar_url = None
                     raise AssertionError("Imagen de perfil inválida")
-            else:
-                u_profile.avatar_url = None
+            elif (not avatarId) and (not u_profile.avatar):
+                avatarObject = Avatar.objects.get(id=1)
+                u_profile.avatar = avatarObject
+                u_profile.avatar_url = (
+                        u_profile.avatar.avatar_img.url).split("?")[0]
             rfc_valida = rfc if rfc else u_profile.rfc
             if not u_profile.curp:
                 pass
@@ -2908,7 +2924,7 @@ class UrlAvatar(graphene.Mutation):
     def mutate(self, info, token):
         user = info.context.user
         try:
-            avatar_url = user.Uprofile.avatar.avatar_img.url
+            avatar_url = (user.Uprofile.avatar.avatar_img.url).split("?")[0]
         except Exception:
             avatar_url = "Sin avatar"
 
