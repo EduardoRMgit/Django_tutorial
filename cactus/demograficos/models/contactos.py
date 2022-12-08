@@ -49,6 +49,11 @@ class Contacto(models.Model):
         default=True,
         null=True,
         blank=True)
+    bloqueado = models.BooleanField(
+        default=False,
+        null=True,
+        blank=True
+    )
 
     def __str__(self):
         return self.nombre
