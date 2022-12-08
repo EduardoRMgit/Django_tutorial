@@ -181,6 +181,36 @@ class ContactoInguzType(graphene.ObjectType):
 
     def resolve_url(self, info):
         return self.Uprofile.avatar_url
+    
+class BuscadorInguzType(graphene.ObjectType):
+    id = graphene.Int()
+    alias = graphene.String()
+    nombre = graphene.String()
+    apPaterno = graphene.String()
+    apMaterno = graphene.String()
+    clabe = graphene.String()
+    url = graphene.String()
+
+    def resolve_id(self, info):
+        return self.user.id
+
+    def resolve_alias(self, info):
+        return self.alias
+
+    def resolve_nombre(self, info):
+        return self.user.first_name
+
+    def resolve_apPaterno(self, info):
+        return self.user.last_name
+
+    def resolve_apMaterno(self, info):
+        return self.apMaterno
+
+    def resolve_clabe(self, info):
+        return self.cuentaClabe
+
+    def resolve_url(self, info):
+        return self.avatar_url
 
 
 class Query(object):
@@ -2423,12 +2453,9 @@ class BlockContacto(graphene.Mutation):
             contacto = Contacto.objects.filter(clabe=clabe).update(
                                                                 bloqueado=True)
             contacto = Contacto.objects.filter(clabe=clabe).first()
-            print(contacto)
             return BlockContacto(contacto=contacto, details='Contacto Bloqueado')
         else:
-            print(clabe)
             usuario_inguz = UserProfile.objects.filter(cuentaClabe=clabe)
-            print(usuario_inguz)
             if usuario_inguz.count() == 0:
                 raise AssertionError('No existe el usuario con esta clabe')
             usuario_inguz = usuario_inguz.first()
@@ -2566,6 +2593,20 @@ class DeleteContacto(graphene.Mutation):
                               all_contactos=associated_user.
                               Contactos_Usuario.all())
 
+
+class BuscadorUsuarioInguz(graphene.Mutation):
+    resultado = graphene.List(BuscadorInguzType)
+
+    class Arguments:
+        token = graphene.String(required=True)
+        alias = graphene.String(graphene.String)
+
+    @login_required
+    def mutate(self, info, token, alias):
+        return BuscadorUsuarioInguz(
+            UserProfile.objects.filter(alias=alias).exclude(
+                alias=(info.context.user.Uprofile.alias)
+            ))
 
 class CreateUpdatePregunta(graphene.Mutation):
     respuesta = graphene.Field(RespuestaType)
@@ -3026,3 +3067,4 @@ class Mutation(graphene.ObjectType):
     url_avatar = UrlAvatar.Field()
     verify_add_contactos = VerifyAddContactos.Field()
     block_contacto = BlockContacto.Field()
+    buscador_usuario_inguz = BuscadorUsuarioInguz.Field()
