@@ -82,7 +82,7 @@ jobs:
         command: |
           source $REPO/autodeploy_env.sh
           echo "Configure Kubernetes"
-          if [[ ${GITHUB_REF##/} == staging ]] || [[ ${GITHUB_REF##/} == test ]] ; then
+          if [[ ${GITHUB_REF##*/} == staging ]] || [[ ${GITHUB_REF##*/} == test ]] ; then
             aws eks update-kubeconfig --name $REPO2
           elif [[ ${GITHUB_REF##*/} == main ]] ; then
             aws eks update-kubeconfig --name $REPO-eksctl
