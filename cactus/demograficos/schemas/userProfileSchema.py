@@ -1842,11 +1842,12 @@ class UpdateInfoPersonal(graphene.Mutation):
             u_profile.curp = curp if curp else u_profile.curp
             alias = alias if alias else u_profile.alias
             if alias and alias != u_profile.alias:
-                if UserProfile.objects.filter(alias=alias).count() == 0:
+                if UserProfile.objects.filter(alias__iexact=alias).count() == 0:
                     u_profile.alias = alias if alias else u_profile.alias
                 else:
                     raise AssertionError(
-                        "El Alias elegido ya pertenece a otro usuario"
+                        "Este alias ya fue tomado por otro cliente, " \
+                            "intenta algo diferente"
                     )
             elif alias and alias == u_profile.alias:
                 pass
@@ -2604,8 +2605,8 @@ class BuscadorUsuarioInguz(graphene.Mutation):
     @login_required
     def mutate(self, info, token, alias):
         return BuscadorUsuarioInguz(
-            UserProfile.objects.filter(alias__iexact=alias).exclude(
-                alias__iexact=(info.context.user.Uprofile.alias)
+            UserProfile.objects.filter(alias__contains=alias).exclude(
+                alias__contains=(info.context.user.Uprofile.alias)
             ))
 
 class CreateUpdatePregunta(graphene.Mutation):
