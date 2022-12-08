@@ -1397,7 +1397,7 @@ class CreateUser(graphene.Mutation):
         lat = info.context.headers.get("Location-Lat")
         lon = info.context.headers.get("Location-Lon")
         if not (lat and lon and uuid) and not test:
-            raise Exception ("Faltan headers en la petición")
+            raise Exception("Faltan headers en la petición")
         try:
             user = User.objects.get(username=username)
             return Exception("Ya existe un usuario con ese número")
@@ -2356,7 +2356,7 @@ class VerifyAddContactos(graphene.Mutation):
             user.Contactos_Usuario.all()))
         usuarios_inguz = User.objects.filter(
             username__in=agenda).filter(
-                is_staff=True).exclude(
+                is_staff=False).exclude(
                     username=user.username).exclude(
                         Uprofile__cuentaClabe__in=clabes_agenda)
 
