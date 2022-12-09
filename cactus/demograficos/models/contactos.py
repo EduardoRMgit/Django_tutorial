@@ -45,6 +45,15 @@ class Contacto(models.Model):
         on_delete=models.CASCADE,
     )
     frecuencia = models.PositiveSmallIntegerField(default=0)
+    es_inguz = models.BooleanField(
+        default=True,
+        null=True,
+        blank=True)
+    bloqueado = models.BooleanField(
+        default=False,
+        null=True,
+        blank=True
+    )
 
     def __str__(self):
         return self.nombre

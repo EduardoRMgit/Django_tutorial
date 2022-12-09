@@ -1,16 +1,22 @@
 import graphene
-from spei.stpTools import randomString
+import logging
+
 from django.utils import timezone
 
 from graphene_django.types import DjangoObjectType
 from graphql_jwt.decorators import login_required
 
+from banca.utils.clabe import es_cuenta_inguz
+from banca.schemas.transaccionSchema import UserType
 from banca.models import (InguzTransaction, StatusTrans, TipoTransaccion,
                           Transaccion, NotificacionCobro)
 from demograficos.models.userProfile import UserProfile
 from demograficos.models import Contacto
-from banca.schemas.transaccionSchema import UserType
-import logging
+from spei.stpTools import randomString
+from django.conf import settings
+
+
+URL_IMAGEN = settings.URL_IMAGEN
 
 
 class InguzType(DjangoObjectType):
@@ -44,7 +50,7 @@ class CreateInguzTransaccion(graphene.Mutation):
             ordenante = info.context.user
         except Exception:
             raise Exception('Usuario inexistente')
-        if ordenante.Uprofile.cuentaClabe[:10] != "6461802180":
+        if not es_cuenta_inguz(ordenante.Uprofile.cuentaClabe):
             raise Exception("Cuenta ordenante no es Inguz")
         if UserProfile.objects.filter(user=ordenante).count() == 0:
             raise Exception('Usuario sin perfil')
@@ -60,7 +66,7 @@ class CreateInguzTransaccion(graphene.Mutation):
         except Exception:
             raise Exception("Contacto no valido")
 
-        if contacto.clabe[:10] != "6461802180":  # Inguz
+        if not es_cuenta_inguz(contacto.clabe):  # Inguz
             raise Exception("Cuenta de beneficiario no es inguz")
 
         if float(abono) <= 0:
@@ -99,7 +105,7 @@ class CreateInguzTransaccion(graphene.Mutation):
             ordenante=ordenante,
             fechaOperacion=fecha,
             contacto=contacto,
-            transaccion=main_trans
+            transaccion=main_trans,
         )
 
         if cobro_id is not None:
@@ -133,6 +139,26 @@ class CreateInguzTransaccion(graphene.Mutation):
         )
 
 
+class UrlImagenComprobanteInguz(graphene.Mutation):
+
+    url = graphene.String()
+
+    class Arguments:
+        token = graphene.String(required=True)
+        id = graphene.Int(required=True)
+
+    def mutate(self, info, token, id):
+        user = info.context.user
+        if not user.is_anonymous:
+            transaccion = InguzTransaction.objects.get(id=id)
+            transaccion.comprobante_img = URL_IMAGEN
+            transaccion.url_comprobante = URL_IMAGEN
+            transaccion.save()
+            url = transaccion.url_comprobante
+            return UrlImagenComprobanteInguz(url=url)
+
+
 # 4
 class Mutation(graphene.ObjectType):
     create_inguz_transaccion = CreateInguzTransaccion.Field()
+    url_imagen_comprobante_inguz = UrlImagenComprobanteInguz.Field()

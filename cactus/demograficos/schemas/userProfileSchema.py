@@ -1,17 +1,24 @@
 # flake8: noqa
-from re import U
+import logging
 import graphene
 import datetime
 import json
 import os
+
+from re import U
 from random import randint
 
 from graphene_django.types import DjangoObjectType
 from graphql_jwt.decorators import login_required
 from graphql_jwt.shortcuts import get_token
 
-from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
+from django.http import HttpRequest
+from django.contrib.auth.models import User
+from demograficos.models import GeoLocation, GeoDevice, UserLocation
+from django.contrib.auth import authenticate
+from django.utils import timezone
+
 from demograficos.models.userProfile import (RespuestaSeguridad,
                                              PreguntaSeguridad,
                                              UserProfile,
@@ -36,12 +43,11 @@ from demograficos.models.profileChecks import (ComponentValidated,
                                                register_device)
 from demograficos.models.documentos import (DocAdjunto, DocAdjuntoTipo,
                                             DocExtraction)
-from django.utils import timezone
+
 from banca.models.entidades import CodigoConfianza
+from banca.utils.clabe import es_cuenta_inguz
+
 from spei.models import InstitutionBanjico
-from django.contrib.auth import authenticate
-from django.http import HttpRequest
-import logging
 
 
 db_logger = logging.getLogger("db")
@@ -158,6 +164,54 @@ class AvatarType(graphene.ObjectType):
     id = graphene.Int()
     name = graphene.String()
     url = graphene.String()
+
+
+class ContactoInguzType(graphene.ObjectType):
+    id = graphene.Int()
+    alias = graphene.String()
+    username = graphene.String()
+    nombre = graphene.String()
+    url = graphene.String()
+
+    def resolve_alias(self, info):
+        return self.Uprofile.alias
+
+    def resolve_nombre(self, info):
+        return self.get_full_name()
+
+    def resolve_url(self, info):
+        return self.Uprofile.avatar_url
+
+
+class BuscadorInguzType(graphene.ObjectType):
+    id = graphene.Int()
+    alias = graphene.String()
+    nombre = graphene.String()
+    apPaterno = graphene.String()
+    apMaterno = graphene.String()
+    clabe = graphene.String()
+    url = graphene.String()
+
+    def resolve_id(self, info):
+        return self.user.id
+
+    def resolve_alias(self, info):
+        return self.alias
+
+    def resolve_nombre(self, info):
+        return self.user.first_name
+
+    def resolve_apPaterno(self, info):
+        return self.user.last_name
+
+    def resolve_apMaterno(self, info):
+        return self.apMaterno
+
+    def resolve_clabe(self, info):
+        return self.cuentaClabe
+
+    def resolve_url(self, info):
+        return self.avatar_url
 
 
 class Query(object):
@@ -367,7 +421,7 @@ class Query(object):
             dicc['id'] = avatar.id
             dicc['name'] = avatar.name
             try:
-                dicc['url'] = str(avatar.avatar_img.url)
+                dicc['url'] = str((avatar.avatar_img.url).split("?")[0])
             except Exception:
                 dicc['url'] = "Objeto sin imagen"
             qs.append(dicc)
@@ -766,12 +820,18 @@ class Query(object):
     def resolve_all_contactos(self, info, **kwargs):
         user = info.context.user
         for contacto in user.Contactos_Usuario.all():
-            if contacto.clabe[:10] == "6461802180":
+            if es_cuenta_inguz(contacto.clabe):
                 try:
                     contacto_user = UserProfile.objects.get(
                         cuentaClabe=contacto.clabe, status="O").user
                     contacto.alias_inguz = contacto_user.Uprofile.alias
-                    contacto.avatar_url = contacto_user.Uprofile.avatar.avatar_img.url
+                    if contacto_user.Uprofile.avatar:
+                        contacto.avatar_url = (
+                            contacto_user.Uprofile.avatar.avatar_img.url
+                        ).split("?")[0]
+                    else:
+                        contacto.avatar_url = (Avatar.objects.get(
+                            id=1).avatar_img.url).split("?")[0]
                 except Exception:
                     contacto.alias_inguz = "Cuenta inguz no encontrada"
                 contacto.save()
@@ -913,6 +973,10 @@ class Query(object):
         if not user.is_anonymous:
             UP = UserProfile.objects.filter(user=user)
             if (len(UP) == 1):
+                if UP[0].avatar:
+                    url = UP[0].avatar.avatar_img.url
+                    UP[0].avatar_url = url.split("?")[0]
+                    UP[0].save()
                 return UP[0]
             return None
         return None
@@ -1363,36 +1427,48 @@ class CreateUser(graphene.Mutation):
 
     def mutate(self, info, username, codigo_referencia=None,
                password=None, test=False):
+        uuid = info.context.headers.get("Device-Id")
+        lat = info.context.headers.get("Location-Lat")
+        lon = info.context.headers.get("Location-Lon")
+        if not (lat and lon and uuid) and not test:
+            raise Exception("Faltan headers en la petición")
         try:
             user = User.objects.get(username=username)
             return Exception("Ya existe un usuario con ese número")
         except Exception:
             try:
-                telefono = Telefono.objects.filter(
+                telefono = Telefono.objects.get(
                     telefono=username,
+<< << << < HEAD
                     activo=False,
                     validado=True).last()
+
+
+== == == =
+                    activo = True,
+                    validado = True)
+>> >>>> > origin/staging
             except Exception:
                 raise Exception("El teléfono no ha sido validado")
             if password is not None:
                 if codigo_referencia is None:
-                    codigoconfianza = None
+                    codigoconfianza=None
                 else:
-                    codigo_referencia = codigo_referencia.strip()
+                    codigo_referencia=codigo_referencia.strip()
                     try:
-                        codigoconfianza = CodigoConfianza.objects.get(
-                            codigo_referencia=codigo_referencia)
+                        codigoconfianza=CodigoConfianza.objects.get(
+                            codigo_referencia = codigo_referencia)
                     except CodigoConfianza.DoesNotExist:
                         raise ValueError("Codigo de referencia invalido")
-                username = username.strip()
-                user = User.objects.create(username=username)
+                username=username.strip()
+                user=User.objects.create(username = username)
                 user.set_password(password)
-                user.is_active = True
+                user.is_active=True
                 user.save()
-                UP = UserProfile.objects.get(user=user)
-                stat = StatusRegistro.objects.get(pk=1)
-                UP.statusRegistro = stat
-                site = os.getenv("SITE", "local")
+                UP=UserProfile.objects.get(user = user)
+                stat=StatusRegistro.objects.get(pk = 1)
+                UP.statusRegistro=stat
+                site=os.getenv("SITE", "local")
                 if ((site == "test") | (site == "stage") | (site == "prod")):
                     UP.saldo_cuenta = 0  # Verificar ambientes de desarrollo
                 UP.usuarioCodigoConfianza = codigoconfianza
@@ -1402,18 +1478,21 @@ class CreateUser(graphene.Mutation):
                     telefono.validado = True
                     telefono.activo = True
                     telefono.save()
-                    try:
-                        register_device(user=user)
-                    except Exception as e:
-                        motivo = str(e)
-                        valid = False
-                        InfoValidator.setComponentValidated('telefono',
-                                                            user,
-                                                            valid,
-                                                            motivo)
-                        msg = "[Enrolamiento] Falla en register_device al \
-                            crear user. Error: {}.".format(e)
-                        db_logger.error(msg)
+                    geo = GeoLocation.objects.create(
+                        lat=lat,
+                        lon=lon,
+                    )
+                    device = GeoDevice.objects.create(
+                        uuid=uuid,
+                        username=username,
+                    )
+                    UserLocation.objects.create(
+                        user=user,
+                        location=geo,
+                        device=device,
+                        date=timezone.now()
+                    )
+                    register_device(user=user)
                 return CreateUser(user=user, codigoconfianza=codigoconfianza)
             else:
                 return CreateUser(user=None)
@@ -1771,11 +1850,12 @@ class UpdateInfoPersonal(graphene.Mutation):
             u_profile.curp = curp if curp else u_profile.curp
             alias = alias if alias else u_profile.alias
             if alias and alias != u_profile.alias:
-                if UserProfile.objects.filter(alias=alias).count() == 0:
+                if UserProfile.objects.filter(alias__iexact=alias).count() == 0:
                     u_profile.alias = alias if alias else u_profile.alias
                 else:
                     raise AssertionError(
-                        "El Alias elegido ya pertenece a otro usuario"
+                        "Este alias ya fue tomado por otro cliente, " \
+                            "intenta algo diferente"
                     )
             elif alias and alias == u_profile.alias:
                 pass
@@ -1789,19 +1869,21 @@ class UpdateInfoPersonal(graphene.Mutation):
             if avatarId:
                 try:
                     avatarObject = Avatar.objects.get(id=avatarId)
-                    u_profile.avatar = (
-                        avatarObject if avatarObject else u_profile.avatar)
-                    u_profile.avatar_url = u_profile.avatar.avatar_img.url
+                    u_profile.avatar = avatarObject
+                    u_profile.avatar_url = (
+                        u_profile.avatar.avatar_img.url).split("?")[0]
                 except Exception:
-                    u_profile.avatar_url = None
                     raise AssertionError("Imagen de perfil inválida")
-            else:
-                u_profile.avatar_url = None
+            elif (not avatarId) and (not u_profile.avatar):
+                avatarObject = Avatar.objects.get(id=1)
+                u_profile.avatar = avatarObject
+                u_profile.avatar_url = (
+                        u_profile.avatar.avatar_img.url).split("?")[0]
             rfc_valida = rfc if rfc else u_profile.rfc
             if not u_profile.curp:
                 pass
             elif (rfc_valida is None or rfc_valida == "null") \
-                and u_profile.curp:
+                    and u_profile.curp:
                 u_profile.rfc = u_profile.curp[:10]
             elif (u_profile.rfc) == u_profile.curp[:10]:
                 pass
@@ -1829,7 +1911,6 @@ class UpdateInfoPersonal(graphene.Mutation):
             except Exception as ex:
                 AssertionError('Error al registrar la cuenta clabe.',
                                ex)
-
         return UpdateInfoPersonal(user=user, profile_valid=validities)
 
 
@@ -2272,7 +2353,9 @@ mutation{
             raise AssertionError(
                 'CLABE inválida, no existe banco válido para esa CLABE:',
                 e)
-        if Contacto.objects.filter(user=user, clabe=clabe, activo=True).count() > 0:
+        if Contacto.objects.filter(user=user,
+                                   clabe=clabe,
+                                   activo=True).count() > 0:
             raise ValueError(
                 "Ya tienes esta CLABE guardada en otro contacto")
         if not user.is_anonymous:
@@ -2282,18 +2365,139 @@ mutation{
             clabe = clabe.strip()
             nombre_completo = str(nombre) + " " + str(
                 ap_paterno) + " " + str(ap_materno)
+            es_inguz = es_cuenta_inguz(clabe)
             contacto = Contacto.objects.create(nombre=nombre,
                                                ap_paterno=ap_paterno,
                                                ap_materno=ap_materno,
                                                nombreCompleto=nombre_completo,
                                                banco=name_banco,
                                                clabe=clabe,
-                                               user=user)
-
+                                               user=user,
+                                               es_inguz=es_inguz)
             # contacto.save()
         return CreateContacto(
             contacto=contacto,
             all_contactos=user.Contactos_Usuario.all())
+
+
+class VerifyAddContactos(graphene.Mutation):
+    contactos = graphene.List(ContactosType)
+    creados = graphene.List(ContactosType)
+    disponibles = graphene.List(ContactoInguzType)
+
+    class Arguments:
+        agenda = graphene.List(graphene.String)
+        token = graphene.String(required=True)
+        agregar = graphene.Boolean()
+
+    @login_required
+    def mutate(self, info, token, agenda, agregar=False):
+        user = info.context.user
+        clabes_agenda = list(map(
+            lambda contacto: contacto.clabe,
+            user.Contactos_Usuario.all()))
+        usuarios_inguz = User.objects.filter(
+            username__in=agenda).filter(
+                is_staff=False).exclude(
+                    username=user.username).exclude(
+                        Uprofile__cuentaClabe__in=clabes_agenda)
+
+        if agregar:
+            lista_creados = []
+            for usuario_inguz in usuarios_inguz:
+                clabe = usuario_inguz.Uprofile.cuentaClabe.strip()
+
+                # Validamos para que no se duplique
+                if Contacto.objects.filter(
+                        user=user, clabe=clabe, activo=True).count() == 0:
+                    try:
+                        nombre = usuario_inguz.first_name.strip()
+                        ap_paterno = usuario_inguz.last_name.strip()
+                        ap_materno = usuario_inguz.Uprofile.apMaterno.strip()
+                        nombre_completo = str(nombre) + " " + str(
+                            ap_paterno) + " " + str(ap_materno)
+                        contacto = Contacto.objects.create(
+                            nombre=nombre,
+                            ap_paterno=ap_paterno,
+                            ap_materno=ap_materno,
+                            nombreCompleto=nombre_completo,
+                            banco="STP",
+                            clabe=clabe,
+                            user=user,
+                            es_inguz=True
+                        )
+                        if contacto:
+                            lista_creados.append(contacto)
+                    except Exception as ex:
+                        print("ex: ", ex)
+                        msg = "[VerifyAddContactos] Error al crear contacto {}"
+                        msg = msg.format(ex)
+                        db_logger.error(msg)
+            return VerifyAddContactos(
+                contactos=user.Contactos_Usuario.all(),
+                creados=lista_creados)
+
+        return VerifyAddContactos(
+            contactos=user.Contactos_Usuario.all(),
+            disponibles=usuarios_inguz,
+            creados=[])
+
+
+class BlockContacto(graphene.Mutation):
+
+    contacto = graphene.Field(ContactosType)
+    details = graphene.String()
+
+    class Arguments:
+        token = graphene.String(required=True)
+        bloquear = graphene.Boolean(required=True)
+        clabe = graphene.String(required=True)
+
+    def mutate(self, info, token, bloquear, clabe):
+
+        user = info.context.user
+        if Contacto.objects.filter(user=user,
+                                   clabe=clabe,
+                                   activo=True).count() > 0:
+            contacto = Contacto.objects.filter(clabe=clabe).update(
+                                                                bloqueado=True)
+            contacto = Contacto.objects.filter(clabe=clabe).first()
+            return BlockContacto(contacto=contacto, details='Contacto Bloqueado')
+        else:
+            usuario_inguz = UserProfile.objects.filter(cuentaClabe=clabe)
+            if usuario_inguz.count() == 0:
+                raise AssertionError('No existe el usuario con esta clabe')
+            usuario_inguz = usuario_inguz.first()
+            es_inguz = es_cuenta_inguz(clabe)
+            try:
+                nombre_banco = InstitutionBanjico.objects.get(
+                    short_id=str(clabe[:3])).short_name
+            except Exception as e:
+                raise AssertionError(
+                    'CLABE invalida, no existe banco valido para esa CLABE:', e)
+            try:
+                nombre = usuario_inguz.user.first_name.strip()
+                ap_paterno = usuario_inguz.user.last_name.strip()
+                ap_materno = usuario_inguz.apMaterno.strip()
+                nombre_completo = str(nombre) + " " + str(
+                    ap_paterno) + " " + str(ap_materno)
+                contacto = Contacto.objects.create(
+                    nombre=nombre,
+                    ap_paterno=ap_paterno,
+                    ap_materno=ap_materno,
+                    nombreCompleto=nombre_completo,
+                    banco=nombre_banco,
+                    clabe=clabe,
+                    user=user,
+                    es_inguz=es_inguz,
+                    bloqueado=True
+                )
+            except Exception as ex:
+                print("ex: ", ex)
+                msg = "[BlockContacto] Error al crear contacto {}"
+                msg = msg.format(ex)
+                db_logger.error(msg)
+        return BlockContacto(contacto=contacto, details='Contacto Bloqueado')
 
 
 class UpdateContacto(graphene.Mutation):
@@ -2398,6 +2602,23 @@ class DeleteContacto(graphene.Mutation):
                               all_contactos=associated_user.
                               Contactos_Usuario.all())
 
+
+class BuscadorUsuarioInguz(graphene.Mutation):
+    resultado = graphene.List(BuscadorInguzType)
+
+    class Arguments:
+        token = graphene.String(required=True)
+        alias = graphene.String(graphene.String)
+        max_coincidencias =graphene.Int()
+
+    @login_required
+    def mutate(self, info, token, alias, max_coincidencias=15):
+        query = UserProfile.objects.filter(
+            alias__startswith=alias).exclude(
+                alias__exact=(info.context.user.Uprofile.alias))
+        if query.count() > max_coincidencias:
+            query = query[:max_coincidencias]
+        return BuscadorUsuarioInguz(query.order_by('alias'))
 
 class CreateUpdatePregunta(graphene.Mutation):
     respuesta = graphene.Field(RespuestaType)
@@ -2816,7 +3037,7 @@ class UrlAvatar(graphene.Mutation):
     def mutate(self, info, token):
         user = info.context.user
         try:
-            avatar_url = user.Uprofile.avatar.avatar_img.url
+            avatar_url = (user.Uprofile.avatar.avatar_img.url).split("?")[0]
         except Exception:
             avatar_url = "Sin avatar"
 
@@ -2856,3 +3077,6 @@ class Mutation(graphene.ObjectType):
     registro_codi = RegistroCodi.Field()
     valida_codi = ValidaCodi.Field()
     url_avatar = UrlAvatar.Field()
+    verify_add_contactos = VerifyAddContactos.Field()
+    block_contacto = BlockContacto.Field()
+    buscador_usuario_inguz = BuscadorUsuarioInguz.Field()
