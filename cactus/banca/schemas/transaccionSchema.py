@@ -592,8 +592,8 @@ class CreateNotificacionCobro(graphene.Mutation):
         contacto = contacto.first()
         _valida(contacto.user != user,
                 'El contacto no pertenece al usuario.')
-        importe = float(importe)
-        _valida(importe <= 0,
+
+        _valida(float(importe) <= 0,
                 'El monto del cobro debe ser positivo.')
 
         usuario_contacto = get_user_model().objects.filter(
