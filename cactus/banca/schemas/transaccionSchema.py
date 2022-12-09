@@ -646,11 +646,11 @@ class DeclinarCobro(graphene.Mutation):
 
 class LiquidarCobro(graphene.Mutation):
     notificacion_cobro = graphene.Field(NotificacionCobroType)
-    user = graphene.Field(UserType)
 
     class Arguments:
         token = graphene.String(required=True)
         cobro_id = graphene.Int(required=True)
+        nip = graphene.String(required=True)
 
     @login_required
     def mutate(self, info, token, nip, cobro_id):
