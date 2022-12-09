@@ -14,7 +14,8 @@ from banca.models.transaccion import (Transaccion,
                                       TipoAnual,
                                       SaldoReservado)
 from banca.models.catalogos import TipoTransaccion
-from banca.models import NotificacionCobro
+from banca.models import NotificacionCobro, InguzTransaction
+from banca.utils.clabe import es_cuenta_inguz
 
 from spei.models import StpTransaction
 from spei.stpTools import randomString
@@ -573,7 +574,7 @@ class CreateNotificacionCobro(graphene.Mutation):
         concepto = graphene.String(required=True)
         nip = graphene.String(required=True)
 
-    @ login_required
+    @login_required
     def mutate(self, info, token, contacto_id, importe, concepto, nip):
         def _valida(expr, msg):
             if expr:
@@ -621,7 +622,7 @@ class DeclinarCobro(graphene.Mutation):
         token = graphene.String(required=True)
         cobro_id = graphene.Int(required=True)
 
-    @ login_required
+    @login_required
     def mutate(self, info, token, cobro_id):
         def _valida(expr, msg):
             if expr:
@@ -632,10 +633,85 @@ class DeclinarCobro(graphene.Mutation):
                 'Cobro inexistente.')
         cobro = cobro.first()
         _valida(cobro.status == NotificacionCobro.LIQUIDADO,
-                'El cobro ya fue liquidado.')
+                'El cobro ya fue liquidado previamente.')
         _valida(cobro.status == NotificacionCobro.DECLINADO,
                 'El cobro ya fue declinado proviamente.')
         cobro.status = NotificacionCobro.DECLINADO
+        cobro.save()
+
+        return CreateNotificacionCobro(
+            notificacion_cobro=cobro
+        )
+
+
+class LiquidarCobro(graphene.Mutation):
+    notificacion_cobro = graphene.Field(NotificacionCobroType)
+    user = graphene.Field(UserType)
+
+    class Arguments:
+        token = graphene.String(required=True)
+        cobro_id = graphene.Int(required=True)
+
+    @login_required
+    def mutate(self, info, token, cobro_id):
+        def _valida(expr, msg):
+            if expr:
+                raise Exception(msg)
+
+        cobro = NotificacionCobro.objects.filter(pk=cobro_id)
+        _valida(cobro.count() == 0,
+                f"No existe cobro con ID {cobro_id}")
+
+        cobro = cobro.first()
+        _valida(cobro.status == NotificacionCobro.LIQUIDADO,
+                'El cobro ya fue liquidado previamente.')
+        _valida(cobro.status == NotificacionCobro.DECLINADO,
+                'El cobro ya fue declinado proviamente.')
+
+        beneficiario = cobro.usuario_solicitante
+        ordenante = info.context.user
+        _valida(ordenante != cobro.usuario_deudor,
+                'Tu usuario no coincide con el del cobro')
+
+        if not es_cuenta_inguz(ordenante.Uprofile.cuentaClabe):
+            raise Exception("Cuenta ordenante no es Inguz")
+        if not es_cuenta_inguz(beneficiario.Uprofile.cuentaClabe):
+            raise Exception("Cuenta beneficiario no es Inguz")
+
+        fecha = timezone.now()
+        claveR = randomString()
+        importe = cobro.importe
+        monto2F = "{:.2f}".format(round(float(importe), 2))
+        status = StatusTrans.objects.get(nombre="exito")
+        tipo = TipoTransaccion.objects.get(codigo=13)
+
+        # Actualizamos saldo del usuario
+        _valida(float(importe) > ordenante.Uprofile.saldo_cuenta,
+                'Saldo insuficiente')
+        ordenante.Uprofile.saldo_cuenta -= round(float(importe), 2)
+        ordenante.Uprofile.save()
+        beneficiario.Uprofile.saldo_cuenta += round(float(importe), 2)
+        beneficiario.Uprofile.save()
+
+        concepto = "Liquidación de cobro"
+        main_trans = Transaccion.objects.create(
+            user=ordenante,
+            fechaValor=fecha,
+            monto=float(importe),
+            statusTrans=status,
+            tipoTrans=tipo,
+            concepto=concepto,
+            claveRastreo=claveR
+        )
+        inguz_transaccion = InguzTransaction.objects.create(
+            monto=monto2F,
+            concepto=concepto,
+            ordenante=ordenante,
+            fechaOperacion=fecha,
+            transaccion=main_trans,
+        )
+        cobro.transaccion = inguz_transaccion
+        cobro.status = NotificacionCobro.LIQUIDADO
         cobro.save()
 
         return CreateNotificacionCobro(
@@ -647,3 +723,4 @@ class Mutation(graphene.ObjectType):
     create_transferencia_enviada = CreateTransferenciaEnviada.Field()
     create_notificacion_cobro = CreateNotificacionCobro.Field()
     declinar_cobro = DeclinarCobro.Field()
+    liquidar_cobro = LiquidarCobro.Field()
