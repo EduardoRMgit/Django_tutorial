@@ -181,7 +181,8 @@ class ContactoInguzType(graphene.ObjectType):
 
     def resolve_url(self, info):
         return self.Uprofile.avatar_url
-    
+
+
 class BuscadorInguzType(graphene.ObjectType):
     id = graphene.Int()
     alias = graphene.String()
@@ -1846,8 +1847,8 @@ class UpdateInfoPersonal(graphene.Mutation):
                     u_profile.alias = alias if alias else u_profile.alias
                 else:
                     raise AssertionError(
-                        "Este alias ya fue tomado por otro cliente, " \
-                            "intenta algo diferente"
+                        "Este alias ya fue tomado por otro cliente, "
+                        "intenta algo diferente"
                     )
             elif alias and alias == u_profile.alias:
                 pass
@@ -1870,7 +1871,7 @@ class UpdateInfoPersonal(graphene.Mutation):
                 avatarObject = Avatar.objects.get(id=1)
                 u_profile.avatar = avatarObject
                 u_profile.avatar_url = (
-                        u_profile.avatar.avatar_img.url).split("?")[0]
+                    u_profile.avatar.avatar_img.url).split("?")[0]
             rfc_valida = rfc if rfc else u_profile.rfc
             if not u_profile.curp:
                 pass
@@ -2380,10 +2381,16 @@ class VerifyAddContactos(graphene.Mutation):
     class Arguments:
         agenda = graphene.List(graphene.String)
         token = graphene.String(required=True)
+        nip = graphene.String()
         agregar = graphene.Boolean()
 
     @login_required
-    def mutate(self, info, token, agenda, agregar=False):
+    def mutate(self, info, token, agenda, nip, agregar=False):
+
+        def _valida(expr, msg):
+            if expr:
+                raise Exception(msg)
+
         user = info.context.user
         clabes_agenda = list(map(
             lambda contacto: contacto.clabe,
@@ -2395,6 +2402,12 @@ class VerifyAddContactos(graphene.Mutation):
                         Uprofile__cuentaClabe__in=clabes_agenda)
 
         if agregar:
+
+            _valida(user.Uprofile.password is None,
+                    'El usuario no ha establecido su NIP.')
+            _valida(not user.Uprofile.check_password(nip),
+                    'El NIP es incorrecto.')
+
             lista_creados = []
             for usuario_inguz in usuarios_inguz:
                 clabe = usuario_inguz.Uprofile.cuentaClabe.strip()
@@ -2452,7 +2465,7 @@ class BlockContacto(graphene.Mutation):
                                    clabe=clabe,
                                    activo=True).count() > 0:
             contacto = Contacto.objects.filter(clabe=clabe).update(
-                                                                bloqueado=True)
+                bloqueado=True)
             contacto = Contacto.objects.filter(clabe=clabe).first()
             return BlockContacto(contacto=contacto, details='Contacto Bloqueado')
         else:
@@ -2601,7 +2614,7 @@ class BuscadorUsuarioInguz(graphene.Mutation):
     class Arguments:
         token = graphene.String(required=True)
         alias = graphene.String(graphene.String)
-        max_coincidencias =graphene.Int()
+        max_coincidencias = graphene.Int()
 
     @login_required
     def mutate(self, info, token, alias, max_coincidencias=15):
@@ -2611,6 +2624,7 @@ class BuscadorUsuarioInguz(graphene.Mutation):
         if query.count() > max_coincidencias:
             query = query[:max_coincidencias]
         return BuscadorUsuarioInguz(query.order_by('alias'))
+
 
 class CreateUpdatePregunta(graphene.Mutation):
     respuesta = graphene.Field(RespuestaType)
