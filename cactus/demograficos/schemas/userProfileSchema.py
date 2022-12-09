@@ -2385,7 +2385,7 @@ class VerifyAddContactos(graphene.Mutation):
         agregar = graphene.Boolean()
 
     @login_required
-    def mutate(self, info, token, agenda, nip, agregar=False):
+    def mutate(self, info, token, agenda, nip=None, agregar=False):
 
         def _valida(expr, msg):
             if expr:
