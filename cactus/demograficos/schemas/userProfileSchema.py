@@ -1439,22 +1439,15 @@ class CreateUser(graphene.Mutation):
             try:
                 telefono = Telefono.objects.get(
                     telefono=username,
-<< << << < HEAD
-                    activo=False,
-                    validado=True).last()
-
-
-== == == =
-                    activo = True,
-                    validado = True)
->> >>>> > origin/staging
+                    activo=True,
+                    validado=True)
             except Exception:
                 raise Exception("El teléfono no ha sido validado")
             if password is not None:
                 if codigo_referencia is None:
-                    codigoconfianza=None
+                    codigoconfianza = None
                 else:
-                    codigo_referencia=codigo_referencia.strip()
+                    codigo_referencia = codigo_referencia.strip()
                     try:
                         codigoconfianza=CodigoConfianza.objects.get(
                             codigo_referencia = codigo_referencia)
