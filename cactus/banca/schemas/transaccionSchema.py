@@ -653,7 +653,7 @@ class LiquidarCobro(graphene.Mutation):
         cobro_id = graphene.Int(required=True)
 
     @login_required
-    def mutate(self, info, token, cobro_id):
+    def mutate(self, info, token, nip, cobro_id):
         def _valida(expr, msg):
             if expr:
                 raise Exception(msg)
@@ -673,10 +673,16 @@ class LiquidarCobro(graphene.Mutation):
         _valida(ordenante != cobro.usuario_deudor,
                 'Tu usuario no coincide con el del cobro')
 
-        if not es_cuenta_inguz(ordenante.Uprofile.cuentaClabe):
-            raise Exception("Cuenta ordenante no es Inguz")
-        if not es_cuenta_inguz(beneficiario.Uprofile.cuentaClabe):
-            raise Exception("Cuenta beneficiario no es Inguz")
+        _valida(UserProfile.objects.filter(user=ordenante).count() == 0,
+                'Usuario sin perfil')
+        _valida(not ordenante.Uprofile.password,
+                "Usuario no ha establecido nip")
+        _valida(not ordenante.Uprofile.check_password(nip),
+                'Nip incorrecto')
+        _valida(not es_cuenta_inguz(ordenante.Uprofile.cuentaClabe),
+                "Cuenta ordenante no es Inguz")
+        _valida(not es_cuenta_inguz(beneficiario.Uprofile.cuentaClabe),
+                "Cuenta beneficiario no es Inguz")
 
         fecha = timezone.now()
         claveR = randomString()
