@@ -1,5 +1,5 @@
 from django.contrib import admin
-from banca.models import InguzTransaction
+from banca.models import InguzTransaction, NotificacionCobro
 
 
 class InguzTransaccionAdmin(admin.ModelAdmin):
@@ -9,8 +9,8 @@ class InguzTransaccionAdmin(admin.ModelAdmin):
                      'ordenante__id',
                      )
     list_filter = (
-                   'statusTrans',
-                   )
+        'statusTrans',
+    )
     list_display = ('id',
                     'ordenante',
                     'monto',
@@ -21,3 +21,4 @@ class InguzTransaccionAdmin(admin.ModelAdmin):
 
 
 admin.site.register(InguzTransaction, InguzTransaccionAdmin)
+admin.site.register(NotificacionCobro)

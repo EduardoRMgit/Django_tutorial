@@ -1449,19 +1449,19 @@ class CreateUser(graphene.Mutation):
                 else:
                     codigo_referencia = codigo_referencia.strip()
                     try:
-                        codigoconfianza = CodigoConfianza.objects.get(
-                            codigo_referencia=codigo_referencia)
+                        codigoconfianza=CodigoConfianza.objects.get(
+                            codigo_referencia = codigo_referencia)
                     except CodigoConfianza.DoesNotExist:
                         raise ValueError("Codigo de referencia invalido")
-                username = username.strip()
-                user = User.objects.create(username=username)
+                username=username.strip()
+                user=User.objects.create(username = username)
                 user.set_password(password)
-                user.is_active = True
+                user.is_active=True
                 user.save()
-                UP = UserProfile.objects.get(user=user)
-                stat = StatusRegistro.objects.get(pk=1)
-                UP.statusRegistro = stat
-                site = os.getenv("SITE", "local")
+                UP=UserProfile.objects.get(user = user)
+                stat=StatusRegistro.objects.get(pk = 1)
+                UP.statusRegistro=stat
+                site=os.getenv("SITE", "local")
                 if ((site == "test") | (site == "stage") | (site == "prod")):
                     UP.saldo_cuenta = 0  # Verificar ambientes de desarrollo
                 UP.usuarioCodigoConfianza = codigoconfianza
