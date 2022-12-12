@@ -2502,7 +2502,33 @@ class BlockContacto(graphene.Mutation):
                 msg = "[BlockContacto] Error al crear contacto {}"
                 msg = msg.format(ex)
                 db_logger.error(msg)
-        return BlockContacto(contacto=contacto, details='Contacto Bloqueado')
+            return BlockContacto(contacto=contacto, details='Contacto Bloqueado')
+
+
+class UnBlokckContacto(graphene.Mutation):
+
+    contacto = graphene.Field(ContactosType)
+    details = graphene.String()
+
+    class Arguments:
+        token = graphene.String(required=True)
+        id = graphene.Int(required=True)
+        agregar = graphene.Boolean()
+
+    def mutate(self, info, token, id, agregar=None):
+
+        user = info.context.user
+        if not user.is_anonymous:
+            contacto = user.Contactos_Usuario.get(pk=id)
+            if agregar is True:
+                contacto.bloqueado = False
+                contacto.save()
+            else:
+                contacto.bloqueado = False
+                contacto.activo = False
+                contacto.save()
+            return UnBlokckContacto(contacto=contacto,
+                                    details='Contacto Desbloqueado')
 
 
 class UpdateContacto(graphene.Mutation):
@@ -3086,3 +3112,4 @@ class Mutation(graphene.ObjectType):
     verify_add_contactos = VerifyAddContactos.Field()
     block_contacto = BlockContacto.Field()
     buscador_usuario_inguz = BuscadorUsuarioInguz.Field()
+    unblock_contacto = UnBlokckContacto.Field()
