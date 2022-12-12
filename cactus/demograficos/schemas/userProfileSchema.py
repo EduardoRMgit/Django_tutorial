@@ -2505,7 +2505,7 @@ class BlockContacto(graphene.Mutation):
             return BlockContacto(contacto=contacto, details='Contacto Bloqueado')
 
 
-class UnBlokckContacto(graphene.Mutation):
+class UnBlockContacto(graphene.Mutation):
 
     contacto = graphene.Field(ContactosType)
     details = graphene.String()
@@ -2523,11 +2523,11 @@ class UnBlokckContacto(graphene.Mutation):
             if agregar is True:
                 contacto.bloqueado = False
                 contacto.save()
-            else:
+            if agregar is False:
                 contacto.bloqueado = False
                 contacto.activo = False
                 contacto.save()
-            return UnBlokckContacto(contacto=contacto,
+            return UnBlockContacto(contacto=contacto,
                                     details='Contacto Desbloqueado')
 
 
@@ -3112,4 +3112,4 @@ class Mutation(graphene.ObjectType):
     verify_add_contactos = VerifyAddContactos.Field()
     block_contacto = BlockContacto.Field()
     buscador_usuario_inguz = BuscadorUsuarioInguz.Field()
-    unblock_contacto = UnBlokckContacto.Field()
+    unblock_contacto = UnBlockContacto.Field()
