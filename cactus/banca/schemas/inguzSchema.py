@@ -147,6 +147,7 @@ class UrlImagenComprobanteInguz(graphene.Mutation):
         token = graphene.String(required=True)
         id = graphene.Int(required=True)
 
+    @login_required
     def mutate(self, info, token, id):
         user = info.context.user
         if not user.is_anonymous:
@@ -158,7 +159,45 @@ class UrlImagenComprobanteInguz(graphene.Mutation):
             return UrlImagenComprobanteInguz(url=url)
 
 
+class UrlImagenComprobanteCobro(graphene.Mutation):
+
+    url = graphene.String()
+
+    class Arguments:
+        token = graphene.String(required=True)
+        id = graphene.Int(required=True)
+        tipo_comprobante = graphene.String()
+
+    @login_required
+    def mutate(self, info, token, id, tipo_comprobante):
+        user = info.context.user
+        if not user.is_anonymous:
+            if tipo_comprobante == "notificacion":
+                try:
+                    transaccion = NotificacionCobro.objects.get(
+                        id=id)
+                    url = URL_IMAGEN
+                except Exception:
+                    raise Exception("id de cobro no válido")
+            elif tipo_comprobante == "pago":
+                try:
+                    transaccion = NotificacionCobro.objects.get(id=id)
+                except Exception:
+                    raise Exception("id de cobro no válido")
+                if transaccion.status == "L":
+                    url = URL_IMAGEN
+                else:
+                    raise Exception("Cobro no liquidado")
+            else:
+                raise Exception(
+                    "Ingrese un tipo válido ('notificacion' "
+                    "o 'pago')."
+                )
+            return UrlImagenComprobanteCobro(url=url)
+
+
 # 4
 class Mutation(graphene.ObjectType):
     create_inguz_transaccion = CreateInguzTransaccion.Field()
     url_imagen_comprobante_inguz = UrlImagenComprobanteInguz.Field()
+    url_imagen_comprobante_cobro = UrlImagenComprobanteCobro.Field()
