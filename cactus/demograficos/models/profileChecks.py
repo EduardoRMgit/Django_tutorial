@@ -10,7 +10,7 @@ from demograficos.models.userProfile import (RespuestaSeguridad,
                                              UserProfile)
 from demograficos.models.telefono import Telefono
 from demograficos.models.adminUtils import adminUtils
-from renapo.renapo_call import check_renapo
+# from renapo.renapo_call import check_renapo
 from django.forms import ValidationError
 from django.dispatch import receiver
 from django.db.models.signals import post_save
