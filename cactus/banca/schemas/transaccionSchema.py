@@ -1,6 +1,6 @@
 import graphene
 
-from datetime import datetime, timedelta
+from datetime import datetime
 
 from django.utils import timezone
 from django.contrib.auth import get_user_model
@@ -397,11 +397,7 @@ class Query(object):
         cobros = user.mis_notificaciones_cobro.all()
         if not user.is_anonymous:
             for cobro in cobros:
-                pendiente = NotificacionCobro.PENDIENTE
-                if (
-                        timezone.now() - cobro.fecha
-                ) > timedelta(hours=48) and cobro.status == pendiente:
-                    cobro.status = NotificacionCobro.VENCIDO
+                cobro.valida_vencido()
                 contacto_solicitante = Contacto.objects.filter(
                     user=user).filter(
                         clabe=cobro.usuario_solicitante.Uprofile.cuentaClabe)
@@ -636,7 +632,12 @@ class DeclinarCobro(graphene.Mutation):
         cobro = NotificacionCobro.objects.filter(pk=cobro_id)
         _valida(cobro.count() == 0,
                 'Cobro inexistente.')
+
         cobro = cobro.first()
+        cobro.valida_vencido()
+
+        _valida(cobro.status == NotificacionCobro.VENCIDO,
+                'El cobro está vencido.')
         _valida(cobro.status == NotificacionCobro.LIQUIDADO,
                 'El cobro ya fue liquidado previamente.')
         _valida(cobro.status == NotificacionCobro.DECLINADO,
@@ -668,6 +669,10 @@ class LiquidarCobro(graphene.Mutation):
                 f"No existe cobro con ID {cobro_id}")
 
         cobro = cobro.first()
+        cobro.valida_vencido()
+
+        _valida(cobro.status == NotificacionCobro.VENCIDO,
+                'El cobro está vencido.')
         _valida(cobro.status == NotificacionCobro.LIQUIDADO,
                 'El cobro ya fue liquidado previamente.')
         _valida(cobro.status == NotificacionCobro.DECLINADO,

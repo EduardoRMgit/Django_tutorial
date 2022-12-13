@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
@@ -65,3 +67,10 @@ class NotificacionCobro(models.Model):
 
     def __str__(self):
         return str(self.importe)
+
+    def valida_vencido(self):
+        if (
+                timezone.now() - self.fecha
+        ) > timedelta(hours=48) and self.status == self.PENDIENTE:
+            self.status = self.VENCIDO
+            self.save()
