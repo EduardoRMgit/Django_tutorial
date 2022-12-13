@@ -1,6 +1,6 @@
 import graphene
 
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from django.utils import timezone
 from django.contrib.auth import get_user_model
@@ -397,6 +397,11 @@ class Query(object):
         cobros = user.mis_notificaciones_cobro.all()
         if not user.is_anonymous:
             for cobro in cobros:
+                pendiente = NotificacionCobro.PENDIENTE
+                if (
+                        timezone.now() - cobro.fecha
+                ) > timedelta(hours=48) and cobro.status == pendiente:
+                    cobro.status = NotificacionCobro.VENCIDO
                 contacto_solicitante = Contacto.objects.filter(
                     user=user).filter(
                         clabe=cobro.usuario_solicitante.Uprofile.cuentaClabe)
@@ -407,7 +412,7 @@ class Query(object):
                     # El solicitante no existe en los contactos del deudor
                     cobro.id_contacto_solicitante = -1
                 cobro.save()
-        return cobros
+        return cobros.order_by('fecha')
 
 
 class CreateTransferenciaEnviada(graphene.Mutation):

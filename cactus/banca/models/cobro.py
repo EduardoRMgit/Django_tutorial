@@ -9,10 +9,12 @@ class NotificacionCobro(models.Model):
     PENDIENTE = 'P'
     LIQUIDADO = 'L'
     DECLINADO = 'D'
+    VENCIDO = 'V'
     STATUS_COBRO = (
         (PENDIENTE, "Pendiente"),
         (LIQUIDADO, "Liquidado"),
         (DECLINADO, "Declinado"),
+        (VENCIDO, "Vencido"),
     )
     usuario_solicitante = models.ForeignKey(
         User,
