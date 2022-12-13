@@ -48,7 +48,7 @@ def register_device(user):
     device.user = user
     device.save()
     print('dispositivo {} se ha registrado por el usuario {}'.format(uuid,
-        user))
+                                                                     user))
 
 
 class InfoValidator(models.Model):
@@ -66,15 +66,15 @@ class InfoValidator(models.Model):
         (IN, 'INE'),
         (TEL, 'telefono'),
         (CBN, 'CreateBeneficiario')
-        )
+    )
 
     @classmethod
     def setComponentValidated(cls, alias, user, valid, motivo=''):
         profile_component = ProfileComponent.objects.get(alias=alias)
         component_validated = ComponentValidated.objects.get(
-                            user=user,
-                            component=profile_component
-                            )
+            user=user,
+            component=profile_component
+        )
         if valid:
             # print('setting checkpoint '+alias)
             component_validated.status = ComponentValidated.VALID
@@ -106,7 +106,14 @@ class InfoValidator(models.Model):
         dia = fNacimiento[2]
         nacimiento = "{}/{}/{}".format(dia, mes, año)
 
-        data, mensaje = check_renapo(curp)
+        # data, mensaje = check_renapo(curp)
+        data = {
+            'nombre_renapo': nombre,
+            'ap_pat_renapo': a_paterno,
+            'ap_mat_renapo': a_materno,
+            'fechNac_renapo': nacimiento
+        }
+        mensaje = ""
         valida = True
 
         try:
@@ -183,7 +190,6 @@ class InfoValidator(models.Model):
 
     @staticmethod
     def RFCValidado(rfc, user):
-
         """pasamos rfc a uppercase y comparamos con el patrón reggex"""
         pattern = re.compile(r'^([A-ZÑ&]{3,4})?(?:- ?)?(\d{2}(?:0[1-9]'
                              r'|1[0-2])(?:0[1-9]|[12]\d|3[01]))?(?:- ?)'
@@ -415,8 +421,8 @@ class ComponentValidated(models.Model):
 
     def __str__(self):
         return 'user {}, component: {}, status: {}'.format(
-                                            self.user,
-                                            self.component.alias, self.status)
+            self.user,
+            self.component.alias, self.status)
 
     # def save(self, *args, **kwargs):
     #     if not self.pk:
@@ -472,8 +478,8 @@ def populate_profile_validation(sender, instance, created, **kwargs):
                 print('adding user to component')
                 status = c.default_status
                 c.verified_status.add(
-                                        user,
-                                        through_defaults={'status': status})
+                    user,
+                    through_defaults={'status': status})
                 c.save()
 
         elif sender == ProfileComponent:
