@@ -397,6 +397,7 @@ class Query(object):
         cobros = user.mis_notificaciones_cobro.all()
         if not user.is_anonymous:
             for cobro in cobros:
+                cobro.valida_vencido()
                 contacto_solicitante = Contacto.objects.filter(
                     user=user).filter(
                         clabe=cobro.usuario_solicitante.Uprofile.cuentaClabe)
@@ -407,7 +408,7 @@ class Query(object):
                     # El solicitante no existe en los contactos del deudor
                     cobro.id_contacto_solicitante = -1
                 cobro.save()
-        return cobros
+        return cobros.order_by('fecha')
 
 
 class CreateTransferenciaEnviada(graphene.Mutation):
@@ -631,7 +632,12 @@ class DeclinarCobro(graphene.Mutation):
         cobro = NotificacionCobro.objects.filter(pk=cobro_id)
         _valida(cobro.count() == 0,
                 'Cobro inexistente.')
+
         cobro = cobro.first()
+        cobro.valida_vencido()
+
+        _valida(cobro.status == NotificacionCobro.VENCIDO,
+                'El cobro está vencido.')
         _valida(cobro.status == NotificacionCobro.LIQUIDADO,
                 'El cobro ya fue liquidado previamente.')
         _valida(cobro.status == NotificacionCobro.DECLINADO,
@@ -663,6 +669,10 @@ class LiquidarCobro(graphene.Mutation):
                 f"No existe cobro con ID {cobro_id}")
 
         cobro = cobro.first()
+        cobro.valida_vencido()
+
+        _valida(cobro.status == NotificacionCobro.VENCIDO,
+                'El cobro está vencido.')
         _valida(cobro.status == NotificacionCobro.LIQUIDADO,
                 'El cobro ya fue liquidado previamente.')
         _valida(cobro.status == NotificacionCobro.DECLINADO,

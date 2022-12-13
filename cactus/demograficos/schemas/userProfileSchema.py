@@ -220,7 +220,7 @@ class BuscadorInguzType(graphene.ObjectType):
                 clabe=clabe,
                 activo=True,
                 bloqueado=False
-                )
+            )
             return True
         except Exception as e:
             print(e)
@@ -234,7 +234,7 @@ class BuscadorInguzType(graphene.ObjectType):
                 clabe=clabe,
                 activo=True,
                 bloqueado=True
-                )
+            )
             return contacto.id
         except Exception:
             return None
@@ -1475,19 +1475,19 @@ class CreateUser(graphene.Mutation):
                 else:
                     codigo_referencia = codigo_referencia.strip()
                     try:
-                        codigoconfianza=CodigoConfianza.objects.get(
-                            codigo_referencia = codigo_referencia)
+                        codigoconfianza = CodigoConfianza.objects.get(
+                            codigo_referencia=codigo_referencia)
                     except CodigoConfianza.DoesNotExist:
                         raise ValueError("Codigo de referencia invalido")
-                username=username.strip()
-                user=User.objects.create(username = username)
+                username = username.strip()
+                user = User.objects.create(username=username)
                 user.set_password(password)
-                user.is_active=True
+                user.is_active = True
                 user.save()
-                UP=UserProfile.objects.get(user = user)
-                stat=StatusRegistro.objects.get(pk = 1)
-                UP.statusRegistro=stat
-                site=os.getenv("SITE", "local")
+                UP = UserProfile.objects.get(user=user)
+                stat = StatusRegistro.objects.get(pk=1)
+                UP.statusRegistro = stat
+                site = os.getenv("SITE", "local")
                 if ((site == "test") | (site == "stage") | (site == "prod")):
                     UP.saldo_cuenta = 0  # Verificar ambientes de desarrollo
                 UP.usuarioCodigoConfianza = codigoconfianza
@@ -2420,7 +2420,7 @@ class VerifyAddContactos(graphene.Mutation):
         user = info.context.user
         clabes_agenda = list(map(
             lambda contacto: contacto.clabe,
-            user.Contactos_Usuario.all()))
+            user.Contactos_Usuario.exclude(activo="False")))
         usuarios_inguz = User.objects.filter(
             username__in=agenda).filter(
                 is_staff=False).exclude(
@@ -2554,7 +2554,7 @@ class UnBlockContacto(graphene.Mutation):
                 contacto.activo = False
                 contacto.save()
             return UnBlockContacto(contacto=contacto,
-                                    details='Contacto Desbloqueado')
+                                   details='Contacto Desbloqueado')
 
 
 class UpdateContacto(graphene.Mutation):
