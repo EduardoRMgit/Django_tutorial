@@ -184,16 +184,14 @@ class ContactoInguzType(graphene.ObjectType):
 
 
 class BuscadorInguzType(graphene.ObjectType):
-    id = graphene.Int()
     alias = graphene.String()
     nombre = graphene.String()
     apPaterno = graphene.String()
     apMaterno = graphene.String()
     clabe = graphene.String()
     url = graphene.String()
-
-    def resolve_id(self, info):
-        return self.user.id
+    agregado = graphene.Boolean()
+    bloqueado = graphene.Int()
 
     def resolve_alias(self, info):
         return self.alias
@@ -212,6 +210,34 @@ class BuscadorInguzType(graphene.ObjectType):
 
     def resolve_url(self, info):
         return self.avatar_url
+
+    def resolve_agregado(self, info):
+        origen = info.context.user
+        clabe = self.cuentaClabe
+        try:
+            print(self.user)
+            contacto = origen.Contactos_Usuario.get(
+                clabe=clabe,
+                activo=True,
+                bloqueado=False
+                )
+            return True
+        except Exception as e:
+            print(e)
+            return False
+
+    def resolve_bloqueado(self, info):
+        origen = info.context.user
+        clabe = self.cuentaClabe
+        try:
+            contacto = origen.Contactos_Usuario.get(
+                clabe=clabe,
+                activo=True,
+                bloqueado=True
+                )
+            return contacto.id
+        except Exception:
+            return None
 
 
 class Query(object):

@@ -14,6 +14,8 @@ import os
 import environ
 from datetime import timedelta
 
+SITE = os.getenv("SITE", "local")
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -309,10 +311,9 @@ DAPP_KEY = env.str('DAPP_KEY', "f2338337-61ee-4eb6-8ea3-7c10b002d3f9")
 DAPP_SECRET = env.str('DAPP_SECRET',
                       "0f8d831dddfac45b0ae56e0cadb92a293f39adbd5d957519cbbca22e37ab2173")
 
-SITE = os.getenv("SITE", "local")
-
 if SITE == "local":
     idle_time = 120
+    INSTALLED_APPS.remove('multi_captcha_admin')
 elif SITE == "stage":
     idle_time = 30
 elif SITE == "test":
