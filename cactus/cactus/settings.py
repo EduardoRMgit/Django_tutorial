@@ -178,6 +178,7 @@ GRAPHENE = {
     'SCHEMA': 'cactus.schema.schema',
     'MIDDLEWARE': [
         'graphql_jwt.middleware.JSONWebTokenMiddleware',
+        'graphene_django_extras.ExtraGraphQLDirectiveMiddleware',
     ],
 }
 
@@ -331,3 +332,11 @@ AUTO_LOGOUT = {
 PREFIJO_CUENTA_INGUZ = "6461802180"
 
 URL_IMAGEN = "https://phototest420.s3.amazonaws.com/docs/docs/banca/comprobantes/comprobante_ejemplo.jpeg"
+
+GRAPHENE_DJANGO_EXTRAS = {
+    'DEFAULT_PAGINATION_CLASS': 'graphene_django_extras.paginations.LimitOffsetGraphqlPagination',
+    'DEFAULT_PAGE_SIZE': 20,
+    'MAX_PAGE_SIZE': 50,
+    'CACHE_ACTIVE': True,
+    'CACHE_TIMEOUT': 300    # seconds
+}

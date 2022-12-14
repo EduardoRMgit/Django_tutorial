@@ -17,7 +17,7 @@ from seguros.schemas import asignar_seguro
 from dde.schemas import (createddeSchema, imagenesddeSchema)
 from pagos.rapydcollect import schemacollect
 from django.contrib.auth.models import User
-from graphene_django.types import DjangoObjectType
+from graphene_django_extras import all_directives, DjangoObjectType
 from graphql_jwt import mixins
 from demograficos.models import UserProfile
 from django.contrib.auth import get_user_model
@@ -129,4 +129,8 @@ class Mutation(transaccionSchema.Mutation,
     refresh_token = graphql_jwt.Refresh.Field()
 
 
-schema = graphene.Schema(query=Query, mutation=Mutation)
+schema = graphene.Schema(
+    query=Query,
+    mutation=Mutation,
+    directives=all_directives
+)

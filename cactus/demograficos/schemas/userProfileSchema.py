@@ -8,7 +8,14 @@ import os
 from re import U
 from random import randint
 
-from graphene_django.types import DjangoObjectType
+from graphene_django_extras import (
+    DjangoListObjectType,
+    DjangoObjectType,
+    DjangoListObjectField
+)
+
+from graphene_django_extras.paginations import LimitOffsetGraphqlPagination
+
 from graphql_jwt.decorators import login_required
 from graphql_jwt.shortcuts import get_token
 
@@ -124,11 +131,24 @@ class BeneficiarioType(DjangoObjectType):
     class Meta:
         model = UserBeneficiario
 
-
 class ContactosType(DjangoObjectType):
     class Meta:
         model = Contacto
 
+        filter_fields = {
+            "id": ("exact", ),
+            "nombreCompleto": ("icontains", "iexact"),
+            "alias_inguz": ("icontains", "iexact"),
+            "bloqueado": ("exact", ),
+            "activo": ("exact", ),
+        }
+
+class ContactosListType(DjangoListObjectType):
+    class Meta:
+        description = " Type definition for Contactos list "
+        model = Contacto
+        pagination = LimitOffsetGraphqlPagination(
+            default_limit=10, ordering="nombreCompleto")
 
 class ValidacionType(DjangoObjectType):
     class Meta:
@@ -240,7 +260,7 @@ class BuscadorInguzType(graphene.ObjectType):
             return None
 
 
-class Query(object):
+class Query(graphene.ObjectType):
     """
         >>> Query (Pregunstas Secretas) Example:
             query{
@@ -391,10 +411,13 @@ class Query(object):
                                                description="`Query all objects from the \
                                             pregunta_secreta model`")
 
-    all_contactos = graphene.List(ContactosType,
-                                  token=graphene.String(required=True),
-                                  description="`Query all the objects from the \
-                                            lista contactos model`")
+    all_contactos = DjangoListObjectField(
+        ContactosListType,
+        token=graphene.String(required=True),
+        description="`Query all the objects from the \
+        lista contactos model`",
+    )
+
     get_INE_Profile = graphene.List(INERegAttemptType,
                                     token=graphene.String(required=True),
                                     description="`Query a single object from the \
