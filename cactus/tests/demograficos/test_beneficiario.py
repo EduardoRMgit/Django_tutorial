@@ -21,11 +21,30 @@ class TestBeneficiario(JSONWebTokenTestCase):
         mutation = '''
         mutation createBeneficiario($token:String!,
                                     $name:String!,
-                                    $parentesco:Int!){
+                                    $apellidopat:String!,
+                                    $apellidomat:String,
+                                    $parentesco:Int!,
+                                    $calle:String!,
+                                    $numeroexterior:String!,
+                                    $numerointerior:String!,
+                                    $codigopostal:String!,
+                                    $colonia:String!,
+                                    $municipio:String!,
+                                    $estado: String!,){
                 createBeneficiario(
                   token: $token,
                   name: $name,
+                  apellidomat: $apellidomat,
+                  apellidopat: $apellidopat,
                   parentesco: $parentesco,
+                  calle: $calle,
+                  numeroexterior: $numeroexterior,
+                  numerointerior: $numerointerior,
+                  codigopostal: $codigopostal,
+                  colonia: $colonia,
+                  municipio: $municipio,
+                  estado: $estado,
+
                 ){
                   beneficiario{
                     nombre
@@ -37,7 +56,16 @@ class TestBeneficiario(JSONWebTokenTestCase):
         variables = {
                     "token": self.token,
                     "name": "Aurora",
-                    "parentesco": 3}
+                    "apellidopat": "perez",
+                    "apellidomat": "paz",
+                    "parentesco": 3,
+                    "calle": "avenida siempre viva",
+                    "numeroexterior": "420",
+                    "numerointerior": "66",
+                    "codigopostal": "10910",
+                    "colonia": "col",
+                    "municipio": "Tlalpan",
+                    "estado": "CDMX"}
         expected_res = {
                   "nombre": "Aurora",
                   "id": "1",
