@@ -23,6 +23,10 @@ from spei.stpTools import gen_referencia_numerica
 
 from demograficos.models.userProfile import UserProfile
 from demograficos.models import Contacto
+from django.conf import settings
+
+
+URL_IMAGEN = settings.URL_IMAGEN
 
 
 class UserType(DjangoObjectType):
@@ -53,6 +57,11 @@ class TipoAnualType(DjangoObjectType):
 class NotificacionCobroType(DjangoObjectType):
     class Meta:
         model = NotificacionCobro
+
+
+class TipoTransType(DjangoObjectType):
+    class Meta:
+        model = TipoTransaccion
 
 
 class Query(object):
@@ -735,8 +744,32 @@ class LiquidarCobro(graphene.Mutation):
         )
 
 
+class UrlImagenComprobanteInter(graphene.Mutation):
+
+    url = graphene.String()
+
+    class Arguments:
+        token = graphene.String(required=True)
+        id = graphene.Int(required=True)
+
+    def mutate(self, info, token, id):
+        user = info.context.user
+        if not user.is_anonymous:
+
+            transaccion = StpTransaction.objects.filter(id=id)
+            if transaccion.count() == 0:
+                raise Exception("Transacción inexistente.")
+            transaccion = transaccion.first()
+            transaccion.comprobante_img = URL_IMAGEN
+            transaccion.url_comprobante = URL_IMAGEN
+            transaccion.save()
+            url = transaccion.url_comprobante
+            return UrlImagenComprobanteInter(url=url)
+
+
 class Mutation(graphene.ObjectType):
     create_transferencia_enviada = CreateTransferenciaEnviada.Field()
     create_notificacion_cobro = CreateNotificacionCobro.Field()
     declinar_cobro = DeclinarCobro.Field()
     liquidar_cobro = LiquidarCobro.Field()
+    url_imagen_comprobante_inter = UrlImagenComprobanteInter.Field()
