@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 
 class Contacto(models.Model):
@@ -54,6 +55,8 @@ class Contacto(models.Model):
         null=True,
         blank=True
     )
+    fecha = models.DateTimeField(
+        default=timezone.now)
 
     def __str__(self):
         return self.nombre
