@@ -220,7 +220,7 @@ class TestContacto(JSONWebTokenTestCase):
                       "clabe": "014111111111111111"}
         res6 = self.client.execute(mutation3, variables6)
         self.assertEqual(res6.errors[0].message,
-                         'Contacto matching query does not exist.')
+                         'No existe contacto activo')
         print("    [assert OK] Wrong CLABE for deleteContacto")
 
         # Ahora el (test)' deleteContacto <con token incorrecto>

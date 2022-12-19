@@ -18,7 +18,9 @@ class LoggingGraphQLView(GraphQLView):
     def dispatch(self, request, *args, **kwargs):
         try:
             data = self.parse_body(request)
+            db_logger.info("prueba token:")
             token = str.encode(data['variables']['token'])
+            db_logger.info(token)
             user = get_user_by_token(token)
             username = user.username if user.username else None
         except Exception:
