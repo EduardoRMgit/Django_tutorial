@@ -49,6 +49,8 @@ from banca.utils.clabe import es_cuenta_inguz
 
 from spei.models import InstitutionBanjico
 
+from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
+
 
 db_logger = logging.getLogger("db")
 
@@ -2680,13 +2682,22 @@ class DeleteContacto(graphene.Mutation):
         token = graphene.String(required=True)
         clabe = graphene.String(required=True)
 
+    @login_required
     def mutate(self, info, token, clabe):
         associated_user = info.context.user
         if not associated_user.is_anonymous:
-            contacto = associated_user.Contactos_Usuario.get(
-                clabe=clabe)
-            contacto.activo = False
-            contacto.save()
+            try:
+                contacto = associated_user.Contactos_Usuario.get(
+                    clabe=clabe, activo=True)
+                contacto.activo = False
+                contacto.save()
+            except ObjectDoesNotExist:
+                raise Exception ("No existe contacto activo")
+            except MultipleObjectsReturned:
+                associated_user.Contactos_Usuario.filter(
+                    clabe=clabe).update(activo=False)
+                contacto = associated_user.Contactos_Usuario.filter(
+                    clabe=clabe).last()
         return DeleteContacto(contacto=contacto,
                               all_contactos=associated_user.
                               Contactos_Usuario.all())
