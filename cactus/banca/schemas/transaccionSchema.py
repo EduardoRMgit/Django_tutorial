@@ -362,7 +362,7 @@ class Query(object):
     def resolve_all_transaccion(self, info, **kwargs):
         user = info.context.user
         if not user.is_anonymous:
-            return Transaccion.objects.filter(user=user)
+            return Transaccion.objects.filter(user=user).order_by('-id')
         return None
 
     @login_required
@@ -417,7 +417,7 @@ class Query(object):
                     # El solicitante no existe en los contactos del deudor
                     cobro.id_contacto_solicitante = -1
                 cobro.save()
-        return cobros.order_by('fecha')
+        return cobros.order_by('-id')
 
 
 class CreateTransferenciaEnviada(graphene.Mutation):
