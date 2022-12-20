@@ -863,7 +863,7 @@ class Query(object):
                 except Exception:
                     contacto.alias_inguz = "Cuenta inguz no encontrada"
                 contacto.save()
-        return user.Contactos_Usuario.all()
+        return (user.Contactos_Usuario.all().order_by('nombre'))
 
     @login_required
     def resolve_profile_validities(self, info, **kwargs):
@@ -1847,6 +1847,8 @@ class UpdateInfoPersonal(graphene.Mutation):
             last_name_m = last_name_m.strip()
         if nationality is not None:
             nationality = nationality.strip()
+        if curp is not None:
+            curp = curp.upper().split()
         user = info.context.user
         if user.is_anonymous:
             raise AssertionError('usuario no identificado')
