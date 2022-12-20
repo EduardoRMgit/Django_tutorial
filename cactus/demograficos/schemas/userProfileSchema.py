@@ -2307,6 +2307,8 @@ class UpdateNip(graphene.Mutation):
             if UP.statusNip == 'U':
                 if len(new_nip) != 4:
                     raise ValueError('NIP debe contener 4 caracteres')
+                elif not new_nip.isnumeric():
+                    raise ValueError('NIP debe ser numérico')
                 else:
                     try:
                         nip_temporal = user.user_nipTemp.filter(
