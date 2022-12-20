@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django.utils import timezone
 from django.db import models
 import random
 
@@ -78,7 +79,7 @@ class UserLocation(models.Model):
         on_delete=models.CASCADE,
         related_name='user_device'
     )
-    date = models.DateTimeField(auto_now=True)
+    date = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return "{} {} {}".format(self.user,
