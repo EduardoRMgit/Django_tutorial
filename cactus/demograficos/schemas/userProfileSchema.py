@@ -143,6 +143,7 @@ class ContactosType(DjangoObjectType):
             "alias_inguz": ("icontains", "iexact"),
             "bloqueado": ("exact", ),
             "activo": ("exact", ),
+            "es_inguz": ("exact",)
         }
 
 class ContactosListType(DjangoListObjectType):
@@ -150,7 +151,7 @@ class ContactosListType(DjangoListObjectType):
         description = " Type definition for Contactos list "
         model = Contacto
         pagination = LimitOffsetGraphqlPagination(
-            default_limit=10, ordering="nombreCompleto")
+            default_limit=10, ordering="nombre")
 
 class ValidacionType(DjangoObjectType):
     class Meta:
@@ -886,7 +887,7 @@ class Query(graphene.ObjectType):
                 except Exception:
                     contacto.alias_inguz = "Cuenta inguz no encontrada"
                 contacto.save()
-        return (user.Contactos_Usuario.all().order_by('nombre'))
+        return (user.Contactos_Usuario.all())
 
     @login_required
     def resolve_profile_validities(self, info, **kwargs):
