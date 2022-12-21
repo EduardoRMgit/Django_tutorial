@@ -56,6 +56,8 @@ from banca.utils.clabe import es_cuenta_inguz
 
 from spei.models import InstitutionBanjico
 
+from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
+
 
 db_logger = logging.getLogger("db")
 
@@ -240,7 +242,7 @@ class BuscadorInguzType(graphene.ObjectType):
                 clabe=clabe,
                 activo=True,
                 bloqueado=False
-                )
+            )
             return True
         except Exception as e:
             print(e)
@@ -254,7 +256,7 @@ class BuscadorInguzType(graphene.ObjectType):
                 clabe=clabe,
                 activo=True,
                 bloqueado=True
-                )
+            )
             return contacto.id
         except Exception:
             return None
@@ -884,7 +886,7 @@ class Query(graphene.ObjectType):
                 except Exception:
                     contacto.alias_inguz = "Cuenta inguz no encontrada"
                 contacto.save()
-        return user.Contactos_Usuario.all()
+        return (user.Contactos_Usuario.all().order_by('nombre'))
 
     @login_required
     def resolve_profile_validities(self, info, **kwargs):
@@ -1498,19 +1500,19 @@ class CreateUser(graphene.Mutation):
                 else:
                     codigo_referencia = codigo_referencia.strip()
                     try:
-                        codigoconfianza=CodigoConfianza.objects.get(
-                            codigo_referencia = codigo_referencia)
+                        codigoconfianza = CodigoConfianza.objects.get(
+                            codigo_referencia=codigo_referencia)
                     except CodigoConfianza.DoesNotExist:
                         raise ValueError("Codigo de referencia invalido")
-                username=username.strip()
-                user=User.objects.create(username = username)
+                username = username.strip()
+                user = User.objects.create(username=username)
                 user.set_password(password)
-                user.is_active=True
+                user.is_active = True
                 user.save()
-                UP=UserProfile.objects.get(user = user)
-                stat=StatusRegistro.objects.get(pk = 1)
-                UP.statusRegistro=stat
-                site=os.getenv("SITE", "local")
+                UP = UserProfile.objects.get(user=user)
+                stat = StatusRegistro.objects.get(pk=1)
+                UP.statusRegistro = stat
+                site = os.getenv("SITE", "local")
                 if ((site == "test") | (site == "stage") | (site == "prod")):
                     UP.saldo_cuenta = 0  # Verificar ambientes de desarrollo
                 UP.usuarioCodigoConfianza = codigoconfianza
@@ -1868,6 +1870,8 @@ class UpdateInfoPersonal(graphene.Mutation):
             last_name_m = last_name_m.strip()
         if nationality is not None:
             nationality = nationality.strip()
+        if curp is not None:
+            curp = curp.upper().split()
         user = info.context.user
         if user.is_anonymous:
             raise AssertionError('usuario no identificado')
@@ -2002,15 +2006,36 @@ class CreateBeneficiario(graphene.Mutation):
     class Arguments:
         token = graphene.String(required=True)
         name = graphene.String(required=True)
+        apellidopat = graphene.String()
+        apellidomat = graphene.String()
         parentesco = graphene.Int(required=True)
         fecha_nacimiento = graphene.Date()
+        calle = graphene.String()
+        numeroexterior = graphene.String()
+        numerointerior = graphene.String()
+        codigopostal = graphene.String()
+        colonia = graphene.String()
+        municipio = graphene.String()
+        estado = graphene.String()
+        
+
 
     def mutate(self,
                info,
                token,
                name,
+               apellidopat,
+               apellidomat,
                parentesco,
-               fecha_nacimiento=None):
+               calle,
+               numeroexterior,
+               numerointerior,
+               codigopostal,
+               colonia,
+               municipio,
+               estado,
+               fecha_nacimiento=None,
+               ):
         user = info.context.user
         if not user.is_anonymous:
             if name is not None:
@@ -2021,9 +2046,20 @@ class CreateBeneficiario(graphene.Mutation):
             beneficiario = UserBeneficiario.objects.create(
                 nombre=name,
                 parentesco=parentesco,
+                apellido_paterno=apellidopat,
+                apellido_materno=apellidomat,
                 user=user,
                 participacion=100,
                 fecha_nacimiento=fecha_nacimiento,
+                direccion_L1=calle,
+                dir_num_ext=numeroexterior,
+                dir_num_int=numerointerior,
+                dir_CP=codigopostal,
+                dir_colonia=colonia,
+                dir_municipio=municipio,
+                dir_estado= estado,
+
+
             )
             try:
                 InfoValidator.setCheckpoint(user=user, concepto='CBN',
@@ -2294,6 +2330,8 @@ class UpdateNip(graphene.Mutation):
             if UP.statusNip == 'U':
                 if len(new_nip) != 4:
                     raise ValueError('NIP debe contener 4 caracteres')
+                elif not new_nip.isnumeric():
+                    raise ValueError('NIP debe ser numérico')
                 else:
                     try:
                         nip_temporal = user.user_nipTemp.filter(
@@ -2443,7 +2481,7 @@ class VerifyAddContactos(graphene.Mutation):
         user = info.context.user
         clabes_agenda = list(map(
             lambda contacto: contacto.clabe,
-            user.Contactos_Usuario.all()))
+            user.Contactos_Usuario.exclude(activo="False")))
         usuarios_inguz = User.objects.filter(
             username__in=agenda).filter(
                 is_staff=False).exclude(
@@ -2577,7 +2615,7 @@ class UnBlockContacto(graphene.Mutation):
                 contacto.activo = False
                 contacto.save()
             return UnBlockContacto(contacto=contacto,
-                                    details='Contacto Desbloqueado')
+                                   details='Contacto Desbloqueado')
 
 
 class UpdateContacto(graphene.Mutation):
@@ -2671,13 +2709,22 @@ class DeleteContacto(graphene.Mutation):
         token = graphene.String(required=True)
         clabe = graphene.String(required=True)
 
+    @login_required
     def mutate(self, info, token, clabe):
         associated_user = info.context.user
         if not associated_user.is_anonymous:
-            contacto = associated_user.Contactos_Usuario.get(
-                clabe=clabe)
-            contacto.activo = False
-            contacto.save()
+            try:
+                contacto = associated_user.Contactos_Usuario.get(
+                    clabe=clabe, activo=True)
+                contacto.activo = False
+                contacto.save()
+            except ObjectDoesNotExist:
+                raise Exception ("No existe contacto activo")
+            except MultipleObjectsReturned:
+                associated_user.Contactos_Usuario.filter(
+                    clabe=clabe).update(activo=False)
+                contacto = associated_user.Contactos_Usuario.filter(
+                    clabe=clabe).last()
         return DeleteContacto(contacto=contacto,
                               all_contactos=associated_user.
                               Contactos_Usuario.all())

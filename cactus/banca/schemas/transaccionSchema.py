@@ -23,6 +23,10 @@ from spei.stpTools import gen_referencia_numerica
 
 from demograficos.models.userProfile import UserProfile
 from demograficos.models import Contacto
+from django.conf import settings
+
+
+URL_IMAGEN = settings.URL_IMAGEN
 
 
 class UserType(DjangoObjectType):
@@ -53,6 +57,11 @@ class TipoAnualType(DjangoObjectType):
 class NotificacionCobroType(DjangoObjectType):
     class Meta:
         model = NotificacionCobro
+
+
+class TipoTransType(DjangoObjectType):
+    class Meta:
+        model = TipoTransaccion
 
 
 class Query(object):
@@ -353,7 +362,7 @@ class Query(object):
     def resolve_all_transaccion(self, info, **kwargs):
         user = info.context.user
         if not user.is_anonymous:
-            return Transaccion.objects.filter(user=user)
+            return Transaccion.objects.filter(user=user).order_by('-id')
         return None
 
     @login_required
@@ -397,6 +406,7 @@ class Query(object):
         cobros = user.mis_notificaciones_cobro.all()
         if not user.is_anonymous:
             for cobro in cobros:
+                cobro.valida_vencido()
                 contacto_solicitante = Contacto.objects.filter(
                     user=user).filter(
                         clabe=cobro.usuario_solicitante.Uprofile.cuentaClabe)
@@ -407,7 +417,7 @@ class Query(object):
                     # El solicitante no existe en los contactos del deudor
                     cobro.id_contacto_solicitante = -1
                 cobro.save()
-        return cobros
+        return cobros.order_by('-id')
 
 
 class CreateTransferenciaEnviada(graphene.Mutation):
@@ -631,7 +641,12 @@ class DeclinarCobro(graphene.Mutation):
         cobro = NotificacionCobro.objects.filter(pk=cobro_id)
         _valida(cobro.count() == 0,
                 'Cobro inexistente.')
+
         cobro = cobro.first()
+        cobro.valida_vencido()
+
+        _valida(cobro.status == NotificacionCobro.VENCIDO,
+                'El cobro está vencido.')
         _valida(cobro.status == NotificacionCobro.LIQUIDADO,
                 'El cobro ya fue liquidado previamente.')
         _valida(cobro.status == NotificacionCobro.DECLINADO,
@@ -663,6 +678,10 @@ class LiquidarCobro(graphene.Mutation):
                 f"No existe cobro con ID {cobro_id}")
 
         cobro = cobro.first()
+        cobro.valida_vencido()
+
+        _valida(cobro.status == NotificacionCobro.VENCIDO,
+                'El cobro está vencido.')
         _valida(cobro.status == NotificacionCobro.LIQUIDADO,
                 'El cobro ya fue liquidado previamente.')
         _valida(cobro.status == NotificacionCobro.DECLINADO,
@@ -725,8 +744,32 @@ class LiquidarCobro(graphene.Mutation):
         )
 
 
+class UrlImagenComprobanteInter(graphene.Mutation):
+
+    url = graphene.String()
+
+    class Arguments:
+        token = graphene.String(required=True)
+        id = graphene.Int(required=True)
+
+    def mutate(self, info, token, id):
+        user = info.context.user
+        if not user.is_anonymous:
+
+            transaccion = StpTransaction.objects.filter(id=id)
+            if transaccion.count() == 0:
+                raise Exception("Transacción inexistente.")
+            transaccion = transaccion.first()
+            transaccion.comprobante_img = URL_IMAGEN
+            transaccion.url_comprobante = URL_IMAGEN
+            transaccion.save()
+            url = transaccion.url_comprobante
+            return UrlImagenComprobanteInter(url=url)
+
+
 class Mutation(graphene.ObjectType):
     create_transferencia_enviada = CreateTransferenciaEnviada.Field()
     create_notificacion_cobro = CreateNotificacionCobro.Field()
     declinar_cobro = DeclinarCobro.Field()
     liquidar_cobro = LiquidarCobro.Field()
+    url_imagen_comprobante_inter = UrlImagenComprobanteInter.Field()

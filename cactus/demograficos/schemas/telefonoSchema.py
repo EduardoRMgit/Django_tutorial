@@ -572,9 +572,9 @@ class SendSmsPin(graphene.Mutation):
 
     class Arguments:
         telefono = graphene.String(required=True)
-        registro_nuevo = graphene.Boolean(required=False)
+        registro_nuevo = graphene.Boolean()
 
-    def mutate(self, info, telefono, registro_nuevo):
+    def mutate(self, info, telefono, registro_nuevo=False):
         if registro_nuevo:
             if User.objects.filter(username=telefono).count() > 0:
                 raise Exception("Telefono ya registrado en una cuenta Inguz")
