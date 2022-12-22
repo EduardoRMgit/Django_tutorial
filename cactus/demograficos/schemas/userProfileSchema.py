@@ -73,6 +73,18 @@ class PreguntaType(DjangoObjectType):
     class Meta:
         model = PreguntaSeguridad
 
+        filter_fields = {
+            "tipo_nip": ("exact", ),
+        }
+
+
+class PreguntaTypeListType(DjangoListObjectType):
+    class Meta:
+        description = " Type definition for Transaccion list "
+        model = PreguntaSeguridad
+        pagination = LimitOffsetGraphqlPagination(
+            default_limit=10, ordering="id")
+
 
 class TrueUserType(DjangoObjectType):
     class Meta:
@@ -406,7 +418,7 @@ class Query(graphene.ObjectType):
                                             description="`Query all objects from the \
                                             respuesta_secreta model`")
 
-    all_pregunta_seguridad = graphene.List(PreguntaType,
+    all_pregunta_seguridad = DjangoListObjectField(PreguntaTypeListType,
                                            description="`Query all objects from the \
                                             pregunta_secreta model`")
 
@@ -2423,17 +2435,28 @@ mutation{
         ap_materno = graphene.String()
         banco = graphene.String()
         clabe = graphene.String()
+        nip = graphene.String()
 
     def mutate(self, info, token, nombreCompleto='', nombre='', ap_paterno='',
-               ap_materno='', banco='', clabe=''):
+               ap_materno='', banco='', clabe='', nip=None):
+
+        def _valida(expr, msg):
+            if expr:
+                raise Exception(msg)
+
         user = info.context.user
+        if nip:
+            _valida(user.Uprofile.password is None,
+                    'El usuario no ha establecido su NIP.')
+            _valida(not user.Uprofile.check_password(nip),
+                    'El NIP es incorrecto.')
+
         try:
             name_banco = InstitutionBanjico.objects.get(
                 short_id=str(clabe[:3])).short_name
         except Exception as e:
-            raise AssertionError(
-                'CLABE inválida, no existe banco válido para esa CLABE:',
-                e)
+            raise Exception(
+                'CLABE inválida, no existe banco válido para esa CLABE')
         if Contacto.objects.filter(user=user,
                                    clabe=clabe,
                                    activo=True).count() > 0:
