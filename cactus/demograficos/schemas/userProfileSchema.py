@@ -8,7 +8,14 @@ import os
 from re import U
 from random import randint
 
-from graphene_django.types import DjangoObjectType
+from graphene_django_extras import (
+    DjangoListObjectType,
+    DjangoObjectType,
+    DjangoListObjectField
+)
+
+from graphene_django_extras.paginations import LimitOffsetGraphqlPagination
+
 from graphql_jwt.decorators import login_required
 from graphql_jwt.shortcuts import get_token
 
@@ -65,6 +72,18 @@ class RespuestaType(DjangoObjectType):
 class PreguntaType(DjangoObjectType):
     class Meta:
         model = PreguntaSeguridad
+
+        filter_fields = {
+            "tipo_nip": ("exact", ),
+        }
+
+
+class PreguntaTypeListType(DjangoListObjectType):
+    class Meta:
+        description = " Type definition for Transaccion list "
+        model = PreguntaSeguridad
+        pagination = LimitOffsetGraphqlPagination(
+            default_limit=10, ordering="id")
 
 
 class TrueUserType(DjangoObjectType):
@@ -126,11 +145,25 @@ class BeneficiarioType(DjangoObjectType):
     class Meta:
         model = UserBeneficiario
 
-
 class ContactosType(DjangoObjectType):
     class Meta:
         model = Contacto
 
+        filter_fields = {
+            "id": ("exact", ),
+            "nombreCompleto": ("icontains", "iexact"),
+            "alias_inguz": ("icontains", "iexact"),
+            "bloqueado": ("exact", ),
+            "activo": ("exact", ),
+            "es_inguz": ("exact",)
+        }
+
+class ContactosListType(DjangoListObjectType):
+    class Meta:
+        description = " Type definition for Contactos list "
+        model = Contacto
+        pagination = LimitOffsetGraphqlPagination(
+            default_limit=10, ordering="nombre")
 
 class ValidacionType(DjangoObjectType):
     class Meta:
@@ -242,7 +275,7 @@ class BuscadorInguzType(graphene.ObjectType):
             return None
 
 
-class Query(object):
+class Query(graphene.ObjectType):
     """
         >>> Query (Pregunstas Secretas) Example:
             query{
@@ -385,7 +418,7 @@ class Query(object):
                                             description="`Query all objects from the \
                                             respuesta_secreta model`")
 
-    all_pregunta_seguridad = graphene.List(PreguntaType,
+    all_pregunta_seguridad = DjangoListObjectField(PreguntaTypeListType,
                                            description="`Query all objects from the \
                                             pregunta_secreta model`")
 
@@ -393,10 +426,13 @@ class Query(object):
                                                description="`Query all objects from the \
                                             pregunta_secreta model`")
 
-    all_contactos = graphene.List(ContactosType,
-                                  token=graphene.String(required=True),
-                                  description="`Query all the objects from the \
-                                            lista contactos model`")
+    all_contactos = DjangoListObjectField(
+        ContactosListType,
+        token=graphene.String(required=True),
+        description="`Query all the objects from the \
+        lista contactos model`",
+    )
+
     get_INE_Profile = graphene.List(INERegAttemptType,
                                     token=graphene.String(required=True),
                                     description="`Query a single object from the \
@@ -863,7 +899,7 @@ class Query(object):
                 except Exception:
                     contacto.alias_inguz = "Cuenta inguz no encontrada"
                 contacto.save()
-        return (user.Contactos_Usuario.all().order_by('nombre'))
+        return (user.Contactos_Usuario.all())
 
     @login_required
     def resolve_profile_validities(self, info, **kwargs):
@@ -2399,17 +2435,28 @@ mutation{
         ap_materno = graphene.String()
         banco = graphene.String()
         clabe = graphene.String()
+        nip = graphene.String()
 
     def mutate(self, info, token, nombreCompleto='', nombre='', ap_paterno='',
-               ap_materno='', banco='', clabe=''):
+               ap_materno='', banco='', clabe='', nip=None):
+
+        def _valida(expr, msg):
+            if expr:
+                raise Exception(msg)
+
         user = info.context.user
+        if nip:
+            _valida(user.Uprofile.password is None,
+                    'El usuario no ha establecido su NIP.')
+            _valida(not user.Uprofile.check_password(nip),
+                    'El NIP es incorrecto.')
+
         try:
             name_banco = InstitutionBanjico.objects.get(
                 short_id=str(clabe[:3])).short_name
         except Exception as e:
-            raise AssertionError(
-                'CLABE inválida, no existe banco válido para esa CLABE:',
-                e)
+            raise Exception(
+                'CLABE inválida, no existe banco válido para esa CLABE')
         if Contacto.objects.filter(user=user,
                                    clabe=clabe,
                                    activo=True).count() > 0:
