@@ -145,6 +145,7 @@ class BeneficiarioType(DjangoObjectType):
     class Meta:
         model = UserBeneficiario
 
+
 class ContactosType(DjangoObjectType):
     class Meta:
         model = Contacto
@@ -158,12 +159,14 @@ class ContactosType(DjangoObjectType):
             "es_inguz": ("exact",)
         }
 
+
 class ContactosListType(DjangoListObjectType):
     class Meta:
         description = " Type definition for Contactos list "
         model = Contacto
         pagination = LimitOffsetGraphqlPagination(
             default_limit=10, ordering="nombre")
+
 
 class ValidacionType(DjangoObjectType):
     class Meta:
@@ -419,7 +422,7 @@ class Query(graphene.ObjectType):
                                             respuesta_secreta model`")
 
     all_pregunta_seguridad = DjangoListObjectField(PreguntaTypeListType,
-                                           description="`Query all objects from the \
+                                                   description="`Query all objects from the \
                                             pregunta_secreta model`")
 
     all_pregunta_seguridad_pwd = graphene.List(PreguntaType,
@@ -2030,8 +2033,6 @@ class CreateBeneficiario(graphene.Mutation):
         colonia = graphene.String()
         municipio = graphene.String()
         estado = graphene.String()
-        
-
 
     def mutate(self,
                info,
@@ -2070,7 +2071,7 @@ class CreateBeneficiario(graphene.Mutation):
                 dir_CP=codigopostal,
                 dir_colonia=colonia,
                 dir_municipio=municipio,
-                dir_estado= estado,
+                dir_estado=estado,
 
 
             )
@@ -2743,7 +2744,7 @@ class DeleteContacto(graphene.Mutation):
                 contacto.activo = False
                 contacto.save()
             except ObjectDoesNotExist:
-                raise Exception ("No existe contacto activo")
+                raise Exception("No existe contacto activo")
             except MultipleObjectsReturned:
                 associated_user.Contactos_Usuario.filter(
                     clabe=clabe).update(activo=False)
@@ -3196,6 +3197,51 @@ class UrlAvatar(graphene.Mutation):
         return UrlAvatar(url=avatar_url)
 
 
+class DeleteBluepixelUser(graphene.Mutation):
+    borrado = graphene.String()
+
+    class Arguments:
+        username = graphene.String(required=True)
+
+    def mutate(self, info, username):
+        msg = f"[DeleteBluepixelUser] Petición recibida. User: {username}"
+        db_logger.info(msg)
+
+        bp_usernames = [
+            "5568161651",
+            "5567907071",
+            "5611670737",
+            "2871313291",
+            "2871628373",
+            "5586999540",
+            "2223644726",
+            "2212299619",
+            "5520783405",
+            "2871095852",
+            "2871218166"
+        ]
+        if username not in bp_usernames:
+            msg_ex = f"No está permitido borrar al usuario {username}"
+            msg = "[DeleteBluepixelUser] " + msg_ex
+            db_logger.info(msg)
+            raise Exception(
+                f"Sólo tienes permitido borrar los siguientes: {bp_usernames}")
+
+        user = User.objects.filter(username=username)
+        if user.count() == 0:
+            msg_ex = f"No existe el usuario {username}"
+            msg = "[DeleteBluepixelUser] " + msg_ex
+            db_logger.info(msg)
+            raise Exception(msg_ex)
+
+        user = user.first()
+        user.delete()
+        msg = f"[DeleteBluepixelUser] Usuario {username} borrado"
+        db_logger.info(msg)
+
+        return DeleteBluepixelUser(borrado=f"Usuario {username} borrado")
+
+
 class Mutation(graphene.ObjectType):
     delete_pregunta_seguridad = BorrarPreguntaSeguridad.Field()
     create_user = CreateUser.Field()
@@ -3233,3 +3279,4 @@ class Mutation(graphene.ObjectType):
     block_contacto = BlockContacto.Field()
     buscador_usuario_inguz = BuscadorUsuarioInguz.Field()
     unblock_contacto = UnBlockContacto.Field()
+    delete_bluepixel_user = DeleteBluepixelUser.Field()
