@@ -1884,7 +1884,7 @@ class UpdateInfoPersonal(graphene.Mutation):
         if nationality is not None:
             nationality = nationality.strip()
         if curp is not None:
-            curp = curp.upper().split()
+            curp = curp.upper()
         user = info.context.user
         if user.is_anonymous:
             raise AssertionError('usuario no identificado')
