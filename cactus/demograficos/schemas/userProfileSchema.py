@@ -19,6 +19,7 @@ from graphene_django_extras.paginations import LimitOffsetGraphqlPagination
 from graphql_jwt.decorators import login_required
 from graphql_jwt.shortcuts import get_token
 
+from django.conf import settings
 from django.contrib.auth import authenticate
 from django.http import HttpRequest
 from django.contrib.auth.models import User
@@ -3204,8 +3205,12 @@ class DeleteBluepixelUser(graphene.Mutation):
         username = graphene.String(required=True)
 
     def mutate(self, info, username):
+
         msg = f"[DeleteBluepixelUser] Petición recibida. User: {username}"
         db_logger.info(msg)
+
+        if settings.SITE not in ["stage", "local"]:
+            raise Exception("No está permitido el borrado en este ambiente")
 
         bp_usernames = [
             "5568161651",
