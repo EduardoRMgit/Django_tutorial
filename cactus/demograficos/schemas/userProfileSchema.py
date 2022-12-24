@@ -59,6 +59,8 @@ from spei.models import InstitutionBanjico
 
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 
+from axes.models import AccessAttempt
+
 
 db_logger = logging.getLogger("db")
 
@@ -3295,6 +3297,7 @@ class UnblockBluePixelUser(graphene.Mutation):
         up.status = "O"
         up.save()
         user_.save()
+        AccessAttempt.objects.filter(username=username).delete()
         msg = f"[UnblockBluePixelUser] Usuario {username} desbloqueado"
         db_logger.info(msg)
 
