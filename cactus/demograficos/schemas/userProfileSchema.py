@@ -59,6 +59,8 @@ from spei.models import InstitutionBanjico
 
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 
+from axes.models import AccessAttempt
+
 
 db_logger = logging.getLogger("db")
 
@@ -3247,6 +3249,62 @@ class DeleteBluepixelUser(graphene.Mutation):
         return DeleteBluepixelUser(borrado=f"Usuario {username} borrado")
 
 
+class UnblockBluePixelUser(graphene.Mutation):
+    desbloqueado = graphene.String()
+
+    class Arguments:
+        username = graphene.String(required=True)
+
+    def mutate(self, info, username):
+
+        msg = f"[UnblockBluePixelUser] Petición recibida. User: {username}"
+        db_logger.info(msg)
+
+        if settings.SITE not in ["stage", "local"]:
+            raise Exception("No está permitido el borrado en este ambiente")
+
+        bp_usernames = [
+            "5568161651",
+            "5567907071",
+            "5611670737",
+            "2871313291",
+            "2871628373",
+            "5586999540",
+            "2223644726",
+            "2212299619",
+            "5520783405",
+            "2871095852",
+            "2871218166"
+        ]
+        if username not in bp_usernames:
+            msg_ex = f"No está permitido borrar al usuario {username}"
+            msg = "[UnblockBluePixelUser] " + msg_ex
+            db_logger.info(msg)
+            raise Exception(
+                f"Sólo tienes permitido desbloquear los siguientes: \
+                {bp_usernames}")
+
+        user = User.objects.filter(username=username)
+        if user.count() == 0:
+            msg_ex = f"No existe el usuario {username}"
+            msg = "[UnblockBluePixelUser] " + msg_ex
+            db_logger.info(msg)
+            raise Exception(msg_ex)
+        user_ = User.objects.get(username=username)
+        up = user_.Uprofile
+        up.login_attempts = 0
+        up.blocked_reason = "K"
+        up.status = "O"
+        up.save()
+        user_.save()
+        AccessAttempt.objects.filter(username=username).delete()
+        msg = f"[UnblockBluePixelUser] Usuario {username} desbloqueado"
+        db_logger.info(msg)
+
+        return UnblockBluePixelUser(
+            desbloqueado=f"Usuario {username} desbloqueado")
+
+
 class Mutation(graphene.ObjectType):
     delete_pregunta_seguridad = BorrarPreguntaSeguridad.Field()
     create_user = CreateUser.Field()
@@ -3285,3 +3343,4 @@ class Mutation(graphene.ObjectType):
     buscador_usuario_inguz = BuscadorUsuarioInguz.Field()
     unblock_contacto = UnBlockContacto.Field()
     delete_bluepixel_user = DeleteBluepixelUser.Field()
+    unblock_bluepixel_user = UnblockBluePixelUser.Field()
