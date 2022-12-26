@@ -247,7 +247,7 @@ class BuscadorInguzType(graphene.ObjectType):
             return None
 
 
-class Query(object):
+class Query(graphene.ObjectType):
     """
         >>> Query (Pregunstas Secretas) Example:
             query{
