@@ -66,7 +66,7 @@ class TipoTransType(DjangoObjectType):
         model = TipoTransaccion
 
 
-class Query(object):
+class Query(graphene.ObjectType):
     """
     ``transaccion (Query)``
         Arguments:
