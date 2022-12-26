@@ -7,6 +7,8 @@ from django.contrib.auth import get_user_model
 
 from graphene_django.types import DjangoObjectType
 
+from django.db.models import Q
+
 from graphql_jwt.decorators import login_required
 
 from banca.models.transaccion import (Transaccion,
@@ -356,7 +358,12 @@ class Query(object):
                                         fecha=graphene.String(),
                                         token=graphene.String())
     all_cobros = graphene.List(NotificacionCobroType,
-                               token=graphene.String())
+                               id=graphene.Int(),
+                               status=graphene.String(),
+                               limit=graphene.Int(),
+                               offset=graphene.Int(),
+                               ordering=graphene.String(),
+                               token=graphene.String(required=True))
 
     @login_required
     def resolve_all_transaccion(self, info, **kwargs):
@@ -401,11 +408,26 @@ class Query(object):
         return None
 
     @login_required
-    def resolve_all_cobros(self, info, **kwargs):
+    def resolve_all_cobros(
+        self, info, limit=None, offset=None,
+            ordering=None, id=None, status=None, **kwargs):
         user = info.context.user
-        cobros = user.mis_notificaciones_cobro.all()
+        qs = user.mis_notificaciones_cobro.all()
+
+        if id:
+            filter = Q(id__iexact=id)
+            qs = qs.filter(filter)
+        if status:
+            filter = Q(status__exact=status)
+            qs = qs.filter(filter)
+        if ordering:
+            qs = qs.order_by(ordering)
+        if offset:
+            qs = qs[offset:]
+        if limit:
+            qs = qs[:limit]
         if not user.is_anonymous:
-            for cobro in cobros:
+            for cobro in qs:
                 cobro.valida_vencido()
                 contacto_solicitante = Contacto.objects.filter(
                     user=user).filter(
@@ -417,7 +439,7 @@ class Query(object):
                     # El solicitante no existe en los contactos del deudor
                     cobro.id_contacto_solicitante = -1
                 cobro.save()
-        return cobros.order_by('-id')
+        return qs
 
 
 class CreateTransferenciaEnviada(graphene.Mutation):

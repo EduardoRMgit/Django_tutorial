@@ -861,19 +861,21 @@ class Query(object):
     def resolve_all_contactos(
         self, info, limit=None, offset=None, ordering=None, es_inguz=None, 
         bloqueado=None, activo=None, alias_inguz=None, nombre=None, **kwargs):
+
         user = info.context.user
         qs= user.Contactos_Usuario.all()
-        if es_inguz != None:
+
+        if es_inguz is not None:
             filter = (
                 Q(es_inguz__exact=es_inguz)
             )
             qs = qs.filter(filter)
-        if bloqueado != None:
+        if bloqueado is not None:
             filter = (
                 Q(bloqueado__exact=bloqueado)
             )
             qs = qs.filter(filter)
-        if activo != None:
+        if activo is not None:
             filter = (
                 Q(activo__exact=activo)
             )
@@ -883,7 +885,7 @@ class Query(object):
                 Q(alias_inguz__icontains=alias_inguz)
             )
             qs = qs.filter(filter)
-        if nombre != None:
+        if nombre:
             filter = (
                 Q(nombre__icontains=nombre) |
                 Q(ap_paterno__icontains=nombre) |
