@@ -391,6 +391,7 @@ class Query(object):
                                             respuesta_secreta model`")
 
     all_pregunta_seguridad = graphene.List(PreguntaType,
+                                           tipo_nip=graphene.Boolean(),
                                            description="`Query all objects from the \
                                             pregunta_secreta model`")
 
@@ -839,8 +840,12 @@ class Query(object):
     def resolve_all_respuesta_seguridad(self, info, **kwargs):
         return RespuestaSeguridad.objects.all()
 
-    def resolve_all_pregunta_seguridad(self, info, **kwargs):
-        return PreguntaSeguridad.objects.all()
+    def resolve_all_pregunta_seguridad(self, info, tipo_nip=None, **kwargs):
+        qs = PreguntaSeguridad.objects.all()
+        if tipo_nip is not None:
+            filter = Q(tipo_nip__exact=tipo_nip)
+            qs = qs.filter(filter)
+        return qs
 
     def resolve_all_pregunta_seguridad_pwd(self, info, **kwargs):
         return PreguntaSeguridad.objects.filter(tipo_nip=False)

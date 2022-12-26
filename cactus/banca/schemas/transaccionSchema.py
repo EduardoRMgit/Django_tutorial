@@ -345,14 +345,17 @@ class Query(object):
     }
 
     """
-    transaccion = graphene.Field(StpTransaccionType,
+    transaccion = graphene.Field(TransaccionType,
                                  id=graphene.Int(),
                                  token=graphene.String())
     all_transaccion = graphene.List(TransaccionType,
-                                    token=graphene.String())
+                                    limit=graphene.Int(),
+                                    offset=graphene.Int(),
+                                    ordering=graphene.String(),
+                                    token=graphene.String(required=True))
     stp_transaccion = graphene.Field(StpTransaccionType,
                                      id=graphene.Int(),
-                                     token=graphene.String())
+                                     token=graphene.String(required=True))
     all_stp_transaccion = graphene.List(StpTransaccionType,
                                         id=graphene.Int(),
                                         fecha=graphene.String(),
@@ -363,14 +366,22 @@ class Query(object):
                                limit=graphene.Int(),
                                offset=graphene.Int(),
                                ordering=graphene.String(),
-                               token=graphene.String(required=True))
+                               token=graphene.String())
 
     @login_required
-    def resolve_all_transaccion(self, info, **kwargs):
+    def resolve_all_transaccion(self, info, limit=None, offset=None,
+            ordering=None, status=None, **kwargs):
         user = info.context.user
-        if not user.is_anonymous:
-            return Transaccion.objects.filter(user=user).order_by('-id')
-        return None
+        qs = user.user_transaccion.all()
+
+        if ordering:
+            qs = qs.order_by(ordering)
+        if offset:
+            qs = qs[offset:]
+        if limit:
+            qs = qs[:limit]
+
+        return qs
 
     @login_required
     def resolve_all_stp_transaccion(self, info, **kwargs):
