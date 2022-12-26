@@ -12,6 +12,8 @@ from graphene_django.types import DjangoObjectType
 from graphql_jwt.decorators import login_required
 from graphql_jwt.shortcuts import get_token
 
+from django.db.models import Q
+
 from django.conf import settings
 from django.contrib.auth import authenticate
 from django.http import HttpRequest
@@ -397,6 +399,14 @@ class Query(object):
                                             pregunta_secreta model`")
 
     all_contactos = graphene.List(ContactosType,
+                                  limit=graphene.Int(),
+                                  offset=graphene.Int(),
+                                  ordering=graphene.String(),
+                                  es_inguz=graphene.Boolean(),
+                                  bloqueado=graphene.Boolean(),
+                                  activo=graphene.Boolean(),
+                                  alias_inguz=graphene.String(),
+                                  nombre=graphene.String(),
                                   token=graphene.String(required=True),
                                   description="`Query all the objects from the \
                                             lista contactos model`")
@@ -848,9 +858,45 @@ class Query(object):
             return PreguntaSeguridad.objects.filter(respuesta_secreta=user)
 
     @login_required
-    def resolve_all_contactos(self, info, **kwargs):
+    def resolve_all_contactos(
+        self, info, limit=None, offset=None, ordering=None, es_inguz=None, 
+        bloqueado=None, activo=None, alias_inguz=None, nombre=None, **kwargs):
         user = info.context.user
-        for contacto in user.Contactos_Usuario.all():
+        qs= user.Contactos_Usuario.all()
+        if es_inguz != None:
+            filter = (
+                Q(es_inguz__exact=es_inguz)
+            )
+            qs = qs.filter(filter)
+        if bloqueado != None:
+            filter = (
+                Q(bloqueado__exact=bloqueado)
+            )
+            qs = qs.filter(filter)
+        if activo != None:
+            filter = (
+                Q(activo__exact=activo)
+            )
+            qs = qs.filter(filter)
+        if alias_inguz:
+            filter = (
+                Q(alias_inguz__icontains=alias_inguz)
+            )
+            qs = qs.filter(filter)
+        if nombre != None:
+            filter = (
+                Q(nombre__icontains=nombre) |
+                Q(ap_paterno__icontains=nombre) |
+                Q(ap_materno__icontains=nombre)
+            )
+            qs = qs.filter(filter)
+        if ordering:
+            qs = qs.order_by(ordering)
+        if offset:
+            qs = qs[offset:]
+        if limit:
+            qs = qs[:limit]
+        for contacto in qs:
             if es_cuenta_inguz(contacto.clabe):
                 try:
                     contacto_user = UserProfile.objects.get(
@@ -866,7 +912,7 @@ class Query(object):
                 except Exception:
                     contacto.alias_inguz = "Cuenta inguz no encontrada"
                 contacto.save()
-        return (user.Contactos_Usuario.all().order_by('nombre'))
+        return (qs)
 
     @login_required
     def resolve_profile_validities(self, info, **kwargs):
