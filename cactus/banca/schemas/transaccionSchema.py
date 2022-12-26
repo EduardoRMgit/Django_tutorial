@@ -5,13 +5,7 @@ from datetime import datetime
 from django.utils import timezone
 from django.contrib.auth import get_user_model
 
-from graphene_django_extras import (
-    DjangoListObjectType,
-    DjangoObjectType,
-    DjangoListObjectField
-)
-from graphene_django_extras.paginations import LimitOffsetGraphqlPagination
-
+from graphene_django.types import DjangoObjectType
 
 from graphql_jwt.decorators import login_required
 
@@ -44,22 +38,6 @@ class TransaccionType(DjangoObjectType):
     class Meta:
         model = Transaccion
 
-        filter_fields = {
-            "id": ("exact", ),
-            "fechaValor": ("icontains", "iexact"),
-            "statusTrans": ("exact", ),
-            "tipoTrans": ("exact", ),
-            "claveRastreo": ("exact", ),
-        }
-
-
-class TransaccionTypeListType(DjangoListObjectType):
-    class Meta:
-        description = " Type definition for Transaccion list "
-        model = Transaccion
-        pagination = LimitOffsetGraphqlPagination(
-            default_limit=10, ordering="-id")
-
 
 class StpTransaccionType(DjangoObjectType):
     class Meta:
@@ -80,26 +58,13 @@ class NotificacionCobroType(DjangoObjectType):
     class Meta:
         model = NotificacionCobro
 
-        filter_fields = {
-            "id": ("exact", ),
-            "status": ("exact", ),
-        }
-
-
-class NotificacionCobroListType(DjangoListObjectType):
-    class Meta:
-        description = " Type definition for Cobros list "
-        model = NotificacionCobro
-        pagination = LimitOffsetGraphqlPagination(
-            default_limit=10, ordering="-id")
-
 
 class TipoTransType(DjangoObjectType):
     class Meta:
         model = TipoTransaccion
 
 
-class Query(graphene.ObjectType):
+class Query(object):
     """
     ``transaccion (Query)``
         Arguments:
@@ -381,7 +346,7 @@ class Query(graphene.ObjectType):
     transaccion = graphene.Field(StpTransaccionType,
                                  id=graphene.Int(),
                                  token=graphene.String())
-    all_transaccion = DjangoListObjectField(TransaccionTypeListType,
+    all_transaccion = graphene.List(TransaccionType,
                                     token=graphene.String())
     stp_transaccion = graphene.Field(StpTransaccionType,
                                      id=graphene.Int(),
@@ -390,14 +355,14 @@ class Query(graphene.ObjectType):
                                         id=graphene.Int(),
                                         fecha=graphene.String(),
                                         token=graphene.String())
-    all_cobros = DjangoListObjectField(NotificacionCobroListType,
-                               token=graphene.String(required=True))
+    all_cobros = graphene.List(NotificacionCobroType,
+                               token=graphene.String())
 
     @login_required
     def resolve_all_transaccion(self, info, **kwargs):
         user = info.context.user
         if not user.is_anonymous:
-            return Transaccion.objects.filter(user=user)
+            return Transaccion.objects.filter(user=user).order_by('-id')
         return None
 
     @login_required
@@ -452,7 +417,7 @@ class Query(graphene.ObjectType):
                     # El solicitante no existe en los contactos del deudor
                     cobro.id_contacto_solicitante = -1
                 cobro.save()
-        return cobros
+        return cobros.order_by('-id')
 
 
 class CreateTransferenciaEnviada(graphene.Mutation):

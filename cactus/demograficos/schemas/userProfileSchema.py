@@ -8,14 +8,7 @@ import os
 from re import U
 from random import randint
 
-from graphene_django_extras import (
-    DjangoListObjectType,
-    DjangoObjectType,
-    DjangoListObjectField
-)
-
-from graphene_django_extras.paginations import LimitOffsetGraphqlPagination
-
+from graphene_django.types import DjangoObjectType
 from graphql_jwt.decorators import login_required
 from graphql_jwt.shortcuts import get_token
 
@@ -75,18 +68,6 @@ class RespuestaType(DjangoObjectType):
 class PreguntaType(DjangoObjectType):
     class Meta:
         model = PreguntaSeguridad
-
-        filter_fields = {
-            "tipo_nip": ("exact", ),
-        }
-
-
-class PreguntaTypeListType(DjangoListObjectType):
-    class Meta:
-        description = " Type definition for Transaccion list "
-        model = PreguntaSeguridad
-        pagination = LimitOffsetGraphqlPagination(
-            default_limit=10, ordering="id")
 
 
 class TrueUserType(DjangoObjectType):
@@ -152,23 +133,6 @@ class BeneficiarioType(DjangoObjectType):
 class ContactosType(DjangoObjectType):
     class Meta:
         model = Contacto
-
-        filter_fields = {
-            "id": ("exact", ),
-            "nombreCompleto": ("icontains", "iexact"),
-            "alias_inguz": ("icontains", "iexact"),
-            "bloqueado": ("exact", ),
-            "activo": ("exact", ),
-            "es_inguz": ("exact",)
-        }
-
-
-class ContactosListType(DjangoListObjectType):
-    class Meta:
-        description = " Type definition for Contactos list "
-        model = Contacto
-        pagination = LimitOffsetGraphqlPagination(
-            default_limit=10, ordering="nombre")
 
 
 class ValidacionType(DjangoObjectType):
@@ -281,7 +245,7 @@ class BuscadorInguzType(graphene.ObjectType):
             return None
 
 
-class Query(graphene.ObjectType):
+class Query(object):
     """
         >>> Query (Pregunstas Secretas) Example:
             query{
@@ -424,21 +388,18 @@ class Query(graphene.ObjectType):
                                             description="`Query all objects from the \
                                             respuesta_secreta model`")
 
-    all_pregunta_seguridad = DjangoListObjectField(PreguntaTypeListType,
-                                                   description="`Query all objects from the \
+    all_pregunta_seguridad = graphene.List(PreguntaType,
+                                           description="`Query all objects from the \
                                             pregunta_secreta model`")
 
     all_pregunta_seguridad_pwd = graphene.List(PreguntaType,
                                                description="`Query all objects from the \
                                             pregunta_secreta model`")
 
-    all_contactos = DjangoListObjectField(
-        ContactosListType,
-        token=graphene.String(required=True),
-        description="`Query all the objects from the \
-        lista contactos model`",
-    )
-
+    all_contactos = graphene.List(ContactosType,
+                                  token=graphene.String(required=True),
+                                  description="`Query all the objects from the \
+                                            lista contactos model`")
     get_INE_Profile = graphene.List(INERegAttemptType,
                                     token=graphene.String(required=True),
                                     description="`Query a single object from the \
@@ -905,7 +866,7 @@ class Query(graphene.ObjectType):
                 except Exception:
                     contacto.alias_inguz = "Cuenta inguz no encontrada"
                 contacto.save()
-        return (user.Contactos_Usuario.all())
+        return (user.Contactos_Usuario.all().order_by('nombre'))
 
     @login_required
     def resolve_profile_validities(self, info, **kwargs):
