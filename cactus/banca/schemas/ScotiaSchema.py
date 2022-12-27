@@ -7,7 +7,7 @@ from django.contrib.auth import get_user_model
 from django.utils import timezone
 
 from graphql_jwt.decorators import login_required
-from graphene_django_extras import all_directives, DjangoObjectType
+from graphene_django.types import DjangoObjectType
 
 from spei.stpTools import randomString
 from spei.models import InstitutionBanjico
@@ -504,8 +504,4 @@ class Mutation(graphene.ObjectType):
     create_scotia_deposito = CreateScotiaDeposito.Field()
 
 
-schema = graphene.Schema(
-    query=Query,
-    mutation=Mutation,
-    directives=all_directives
-)
+schema = graphene.Schema(query=Query, mutation=Mutation)

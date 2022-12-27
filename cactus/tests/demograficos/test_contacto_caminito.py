@@ -253,9 +253,7 @@ class TestContacto(JSONWebTokenTestCase):
         query = '''
             query allContactos($token: String!){
                 allContactos(token: $token){
-                    results{
-                        activo
-                    }
+                    activo
                 }
             }
         '''
@@ -273,6 +271,5 @@ class TestContacto(JSONWebTokenTestCase):
         # Query allContactos con variables correctas
         variables = {'token': self.token}
         res = self.client.execute(query, variables)
-        self.assertEqual(
-            res.data['allContactos']['results'][0]['activo'], False)
+        self.assertEqual(res.data['allContactos'][0]['activo'], False)
         print("    [assert OK] Contacts in order!  ")

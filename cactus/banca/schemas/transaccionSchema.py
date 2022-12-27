@@ -5,13 +5,9 @@ from datetime import datetime
 from django.utils import timezone
 from django.contrib.auth import get_user_model
 
-from graphene_django_extras import (
-    DjangoListObjectType,
-    DjangoObjectType,
-    DjangoListObjectField
-)
-from graphene_django_extras.paginations import LimitOffsetGraphqlPagination
+from graphene_django.types import DjangoObjectType
 
+from django.db.models import Q
 
 from graphql_jwt.decorators import login_required
 
@@ -44,22 +40,6 @@ class TransaccionType(DjangoObjectType):
     class Meta:
         model = Transaccion
 
-        filter_fields = {
-            "id": ("exact", ),
-            "fechaValor": ("icontains", "iexact"),
-            "statusTrans": ("exact", ),
-            "tipoTrans": ("exact", ),
-            "claveRastreo": ("exact", ),
-        }
-
-
-class TransaccionTypeListType(DjangoListObjectType):
-    class Meta:
-        description = " Type definition for Transaccion list "
-        model = Transaccion
-        pagination = LimitOffsetGraphqlPagination(
-            default_limit=10, ordering="-id")
-
 
 class StpTransaccionType(DjangoObjectType):
     class Meta:
@@ -79,19 +59,6 @@ class TipoAnualType(DjangoObjectType):
 class NotificacionCobroType(DjangoObjectType):
     class Meta:
         model = NotificacionCobro
-
-        filter_fields = {
-            "id": ("exact", ),
-            "status": ("exact", ),
-        }
-
-
-class NotificacionCobroListType(DjangoListObjectType):
-    class Meta:
-        description = " Type definition for Cobros list "
-        model = NotificacionCobro
-        pagination = LimitOffsetGraphqlPagination(
-            default_limit=10, ordering="-id")
 
 
 class TipoTransType(DjangoObjectType):
@@ -378,27 +345,43 @@ class Query(graphene.ObjectType):
     }
 
     """
-    transaccion = graphene.Field(StpTransaccionType,
+    transaccion = graphene.Field(TransaccionType,
                                  id=graphene.Int(),
                                  token=graphene.String())
-    all_transaccion = DjangoListObjectField(TransaccionTypeListType,
-                                    token=graphene.String())
+    all_transaccion = graphene.List(TransaccionType,
+                                    limit=graphene.Int(),
+                                    offset=graphene.Int(),
+                                    ordering=graphene.String(),
+                                    token=graphene.String(required=True))
     stp_transaccion = graphene.Field(StpTransaccionType,
                                      id=graphene.Int(),
-                                     token=graphene.String())
+                                     token=graphene.String(required=True))
     all_stp_transaccion = graphene.List(StpTransaccionType,
                                         id=graphene.Int(),
                                         fecha=graphene.String(),
                                         token=graphene.String())
-    all_cobros = DjangoListObjectField(NotificacionCobroListType,
-                               token=graphene.String(required=True))
+    all_cobros = graphene.List(NotificacionCobroType,
+                               id=graphene.Int(),
+                               status=graphene.String(),
+                               limit=graphene.Int(),
+                               offset=graphene.Int(),
+                               ordering=graphene.String(),
+                               token=graphene.String())
 
     @login_required
-    def resolve_all_transaccion(self, info, **kwargs):
+    def resolve_all_transaccion(self, info, limit=None, offset=None,
+            ordering=None, status=None, **kwargs):
         user = info.context.user
-        if not user.is_anonymous:
-            return Transaccion.objects.filter(user=user)
-        return None
+        qs = user.user_transaccion.all()
+
+        if ordering:
+            qs = qs.order_by(ordering)
+        if offset:
+            qs = qs[offset:]
+        if limit:
+            qs = qs[:limit]
+
+        return qs
 
     @login_required
     def resolve_all_stp_transaccion(self, info, **kwargs):
@@ -436,11 +419,26 @@ class Query(graphene.ObjectType):
         return None
 
     @login_required
-    def resolve_all_cobros(self, info, **kwargs):
+    def resolve_all_cobros(
+        self, info, limit=None, offset=None,
+            ordering=None, id=None, status=None, **kwargs):
         user = info.context.user
-        cobros = user.mis_notificaciones_cobro.all()
+        qs = user.mis_notificaciones_cobro.all()
+
+        if id:
+            filter = Q(id__iexact=id)
+            qs = qs.filter(filter)
+        if status:
+            filter = Q(status__exact=status)
+            qs = qs.filter(filter)
+        if ordering:
+            qs = qs.order_by(ordering)
+        if offset:
+            qs = qs[offset:]
+        if limit:
+            qs = qs[:limit]
         if not user.is_anonymous:
-            for cobro in cobros:
+            for cobro in qs:
                 cobro.valida_vencido()
                 contacto_solicitante = Contacto.objects.filter(
                     user=user).filter(
@@ -452,7 +450,7 @@ class Query(graphene.ObjectType):
                     # El solicitante no existe en los contactos del deudor
                     cobro.id_contacto_solicitante = -1
                 cobro.save()
-        return cobros
+        return qs
 
 
 class CreateTransferenciaEnviada(graphene.Mutation):
