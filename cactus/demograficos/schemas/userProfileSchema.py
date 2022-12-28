@@ -864,11 +864,11 @@ class Query(graphene.ObjectType):
 
     @login_required
     def resolve_all_contactos(
-        self, info, limit=None, offset=None, ordering=None, es_inguz=None, 
-        bloqueado=None, activo=None, alias_inguz=None, nombre=None, **kwargs):
+            self, info, limit=None, offset=None, ordering=None, es_inguz=None,
+            bloqueado=None, activo=None, alias_inguz=None, nombre=None, **kwargs):
 
         user = info.context.user
-        qs= user.Contactos_Usuario.all()
+        qs = user.Contactos_Usuario.all()
 
         if es_inguz is not None:
             filter = (
@@ -2523,13 +2523,16 @@ class VerifyAddContactos(graphene.Mutation):
         user = info.context.user
         clabes_agenda = list(map(
             lambda contacto: contacto.clabe,
-            user.Contactos_Usuario.exclude(activo="False")))
+            user.Contactos_Usuario.exclude(activo="False").exclude(
+                clabe='')))
+
         usuarios_inguz = User.objects.filter(
             username__in=agenda).filter(
                 is_staff=False).exclude(
                     username=user.username).exclude(
-                        Uprofile__cuentaClabe__in=clabes_agenda)
-
+                        Uprofile__cuentaClabe__in=clabes_agenda).exclude(
+                            Uprofile__cuentaClabe__isnull=True).exclude(
+                                Uprofile__cuentaClabe='')
         if agregar:
 
             _valida(user.Uprofile.password is None,
