@@ -28,18 +28,9 @@ spec:
         app: traefik
     spec:
       serviceAccountName: traefik-ingress-controller
-      # Aqui montamos el configmap en un volumen en la imagen. Kube
-      # nos deja hacer eso y no tenemos que meternos con el build de la imagen
-      volumes:
-      - name: config
-        configMap:
-          name: traefik-conf
       containers:
         - name: traefik
           image: traefik:v2.3
-          volumeMounts:
-          - mountPath: "/config"
-            name: config
           args:
             # Esto dice que puedes entrar al dashbaord sin seguiridad
             # en el puerto 8080
@@ -58,9 +49,10 @@ spec:
             - --providers.kubernetescrd
 
             # Dynamic configuration file that has to be mounted in the image
-            - --providers.file.directory=/config
+            # - --providers.file.directory=/config
 
             # Esta es la parte para hacer tls con Let's encrypt
+            # Hay que ponerle true
             - --certificatesresolvers.default.acme.tlschallenge=true
             - --certificatesresolvers.default.acme.email=mjaramillo@inguzmx.com
             - --certificatesresolvers.default.acme.storage=acme.json

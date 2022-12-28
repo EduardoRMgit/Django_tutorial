@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: traefik-conf
+data:
+  traefik.yaml: |
+    http:
+      middlewares:
+        doc-auth2:
+          basicAuth:
+            users:
+              - test:$apr1$YmN5e0XU$.MImON.h26fKUoRIsQnmH/
+              - aldo:$apr1$maNHUzQR$sfb/dwhtYTk3K6kYtqs861
+
+        redirect:
+          redirectScheme:
+            scheme: https

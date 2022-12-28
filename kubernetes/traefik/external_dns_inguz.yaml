@@ -1,23 +1,68 @@
+# External DNS crea los record sets necesarios en AWS automaticamente basandose
+# en los archivos de traefik, para no tener que estar creandolos a mano cada vez
+# Necesita su serviceaccount para hacer cambios
+# Un usuario con permisos y el deployment que estara vigilando por cambios
+# para creaer o borrar los route zones basado en si cambian los Services
+# o los routers
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: external-dns
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: external-dns
+rules:
+- apiGroups: [""]
+  resources: ["services"]
+  verbs: ["get","watch","list"]
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get","watch","list"]
+- apiGroups: ["networking","networking.k8s.io"]
+  resources: ["ingresses"]
+  verbs: ["get","watch","list"]
+- apiGroups: [""]
+  resources: ["nodes"]
+  verbs: ["list","watch"]
+- apiGroups: [""]
+  resources: ["endpoints"]
+  verbs: ["get","watch","list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: external-dns-viewer
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: external-dns
+subjects:
+- kind: ServiceAccount
+  name: external-dns
+  namespace: default
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: external-dns-inguz
+  name: external-dns
   labels: 
-    app: external-dns-inguz
+    app: external-dns
 spec:
   selector:
     matchLabels:
-      app: external-dns-inguz
+      app: external-dns
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: external-dns-inguz
+        app: external-dns
     spec:
       serviceAccountName: external-dns
       containers:
-      - name: external-dns-inguz
+      - name: external-dns
         image: registry.opensource.zalan.do/teapot/external-dns:latest
         args:
         - --source=service
@@ -27,6 +72,6 @@ spec:
         # - --policy=upsert-only # would prevent ExternalDNS from deleting any records, omit to enable full synchronization
         - --aws-zone-type=public # only look at public hosted zones (valid values are public, private or no value for both)
         - --registry=txt
-        - --txt-owner-id=/hostedzone/Z07427703JU54MD6YTKNU
+        - --txt-owner-id=/hostedzone/Z00557771B8TPF4IONWE6
       securityContext:
         fsGroup: 65534 # For ExternalDNS to be able to read Kubernetes and AWS token files
