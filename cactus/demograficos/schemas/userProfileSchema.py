@@ -2038,11 +2038,13 @@ class CreateBeneficiario(graphene.Mutation):
 
     class Arguments:
         token = graphene.String(required=True)
+        nip = graphene.String(required=True)
         name = graphene.String(required=True)
         apellidopat = graphene.String()
         apellidomat = graphene.String()
         parentesco = graphene.Int(required=True)
         fecha_nacimiento = graphene.Date()
+        telefono = graphene.String()
         calle = graphene.String()
         numeroexterior = graphene.String()
         numerointerior = graphene.String()
@@ -2051,9 +2053,11 @@ class CreateBeneficiario(graphene.Mutation):
         municipio = graphene.String()
         estado = graphene.String()
 
+    @login_required
     def mutate(self,
                info,
                token,
+               nip,
                name,
                apellidopat,
                apellidomat,
@@ -2065,10 +2069,20 @@ class CreateBeneficiario(graphene.Mutation):
                colonia,
                municipio,
                estado,
-               fecha_nacimiento=None,
-               ):
+               fecha_nacimiento,
+               telefono):
         user = info.context.user
         if not user.is_anonymous:
+
+            def _valida(expr, msg):
+                if expr:
+                    raise Exception(msg)
+
+            _valida(user.Uprofile.password is None,
+                    'El usuario no ha establecido su NIP.')
+            _valida(not user.Uprofile.check_password(nip),
+                    'El NIP es incorrecto.')
+
             if name is not None:
                 name = name.strip()
             parentesco = Parentesco.objects.get(pk=parentesco)
@@ -2089,8 +2103,7 @@ class CreateBeneficiario(graphene.Mutation):
                 dir_colonia=colonia,
                 dir_municipio=municipio,
                 dir_estado=estado,
-
-
+                telefono=telefono,
             )
             try:
                 InfoValidator.setCheckpoint(user=user, concepto='CBN',
