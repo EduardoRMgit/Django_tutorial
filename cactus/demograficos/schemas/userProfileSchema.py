@@ -1630,7 +1630,8 @@ class ChangePassword(graphene.Mutation):
                 user.set_password(new_password)
                 user.save()
                 return ChangePassword(user=user)
-            return ChangePassword(user=user)
+            if not user.check_password(old_password):
+                raise AssertionError("Contraseña actual incorecta")
 
 
 class DeleteDevice(graphene.Mutation):
