@@ -12,6 +12,9 @@ from graphene_django.types import DjangoObjectType
 from graphql_jwt.decorators import login_required
 from graphql_jwt.shortcuts import get_token
 
+from django.db.models import Q
+
+from django.conf import settings
 from django.contrib.auth import authenticate
 from django.http import HttpRequest
 from django.contrib.auth.models import User
@@ -50,6 +53,8 @@ from banca.utils.clabe import es_cuenta_inguz
 from spei.models import InstitutionBanjico
 
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
+
+from axes.models import AccessAttempt
 
 
 db_logger = logging.getLogger("db")
@@ -242,7 +247,7 @@ class BuscadorInguzType(graphene.ObjectType):
             return None
 
 
-class Query(object):
+class Query(graphene.ObjectType):
     """
         >>> Query (Pregunstas Secretas) Example:
             query{
@@ -386,6 +391,7 @@ class Query(object):
                                             respuesta_secreta model`")
 
     all_pregunta_seguridad = graphene.List(PreguntaType,
+                                           tipo_nip=graphene.Boolean(),
                                            description="`Query all objects from the \
                                             pregunta_secreta model`")
 
@@ -394,6 +400,14 @@ class Query(object):
                                             pregunta_secreta model`")
 
     all_contactos = graphene.List(ContactosType,
+                                  limit=graphene.Int(),
+                                  offset=graphene.Int(),
+                                  ordering=graphene.String(),
+                                  es_inguz=graphene.Boolean(),
+                                  bloqueado=graphene.Boolean(),
+                                  activo=graphene.Boolean(),
+                                  alias_inguz=graphene.String(),
+                                  nombre=graphene.String(),
                                   token=graphene.String(required=True),
                                   description="`Query all the objects from the \
                                             lista contactos model`")
@@ -826,8 +840,12 @@ class Query(object):
     def resolve_all_respuesta_seguridad(self, info, **kwargs):
         return RespuestaSeguridad.objects.all()
 
-    def resolve_all_pregunta_seguridad(self, info, **kwargs):
-        return PreguntaSeguridad.objects.all()
+    def resolve_all_pregunta_seguridad(self, info, tipo_nip=None, **kwargs):
+        qs = PreguntaSeguridad.objects.all()
+        if tipo_nip is not None:
+            filter = Q(tipo_nip__exact=tipo_nip)
+            qs = qs.filter(filter)
+        return qs
 
     def resolve_all_pregunta_seguridad_pwd(self, info, **kwargs):
         return PreguntaSeguridad.objects.filter(tipo_nip=False)
@@ -845,9 +863,47 @@ class Query(object):
             return PreguntaSeguridad.objects.filter(respuesta_secreta=user)
 
     @login_required
-    def resolve_all_contactos(self, info, **kwargs):
+    def resolve_all_contactos(
+            self, info, limit=None, offset=None, ordering=None, es_inguz=None,
+            bloqueado=None, activo=None, alias_inguz=None, nombre=None, **kwargs):
+
         user = info.context.user
-        for contacto in user.Contactos_Usuario.all():
+        qs = user.Contactos_Usuario.all()
+
+        if es_inguz is not None:
+            filter = (
+                Q(es_inguz__exact=es_inguz)
+            )
+            qs = qs.filter(filter)
+        if bloqueado is not None:
+            filter = (
+                Q(bloqueado__exact=bloqueado)
+            )
+            qs = qs.filter(filter)
+        if activo is not None:
+            filter = (
+                Q(activo__exact=activo)
+            )
+            qs = qs.filter(filter)
+        if alias_inguz:
+            filter = (
+                Q(alias_inguz__icontains=alias_inguz)
+            )
+            qs = qs.filter(filter)
+        if nombre:
+            filter = (
+                Q(nombre__icontains=nombre) |
+                Q(ap_paterno__icontains=nombre) |
+                Q(ap_materno__icontains=nombre)
+            )
+            qs = qs.filter(filter)
+        if ordering:
+            qs = qs.order_by(ordering)
+        if offset:
+            qs = qs[offset:]
+        if limit:
+            qs = qs[:limit]
+        for contacto in qs:
             if es_cuenta_inguz(contacto.clabe):
                 try:
                     contacto_user = UserProfile.objects.get(
@@ -863,7 +919,7 @@ class Query(object):
                 except Exception:
                     contacto.alias_inguz = "Cuenta inguz no encontrada"
                 contacto.save()
-        return user.Contactos_Usuario.all()
+        return (qs)
 
     @login_required
     def resolve_profile_validities(self, info, **kwargs):
@@ -1574,7 +1630,7 @@ class ChangePassword(graphene.Mutation):
                 user.set_password(new_password)
                 user.save()
                 return ChangePassword(user=user)
-            return ChangePassword(user=user)
+            raise AssertionError("Contraseña actual incorrecta")
 
 
 class DeleteDevice(graphene.Mutation):
@@ -1847,6 +1903,8 @@ class UpdateInfoPersonal(graphene.Mutation):
             last_name_m = last_name_m.strip()
         if nationality is not None:
             nationality = nationality.strip()
+        if curp is not None:
+            curp = curp.upper()
         user = info.context.user
         if user.is_anonymous:
             raise AssertionError('usuario no identificado')
@@ -1980,11 +2038,13 @@ class CreateBeneficiario(graphene.Mutation):
 
     class Arguments:
         token = graphene.String(required=True)
+        nip = graphene.String(required=True)
         name = graphene.String(required=True)
         apellidopat = graphene.String()
         apellidomat = graphene.String()
         parentesco = graphene.Int(required=True)
         fecha_nacimiento = graphene.Date()
+        telefono = graphene.String()
         calle = graphene.String()
         numeroexterior = graphene.String()
         numerointerior = graphene.String()
@@ -1992,12 +2052,12 @@ class CreateBeneficiario(graphene.Mutation):
         colonia = graphene.String()
         municipio = graphene.String()
         estado = graphene.String()
-        
 
-
+    @login_required
     def mutate(self,
                info,
                token,
+               nip,
                name,
                apellidopat,
                apellidomat,
@@ -2009,10 +2069,27 @@ class CreateBeneficiario(graphene.Mutation):
                colonia,
                municipio,
                estado,
-               fecha_nacimiento=None,
-               ):
+               fecha_nacimiento,
+               telefono):
         user = info.context.user
         if not user.is_anonymous:
+
+            def _valida(expr, msg):
+                if expr:
+                    raise Exception(msg)
+
+            _valida(user.Uprofile.password is None,
+                    'El usuario no ha establecido su NIP.')
+            _valida(not user.Uprofile.check_password(nip),
+                    'El NIP es incorrecto.')
+
+            try:
+                user.User_Beneficiario.all().delete()
+            except Exception as ex:
+                msg = f"[CreateBeneficiario] Error al borrar benefs de {user} "
+                msg += ex
+                db_logger.info(msg)
+
             if name is not None:
                 name = name.strip()
             parentesco = Parentesco.objects.get(pk=parentesco)
@@ -2032,9 +2109,8 @@ class CreateBeneficiario(graphene.Mutation):
                 dir_CP=codigopostal,
                 dir_colonia=colonia,
                 dir_municipio=municipio,
-                dir_estado= estado,
-
-
+                dir_estado=estado,
+                telefono=telefono,
             )
             try:
                 InfoValidator.setCheckpoint(user=user, concepto='CBN',
@@ -2305,6 +2381,8 @@ class UpdateNip(graphene.Mutation):
             if UP.statusNip == 'U':
                 if len(new_nip) != 4:
                     raise ValueError('NIP debe contener 4 caracteres')
+                elif not new_nip.isnumeric():
+                    raise ValueError('NIP debe ser numérico')
                 else:
                     try:
                         nip_temporal = user.user_nipTemp.filter(
@@ -2395,17 +2473,28 @@ mutation{
         ap_materno = graphene.String()
         banco = graphene.String()
         clabe = graphene.String()
+        nip = graphene.String()
 
     def mutate(self, info, token, nombreCompleto='', nombre='', ap_paterno='',
-               ap_materno='', banco='', clabe=''):
+               ap_materno='', banco='', clabe='', nip=None):
+
+        def _valida(expr, msg):
+            if expr:
+                raise Exception(msg)
+
         user = info.context.user
+        if nip:
+            _valida(user.Uprofile.password is None,
+                    'El usuario no ha establecido su NIP.')
+            _valida(not user.Uprofile.check_password(nip),
+                    'El NIP es incorrecto.')
+
         try:
             name_banco = InstitutionBanjico.objects.get(
                 short_id=str(clabe[:3])).short_name
         except Exception as e:
-            raise AssertionError(
-                'CLABE inválida, no existe banco válido para esa CLABE:',
-                e)
+            raise Exception(
+                'CLABE inválida, no existe banco válido para esa CLABE')
         if Contacto.objects.filter(user=user,
                                    clabe=clabe,
                                    activo=True).count() > 0:
@@ -2454,13 +2543,16 @@ class VerifyAddContactos(graphene.Mutation):
         user = info.context.user
         clabes_agenda = list(map(
             lambda contacto: contacto.clabe,
-            user.Contactos_Usuario.exclude(activo="False")))
+            user.Contactos_Usuario.exclude(activo="False").exclude(
+                clabe='')))
+
         usuarios_inguz = User.objects.filter(
             username__in=agenda).filter(
                 is_staff=False).exclude(
                     username=user.username).exclude(
-                        Uprofile__cuentaClabe__in=clabes_agenda)
-
+                        Uprofile__cuentaClabe__in=clabes_agenda).exclude(
+                            Uprofile__cuentaClabe__isnull=True).exclude(
+                                Uprofile__cuentaClabe='')
         if agregar:
 
             _valida(user.Uprofile.password is None,
@@ -2692,7 +2784,7 @@ class DeleteContacto(graphene.Mutation):
                 contacto.activo = False
                 contacto.save()
             except ObjectDoesNotExist:
-                raise Exception ("No existe contacto activo")
+                raise Exception("No existe contacto activo")
             except MultipleObjectsReturned:
                 associated_user.Contactos_Usuario.filter(
                     clabe=clabe).update(activo=False)
@@ -3145,6 +3237,111 @@ class UrlAvatar(graphene.Mutation):
         return UrlAvatar(url=avatar_url)
 
 
+class DeleteBluepixelUser(graphene.Mutation):
+    borrado = graphene.String()
+
+    class Arguments:
+        username = graphene.String(required=True)
+
+    def mutate(self, info, username):
+
+        msg = f"[DeleteBluepixelUser] Petición recibida. User: {username}"
+        db_logger.info(msg)
+
+        if settings.SITE not in ["stage", "local"]:
+            raise Exception("No está permitido el borrado en este ambiente")
+
+        bp_usernames = [
+            "5568161651",
+            "5567907071",
+            "5611670737",
+            "2871313291",
+            "2871628373",
+            "5586999540",
+            "2223644726",
+            "2212299619",
+            "5520783405",
+            "2871095852",
+            "2871218166"
+        ]
+        if username not in bp_usernames:
+            msg_ex = f"No está permitido borrar al usuario {username}"
+            msg = "[DeleteBluepixelUser] " + msg_ex
+            db_logger.info(msg)
+            raise Exception(
+                f"Sólo tienes permitido borrar los siguientes: {bp_usernames}")
+
+        user = User.objects.filter(username=username)
+        if user.count() == 0:
+            msg_ex = f"No existe el usuario {username}"
+            msg = "[DeleteBluepixelUser] " + msg_ex
+            db_logger.info(msg)
+            raise Exception(msg_ex)
+
+        user = user.first()
+        user.delete()
+        msg = f"[DeleteBluepixelUser] Usuario {username} borrado"
+        db_logger.info(msg)
+
+        return DeleteBluepixelUser(borrado=f"Usuario {username} borrado")
+
+
+class UnblockBluePixelUser(graphene.Mutation):
+    desbloqueado = graphene.String()
+
+    class Arguments:
+        username = graphene.String(required=True)
+
+    def mutate(self, info, username):
+
+        msg = f"[UnblockBluePixelUser] Petición recibida. User: {username}"
+        db_logger.info(msg)
+
+        if settings.SITE not in ["stage", "local"]:
+            raise Exception("No está permitido el borrado en este ambiente")
+
+        bp_usernames = [
+            "5568161651",
+            "5567907071",
+            "5611670737",
+            "2871313291",
+            "2871628373",
+            "5586999540",
+            "2223644726",
+            "2212299619",
+            "5520783405",
+            "2871095852",
+            "2871218166"
+        ]
+        if username not in bp_usernames:
+            msg_ex = f"No está permitido borrar al usuario {username}"
+            msg = "[UnblockBluePixelUser] " + msg_ex
+            db_logger.info(msg)
+            raise Exception(
+                f"Sólo tienes permitido desbloquear los siguientes: \
+                {bp_usernames}")
+
+        user = User.objects.filter(username=username)
+        if user.count() == 0:
+            msg_ex = f"No existe el usuario {username}"
+            msg = "[UnblockBluePixelUser] " + msg_ex
+            db_logger.info(msg)
+            raise Exception(msg_ex)
+        user_ = User.objects.get(username=username)
+        up = user_.Uprofile
+        up.login_attempts = 0
+        up.blocked_reason = "K"
+        up.status = "O"
+        up.save()
+        user_.save()
+        AccessAttempt.objects.filter(username=username).delete()
+        msg = f"[UnblockBluePixelUser] Usuario {username} desbloqueado"
+        db_logger.info(msg)
+
+        return UnblockBluePixelUser(
+            desbloqueado=f"Usuario {username} desbloqueado")
+
+
 class Mutation(graphene.ObjectType):
     delete_pregunta_seguridad = BorrarPreguntaSeguridad.Field()
     create_user = CreateUser.Field()
@@ -3182,3 +3379,5 @@ class Mutation(graphene.ObjectType):
     block_contacto = BlockContacto.Field()
     buscador_usuario_inguz = BuscadorUsuarioInguz.Field()
     unblock_contacto = UnBlockContacto.Field()
+    delete_bluepixel_user = DeleteBluepixelUser.Field()
+    unblock_bluepixel_user = UnblockBluePixelUser.Field()

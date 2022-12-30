@@ -59,7 +59,8 @@ class NotificacionCobro(models.Model):
         InguzTransaction,
         on_delete=models.CASCADE,
         related_name='cobros',
-        null=True
+        null=True,
+        blank=True,
     )
 
     class Meta():
