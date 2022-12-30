@@ -23,9 +23,10 @@ class LoggingGraphQLView(GraphQLView):
                 user = get_user_by_token(token)
                 username = user.username
             except Exception:
-                username = (data['variables']['username'])
-                password = (data['variables']['password'])
-                user = User.objects.get(username=username)
+                if 'tokenAuth' in data['query']:
+                    username = (data['variables']['username'])
+                    password = (data['variables']['password'])
+                    user = User.objects.get(username=username)
                 if not user.check_password(password):
                     return super().dispatch(request, *args, **kwargs)
         except Exception:
