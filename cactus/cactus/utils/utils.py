@@ -8,6 +8,7 @@ from graphene.utils.thenables import maybe_thenable
 from graphql_jwt import exceptions
 from graphql_jwt import signals
 from django.contrib.auth.models import User
+from demograficos.models import UserLocation
 from django.utils import timezone
 from graphql_jwt.decorators import (csrf_rotation,
                                     setup_jwt_cookie,
@@ -59,7 +60,16 @@ def token_auth(f):
                 _("Please enter valid credentials"),
             )
 
-        user.last_login = timezone.now()
+        location = UserLocation.objects.filter(user=user).last()
+        location.login = True
+        location.save()
+        qs = UserLocation.objects.filter(user=user, login=True).order_by(
+            '-date')
+        print(qs)
+        if qs.count() > 1:
+            user.last_login = qs[1].date
+        else:
+            user.last_login = timezone.now()
         user.save()
 
         if hasattr(context, "user"):

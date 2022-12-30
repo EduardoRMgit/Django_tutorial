@@ -80,6 +80,7 @@ class UserLocation(models.Model):
         related_name='user_device'
     )
     date = models.DateTimeField(default=timezone.now)
+    login = models.BooleanField(default=False)
 
     def __str__(self):
         return "{} {} {}".format(self.user,

@@ -65,8 +65,9 @@ class LoggingGraphQLView(GraphQLView):
                 valid_device = LoggingGraphQLView.set_screen(uuid=device_id,
                                               username=username)
                 if not valid_device:
-                    return HttpResponseForbidden(
-                        "action forbidden, wrong UUID")
+                    pass
+                    # return HttpResponseForbidden(
+                    #     "action forbidden, wrong UUID")
         return super().dispatch(request, *args, **kwargs)
 
     @classmethod
