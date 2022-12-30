@@ -66,6 +66,7 @@ class LoggingGraphQLView(GraphQLView):
                                               username=username)
                 if not valid_device:
                     pass
+                    # Descomentar cuando quieran validarlo.
                     # return HttpResponseForbidden(
                     #     "action forbidden, wrong UUID")
         return super().dispatch(request, *args, **kwargs)
