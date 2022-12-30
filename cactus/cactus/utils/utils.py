@@ -65,7 +65,6 @@ def token_auth(f):
         location.save()
         qs = UserLocation.objects.filter(user=user, login=True).order_by(
             '-date')
-        print(qs)
         if qs.count() > 1:
             user.last_login = qs[1].date
         else:
