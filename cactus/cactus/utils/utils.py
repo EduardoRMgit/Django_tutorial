@@ -61,8 +61,9 @@ def token_auth(f):
             )
 
         location = UserLocation.objects.filter(user=user).last()
-        location.login = True
-        location.save()
+        if location:
+            location.login = True
+            location.save()
         qs = UserLocation.objects.filter(user=user, login=True).order_by(
             '-date')
         print(qs)
