@@ -103,14 +103,16 @@ class UserTests(DemograficosTestBase):
                         $nombre: String!,
                         $nombreCompleto: String!,
                         $banco: String!,
-                        $clabe: String!
+                        $clabe: String!,
+                        $nip: String
                       ){
                         createContacto(
                           token: $token,
                           nombre: $nombre,
                           nombreCompleto: $nombreCompleto,
                           banco: $banco,
-                          clabe: $clabe
+                          clabe: $clabe,
+                          nip: $nip
                         ){
                         allContactos{
                             clabe
@@ -122,7 +124,8 @@ class UserTests(DemograficosTestBase):
                      'nombre': 'nombretest',
                      'nombreCompleto': 'nombreCompletotest',
                      'banco': 'bancotest',
-                     'clabe': '014456789098765432'}
+                     'clabe': '014456789098765432',
+                     'nip': '123456'}
         res = self.client.execute(mutation, variables)
         expected_res = {
             'createContacto': {
