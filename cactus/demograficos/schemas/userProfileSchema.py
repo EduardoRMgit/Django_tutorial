@@ -2486,21 +2486,20 @@ mutation{
         ap_materno = graphene.String()
         banco = graphene.String()
         clabe = graphene.String()
-        nip = graphene.String()
+        nip = graphene.String(required=True)
 
-    def mutate(self, info, token, nombreCompleto='', nombre='', ap_paterno='',
-               ap_materno='', banco='', clabe='', nip=None):
+    def mutate(self, info, token, nip, nombreCompleto='', nombre='', ap_paterno='',
+               ap_materno='', banco='', clabe=''):
 
         def _valida(expr, msg):
             if expr:
                 raise Exception(msg)
 
         user = info.context.user
-        if nip:
-            _valida(user.Uprofile.password is None,
-                    'El usuario no ha establecido su NIP.')
-            _valida(not user.Uprofile.check_password(nip),
-                    'El NIP es incorrecto.')
+        _valida(user.Uprofile.password is None,
+                'El usuario no ha establecido su NIP.')
+        _valida(not user.Uprofile.check_password(nip),
+                'El NIP es incorrecto.')
 
         try:
             name_banco = InstitutionBanjico.objects.get(
