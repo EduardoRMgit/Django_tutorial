@@ -101,6 +101,15 @@ def uProfilenuller(klass):
 
 class Avatar(models.Model):
 
+    opciones_genero = (
+            ("Mujer", "Mujer"),
+            ("Hombre", "Hombre"),
+            ("Otro", "Otro")
+    )
+    genero = models.CharField(null=True,
+                              blank=True,
+                              max_length=15,
+                              choices=opciones_genero)
     avatar_img = models.ImageField(upload_to='avatars',
                                    blank=True,
                                    null=True)
@@ -111,6 +120,8 @@ class Avatar(models.Model):
     description = models.CharField(max_length=128,
                                    blank=True,
                                    null=True)
+
+    activo = models.BooleanField(default=False)
 
     def __str__(self):
         return str(self.name)
