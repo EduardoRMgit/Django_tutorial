@@ -3262,7 +3262,8 @@ class DeleteBluepixelUser(graphene.Mutation):
             "2212299619",
             "5520783405",
             "2871095852",
-            "2871218166"
+            "2871218166",
+            "7714209743"
         ]
         if username not in bp_usernames:
             msg_ex = f"No está permitido borrar al usuario {username}"
@@ -3311,7 +3312,8 @@ class UnblockBluePixelUser(graphene.Mutation):
             "2212299619",
             "5520783405",
             "2871095852",
-            "2871218166"
+            "2871218166",
+            "7714209743"
         ]
         if username not in bp_usernames:
             msg_ex = f"No está permitido borrar al usuario {username}"
