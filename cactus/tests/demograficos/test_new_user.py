@@ -104,7 +104,7 @@ class UserTests(DemograficosTestBase):
                         $nombreCompleto: String!,
                         $banco: String!,
                         $clabe: String!,
-                        $nip: String
+                        $nip: String!
                       ){
                         createContacto(
                           token: $token,
@@ -125,7 +125,9 @@ class UserTests(DemograficosTestBase):
                      'nombreCompleto': 'nombreCompletotest',
                      'banco': 'bancotest',
                      'clabe': '014456789098765432',
-                     'nip': '123456'}
+                     'nip': '1234'}
+        self.user.Uprofile.set_password("1234")
+        self.user.Uprofile.save()
         res = self.client.execute(mutation, variables)
         expected_res = {
             'createContacto': {
