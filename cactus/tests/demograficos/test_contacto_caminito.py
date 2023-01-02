@@ -114,7 +114,7 @@ class TestContacto(JSONWebTokenTestCase):
                      'nombreCompleto': 'wazap',
                      'banco': 'fake',
                      'clabe': '014122223333444455',
-                     'nip': '123456'}
+                     'nip': '1234'}
         res = self.client.execute(mutation, variables)
         self.assertEqual(res.errors[0].message,
                          'Error decoding signature')
@@ -126,7 +126,9 @@ class TestContacto(JSONWebTokenTestCase):
                      'nombreCompleto': 'wazap',
                      'banco': 'fake',
                      'clabe': '014122223333444455',
-                     'nip': '123456'}
+                     'nip': '1234'}
+        self.user.Uprofile.set_password("1234")
+        self.user.Uprofile.save()
         res2 = self.client.execute(mutation, variables2)
         expected_res = {
                 "createContacto": {
