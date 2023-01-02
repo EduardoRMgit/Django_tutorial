@@ -2509,9 +2509,18 @@ mutation{
                 'CLABE inválida, no existe banco válido para esa CLABE')
         if Contacto.objects.filter(user=user,
                                    clabe=clabe,
-                                   activo=True).count() > 0:
+                                   activo=True,
+                                   bloqueado=False).count() > 0:
             raise Exception(
-                "Ya tienes esta CLABE guardada en otro contacto")
+                "Ya tienes esta CLABE agregada en tus contactos")
+        if Contacto.objects.filter(user=user,
+                            clabe=clabe,
+                            activo=True,
+                            bloqueado=True).count() > 0:
+            raise Exception(
+                "Esta cuenta CLABE la tienes en un contacto bloqueado, " \
+                "desbloquéalo desde el buscador con su alias.")
+        
         if not user.is_anonymous:
             nombre = nombre.strip()
             ap_paterno = ap_paterno.strip()
@@ -2825,7 +2834,7 @@ class BuscadorUsuarioInguz(graphene.Mutation):
 
     @login_required
     def mutate(self, info, token, alias, max_coincidencias=10):
-        if len(alias) <= 3:
+        if len(alias) < 3:
             return BuscadorUsuarioInguz([])
         query = UserProfile.objects.filter(
             alias__startswith=alias,
