@@ -439,8 +439,8 @@ class CreateScotiaDeposito(graphene.Mutation):
                info,
                token,
                monto,
-               ubicacion,
-               nip):
+               nip,
+               ubicacion=None):
 
         def validar(expr, msg):
             if expr:
