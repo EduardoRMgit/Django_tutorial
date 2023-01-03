@@ -102,9 +102,9 @@ def uProfilenuller(klass):
 class Avatar(models.Model):
 
     opciones_genero = (
-            ("Mujer", "Mujer"),
-            ("Hombre", "Hombre"),
-            ("Otro", "Otro")
+            ("M", "Mujer"),
+            ("H", "Hombre"),
+            ("O", "Otro")
     )
     genero = models.CharField(null=True,
                               blank=True,
