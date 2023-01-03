@@ -171,6 +171,8 @@ class AvatarType(graphene.ObjectType):
     id = graphene.Int()
     name = graphene.String()
     url = graphene.String()
+    genero = graphene.String()
+    activo = graphene.Boolean()
 
 
 class ContactoInguzType(graphene.ObjectType):
@@ -435,7 +437,7 @@ class Query(graphene.ObjectType):
                                    Parentesco Model")
     all_avatars = graphene.List(AvatarType,
                                 description="Query all the objects from the\
-                                   Avatar Model")
+                                Avatar Model")
     # Initiating resolvers for type all Queries
 
     def resolve_all_avatars(self, info, **kwargs):
@@ -462,6 +464,8 @@ class Query(graphene.ObjectType):
             dicc = {}
             dicc['id'] = avatar.id
             dicc['name'] = avatar.name
+            dicc['genero'] = avatar.genero
+            dicc['activo'] = avatar.activo
             try:
                 dicc['url'] = str((avatar.avatar_img.url).split("?")[0])
             except Exception:
