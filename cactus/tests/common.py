@@ -9,6 +9,8 @@ import json
 
 from django.test import TestCase, Client
 from django.contrib.auth.models import User
+from django.contrib.auth import authenticate
+from django.http import HttpRequest
 
 
 class CactusGraphQLTestCase(TestCase):
@@ -26,7 +28,10 @@ class CactusGraphQLTestCase(TestCase):
         # Login
         User.objects.create_user(username=self._username,
                                  password=self._userpass)
-        self._client.login(username=self._username, password=self._userpass)
+        request = HttpRequest()
+        authenticate(request,
+            username=self._username,
+            password=self._userpass)
 
     def query(self, query: str,
               device_id_header: str = None,

@@ -57,12 +57,6 @@ class TelefonoAdmin(admin.ModelAdmin):
     )
 
     search_fields = ('telefono',
-                     'country',
-                     'activo',
-                     'validado',
-                     'user',
-                     'proveedorTelefonico',
-                     'tipoTelefono',
                      )
 
     list_filter = ('country',
@@ -102,4 +96,4 @@ class TelefonoAdmin(admin.ModelAdmin):
 admin.site.register(Telefono, TelefonoAdmin)
 admin.site.register(ProveedorTelefonico)
 admin.site.register(TipoTelefono)
-# admin.site.register(PhoneVerification, PhoneVeriicationAdmin)
+admin.site.register(PhoneVerification, PhoneVeriicationAdmin)

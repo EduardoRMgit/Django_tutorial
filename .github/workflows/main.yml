@@ -12,11 +12,12 @@ name: Deploy Production to Amazon EKS with helm
 
 env:
   REPO: cactus
+  REPO2: inguz-test
 
 jobs:
   checkout:
     name: Checkout
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     outputs:
         imaged1: ${{steps.imaged.outputs.imaged}}
 
@@ -30,10 +31,9 @@ jobs:
           source $REPO/autodeploy_env.sh
           echo $IMAGE_DJANGO
           echo "::set-output name=imaged::$(echo $IMAGE_DJANGO)"
-
   deploy:
     name: Deploy
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     needs: checkout
     if: ${{needs.checkout.outputs.imaged1 == 'true'}}
 
@@ -74,7 +74,6 @@ jobs:
           docker push $ECR_REGISTRY/$REPO:$IMAGE_TAG
           echo "::set-output name=image::$ECR_REGISTRY/$REPO:$IMAGE_TAG"
         fi;
-
     - name: Run Helm tools
       uses: Inguz-Digital-IFPE/kube-tools@v1
       env:
@@ -83,7 +82,11 @@ jobs:
         command: |
           source $REPO/autodeploy_env.sh
           echo "Configure Kubernetes"
-          aws eks update-kubeconfig --name $REPO-eksctl
+          if [[ ${GITHUB_REF##*/} == staging ]] || [[ ${GITHUB_REF##*/} == test ]] ; then
+            aws eks update-kubeconfig --name $REPO2
+          elif [[ ${GITHUB_REF##*/} == main ]] ; then
+            aws eks update-kubeconfig --name $REPO-eksctl
+          fi;
           echo "Package contents"
           helm package kubernetes/charts/$REPO
           echo "Set vars for deploy"
@@ -108,12 +111,12 @@ jobs:
             export STPSECRET=stpsecrettest
           fi;
           if [[ $NEW_RELEASE == true ]] ; then
-            # if helm list -q | grep -q $REPO-$SUFFIX; then
-            #   echo "Checking if previous release is present"
-            #   echo $(helm list -q)
-            #   echo "Delete previous chart because it is present"
-            #   helm del $REPO-$SUFFIX
-            # fi;
+            if helm list -q | grep $REPO-$SUFFIX; then
+              echo "Checking if previous release is present"
+              echo $(helm list -q)
+              echo "Delete previous chart because it is present"
+              helm del $REPO-$SUFFIX
+            fi;
             echo "Install helm chart"
             helm upgrade $REPO-$SUFFIX --install --force $REPO-0.1.0.tgz \
             --set rdsExternal=$DB \

@@ -5,6 +5,8 @@ from django.contrib.auth import get_user_model
 from django.core.management import call_command
 import string
 import random
+from django.contrib.auth import authenticate
+from django.http import HttpRequest
 
 
 class PasswordTestBase(JSONWebTokenTestCase):
@@ -20,7 +22,11 @@ class PasswordTestBase(JSONWebTokenTestCase):
     def setUp(self):
         self._client = Client()
         self.user = get_user_model().objects.get(username='test')
-        self._client.login(username=self.user.username)
+        self._pass = "12345678"
+        request = HttpRequest()
+        authenticate(request,
+            username=self.user,
+            password=self._pass)
         self.token = get_token(self.user)
 
 
@@ -222,7 +228,7 @@ class TestPreguntaNipPassword(PasswordTestBase):
         # UpdateNip <con token correcto>
         variables2 = {"token": self.token,
                       "oldNip": nip_temp,
-                      "newNip": "111111"}
+                      "newNip": "1111"}
         res2 = self.client.execute(mutation2, variables2)
         expected_res2 = {
                 "updateNip": {

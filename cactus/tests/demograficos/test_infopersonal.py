@@ -2,6 +2,8 @@ from graphql_jwt.testcases import JSONWebTokenTestCase
 from graphql_jwt.shortcuts import get_token
 from django.contrib.auth import get_user_model
 from django.core.management import call_command
+from demograficos.models import Avatar
+from django.core.files.images import ImageFile
 
 
 class TestInfopersonal(JSONWebTokenTestCase):
@@ -11,6 +13,11 @@ class TestInfopersonal(JSONWebTokenTestCase):
         call_command('loaddata', 'adminUtils', verbosity=0)
         call_command('loaddata', 'usertesting', verbosity=0)
         call_command('loaddata', 'statusRegistro', verbosity=0)
+        Avatar.objects.create(
+            avatar_img=ImageFile(open("Zygoovertical-01.jpg", "rb")),
+            name="test",
+            description="test"
+        )
 
         self.user = get_user_model().objects.get(username='test')
         self.token = get_token(self.user)
@@ -44,13 +51,14 @@ class TestInfopersonal(JSONWebTokenTestCase):
                         firstName
                         lastName
                         Uprofile{
+                          alias
                           apMaterno
                           sexo
                           nacionalidad
                           ciudadNacimiento
                           ocupacion
                           # curp
-                          rfc
+                          # rfc
                           # fechaNacimiento
                         }
                     }
@@ -65,7 +73,7 @@ class TestInfopersonal(JSONWebTokenTestCase):
                      "nationality": "Mexicano",
                      "city": "Neza",
                      "occupation": "tester",
-                     "rfc": "VAQD970909H96",
+                     # "rfc": "VAQD970909H96",
                      # "curp": "VAQD970909HDFLJN03",
                      # "birthDate": "1999-08-13"
                      }
@@ -76,13 +84,14 @@ class TestInfopersonal(JSONWebTokenTestCase):
                     "firstName": "TestName",
                     "lastName": "ApellidoPTest",
                     "Uprofile": {
+                      "alias": "TestName17",
                       "apMaterno": "ApellidoMTest",
                       "sexo": "trans",
                       "nacionalidad": "Mexicano",
                       "ciudadNacimiento": "Neza",
                       "ocupacion": "tester",
                       # "curp": "VAQD970909HDFLJN03",
-                      "rfc": "VAQD970909H96",
+                      # "rfc": "VAQD970909H96",
                       # "fechaNacimiento": "1999-08-13",
                     }
                 }

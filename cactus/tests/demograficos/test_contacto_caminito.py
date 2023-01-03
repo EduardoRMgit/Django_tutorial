@@ -5,6 +5,8 @@ from django.contrib.auth import get_user_model
 from django.core.management import call_command
 import string
 import random
+from django.contrib.auth import authenticate
+from django.http import HttpRequest
 
 
 class TestContacto(JSONWebTokenTestCase):
@@ -66,14 +68,18 @@ class TestContacto(JSONWebTokenTestCase):
               usuario, se encuentre en la base de datos como inactivo.
         """
     @classmethod
-    def setUpTestData(cls):
+    def setUpTestData(self):
         call_command('loaddata', 'usertesting', verbosity=0)
         call_command('loaddata', 'institutionbanjico', verbosity=0)
 
-        cls._client = Client()
-        cls.user = get_user_model().objects.get(username='test')
-        cls._client.login(username=cls.user.username)
-        cls.token = get_token(cls.user)
+        self._client = Client()
+        self.user = get_user_model().objects.get(username='test')
+        self._pass = "12345678"
+        request = HttpRequest()
+        authenticate(request,
+            username=self.user,
+            password=self._pass)
+        self.token = get_token(self.user)
 
     def test_contacto(self):
         # (createContacto)' <con token incorrecto>
@@ -214,7 +220,7 @@ class TestContacto(JSONWebTokenTestCase):
                       "clabe": "014111111111111111"}
         res6 = self.client.execute(mutation3, variables6)
         self.assertEqual(res6.errors[0].message,
-                         'Contacto matching query does not exist.')
+                         'No existe contacto activo')
         print("    [assert OK] Wrong CLABE for deleteContacto")
 
         # Ahora el (test)' deleteContacto <con token incorrecto>

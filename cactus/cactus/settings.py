@@ -14,6 +14,8 @@ import os
 import environ
 from datetime import timedelta
 
+SITE = os.getenv("SITE", "local")
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -41,10 +43,11 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'staging.inguz.site',
                  'test.inguz.site', 'prod.inguz.site',
                  'staging.zygoo.mx', 'test.zygoo.mx',
                  'inguz.site', 'zygoo.mx', '10.195.1.207',
-                 '10.5.1.1', 'inguzmx.com', ]
+                 '10.5.1.1', 'inguzmx.com', 'staging.inguz.online',
+                 'test.inguz.online']
 
-RECAPTCHA_PUBLIC_KEY = '6LcTX1AaAAAAAN30Sl2EMuGJHCnbsiX-934v91A7'
-RECAPTCHA_PRIVATE_KEY = '6LcTX1AaAAAAADsgnyMWbEy8H7DTAcVYdqs3KGU3'
+RECAPTCHA_PUBLIC_KEY = '6Lc_Z2ojAAAAAIi_BPRSrrmkle33Yk9pf4JtWEsQ'
+RECAPTCHA_PRIVATE_KEY = '6Lc_Z2ojAAAAAKxXKQwxFosKmzM7SHxxuKn2w1zP'
 RECAPTCHA_REQUIRED_SCORE = 0.85
 
 # Application definition
@@ -62,14 +65,15 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'storages',
-    'django_db_logger',
     'graphene_django',
     'graphql_jwt.refresh_token.apps.RefreshTokenConfig',
     'reportlab',
     'rangefilter',
     'notifications',
     'django_extensions',
+    'axes',
     # Nuestras apps internas
+    'CactusDBLogger',
     'banca.apps.BancaConfig',
     'demograficos.apps.DemograficosConfig',
     'administradores.apps.AdministradoresConfig',
@@ -86,6 +90,7 @@ INSTALLED_APPS = [
     'pagos.rapydcollect.apps.RapydcollectConfig',
     'scotiabank.apps.ScotiabankConfig',
     'renapo.apps.RenapoConfig',
+    'dapp.apps.DappConfig',
 ]
 
 if (PROD):
@@ -123,6 +128,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_auto_logout.middleware.auto_logout',
+    'axes.middleware.AxesMiddleware',
 ]
 
 CORS_ORIGIN_ALLOW_ALL = False
@@ -159,6 +166,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django_auto_logout.context_processors.auto_logout_client',
             ],
         },
     },
@@ -178,6 +186,7 @@ MULTI_CAPTCHA_ADMIN = {
 }
 
 AUTHENTICATION_BACKENDS = [
+    'axes.backends.AxesStandaloneBackend',
     'graphql_jwt.backends.JSONWebTokenBackend',
     'django.contrib.auth.backends.ModelBackend',
     'cactus.customAuthBackend.EmailBackend',
@@ -188,7 +197,8 @@ AUTHENTICATION_BACKENDS = [
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
 GRAPHQL_JWT = {
     'JWT_VERIFY_EXPIRATION': True,
-    'JWT_EXPIRATION_DELTA': timedelta(minutes=1440),
+    'JWT_EXPIRATION_DELTA': timedelta(hours=4),
+    "JWT_REFRESH_EXPIRATION_DELTA": timedelta(hours=4),
     'JWT_ALLOW_ARGUMENT': True,
 }
 
@@ -241,7 +251,7 @@ LOGGING = {
     'handlers': {
         'db_log': {
             'level': 'DEBUG',
-            'class': 'django_db_logger.db_log_handler.DatabaseLogHandler'
+            'class': 'CactusDBLogger.db_log_handler.DatabaseLogHandler'
         },
     },
     'loggers': {
@@ -287,3 +297,39 @@ DATA_UPLOAD_MAX_NUMBER_FIELDS = 10240
 
 PASSWORD_RESET_TIMEOUT_DAYS = 2
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
+
+AXES_ONLY_USER_FAILURES = True
+
+AXES_ONLY_ADMIN_SITE = True
+
+AXES_COOLOFF_TIME = timedelta(minutes=10)
+
+DAPP_KEY = env.str('DAPP_KEY', "f2338337-61ee-4eb6-8ea3-7c10b002d3f9")
+DAPP_SECRET = env.str('DAPP_SECRET',
+                      "0f8d831dddfac45b0ae56e0cadb92a293f39adbd5d957519cbbca22e37ab2173")
+
+if SITE == "local":
+    idle_time = 120
+    AXES_FAILURE_LIMIT = 10
+    INSTALLED_APPS.remove('multi_captcha_admin')
+elif SITE == "stage":
+    idle_time = 30
+    AXES_FAILURE_LIMIT = 5
+elif SITE == "test":
+    idle_time = 5
+    AXES_FAILURE_LIMIT = 5
+elif SITE == "prod":
+    idle_time = 5
+    AXES_FAILURE_LIMIT = 5
+
+AUTO_LOGOUT = {
+    'IDLE_TIME': timedelta(minutes=idle_time),
+    'SESSION_TIME': timedelta(hours=8),
+    'MESSAGE': 'Tu sesión ha expirado, por favor inicia sesión nuevamente.',
+    'REDIRECT_TO_LOGIN_IMMEDIATELY': True,
+}
+
+PREFIJO_CUENTA_INGUZ = "6461802180"
+
+URL_IMAGEN = "https://phototest420.s3.amazonaws.com/docs/docs/banca/comprobantes/comprobante_ejemplo.jpeg"

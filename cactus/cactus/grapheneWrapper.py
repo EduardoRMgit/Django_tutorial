@@ -1,4 +1,3 @@
-import json
 import math
 
 from django.http import HttpResponseForbidden
@@ -10,28 +9,26 @@ from graphql_jwt.shortcuts import get_user_by_token
 
 from demograficos.models.profileChecks import InfoValidator as Validator
 from demograficos.models import GeoLocation, GeoDevice, UserLocation
+import logging
+
+db_logger = logging.getLogger("db")
 
 
 class LoggingGraphQLView(GraphQLView):
     def dispatch(self, request, *args, **kwargs):
         try:
             data = self.parse_body(request)
-            token = str.encode(data['variables']['token'])
-            user = get_user_by_token(token)
-            username = user.username
-        except Exception:
             try:
-                username = request.headers['username']
+                token = str.encode(data['variables']['token'])
+                user = get_user_by_token(token)
+                username = user.username
             except Exception:
-                try:
-                    username = data['variables']['username']
-                except Exception:
-                    try:
-                        username = json.loads(data['variables'])['username']
-                    except Exception:
-                        username = None
-        try:
-            user = User.objects.get(username=username)
+                if 'tokenAuth' in data['query']:
+                    username = (data['variables']['username'])
+                    password = (data['variables']['password'])
+                    user = User.objects.get(username=username)
+                if not user.check_password(password):
+                    return super().dispatch(request, *args, **kwargs)
         except Exception:
             return super().dispatch(request, *args, **kwargs)
         last_location = UserLocation.objects.filter(user=user).last()
@@ -59,15 +56,19 @@ class LoggingGraphQLView(GraphQLView):
                 if dist > max_dist + 100:
                     # Crear warning
                     pass
-
         device_id = request.headers.get("Device-Id")
         if device_id:
             device = GeoDevice.objects.create(uuid=device_id)
             current_location.device = device
             current_location.save()
             if username is not None:
-                LoggingGraphQLView.set_screen(uuid=device_id,
+                valid_device = LoggingGraphQLView.set_screen(uuid=device_id,
                                               username=username)
+                if not valid_device:
+                    pass
+                    # Descomentar cuando quieran validarlo.
+                    # return HttpResponseForbidden(
+                    #     "action forbidden, wrong UUID")
         return super().dispatch(request, *args, **kwargs)
 
     @classmethod
@@ -77,17 +78,25 @@ class LoggingGraphQLView(GraphQLView):
             device = user.udevices.get(activo=True)
             if device.uuid != uuid:
                 print('setting screen to emergency for user {}'.format(
-                                                                     username))
+                    username))
                 Validator.setComponentValidated(alias='dispositivo',
                                                 user=user,
                                                 valid=False,
                                                 motivo='Este dispositivo es \
                                                 diferente al que tenemos \
                                                 registrado')
+                return False
             else:
-                pass
+                Validator.setComponentValidated(alias='dispositivo',
+                                                user=user,
+                                                valid=True,
+                                                motivo='')
+                return True
                 # print('normal start for user {}'.format(username))
-        except Exception:
+        except Exception as e:
+            msg = "[Inicio de sesión] No se pudo obtener device activo en \
+                Udevices.Error: {}.".format(e)
+            db_logger.info(msg)
             pass
             # print('normal start for user {}'.format(username))
 
@@ -123,8 +132,6 @@ class LoggingGraphQLView(GraphQLView):
         # Lo que recorre un avión en dos horas
         # se resta a las horas efectivas tiempo ascenso y descenso y esperas
         dist = plane_vel * (hours - max(0, 100/60))
-        print('////')
-        print(dist)
         return dist
 
     @classmethod

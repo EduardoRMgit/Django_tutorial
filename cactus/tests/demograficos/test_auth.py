@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 
 from django.contrib.auth import get_user_model
+from django.core.management import call_command
 
 from graphql_jwt.shortcuts import get_token
 
 from ..auth_client import JWTAuthClientTestCase
+from demograficos.models import Telefono
 
 
 class TokenTests(JWTAuthClientTestCase):
@@ -50,11 +52,19 @@ class TokenTests(JWTAuthClientTestCase):
         res = self.client.execute(mutation, variables)
         self.assertEqual(res.data['tokenAuth'], None)
         self.assertEqual(res.errors[0].message,
-                         'Please enter valid credentials')
+                         'Contraseña incorrecta')
 
 
 class CreateUserTests(JWTAuthClientTestCase):
     """ Pruebas de la mutación createUser. """
+
+    def setUp(self):
+        call_command('loaddata', 'statusRegistro', verbosity=0)
+        Telefono.objects.create(
+            telefono="5551029634",
+            activo=True,
+            validado=True
+        )
 
     def test_create_user(self):
         """ Prueba la mutación createUser.

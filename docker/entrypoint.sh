@@ -1,13 +1,8 @@
 #!/bin/bash
 
-# ./manage.py runserver 0.0.0.0:8000
-# Debug requests
-# gunicorn -c g_conf.py --bind 0.0.0.0:8000 --log-file g_logs --log-level debug cactus.wsgi
-
 # Extract private key from secrets
 echo "${RENAPO_PRIVATE_KEY}" > renapo.pem
 chmod 400 renapo.pem
-
 
 # host name for stp
 echo "192.168.66.211    prod.stpmex.com" >> /etc/hosts
@@ -25,8 +20,6 @@ if [[ $SITE == 'stage' ]] ; then
     scp -i neto.pem my_ip ubuntu@192.168.93.229:stage_ip
     # stp
     scp -i neto.pem my_ip ubuntu@192.168.66.211:stage_ip_${HASH}_$(hostname)
-    scp -i neto.pem my_ip ubuntu@192.168.84.232:stage_ip_${HASH}_$(hostname)
-    scp -i neto.pem my_ip ubuntu@192.168.66.224:stage_ip_${HASH}_$(hostname)
     # renapo
     scp -i renapo.pem my_ip ubuntu@192.168.87.187:stage_ip_${HASH}_$(hostname)
 fi;
@@ -36,29 +29,28 @@ if [[ $SITE == 'test' ]] ; then
     # scotia
     scp -i neto.pem my_ip ubuntu@192.168.93.229:test_ip
     # stp
-    # This command must be run for it to work:
-    # iwatch -c "bash tables.sh" -t "test_ip.*" -e create,modify ~
     scp -i neto.pem my_ip ubuntu@192.168.66.211:test_ip_${HASH}_$(hostname)
-    scp -i neto.pem my_ip ubuntu@192.168.84.232:test_ip_${HASH}_$(hostname)
-    scp -i neto.pem my_ip ubuntu@192.168.66.224:test_ip_${HASH}_$(hostname)
     # renapo
     scp -i renapo.pem my_ip ubuntu@192.168.87.187:test_ip_${HASH}_$(hostname)
 fi;
 
 if [[ $SITE == 'prod' ]] ; then
+    # Extract private key from secrets
+    echo "${STP_PK}" > llavePrivada.pem
+    unset STP_PK
+
     cat /etc/hosts | grep cactus-$SITE > my_ip
     # scotia
     scp -i neto.pem my_ip ubuntu@192.168.93.229:prod_ip
     # stp
     scp -i neto.pem my_ip ubuntu@192.168.66.211:prod_ip_${HASH}_$(hostname)
-    scp -i neto.pem my_ip ubuntu@192.168.84.232:prod_ip_${HASH}_$(hostname)
-    scp -i neto.pem my_ip ubuntu@192.168.66.224:prod_ip_${HASH}_$(hostname)
     # renapo
-    scp -i renapo.pem my_ip ubuntu@192.168.87.187:test_ip_${HASH}_$(hostname)
+    scp -i renapo.pem my_ip ubuntu@192.168.87.187:prod_ip_${HASH}_$(hostname)
 fi;
 
 chmod +w renapo.pem
 rm renapo.pem
+unset RENAPO_PRIVATE_KEY
 
 # Standard
 gunicorn --bind 0.0.0.0:8000 -t 2400 cactus.wsgi --log-level debug

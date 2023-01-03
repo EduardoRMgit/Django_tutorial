@@ -20,12 +20,37 @@ class TestBeneficiario(JSONWebTokenTestCase):
     def test_create_beneficiario(self):
         mutation = '''
         mutation createBeneficiario($token:String!,
+                                    $nip: String!,
                                     $name:String!,
-                                    $parentesco:Int!){
+                                    $apellidopat:String!,
+                                    $apellidomat:String,
+                                    $parentesco:Int!,
+                                    $calle:String!,
+                                    $numeroexterior:String!,
+                                    $numerointerior:String!,
+                                    $codigopostal:String!,
+                                    $colonia:String!,
+                                    $municipio:String!,
+                                    $estado: String!,
+                                    $telefono: String!,
+                                    $fechaNacimiento: Date!){
                 createBeneficiario(
                   token: $token,
+                  nip: $nip,
                   name: $name,
+                  apellidomat: $apellidomat,
+                  apellidopat: $apellidopat,
                   parentesco: $parentesco,
+                  calle: $calle,
+                  numeroexterior: $numeroexterior,
+                  numerointerior: $numerointerior,
+                  codigopostal: $codigopostal,
+                  colonia: $colonia,
+                  municipio: $municipio,
+                  estado: $estado,
+                  telefono: $telefono,
+                  fechaNacimiento: $fechaNacimiento
+
                 ){
                   beneficiario{
                     nombre
@@ -34,19 +59,36 @@ class TestBeneficiario(JSONWebTokenTestCase):
                 }
               }
               '''
+        self.user.Uprofile.set_password("1234")
+        self.user.Uprofile.save()
         variables = {
                     "token": self.token,
+                    "nip": "1234",
                     "name": "Aurora",
-                    "parentesco": 3}
+                    "apellidopat": "perez",
+                    "apellidomat": "paz",
+                    "parentesco": 3,
+                    "calle": "avenida siempre viva",
+                    "numeroexterior": "420",
+                    "numerointerior": "66",
+                    "codigopostal": "10910",
+                    "colonia": "col",
+                    "municipio": "Tlalpan",
+                    "estado": "CDMX",
+                    "telefono": "5578094114",
+                    "fechaNacimiento": "1990-05-28"}
         expected_res = {
                   "nombre": "Aurora",
                   "id": "1",
         }
 
         res = self.client.execute(mutation, variables)
+        print(res)
         my_dict = res.data['createBeneficiario']['beneficiario']
         my_dict_ = json.dumps(my_dict)
+        print(my_dict_)
         expected_res_ = json.dumps(expected_res)
+        print(expected_res_)
         self.assertEqual(my_dict_, expected_res_)
         # variables["linea1"] = variables["linea1"]+"1"
         # res = self.client.execute(mutation, variables)

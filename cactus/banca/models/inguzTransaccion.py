@@ -45,6 +45,16 @@ class InguzTransaction(models.Model):
         blank=True,
         null=True
     )
+    comprobante_img = models.ImageField(
+        upload_to='banca/comprobantes',
+        blank=True,
+        null=True
+    )
+    url_comprobante = models.URLField(
+        max_length=600,
+        blank=True,
+        null=True
+    )
 
     def get_main_transaccions(self):
         """

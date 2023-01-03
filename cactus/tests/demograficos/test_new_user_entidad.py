@@ -4,6 +4,9 @@ from django.test import Client
 from graphql_jwt.testcases import JSONWebTokenTestCase
 from django.core.management import call_command
 from ..perms import load_groups
+from django.contrib.auth import authenticate
+from django.http import HttpRequest
+from demograficos.models import Telefono
 
 
 class TestNewUserReferencia(JSONWebTokenTestCase):
@@ -18,10 +21,34 @@ class TestNewUserReferencia(JSONWebTokenTestCase):
         call_command('loaddata', 'user', verbosity=0)
         call_command('loaddata', 'statusRegistro', verbosity=0)
         call_command('loaddata', 'codigoconfianza', verbosity=0)
+        Telefono.objects.create(
+            telefono="testname",
+            activo=True,
+            validado=True
+        )
+        Telefono.objects.create(
+            telefono="testname03",
+            activo=True,
+            validado=True
+        )
+        Telefono.objects.create(
+            telefono="testname04",
+            activo=True,
+            validado=True
+        )
+        Telefono.objects.create(
+            telefono="Aldo",
+            activo=True,
+            validado=True
+        )
 
         self._client = Client()
         self.user = get_user_model().objects.get(username='test')
-        self._client.login(username=self.user.username)
+        self._pass = "12345678"
+        request = HttpRequest()
+        authenticate(request,
+            username=self.user,
+            password=self._pass)
 
     def test_create_user_codref(self):
         """Prueba la creación de usuario con contraseña y codigo de
@@ -33,6 +60,7 @@ class TestNewUserReferencia(JSONWebTokenTestCase):
                 createUser(
                     username: $username,
                     password: $password,
+                    test: true,
                     codigoReferencia: $codigoReferencia,
                         ){
                     user{
@@ -71,6 +99,7 @@ class TestNewUserReferencia(JSONWebTokenTestCase):
                 createUser(
                     username: $username,
                     password: $password,
+                    test: true,
                     codigoReferencia: $codigoReferencia,
                     ){
                     user{
@@ -100,6 +129,7 @@ class TestNewUserReferencia(JSONWebTokenTestCase):
             $codigoReferencia: String!) {
                 createUser(
                     username: $username,
+                    test: true,
                     codigoReferencia: $codigoReferencia,
                 ){
                     user{
@@ -132,6 +162,7 @@ class TestNewUserReferencia(JSONWebTokenTestCase):
             $codigoReferencia: String!) {
                 createUser(
                     username: $username,
+                    test: true,
                     codigoReferencia: $codigoReferencia,
                 ){
                     user{

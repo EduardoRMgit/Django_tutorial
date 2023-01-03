@@ -44,6 +44,7 @@ spec:
           # de tu programa por cambiando las variables de entonro que usas.
           # Ademas es muy seguro que esten guardadas solo en el env y no en un archivo
           env:
+            # POSTGRES
             - name: POSTGRES_USER
               valueFrom:
                 secretKeyRef:
@@ -59,9 +60,30 @@ spec:
             - name: POSTGRES_NAME
               value: {{ .Values.dbName | quote }}
 
+            # STP
             - name: STPSECRET
-              value: {{ .Values.stpSecret | quote }}
+              value: {{ .Values.stpSecret }}
 
+            - name: STP_PK
+              valueFrom:
+                secretKeyRef:
+                   name: {{ .Values.stpSecret }}
+                   key: stp-pk
+
+            # SCOTIA
+            - name: SBRSECRET
+              valueFrom:
+                secretKeyRef:
+                   name: {{ .Values.sbSecret }}
+                   key: retiro
+
+            - name: SBTSECRET
+              valueFrom:
+                secretKeyRef:
+                   name: {{ .Values.sbSecret }}
+                   key: transfer
+
+            # RENAPO
             - name: RENAPO_PRIVATE_KEY
               valueFrom:
                 secretKeyRef:
@@ -79,13 +101,15 @@ spec:
                 secretKeyRef:
                    name: {{ .Values.renapoSecret }}
                    key: password
-
+            
+            # SITE
             - name: SITE
               value: {{ .Values.site | quote }}
 
             - name: HASH
               value: {{ .Values.image.tag }}
 
+            # S3
 {{- if .Values.s3.enabled }}
             - name: AWS_SECRET_ID
               valueFrom:
@@ -99,6 +123,8 @@ spec:
                    name: {{ .Values.s3.secret }}
                    key: id
 {{- end }}
+
+            # TWILIO
 {{- if .Values.twilio.enabled }}
             - name: TWILIO_SID
               valueFrom:
@@ -112,6 +138,8 @@ spec:
                    name: {{ .Values.twilio.secret }}
                    key: token
 {{- end }}
+
+            # POSTGRES
             - name: POSTGRES_HOST
               value: {{ include "django.name" . }}-postgres
 
@@ -121,6 +149,7 @@ spec:
             - name: PRODUCTION
               value: "true"
 
+            # DJANGO
             - name: DJANGO_SECRET_KEY
               valueFrom:
                 secretKeyRef:
