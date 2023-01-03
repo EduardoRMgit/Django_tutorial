@@ -126,5 +126,21 @@
         },
         "model": "contabilidad.tipocontablecuenta",
         "pk": 19
+    },
+    {
+        "fields": {
+            "activo": true,
+            "tipo": "Inguz-Inguz Cobro Enviado"
+        },
+        "model": "contabilidad.tipocontablecuenta",
+        "pk": 20
+    },
+    {
+        "fields": {
+            "activo": true,
+            "tipo": "Inguz-Inguz Cobro Recibido"
+        },
+        "model": "contabilidad.tipocontablecuenta",
+        "pk": 21
     }
 ]

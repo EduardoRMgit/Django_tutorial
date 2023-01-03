@@ -178,5 +178,25 @@
     "tipo": "R",
     "salida": true
   }
+},
+{
+  "model": "banca.tipotransaccion",
+  "pk": 20,
+  "fields": {
+    "codigo": "20",
+    "nombre": "Inguz-Inguz Cobro Enviado",
+    "tipo": "E",
+    "salida": false
+  }
+},
+{
+  "model": "banca.tipotransaccion",
+  "pk": 21,
+  "fields": {
+    "codigo": "21",
+    "nombre": "Inguz-Inguz Cobro Recibido",
+    "tipo": "R",
+    "salida": true
+  }
 }
 ]
