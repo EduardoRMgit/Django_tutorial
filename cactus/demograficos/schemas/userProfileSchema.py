@@ -171,6 +171,8 @@ class AvatarType(graphene.ObjectType):
     id = graphene.Int()
     name = graphene.String()
     url = graphene.String()
+    genero = graphene.String()
+    activo = graphene.Boolean()
 
 
 class ContactoInguzType(graphene.ObjectType):
@@ -435,7 +437,7 @@ class Query(graphene.ObjectType):
                                    Parentesco Model")
     all_avatars = graphene.List(AvatarType,
                                 description="Query all the objects from the\
-                                   Avatar Model")
+                                Avatar Model")
     # Initiating resolvers for type all Queries
 
     def resolve_all_avatars(self, info, **kwargs):
@@ -462,6 +464,8 @@ class Query(graphene.ObjectType):
             dicc = {}
             dicc['id'] = avatar.id
             dicc['name'] = avatar.name
+            dicc['genero'] = avatar.genero
+            dicc['activo'] = avatar.activo
             try:
                 dicc['url'] = str((avatar.avatar_img.url).split("?")[0])
             except Exception:
@@ -907,7 +911,8 @@ class Query(graphene.ObjectType):
             if es_cuenta_inguz(contacto.clabe):
                 try:
                     contacto_user = UserProfile.objects.get(
-                        cuentaClabe=contacto.clabe, status="O").user
+                        cuentaClabe=contacto.clabe,
+                        status="O").user
                     contacto.alias_inguz = contacto_user.Uprofile.alias
                     if contacto_user.Uprofile.avatar:
                         contacto.avatar_url = (
@@ -917,6 +922,7 @@ class Query(graphene.ObjectType):
                         contacto.avatar_url = (Avatar.objects.get(
                             id=1).avatar_img.url).split("?")[0]
                 except Exception:
+                    contacto.activo = False
                     contacto.alias_inguz = "Cuenta inguz no encontrada"
                 contacto.save()
         return (qs)
@@ -2268,22 +2274,30 @@ class TokenAuthPregunta(graphene.Mutation):
 
 class TokenAuthPreguntaNip(graphene.Mutation):
 
-    token = graphene.String()
     nip = graphene.String()
 
     class Arguments:
+        token = graphene.String()
         pregunta_id = graphene.Int(required=True)
         respuesta_secreta = graphene.String(required=True)
-        username = graphene.String(required=True)
+        username = graphene.String()
 
-    def mutate(self, info, username, pregunta_id, respuesta_secreta):
+    def mutate(self, info, pregunta_id, respuesta_secreta,
+        username=None, token=None
+    ):
         pregunta = PreguntaSeguridad.objects.get(pk=pregunta_id)
-        user = User.objects.get(username=username)
-        RespuestaSeguridad.objects.get(
-            user=user,
-            pregunta=pregunta,
-            respuesta_secreta=respuesta_secreta,
-            tipo_nip=True)
+        if username:
+            user = User.objects.get(username=username)
+        else:
+            user = info.context.user
+        try:
+            RespuestaSeguridad.objects.get(
+                user=user,
+                pregunta=pregunta,
+                respuesta_secreta=respuesta_secreta,
+                tipo_nip=True)
+        except Exception:
+            raise Exception("Datos incorrectos")
 
         up = UserProfile.objects.get(user=user)
         up.statusNip = 'U'
@@ -2295,7 +2309,7 @@ class TokenAuthPreguntaNip(graphene.Mutation):
         up.statusRegistro = stat
         up.save()
 
-        return TokenAuthPreguntaNip(token=get_token(user), nip=nip)
+        return TokenAuthPreguntaNip(nip=nip)
 
 
 class UnBlockAccount(graphene.Mutation):
@@ -2484,33 +2498,41 @@ mutation{
         ap_materno = graphene.String()
         banco = graphene.String()
         clabe = graphene.String()
-        nip = graphene.String()
+        nip = graphene.String(required=True)
 
-    def mutate(self, info, token, nombreCompleto='', nombre='', ap_paterno='',
-               ap_materno='', banco='', clabe='', nip=None):
+    def mutate(self, info, token, nip, nombreCompleto='', nombre='', ap_paterno='',
+               ap_materno='', banco='', clabe=''):
 
         def _valida(expr, msg):
             if expr:
                 raise Exception(msg)
 
         user = info.context.user
-        if nip:
-            _valida(user.Uprofile.password is None,
-                    'El usuario no ha establecido su NIP.')
-            _valida(not user.Uprofile.check_password(nip),
-                    'El NIP es incorrecto.')
+        _valida(user.Uprofile.password is None,
+                'El usuario no ha establecido su NIP.')
+        _valida(not user.Uprofile.check_password(nip),
+                'El NIP es incorrecto.')
 
         try:
             name_banco = InstitutionBanjico.objects.get(
                 short_id=str(clabe[:3])).short_name
-        except Exception as e:
+        except Exception:
             raise Exception(
                 'CLABE inválida, no existe banco válido para esa CLABE')
         if Contacto.objects.filter(user=user,
                                    clabe=clabe,
-                                   activo=True).count() > 0:
-            raise ValueError(
-                "Ya tienes esta CLABE guardada en otro contacto")
+                                   activo=True,
+                                   bloqueado=False).count() > 0:
+            raise Exception(
+                "Ya tienes esta CLABE agregada en tus contactos")
+        if Contacto.objects.filter(user=user,
+                            clabe=clabe,
+                            activo=True,
+                            bloqueado=True).count() > 0:
+            raise Exception(
+                "Esta cuenta CLABE la tienes en un contacto bloqueado, " \
+                "desbloquéalo desde el buscador con su alias.")
+        
         if not user.is_anonymous:
             nombre = nombre.strip()
             ap_paterno = ap_paterno.strip()
@@ -2519,6 +2541,14 @@ mutation{
             nombre_completo = str(nombre) + " " + str(
                 ap_paterno) + " " + str(ap_materno)
             es_inguz = es_cuenta_inguz(clabe)
+            if es_inguz:
+                try:
+                    UserProfile.objects.get(
+                        cuentaClabe=clabe,
+                        enrolamiento=True,
+                        status="O")
+                except Exception:
+                    raise Exception("No existe usuario Inguz con esa CLABE")
             contacto = Contacto.objects.create(nombre=nombre,
                                                ap_paterno=ap_paterno,
                                                ap_materno=ap_materno,
@@ -2527,7 +2557,6 @@ mutation{
                                                clabe=clabe,
                                                user=user,
                                                es_inguz=es_inguz)
-            # contacto.save()
         return CreateContacto(
             contacto=contacto,
             all_contactos=user.Contactos_Usuario.all())
@@ -2563,7 +2592,8 @@ class VerifyAddContactos(graphene.Mutation):
                     username=user.username).exclude(
                         Uprofile__cuentaClabe__in=clabes_agenda).exclude(
                             Uprofile__cuentaClabe__isnull=True).exclude(
-                                Uprofile__cuentaClabe='')
+                                Uprofile__cuentaClabe='').exclude(
+                                    Uprofile__enrolamiento=False)
         if agregar:
 
             _valida(user.Uprofile.password is None,
@@ -2815,10 +2845,14 @@ class BuscadorUsuarioInguz(graphene.Mutation):
         max_coincidencias = graphene.Int()
 
     @login_required
-    def mutate(self, info, token, alias, max_coincidencias=15):
+    def mutate(self, info, token, alias, max_coincidencias=10):
+        if len(alias) < 3:
+            return BuscadorUsuarioInguz([])
         query = UserProfile.objects.filter(
-            alias__startswith=alias).exclude(
-                alias__exact=(info.context.user.Uprofile.alias))
+            alias__startswith=alias,
+            enrolamiento=True).exclude(
+                alias__exact=(info.context.user.Uprofile.alias)).exclude(
+                    status="C").exclude(cuentaClabe="")
         if query.count() > max_coincidencias:
             query = query[:max_coincidencias]
         return BuscadorUsuarioInguz(query.order_by('alias'))
