@@ -737,37 +737,39 @@ class ValidacionTelefono(graphene.Mutation):
 
     def mutate(self, info, pin, numero, test=False, register_device=True,
                enrolamiento=False):
-        try:
-            tel = Telefono.objects.get(telefono=numero,
-            activo=True, validado=True)
-        except Exception:
-            raise Exception('Número no registrado')
-        if enrolamiento:
-            if User.objects.filter(username=numero).count() > 0:
-                raise Exception('Número con cuenta Inguz existente')
-        if test or tel.is_valid(pin):
-            if not enrolamiento:
-                try:
-                    tel = Telefono.objects.filter(telefono=numero).exclude(
-                        user=None).last()
-                    user = tel.user
-                    InfoValidator.setCheckpoint(
-                        user=user, concepto='TEL',
-                        register=register_device
-                    )
-                    user.is_active = True
-                    user.save()
-                    tel.activo = True
-                    tel.validado = True
-                    tel.save()
-                except Exception as e:
-                    db_logger.error(f"[ValidacionTelefono] Error: {e}")
-                    return ValidacionTelefono(validacion=str(e))
-            res = "Validado"
-        else:
-            return ValidacionTelefono(validacion="Incorrecto")
 
-        return ValidacionTelefono(validacion=res)
+        if enrolamiento:
+            tel = Telefono.objects.filter(telefono=numero, activo=False,
+                validado=False)
+            if tel.count() == 0:
+                raise Exception('Número no registrado')
+            tel = tel.last()
+            if not test and not tel.is_valid(pin):
+                return ValidacionTelefono(validacion="Incorrecto")
+        else:
+            tel = Telefono.objects.filter(telefono=numero).exclude(
+                    user=None)
+            if tel.count() == 0:
+                raise Exception('No existe usuario asociado al teléfono')
+            tel = tel.last()
+            if not test and not tel.is_valid(pin):
+                return ValidacionTelefono(validacion="Incorrecto")
+            try:
+                user = tel.user
+                InfoValidator.setCheckpoint(
+                    user=user, concepto='TEL',
+                    register=register_device
+                )
+                user.is_active = True
+                user.save()
+                tel.activo = True
+                tel.validado = True
+                tel.save()
+            except Exception as e:
+                db_logger.error(f"[ValidacionTelefono] Error: {e}")
+                return ValidacionTelefono(validacion=str(e))
+
+        return ValidacionTelefono(validacion="Validado")
 
 
 class VerifyUserNip(graphene.Mutation):
