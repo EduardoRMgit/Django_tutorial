@@ -2246,12 +2246,18 @@ class TokenAuthPregunta(graphene.Mutation):
 
     def mutate(self, info, username, pregunta_id, respuesta_secreta):
         pregunta = PreguntaSeguridad.objects.get(pk=pregunta_id)
-        user = User.objects.get(username=username)
-        RespuestaSeguridad.objects.get(
-            user=user,
-            pregunta=pregunta,
-            respuesta_secreta=respuesta_secreta,
-            tipo_nip=False)
+        try:
+            user = User.objects.get(username=username)
+        except Exception:
+            raise Exception("Usuario inválido")
+        try:
+            RespuestaSeguridad.objects.get(
+                user=user,
+                pregunta=pregunta,
+                respuesta_secreta=respuesta_secreta,
+                tipo_nip=False)
+        except Exception:
+            raise Exception("Datos incorrectos")
         pin = randint(100000, 999999)
         RestorePassword.objects.filter(user=user).delete()
         RestorePassword.objects.create(user=user,
@@ -2297,17 +2303,19 @@ class UnBlockAccount(graphene.Mutation):
     details = graphene.String()
 
     class Arguments:
-        token = graphene.String(required=True)
+
+        username = graphene.String(required=True)
+        password = graphene.String(required=True)
         nip = graphene.String(required=True)
 
-    def mutate(self, info, token, nip):
-        user = info.context.user
-        if user.is_anonymous:
-            raise AssertionError('User does not exist')
-
-        if not user.Uprofile.check_password(nip):
-            raise AssertionError('Credenciales incorrectas')
-
+    def mutate(self, info, username, password, nip):
+        try:
+            user = User.objects.get(username=username)
+        except Exception:
+            user = False
+        if not user or not user.check_password(password) or \
+            not user.Uprofile.check_password(nip):
+                raise Exception("Credenciales de acceso incorrectas")
         up = user.Uprofile
         up.blocked_reason = up.NOT_BLOCKED
         up.status = up.OK
@@ -2336,6 +2344,9 @@ class RecoverPassword(graphene.Mutation):
                     user=user,
                     activo=True)[0]
                 if pass_temporal.validate(pin):
+                    if user.check_password(new_password):
+                        raise Exception("La nueva contraseña no puede " \
+                            "ser igual a la anterior.")
                     user.set_password(new_password)
                     pass_temporal.activo = False
                     pass_temporal.save()
@@ -2344,7 +2355,7 @@ class RecoverPassword(graphene.Mutation):
                 else:
                     return RecoverPassword(details='pin invalido')
             except IndexError:
-                raise AssertionError('contraseña de recuperacion no existente')
+                raise AssertionError('pin inválido')
 
 
 class UpdateNip(graphene.Mutation):
