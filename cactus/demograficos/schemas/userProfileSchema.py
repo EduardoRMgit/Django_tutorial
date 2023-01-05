@@ -3153,24 +3153,32 @@ class GetRnScreen(graphene.Mutation):
 class UpdateDevice(graphene.Mutation):
 
     validacion = graphene.String()
-    validities = graphene.List(ComponentValidType)
+
 
     class Arguments:
-        token = graphene.String(required=True)
+        username = graphene.String(required=True)
+        password = graphene.String(required=True)
         nip = graphene.String(required=True)
 
-    def mutate(self, info, token, nip):
-        user = info.context.user
-        if user.is_anonymous:
-            raise ValueError('token esta mal')
-        if not user.Uprofile.check_password(nip):
-            raise ValueError('nip esta mal')
+    def mutate(self, info,username, password, nip):
+        
+        e = "Usuario y/o contraseña incorrectos"
+        
         try:
-            InfoValidator.setCheckpoint(user=user, concepto='UUID')
-            validities = ComponentValidated.objects.filter(user=user)
-            return UpdateDevice(validities=validities, validacion='Validado')
+            user = User.objects.get(username=username)
+        except Exception:
+            raise Exception(e)
+        if not user.check_password(password):
+            raise Exception(e)
+        if not user.Uprofile.check_password(nip):
+            raise Exception("El NIP es incorrecto")
+        try:
+            register_device(user=user)
+            return UpdateDevice(validacion='Validado')
         except Exception as ex:
-            raise ValueError('no se pudo actualizar dispositivo', ex)
+            db_logger.error("No se pudo actualizar dispositivo del usuario" \
+            f"{user}. Error: {ex}")
+            raise Exception('No se pudo actualizar dispositivo')
 
 
 class CancelacionCuenta(graphene.Mutation):
