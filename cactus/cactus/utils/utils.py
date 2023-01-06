@@ -51,7 +51,7 @@ def token_auth(f):
                     log.save()
                     return Exception("Cuenta Bloqueada")
                 return exceptions.JSONWebTokenError(
-                    _("Contraseña incorrecta"),
+                    _("Usuario y/o contraseña incorrecto"),
                 )
             except Exception:
                 pass
