@@ -3203,8 +3203,6 @@ class CancelacionCuenta(graphene.Mutation):
         if not user.Uprofile.check_password(nip):
             raise AssertionError('bad credentials')
         user.is_active = False
-        user.Uprofile.is_active = False
-        user.Uprofile.save()
         user.save()
         folio = randomString()
         url = settings.URL_IMAGEN
