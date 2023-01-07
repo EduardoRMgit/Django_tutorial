@@ -3200,8 +3200,12 @@ class CancelacionCuenta(graphene.Mutation):
         user = info.context.user
         if user.is_anonymous:
             return
+        if user.Uprofile.password is None:
+            raise Exception('La cuenta no tiene NIP establecido')
         if not user.Uprofile.check_password(nip):
-            raise AssertionError('bad credentials')
+            raise Exception('El NIP es incorrecto')
+        if not user.Uprofile.saldo_cuenta == 0:
+            raise Exception('El saldo de tu cuenta debe ser $0 para cancelar')
         user.is_active = False
         user.save()
         folio = randomString()
