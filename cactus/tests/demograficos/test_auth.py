@@ -52,7 +52,7 @@ class TokenTests(JWTAuthClientTestCase):
         res = self.client.execute(mutation, variables)
         self.assertEqual(res.data['tokenAuth'], None)
         self.assertEqual(res.errors[0].message,
-                         'Contraseña incorrecta')
+                         'Usuario y/o contraseña incorrectos')
 
 
 class CreateUserTests(JWTAuthClientTestCase):

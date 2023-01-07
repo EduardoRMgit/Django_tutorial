@@ -21,6 +21,9 @@ from django.contrib.auth.models import User
 from demograficos.models import GeoLocation, GeoDevice, UserLocation
 from django.contrib.auth import authenticate
 from django.utils import timezone
+from spei.stpTools import randomString
+from django.conf import Settings
+
 
 from demograficos.models.userProfile import (RespuestaSeguridad,
                                              PreguntaSeguridad,
@@ -3192,6 +3195,10 @@ class UpdateDevice(graphene.Mutation):
 class CancelacionCuenta(graphene.Mutation):
 
     confirmacion = graphene.String()
+    folio = graphene.String()
+    fecha = graphene.types.datetime.DateTime()
+    url = graphene.String()
+
 
     class Arguments:
         token = graphene.String(required=True)
@@ -3201,11 +3208,20 @@ class CancelacionCuenta(graphene.Mutation):
         user = info.context.user
         if user.is_anonymous:
             return
+        if user.Uprofile.password is None:
+            raise Exception('La cuenta no tiene NIP establecido')
         if not user.Uprofile.check_password(nip):
-            raise AssertionError('bad credentials')
+            raise Exception('El NIP es incorrecto')
+        if not user.Uprofile.saldo_cuenta == 0:
+            raise Exception('El saldo de tu cuenta debe ser $0 para cancelar')
         user.is_active = False
         user.save()
-        return CancelacionCuenta(confirmacion='OK')
+        folio = randomString()
+        url = settings.URL_IMAGEN
+        fecha = timezone.now()
+        # Pendiente de crear movimiento no transaccional
+        return CancelacionCuenta(
+            confirmacion='OK', folio=folio, fecha=fecha, url=url)
 
 
 class BorrarPreguntaSeguridad(graphene.Mutation):
