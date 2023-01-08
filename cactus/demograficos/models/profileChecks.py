@@ -436,11 +436,9 @@ class ComponentValidated(models.Model):
 def status_registro(sender, instance, created, **kwargs):
 
     qs = ComponentValidated.objects.filter(user=instance.user)
-    print(qs.__dict__)
     completo = True
     for check in qs:
         if check.status != 'VA':
-            print("check: ", check, check.status)
             completo = False
     if completo:
         print("COMPLETO!")
@@ -495,7 +493,6 @@ def populate_profile_validation(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=ComponentValidated)
 def set_validation_flags(sender, instance, created, **kwargs):
-    print(instance)
     if not created:
         if instance.status == 'VA':
             user = instance.user.Uprofile

@@ -142,7 +142,7 @@ class DocAdjuntoInLine(admin.TabularInline):
 
 class BeneficiarioInLine(admin.TabularInline):
     model = UserBeneficiario
-    can_delete = False
+    can_delete = True
     verbose_name_plural = "Beneficiarios"
     fk_name = "user"
     extra = 0

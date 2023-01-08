@@ -305,21 +305,23 @@ AXES_ONLY_ADMIN_SITE = True
 
 AXES_COOLOFF_TIME = timedelta(minutes=10)
 
-AXES_FAILURE_LIMIT = 5
-
 DAPP_KEY = env.str('DAPP_KEY', "f2338337-61ee-4eb6-8ea3-7c10b002d3f9")
 DAPP_SECRET = env.str('DAPP_SECRET',
                       "0f8d831dddfac45b0ae56e0cadb92a293f39adbd5d957519cbbca22e37ab2173")
 
 if SITE == "local":
     idle_time = 120
+    AXES_FAILURE_LIMIT = 10
     INSTALLED_APPS.remove('multi_captcha_admin')
 elif SITE == "stage":
     idle_time = 30
+    AXES_FAILURE_LIMIT = 5
 elif SITE == "test":
     idle_time = 5
+    AXES_FAILURE_LIMIT = 5
 elif SITE == "prod":
     idle_time = 5
+    AXES_FAILURE_LIMIT = 5
 
 AUTO_LOGOUT = {
     'IDLE_TIME': timedelta(minutes=idle_time),

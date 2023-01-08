@@ -18,11 +18,17 @@ class LoggingGraphQLView(GraphQLView):
     def dispatch(self, request, *args, **kwargs):
         try:
             data = self.parse_body(request)
-            db_logger.info("prueba token:")
-            token = str.encode(data['variables']['token'])
-            db_logger.info(token)
-            user = get_user_by_token(token)
-            username = user.username if user.username else None
+            try:
+                token = str.encode(data['variables']['token'])
+                user = get_user_by_token(token)
+                username = user.username
+            except Exception:
+                if 'tokenAuth' in data['query']:
+                    username = (data['variables']['username'])
+                    password = (data['variables']['password'])
+                    user = User.objects.get(username=username)
+                if not user.check_password(password):
+                    return super().dispatch(request, *args, **kwargs)
         except Exception:
             return super().dispatch(request, *args, **kwargs)
         last_location = UserLocation.objects.filter(user=user).last()
@@ -56,8 +62,11 @@ class LoggingGraphQLView(GraphQLView):
             current_location.device = device
             current_location.save()
             if username is not None:
-                LoggingGraphQLView.set_screen(uuid=device_id,
+                valid_device = LoggingGraphQLView.set_screen(uuid=device_id,
                                               username=username)
+                if not valid_device:
+                    return HttpResponseForbidden(
+                        "UUID incorrecto")
         return super().dispatch(request, *args, **kwargs)
 
     @classmethod
@@ -74,8 +83,13 @@ class LoggingGraphQLView(GraphQLView):
                                                 motivo='Este dispositivo es \
                                                 diferente al que tenemos \
                                                 registrado')
+                return False
             else:
-                pass
+                Validator.setComponentValidated(alias='dispositivo',
+                                                user=user,
+                                                valid=True,
+                                                motivo='')
+                return True
                 # print('normal start for user {}'.format(username))
         except Exception as e:
             msg = "[Inicio de sesión] No se pudo obtener device activo en \
@@ -116,8 +130,6 @@ class LoggingGraphQLView(GraphQLView):
         # Lo que recorre un avión en dos horas
         # se resta a las horas efectivas tiempo ascenso y descenso y esperas
         dist = plane_vel * (hours - max(0, 100/60))
-        print('////')
-        print(dist)
         return dist
 
     @classmethod
