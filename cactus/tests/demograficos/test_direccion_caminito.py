@@ -111,7 +111,7 @@ class TestDireccion(JSONWebTokenTestCase):
         token_wrong = ''.join(
             (random.choice(letters_and_digits) for i in range(158)))
         variables = {"token": str(token_wrong),
-                     "calle": "5512345678", "n_Int":"101",
+                     "calle": "5512345678", "n_Int": "101",
                      "n_Ext": "80", "col": "San Andrés", "cp": "13670",
                      "alcaldiaMunicipio": "Tlalpan", "estado": 1,
                      "ciudad": "DF"}
@@ -124,7 +124,8 @@ class TestDireccion(JSONWebTokenTestCase):
         variables = {"token": self.token,
                      "calle": "5512345678", "n_Int": "101",
                      "n_Ext": "80", "col": "San Andrés", "cp": "13670",
-                     "alcaldiaMunicipio": "Tlalpan", "estado": 1, "ciudad": "DF"}
+                     "alcaldiaMunicipio": "Tlalpan", "estado": 1,
+                     "ciudad": "DF"}
         expected_res = {
                         "setDireccion": {
                           "direccion": {
