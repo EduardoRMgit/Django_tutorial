@@ -78,32 +78,27 @@ class TestDireccion(JSONWebTokenTestCase):
 
     def test_direccion(self):
         mutation = '''
-        mutation setDireccion($token:String!,$ciudad:String!,$linea1:String!,
-        $linea2:String!,$n_Int:String!,$n_Ext:String!,$col:String!,$cp:String!,
-        $alcaldia:String!,$tel:String!,$email:String!,$estado:Int!){
+        mutation setDireccion($token:String!,$ciudad:String!,$calle:String!,
+        $n_Int:String!,$n_Ext:String!,$col:String!,$cp:String!,
+        $alcaldiaMunicipio:String!,$estado:Int!){
                 setDireccion(
                   token: $token,
                   ciudad: $ciudad,
-                  linea1: $linea1,
-                  linea2: $linea2,
+                  calle: $calle,
                   numInt: $n_Int,
                   numExt: $n_Ext,
                   colonia: $col,
                   codPostal: $cp,
-                  delegMunicipio: $alcaldia,
-                  telefono: $tel,
-                  email: $email,
+                  alcaldiaMunicipio: $alcaldiaMunicipio,
                   estado: $estado
                 ){
                   direccion{
-                    linea1
-                    linea2
+                    calle
                     numInt
                     numExt
                     codPostal
                     ciudad
                     delegMunicipio
-                    telefono
                     entidadFed{
                         entidad
                     }
@@ -116,11 +111,10 @@ class TestDireccion(JSONWebTokenTestCase):
         token_wrong = ''.join(
             (random.choice(letters_and_digits) for i in range(158)))
         variables = {"token": str(token_wrong),
-                     "linea1": "5512345678", "linea2": "5587654321", "n_Int":
-                     "101",
+                     "calle": "5512345678", "n_Int":"101",
                      "n_Ext": "80", "col": "San Andrés", "cp": "13670",
-                     "alcaldia": "Tlalpan", "tel": "5555555", "email":
-                     "el_borras@hotmail.com", "estado": 1, "ciudad": "DF"}
+                     "alcaldiaMunicipio": "Tlalpan", "estado": 1,
+                     "ciudad": "DF"}
         res = self.client.execute(mutation, variables)
         self.assertEqual(res.errors[0].message,
                          'Error decoding signature')
@@ -128,22 +122,18 @@ class TestDireccion(JSONWebTokenTestCase):
 
         # setDireccion <con token correcto>
         variables = {"token": self.token,
-                     "linea1": "5512345678", "linea2": "5587654321", "n_Int":
-                     "101",
+                     "calle": "5512345678", "n_Int": "101",
                      "n_Ext": "80", "col": "San Andrés", "cp": "13670",
-                     "alcaldia": "Tlalpan", "tel": "5555555", "email":
-                     "el_borras@hotmail.com", "estado": 1, "ciudad": "DF"}
+                     "alcaldiaMunicipio": "Tlalpan", "estado": 1, "ciudad": "DF"}
         expected_res = {
                         "setDireccion": {
                           "direccion": {
-                            'linea1': '5512345678',
-                            'linea2': '5587654321',
+                            'calle': '5512345678',
                             'numInt': '101',
                             'numExt': '80',
                             'codPostal': '13670',
                             'ciudad': 'DF',
                             'delegMunicipio': "Tlalpan",
-                            'telefono': '5555555',
                             'entidadFed': {
                               'entidad': 'CDMX'
                                 }
@@ -154,7 +144,7 @@ class TestDireccion(JSONWebTokenTestCase):
         self.assertEqual(res.data, expected_res)
         print("    [assert OK] Set Direccion, done")
         """ probamos si falla cambiando algún dato """
-        variables["linea1"] = variables["linea1"]+"1"
+        variables["calle"] = variables["calle"]+"1"
         res = self.client.execute(mutation, variables)
         self.assertNotEqual(res.data, expected_res)
 
@@ -187,8 +177,7 @@ class TestDireccion(JSONWebTokenTestCase):
         query = '''
              query direccion($token: String!){
                  direccion(token: $token){
-                     linea1
-                     linea2
+                     calle
                      numInt
                      numExt
                      codPostal
@@ -215,8 +204,7 @@ class TestDireccion(JSONWebTokenTestCase):
                  "data": {
                      "direccion": [
                      {
-                         "linea1": "55123456781",
-                         "linea2": "5587654321",
+                         "calle": "55123456781",
                          "numInt": "101",
                          "numExt": "80",
                          "codPostal": "13670",
@@ -228,6 +216,10 @@ class TestDireccion(JSONWebTokenTestCase):
                  }
          '''
         my_dict = json.loads(string2, object_pairs_hook=OrderedDict)
+        print('---------------------------------')
+        print(my_dict)
+        print('---------------------------------')
+        print(res.data)
         self.assertEqual(res.data, my_dict['data'])
         print("    [assert OK] query direccion, done")
 
