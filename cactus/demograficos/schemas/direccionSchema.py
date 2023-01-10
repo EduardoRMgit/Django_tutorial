@@ -525,13 +525,14 @@ class deleteDireccion(graphene.Mutation):
         return deleteDireccion(direccion=dir)
 
 
-class createDireccion(graphene.Mutation):
+class CreateDireccion(graphene.Mutation):
 
     direccion = graphene.Field(DireccionType)
 
     class Arguments:
 
         token = graphene.String(required=True)
+        nip = graphene.String(required=True)
         calle = graphene.String()
         num_int = graphene.String()
         num_ext = graphene.String()
@@ -540,13 +541,15 @@ class createDireccion(graphene.Mutation):
         alcaldiaMunicipio = graphene.String()
         estado = graphene.String()
 
-    def mutate(self, info, token, calle=None, codPostal=None, num_int=None,
-               num_ext=None, colonia=None, alcaldiaMunicipio=None,
-               estado=None):
+    def mutate(self, info, token, nip, calle=None, codPostal=None,
+               num_int=None, num_ext=None, colonia=None,
+               alcaldiaMunicipio=None, estado=None):
 
         user = info.context.user
         if user.is_anonymous:
             raise Exception('User does not exist')
+        if not user.Uprofile.check_password(nip):
+            raise Exception('Nip incorrecto')
         direccion = Direccion.objects.create(
             calle=calle,
             num_int=num_int,
@@ -561,10 +564,10 @@ class createDireccion(graphene.Mutation):
             activo=True, user=user).update(activo=False)
         direccion.activo = True
         direccion.save()
-        return createDireccion(direccion=direccion)
+        return CreateDireccion(direccion=direccion)
 
 
 class Mutation(graphene.ObjectType):
     set_direccion = setDireccion.Field()
     delete_direccion = deleteDireccion.Field()
-    create_direccion = createDireccion.Field()
+    create_direccion = CreateDireccion.Field()
