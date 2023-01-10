@@ -1,7 +1,9 @@
 import graphene
 from graphene_django.types import DjangoObjectType
 
-from demograficos.models.documentos import DocAdjuntoTipo, DocAdjunto
+from demograficos.models.documentos import (DocAdjuntoTipo,
+                                            DocAdjunto,
+                                            TipoComprobante)
 
 
 class DocAdjuntoTipoType(DjangoObjectType):
@@ -12,6 +14,11 @@ class DocAdjuntoTipoType(DjangoObjectType):
 class DocAdjuntoType(DjangoObjectType):
     class Meta:
         model = DocAdjunto
+
+
+class TipoComprobanteType(DjangoObjectType):
+    class Meta:
+        model = TipoComprobante
 
 
 class Query(object):
@@ -259,6 +266,9 @@ class Query(object):
     all_doc_adjunto = graphene.List(DocAdjuntoType,
                                     description="`Query all objects from \
                                     DocAdjunto Model`")
+    all_tipo_comprobante = graphene.List(TipoComprobanteType,
+                                         description="Query all objects from \
+                                         TipoComprobante Model")
 
     def resolve_all_doc_adjunto_tipo(self, info, **kwargs):
         return DocAdjuntoTipo.objects.all()
@@ -286,6 +296,9 @@ class Query(object):
             return DocAdjunto.objects.get(pk=id)
 
         return None
+
+    def resolve_all_tipo_comprobante(self, info, **kwargs):
+        return TipoComprobante.objects.all()
 
 
 class CreateDocumento(graphene.Mutation):

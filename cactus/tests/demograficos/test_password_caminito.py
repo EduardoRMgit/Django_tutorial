@@ -121,7 +121,6 @@ class TestPreguntaNipPassword(PasswordTestBase):
                 tokenAuthPreguntaNip(preguntaId: $preguntaId,
                                      respuestaSecreta: $respuestaSecreta,
                                      username: $username){
-                    token
                     nip
                 }
             }
@@ -132,7 +131,6 @@ class TestPreguntaNipPassword(PasswordTestBase):
         res2 = self.client.execute(mutation2, variables2)
         expected_res2 = {
             "tokenAuthPreguntaNip": {
-                "token": res2.data['tokenAuthPreguntaNip']['token'],
                 "nip": res2.data['tokenAuthPreguntaNip']['nip']
             }
         }
@@ -228,7 +226,7 @@ class TestPreguntaNipPassword(PasswordTestBase):
         # UpdateNip <con token correcto>
         variables2 = {"token": self.token,
                       "oldNip": nip_temp,
-                      "newNip": "111111"}
+                      "newNip": "1111"}
         res2 = self.client.execute(mutation2, variables2)
         expected_res2 = {
                 "updateNip": {

@@ -1,4 +1,5 @@
 import io
+import environ
 
 from weasyprint import HTML
 
@@ -15,6 +16,32 @@ from scotiabank.models import Archivo
 from scotiabank.utility.utcToLocal import utc_to_local
 
 import logging
+
+
+def get_envs(retiro):
+
+    env = environ.Env()
+    SBSECRET = env.str('SBRSECRET', '') if retiro else env.str('SBTSECRET', '')
+    try:
+        from kubernetes import client, config
+        from base64 import b64decode
+        try:
+            config.load_kube_config()
+        except Exception:
+            config.load_incluster_config()
+        v1 = client.CoreV1Api()
+        SCOTIA_KEYS = v1.read_namespaced_secret(SBSECRET, 'default')
+        NUMERO_CONVENIO = b64decode(
+            SCOTIA_KEYS.data['convenio']).decode('utf-8')
+        REFERENCIA_EMPRESA = b64decode(
+            SCOTIA_KEYS.data['referencia']).decode('utf-8')
+        CUENTA_CARGO = b64decode(
+            SCOTIA_KEYS.data['cuenta']).decode('utf-8')
+    except Exception:
+        NUMERO_CONVENIO = "12345"
+        REFERENCIA_EMPRESA = "1234"
+        CUENTA_CARGO = "12345678901"
+    return NUMERO_CONVENIO, REFERENCIA_EMPRESA, CUENTA_CARGO
 
 
 def GeneraRetiro(movimientos):
@@ -35,9 +62,8 @@ def GeneraRetiro(movimientos):
         tipo_archivo="Retiro").count() + 1
     try:
         fecha_t = hoy.strftime("%Y%m%d")
-        numero_convenio = "17244"
-        referencia_empresa = "1753"
-        cuenta_cargo = '25600126235'
+        numero_convenio, referencia_empresa, cuenta_cargo = get_envs(
+            retiro=True)
 
         name = "H2HJDF000000{}001{}{}.1001007FN100{}.txt".format(
             '{:0>5}'.format(referencia_empresa),
@@ -205,10 +231,9 @@ def GeneraTransferencia(movimientos):
         fecha_t = datetime(1999, 12, 31)
     try:
         fecha_t = fecha_t.strftime("%Y%m%d")
-        numero_convenio = '7640'
-        referencia_empresa = "1753"
         dias_vigencia = '001'
-        cuenta_cargo = '25600126235'
+        numero_convenio, referencia_empresa, cuenta_cargo = get_envs(
+            retiro=False)
 
         name = "H2HJDF000000{}001{}{}.1001007FN100{}.txt".format(
             '{:0>5}'.format(referencia_empresa),

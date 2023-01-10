@@ -1,7 +1,7 @@
 from .calculoDeLines import (Prospectos,
                              Depositos)
 from .direccion import Direccion, EntidadFed, TipoDireccion
-from .documentos import DocAdjuntoTipo, DocAdjunto
+from .documentos import DocAdjuntoTipo, DocAdjunto, TipoComprobante
 from .instituciones import Institucion, Columnas, SoyClienteDe, BinBanco
 from .solicitud import CatalogoCampos, SolicitudIncompleta, Respuestas
 from .tarjeta import StatusTarjeta, Tarjeta
@@ -18,6 +18,7 @@ from .userProfile import (StatusRegistro,
                           RespuestaSeguridad,
                           UserDevice,
                           Parentesco,
+                          Avatar
                           )
 from .comportamiento import (ComportamientoDiario, ComportamientoMensual)
 from .contactos import Contacto

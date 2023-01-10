@@ -10,12 +10,15 @@ from demograficos.models.userProfile import (RespuestaSeguridad,
                                              UserProfile)
 from demograficos.models.telefono import Telefono
 from demograficos.models.adminUtils import adminUtils
-from renapo.renapo_call import check_renapo
+# from renapo.renapo_call import check_renapo
 from django.forms import ValidationError
 from django.dispatch import receiver
 from django.db.models.signals import post_save
 from demograficos.models.location import UDevice
 from .documentos import sendOCR
+
+
+db_logger = logging.getLogger("db")
 
 
 """definir aqui todos lo criterios de validación , dependiendo del campo"""
@@ -24,7 +27,12 @@ e.g approved = InfoValidator.test(nip) , if approved setear el componente"""
 
 
 def register_device(user):
-    uuid = user.location.last().device.uuid
+    try:
+        uuid = user.location.last().device.uuid
+    except Exception as e:
+        msg = "[Register device] Fallo al obtener el uuid. Error: {} \
+            .".format(e)
+        db_logger.error(msg)
     UDevice.objects.filter(user=user).exclude(uuid=uuid).update(activo=False)
     device, created = UDevice.objects.get_or_create(uuid=uuid, activo=True)
     if not created:
@@ -58,15 +66,15 @@ class InfoValidator(models.Model):
         (IN, 'INE'),
         (TEL, 'telefono'),
         (CBN, 'CreateBeneficiario')
-        )
+    )
 
     @classmethod
     def setComponentValidated(cls, alias, user, valid, motivo=''):
         profile_component = ProfileComponent.objects.get(alias=alias)
         component_validated = ComponentValidated.objects.get(
-                            user=user,
-                            component=profile_component
-                            )
+            user=user,
+            component=profile_component
+        )
         if valid:
             # print('setting checkpoint '+alias)
             component_validated.status = ComponentValidated.VALID
@@ -98,7 +106,14 @@ class InfoValidator(models.Model):
         dia = fNacimiento[2]
         nacimiento = "{}/{}/{}".format(dia, mes, año)
 
-        data, mensaje = check_renapo(curp)
+        # data, mensaje = check_renapo(curp)
+        data = {
+            'nombre_renapo': nombre,
+            'ap_pat_renapo': a_paterno,
+            'ap_mat_renapo': a_materno,
+            'fechNac_renapo': nacimiento
+        }
+        mensaje = ""
         valida = True
 
         try:
@@ -175,7 +190,6 @@ class InfoValidator(models.Model):
 
     @staticmethod
     def RFCValidado(rfc, user):
-
         """pasamos rfc a uppercase y comparamos con el patrón reggex"""
         pattern = re.compile(r'^([A-ZÑ&]{3,4})?(?:- ?)?(\d{2}(?:0[1-9]'
                              r'|1[0-2])(?:0[1-9]|[12]\d|3[01]))?(?:- ?)'
@@ -356,10 +370,14 @@ class InfoValidator(models.Model):
             except Exception as e:
                 motivo += str(e)
                 InfoValidator.setComponentValidated(
-                                                alias='dispositivo',
-                                                user=user,
-                                                valid=False,
-                                                motivo=motivo)
+                    alias='dispositivo',
+                    user=user,
+                    valid=False,
+                    motivo=motivo
+                )
+                msg = "[Enrolamiento] Falla al usar register_device en set \
+                    checkpoint con alias 'dispositivo'. Error: {}".format(e)
+                db_logger.error(msg)
                 raise Exception(e)
 
         elif concepto == 'bloqueo':
@@ -403,8 +421,8 @@ class ComponentValidated(models.Model):
 
     def __str__(self):
         return 'user {}, component: {}, status: {}'.format(
-                                            self.user,
-                                            self.component.alias, self.status)
+            self.user,
+            self.component.alias, self.status)
 
     # def save(self, *args, **kwargs):
     #     if not self.pk:
@@ -418,11 +436,9 @@ class ComponentValidated(models.Model):
 def status_registro(sender, instance, created, **kwargs):
 
     qs = ComponentValidated.objects.filter(user=instance.user)
-    print(qs.__dict__)
     completo = True
     for check in qs:
         if check.status != 'VA':
-            print("check: ", check, check.status)
             completo = False
     if completo:
         print("COMPLETO!")
@@ -460,8 +476,8 @@ def populate_profile_validation(sender, instance, created, **kwargs):
                 print('adding user to component')
                 status = c.default_status
                 c.verified_status.add(
-                                        user,
-                                        through_defaults={'status': status})
+                    user,
+                    through_defaults={'status': status})
                 c.save()
 
         elif sender == ProfileComponent:
@@ -477,7 +493,6 @@ def populate_profile_validation(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=ComponentValidated)
 def set_validation_flags(sender, instance, created, **kwargs):
-    print(instance)
     if not created:
         if instance.status == 'VA':
             user = instance.user.Uprofile

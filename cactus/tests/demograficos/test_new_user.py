@@ -8,6 +8,7 @@ from ..testdb import load_min_test
 from django.core.management import call_command
 from django.contrib.auth import authenticate
 from django.http import HttpRequest
+from demograficos.models import Telefono
 
 
 class DemograficosTestBase(JSONWebTokenTestCase):
@@ -21,6 +22,12 @@ class DemograficosTestBase(JSONWebTokenTestCase):
         call_command('loaddata', 'direccion', verbosity=0)
         call_command('loaddata', 'component', verbosity=0)
         call_command('loaddata', 'institutionbanjico', verbosity=0)
+        call_command('loaddata', 'statusRegistro', verbosity=0)
+        Telefono.objects.create(
+            telefono="5513125668",
+            activo=True,
+            validado=True
+        )
 
         self._client = Client()
         self.user = get_user_model().objects.get(username='test')
@@ -96,14 +103,16 @@ class UserTests(DemograficosTestBase):
                         $nombre: String!,
                         $nombreCompleto: String!,
                         $banco: String!,
-                        $clabe: String!
+                        $clabe: String!,
+                        $nip: String!
                       ){
                         createContacto(
                           token: $token,
                           nombre: $nombre,
                           nombreCompleto: $nombreCompleto,
                           banco: $banco,
-                          clabe: $clabe
+                          clabe: $clabe,
+                          nip: $nip
                         ){
                         allContactos{
                             clabe
@@ -115,7 +124,10 @@ class UserTests(DemograficosTestBase):
                      'nombre': 'nombretest',
                      'nombreCompleto': 'nombreCompletotest',
                      'banco': 'bancotest',
-                     'clabe': '014456789098765432'}
+                     'clabe': '014456789098765432',
+                     'nip': '1234'}
+        self.user.Uprofile.set_password("1234")
+        self.user.Uprofile.save()
         res = self.client.execute(mutation, variables)
         expected_res = {
             'createContacto': {
