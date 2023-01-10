@@ -2,30 +2,30 @@ import cv2
 
 
 class Comprobante():
-    def __init__(self) -> None:
-        print(self)
-        pass
 
     def cobro(cobro):
-        return ("hola")
-
-    def cobroLiquidado(self, cobro, trans):
         pass
 
-    def inguzInguz(self, inguz, trans):
+    def cobroL(self, cobro):
         pass
 
-    def stpTransaccion(self, stp, trans):
+    def inguz(self, inguz):
         pass
 
-    def speiTransaccion(self, trans):
+    def stp(self, stp):
         pass
 
-    def scotiaDeposito(self, scotia, trans):
+    def spei(self, trans):
         pass
 
-    def scotiaRetiro(self, scotia, trans):
+    def scotiaD(self, scotia):
         pass
 
-    def ticketCancelacion(self, trans):
+    def scotiaR(self, scotia):
+        pass
+
+    def soporte(self, ticket):
+        pass
+
+    def cancelacion(self, info):
         pass
