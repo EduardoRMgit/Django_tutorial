@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from demograficos.models.telefono import Telefono
 from django.contrib.auth.backends import ModelBackend
+from django.http import JsonResponse
 
 
 class EmailBackend(ModelBackend):
@@ -41,3 +42,9 @@ class EmailBackend(ModelBackend):
                         return user
 
         return None
+
+
+def lockout(request, credentials, *args, **kwargs):
+    return JsonResponse(
+        {"status": "Cuenta bloqueada por exceso de intentos."},
+        status=403)
