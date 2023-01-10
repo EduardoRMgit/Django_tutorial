@@ -66,6 +66,7 @@ if [[ $LOADDATA == true ]] || [[ $PROD == false ]] ; then
   ./manage.py loaddata adminUtils.json
   ./manage.py loaddata countries.json
   ./manage.py loaddata parentesco.json
+  ./manage.py loaddata tipocomprobante.json
 
   # BANCA
   # Catalogos
@@ -101,7 +102,7 @@ if [[ $LOADDATA == true ]] || [[ $PROD == false ]] ; then
 
   # SCOTIABANK
   ./manage.py loaddata catalogoCodigosTEF.json
-  ./manage.py loaddata datosFijos.json  
+  ./manage.py loaddata datosFijos.json
 
 fi;
 
