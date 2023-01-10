@@ -46,5 +46,7 @@ class EmailBackend(ModelBackend):
 
 def lockout(request, credentials, *args, **kwargs):
     return JsonResponse(
-        {"status": "Cuenta bloqueada por exceso de intentos."},
+        {
+            "codigo": -1001,
+            "mensaje": "Cuenta bloqueada por exceso de intentos."},
         status=403)
