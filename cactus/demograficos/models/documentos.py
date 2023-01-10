@@ -9,7 +9,10 @@ from PIL import Image
 from pytesseract import Output
 import io
 import requests
-
+import cv2
+import datetime
+from datetime import datetime, timedelta
+from demograficos.utils.meses import meses
 
 # Catalogo de documentos adjuntos
 class DocAdjuntoTipo(models.Model):
@@ -106,7 +109,7 @@ def imagen(sender, instance, created, **kwargs):
                     # print(text)
                     # dicc['key'] = text
                     listf.append(text)
-            # print(listf)
+            print(listf)
             # print(curp)
             # for x in listf:
             #     if (x == ''):
@@ -136,24 +139,62 @@ def imagen(sender, instance, created, **kwargs):
                     print(dict)
         elif instance.tipo_id == 3:
             uprofile.comprobanteDomCaptura = instance.imagen
-            # url = "{}{}".format(
-            #     'http://127.0.0.1:8000/media/', instance.imagen)
-            # response = requests.get(url)
-            # img = Image.open(io.BytesIO(response.content))
-            # config_tesseract = '--tessdata-dir tessdata'
-            # result = pytesseract.image_to_data(img,
-            #                                    config=config_tesseract,
-            #                                    output_type=Output.DICT)
-            # print(result)
-            # list = []
-            # list.append(result)
-            # print(list)
-            # min_confidence = 80
-            # for i in range(0, len(result['text'])):
-            #     confidence = result['conf'][i]
-            #     if confidence > min_confidence:
-            #         text = result['text'][i]
-            #         print(text)
+            url = "{}{}".format(
+                'http://127.0.0.1:8000/media/', instance.imagen)
+            response = requests.get(url)
+            img = Image.open(io.BytesIO(response.content))
+            # print('---------------------')
+            # print(img)
+            # print('---------------------')
+            # img = cv2.imread(img)
+            # img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+            config_tesseract = '--tessdata-dir tessdata'
+            result = pytesseract.image_to_data(img,
+                                               config=config_tesseract,
+                                               output_type=Output.DICT)
+            print(result)
+            list = []
+            list.append(result)
+            print(list)
+            min_confidence = 20
+            listf = []
+            listl = []
+            listt = []
+            listw = []
+            listh = []
+            for i in range(0, len(result['text'])):
+                confidence = result['conf'][i]
+                if confidence > min_confidence:
+                    text = result['text'][i]
+                    left = result['left'][i]
+                    top = result['top'][i]
+                    width = result['width'][i]
+                    height = result['height'][i]
+                    listf.append(text)
+                    listl.append(left)
+                    listt.append(top)
+                    listw.append(width)
+                    listh.append(height)
+
+                    # print(text)
+            print(len(listf))
+            print(listf[98])
+            print(listl[98])
+            print(listt[98])
+            print(listw[98])
+            print(listh[98])
+            # date = listf[98]
+            # date = meses(date)
+            # print(date)
+            # date = datetime.strptime(date, "%d-%m-%y")
+            # fecha = datetime.now()
+            # comparacion = (fecha - date) > timedelta(days=90)
+            # print(fecha - date)
+            # if comparacion:
+            #     print("yes")
+            # print(comparacion)
+            # print(date)
+            # print(fecha)
         uprofile.save()
 
 
