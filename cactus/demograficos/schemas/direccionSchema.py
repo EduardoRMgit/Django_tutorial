@@ -525,6 +525,46 @@ class deleteDireccion(graphene.Mutation):
         return deleteDireccion(direccion=dir)
 
 
+class createDireccion(graphene.Mutation):
+
+    direccion = graphene.Field(DireccionType)
+
+    class Arguments:
+
+        token = graphene.String(required=True)
+        calle = graphene.String()
+        num_int = graphene.String()
+        num_ext = graphene.String()
+        codPostal = graphene.String()
+        colonia = graphene.String()
+        alcaldiaMunicipio = graphene.String()
+        estado = graphene.String()
+
+    def mutate(self, info, token, calle=None, codPostal=None, num_int=None,
+               num_ext=None, colonia=None, alcaldiaMunicipio=None,
+               estado=None):
+
+        user = info.context.user
+        if user.is_anonymous:
+            raise Exception('User does not exist')
+        direccion = Direccion.objects.create(
+            calle=calle,
+            num_int=num_int,
+            num_ext=num_ext,
+            codPostal=codPostal,
+            delegMunicipio=alcaldiaMunicipio,
+            colonia=colonia,
+            user=user,
+            estado=estado,
+            activo=True)
+        Direccion.objects.filter(
+            activo=True, user=user).update(activo=False)
+        direccion.activo = True
+        direccion.save()
+        return createDireccion(direccion=direccion)
+
+
 class Mutation(graphene.ObjectType):
     set_direccion = setDireccion.Field()
     delete_direccion = deleteDireccion.Field()
+    create_direccion = createDireccion.Field()
