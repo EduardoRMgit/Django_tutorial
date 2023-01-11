@@ -167,11 +167,9 @@ def imagen(sender, instance, created, **kwargs):
             result = pytesseract.image_to_data(img,
                                                config=config_tesseract,
                                                output_type=Output.DICT)
-            print(result)
             list = []
             list.append(result)
-            print(list)
-            min_confidence = 20
+            min_confidence = 0
             listf = []
             listl = []
             listt = []
@@ -193,11 +191,15 @@ def imagen(sender, instance, created, **kwargs):
 
                     # print(text)
             print(len(listf))
+            print(listf)
             print(listf[98])
             print(listl[98])
             print(listt[98])
             print(listw[98])
             print(listh[98])
+            v = '555'
+            if v in listl:
+                print('yes')
             # date = listf[98]
             # date = meses(date)
             # print(date)
