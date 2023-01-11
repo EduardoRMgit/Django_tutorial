@@ -1,0 +1,37 @@
+[
+{
+  "model": "demograficos.origendeposito",
+  "pk": 1,
+  "fields": {
+    "origen": "Ahorros"
+  }
+},
+{
+  "model": "demograficos.origendeposito",
+  "pk": 2,
+  "fields": {
+    "origen": "Sueldos"
+  }
+},
+{
+  "model": "demograficos.origendeposito",
+  "pk": 3,
+  "fields": {
+    "origen": "Negocios"
+  }
+},
+{
+  "model": "demograficos.origendeposito",
+  "pk": 4,
+  "fields": {
+    "origen": "Herencia"
+  }
+},
+{
+  "model": "demograficos.origendeposito",
+  "pk": 5,
+  "fields": {
+    "origen": "Otros"
+  }
+}
+]

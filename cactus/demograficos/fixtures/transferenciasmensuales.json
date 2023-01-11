@@ -1,0 +1,30 @@
+[
+{
+  "model": "demograficos.transferenciasmensuales",
+  "pk": 1,
+  "fields": {
+    "transferencias_mensuales": "1 a 3"
+  }
+},
+{
+  "model": "demograficos.transferenciasmensuales",
+  "pk": 2,
+  "fields": {
+    "transferencias_mensuales": "4 a 7"
+  }
+},
+{
+  "model": "demograficos.transferenciasmensuales",
+  "pk": 3,
+  "fields": {
+    "transferencias_mensuales": "8 a 10"
+  }
+},
+{
+  "model": "demograficos.transferenciasmensuales",
+  "pk": 4,
+  "fields": {
+    "transferencias_mensuales": "Más de 10"
+  }
+}
+]

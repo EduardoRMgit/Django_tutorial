@@ -1,0 +1,30 @@
+[
+{
+  "model": "demograficos.usocuenta",
+  "pk": 1,
+  "fields": {
+    "uso_de_cuenta": "Compras"
+  }
+},
+{
+  "model": "demograficos.usocuenta",
+  "pk": 2,
+  "fields": {
+    "uso_de_cuenta": "Pago de servicios"
+  }
+},
+{
+  "model": "demograficos.usocuenta",
+  "pk": 3,
+  "fields": {
+    "uso_de_cuenta": "Disposiciones en efectivo"
+  }
+},
+{
+  "model": "demograficos.usocuenta",
+  "pk": 4,
+  "fields": {
+    "uso_de_cuenta": "Otros"
+  }
+}
+]
