@@ -49,6 +49,11 @@ from demograficos.models.profileChecks import (ComponentValidated,
                                                register_device)
 from demograficos.models.documentos import (DocAdjunto, DocAdjuntoTipo,
                                             DocExtraction)
+from demograficos.models.perfildeclarado import (TransferenciasMensuales,
+                                                 OperacionesMensual,
+                                                 UsoCuenta,
+                                                 OrigenDeposito,
+                                                 PerfilTransaccionalDeclarado,)
 
 from banca.models.entidades import CodigoConfianza
 from banca.utils.clabe import es_cuenta_inguz
@@ -168,6 +173,31 @@ class CodigoConfianzaType(DjangoObjectType):
 class ParentescoType(DjangoObjectType):
     class Meta:
         model = Parentesco
+
+
+class TransferenciasMensualesType(DjangoObjectType):
+    class Meta:
+        model = TransferenciasMensuales
+
+
+class OperacionesMensualType(DjangoObjectType):
+    class Meta:
+        model = OperacionesMensual
+
+
+class UsoCuentaType(DjangoObjectType):
+    class Meta:
+        model = UsoCuenta
+
+
+class OrigenDepositoType(DjangoObjectType):
+    class Meta:
+        model = OrigenDeposito
+
+
+class PerfilTransaccionalDeclaradoType(DjangoObjectType):
+    class Meta:
+        model = PerfilTransaccionalDeclarado
 
 
 class AvatarType(graphene.ObjectType):
@@ -441,6 +471,24 @@ class Query(graphene.ObjectType):
     all_avatars = graphene.List(AvatarType,
                                 description="Query all the objects from the\
                                 Avatar Model")
+
+    all_transferencias_mensuales = graphene.List(TransferenciasMensualesType,
+                                                 description="Query all \
+                                                 objects from the model \
+                                                 Transferencias Mensuales")
+
+    all_operaciones_mensuales = graphene.List(OperacionesMensualType,
+                                              description="Query all objects \
+                                              from the model \
+                                              OperacionesMensual")
+
+    all_uso_cuenta = graphene.List(UsoCuentaType,
+                                   description="Query all objects from the \
+                                   model UsoCuenta")
+
+    all_origen_deposito = graphene.List(OrigenDepositoType,
+                                        description="Query all objects from \
+                                        model OrigenDeposito")
     # Initiating resolvers for type all Queries
 
     def resolve_all_avatars(self, info, **kwargs):
@@ -1439,6 +1487,18 @@ class Query(graphene.ObjectType):
 
     def resolve_all_parentesco(self, info, **kwargs):
         return Parentesco.objects.all()
+
+    def resolve_all_transferencias_mensuales(self, info, **kwargs):
+        return TransferenciasMensuales.objects.all()
+
+    def resolve_all_operaciones_mensuales(self, info, **kwargs):
+        return OperacionesMensual.objects.all()
+
+    def resolve_all_uso_cuenta(self, info, **kwargs):
+        return UsoCuenta.objects.all()
+
+    def resolve_all_origen_deposito(self, info, **kwargs):
+        return OrigenDeposito.objects.all()
 
 
 class CreateUser(graphene.Mutation):
@@ -2535,7 +2595,7 @@ mutation{
             raise Exception(
                 "Esta cuenta CLABE la tienes en un contacto bloqueado, " \
                 "desbloquéalo desde el buscador con su alias.")
-        
+
         if not user.is_anonymous:
             nombre = nombre.strip()
             ap_paterno = ap_paterno.strip()
@@ -3172,9 +3232,9 @@ class UpdateDevice(graphene.Mutation):
         nip = graphene.String(required=True)
 
     def mutate(self, info,username, password, nip):
-        
+
         e = "Usuario y/o contraseña incorrectos"
-        
+
         try:
             user = User.objects.get(username=username)
         except Exception:
@@ -3413,6 +3473,38 @@ class UnblockBluePixelUser(graphene.Mutation):
             desbloqueado=f"Usuario {username} desbloqueado")
 
 
+class SetPerfilTransaccional(graphene.Mutation):
+
+    perfil = graphene.Field(PerfilTransaccionalDeclaradoType)
+
+    class Arguments:
+        token = graphene.String(required=True)
+        transferencias_id = graphene.Int(required=True)
+        operaciones_id = graphene.Int(required=True)
+        uso_id = graphene.Int(required=True)
+        origen_id = graphene.Int(required=True)
+
+    def mutate(self, info, token, transferencias_id, operaciones_id,
+               uso_id, origen_id):
+        user = info.context.user
+        if not user.is_anonymous:
+            transferencias = TransferenciasMensuales.objects.get(
+                pk=transferencias_id)
+            operaciones = OperacionesMensual.objects.get(pk=operaciones_id)
+            uso = UsoCuenta.objects.get(pk=uso_id)
+            origen = OrigenDeposito.objects.get(pk=origen_id)
+
+            perfil_declarado = PerfilTransaccionalDeclarado.objects.create(
+                user=user,
+                transferencias_mensuales=transferencias,
+                operaciones_mensuales=operaciones,
+                uso_cuenta=uso,
+                origen=origen,
+                status_perfil='Pendiente')
+        return SetPerfilTransaccional(perfil=perfil_declarado)
+
+
+
 class Mutation(graphene.ObjectType):
     delete_pregunta_seguridad = BorrarPreguntaSeguridad.Field()
     create_user = CreateUser.Field()
@@ -3452,3 +3544,4 @@ class Mutation(graphene.ObjectType):
     unblock_contacto = UnBlockContacto.Field()
     delete_bluepixel_user = DeleteBluepixelUser.Field()
     unblock_bluepixel_user = UnblockBluePixelUser.Field()
+    set_perfil_transaccional = SetPerfilTransaccional.Field()
