@@ -3,28 +3,32 @@
   "model": "demograficos.usocuenta",
   "pk": 1,
   "fields": {
-    "uso_de_cuenta": "Compras"
+    "uso_de_cuenta": "Compras",
+    "codigo": "001"
   }
 },
 {
   "model": "demograficos.usocuenta",
   "pk": 2,
   "fields": {
-    "uso_de_cuenta": "Pago de servicios"
+    "uso_de_cuenta": "Pago de servicios",
+    "codigo": "002"
   }
 },
 {
   "model": "demograficos.usocuenta",
   "pk": 3,
   "fields": {
-    "uso_de_cuenta": "Disposiciones en efectivo"
+    "uso_de_cuenta": "Disposiciones en efectivo",
+    "codigo": "003"
   }
 },
 {
   "model": "demograficos.usocuenta",
   "pk": 4,
   "fields": {
-    "uso_de_cuenta": "Otros"
+    "uso_de_cuenta": "Otros",
+    "codigo": "004"
   }
 }
 ]

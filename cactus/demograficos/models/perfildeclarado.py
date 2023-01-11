@@ -7,6 +7,9 @@ class TransferenciasMensuales(models.Model):
     transferencias_mensuales = models.CharField(null=True,
                                                 blank=True,
                                                 max_length=50)
+    codigo = models.CharField(null=True,
+                              blank=True,
+                              max_length=3)
 
     def __str__(self):
         return str(self.transferencias_mensuales)
@@ -17,6 +20,9 @@ class OperacionesMensual(models.Model):
     operaciones_mensuales = models.CharField(null=True,
                                              blank=True,
                                              max_length=50)
+    codigo = models.CharField(null=True,
+                              blank=True,
+                              max_length=3)
 
     def __str__(self):
         return str(self.operaciones_mensuales)
@@ -27,6 +33,9 @@ class UsoCuenta(models.Model):
     uso_de_cuenta = models.CharField(null=True,
                                      blank=True,
                                      max_length=50)
+    codigo = models.CharField(null=True,
+                              blank=True,
+                              max_length=3)
 
     def __str__(self):
         return str(self.uso_de_cuenta)
@@ -37,6 +46,9 @@ class OrigenDeposito(models.Model):
     origen = models.CharField(null=True,
                               blank=True,
                               max_length=50)
+    codigo = models.CharField(null=True,
+                              blank=True,
+                              max_length=3)
 
     def __str__(self):
         return str(self.origen)

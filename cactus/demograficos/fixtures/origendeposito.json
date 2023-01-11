@@ -3,35 +3,40 @@
   "model": "demograficos.origendeposito",
   "pk": 1,
   "fields": {
-    "origen": "Ahorros"
+    "origen": "Ahorros",
+    "codigo": "001"
   }
 },
 {
   "model": "demograficos.origendeposito",
   "pk": 2,
   "fields": {
-    "origen": "Sueldos"
+    "origen": "Sueldos",
+    "codigo": "002"
   }
 },
 {
   "model": "demograficos.origendeposito",
   "pk": 3,
   "fields": {
-    "origen": "Negocios"
+    "origen": "Negocios",
+    "codigo": "003"
   }
 },
 {
   "model": "demograficos.origendeposito",
   "pk": 4,
   "fields": {
-    "origen": "Herencia"
+    "origen": "Herencia",
+    "codigo": "004"
   }
 },
 {
   "model": "demograficos.origendeposito",
   "pk": 5,
   "fields": {
-    "origen": "Otros"
+    "origen": "Otros",
+    "codigo": "005"
   }
 }
 ]
