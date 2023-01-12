@@ -5,7 +5,6 @@ class NivelCuenta(models.Model):
     class Meta():
         verbose_name_plural = 'Niveles de cuenta'
 
-
     NIVELES = (
         (1, "Nivel 1"),
         (3, "Nivel 3")
@@ -14,7 +13,7 @@ class NivelCuenta(models.Model):
     nivel = models.PositiveSmallIntegerField(
         blank=False,
         null=False,
-        choices=NIVELES, 
+        choices=NIVELES,
         verbose_name="Nivel de cuenta"
     )
 
