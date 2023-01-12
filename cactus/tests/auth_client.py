@@ -20,6 +20,7 @@ class JWTAuthClientTestCase(JSONWebTokenTestCase):
         call_command('loaddata', 'tipo_contable_cuenta', verbosity=0)
         call_command('loaddata', 'cuenta_saldo', verbosity=0)
         call_command('loaddata', 'contactos', verbosity=0)
+        call_command('loaddata', 'nivelCuenta', verbosity=0)
 
         self.user = get_user_model().objects.get(username='test')
         self.client.authenticate(self.user)
