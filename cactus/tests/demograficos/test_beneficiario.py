@@ -12,6 +12,7 @@ class TestBeneficiario(JSONWebTokenTestCase):
         call_command('loaddata', 'usertesting', verbosity=0)
         call_command('loaddata', 'component', verbosity=0)
         call_command('loaddata', 'statusRegistro', verbosity=0)
+        call_command('loaddata', 'nivelCuenta', verbosity=0)
 
         self.user = get_user_model().objects.get(username='test')
         self.token = get_token(self.user)

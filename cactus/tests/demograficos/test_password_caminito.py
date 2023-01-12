@@ -17,6 +17,7 @@ class PasswordTestBase(JSONWebTokenTestCase):
         call_command('loaddata', 'statusRegistro', verbosity=0)
         call_command('loaddata', 'component', verbosity=0)
         call_command('loaddata', 'preguntas_secretas', verbosity=0)
+        call_command('loaddata', 'nivelCuenta', verbosity=0)
         call_command('loaddata', 'usertesting', verbosity=0)
 
     def setUp(self):

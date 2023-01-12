@@ -6,12 +6,14 @@ Transaction APP
 
 from ..common import CactusGraphQLTestCase
 from ..testdb import load_min_test
+from django.core.management import call_command
 
 
 class TestTransactionGraphQL(CactusGraphQLTestCase):
 
     def setUp(self):
         load_min_test()
+        call_command('loaddata', 'nivelCuenta', verbosity=0)
         super().setUp()
 
     def test_transaction_query(self):

@@ -17,6 +17,7 @@ class DemograficosTestBase(JSONWebTokenTestCase):
 
     def setUp(self):
         load_min_test()
+        call_command('loaddata', 'nivelCuenta', verbosity=0)
         call_command('loaddata', 'entidadFed', verbosity=0)
         call_command('loaddata', 'tipoDireccion', verbosity=0)
         call_command('loaddata', 'direccion', verbosity=0)
@@ -42,6 +43,9 @@ class DemograficosTestBase(JSONWebTokenTestCase):
 
 
 class UserTests(DemograficosTestBase):
+
+    def setUp(self):
+        call_command('loaddata', 'nivelCuenta', verbosity=0)
 
     def test_create_user(self):
         mutation = '''

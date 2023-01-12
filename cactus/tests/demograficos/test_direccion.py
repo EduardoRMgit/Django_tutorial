@@ -12,6 +12,7 @@ class TestDireccion(JSONWebTokenTestCase):
     def setUpTestData(cls):
         call_command('loaddata', 'entidadFed', verbosity=0)
         call_command('loaddata', 'tipoDireccion', verbosity=0)
+        call_command('loaddata', 'nivelCuenta', verbosity=0)
         call_command('loaddata', 'usertesting', verbosity=0)
         call_command('loaddata', 'component', verbosity=0)
         call_command('loaddata', 'docAdjuntoTipo', verbosity=0)
