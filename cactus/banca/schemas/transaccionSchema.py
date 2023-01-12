@@ -67,8 +67,14 @@ class TipoTransType(DjangoObjectType):
 
 
 class NivelCuentaType(DjangoObjectType):
+
     class Meta:
         model = NivelCuenta
+
+    nivel = graphene.Int()
+
+    def resolve_nivel(self, info):
+        return int(self.nivel)
 
 
 class Query(graphene.ObjectType):
