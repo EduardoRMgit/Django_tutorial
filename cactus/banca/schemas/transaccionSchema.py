@@ -462,6 +462,7 @@ class Query(graphene.ObjectType):
     def resolve_all_nivel(self, info):
         return NivelCuenta.objects.all()
 
+
 class CreateTransferenciaEnviada(graphene.Mutation):
     """
     ``CreateTransferenciaEnviada (Mutation): Creates a transaction for STP``
