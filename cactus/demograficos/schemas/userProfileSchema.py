@@ -2103,7 +2103,6 @@ class CreateBeneficiario(graphene.Mutation):
         }
     """
     beneficiario = graphene.Field(BeneficiarioType)
-    profile_valid = graphene.List(ComponentValidType)
 
     class Arguments:
         token = graphene.String(required=True)
@@ -2152,18 +2151,19 @@ class CreateBeneficiario(graphene.Mutation):
             _valida(not user.Uprofile.check_password(nip),
                     'El NIP es incorrecto.')
 
-            try:
-                user.User_Beneficiario.all().delete()
-            except Exception as ex:
-                msg = f"[CreateBeneficiario] Error al borrar benefs de {user} "
-                msg += ex
-                db_logger.info(msg)
+            # try:
+            #     user.User_Beneficiario.all().delete()
+            # except Exception as ex:
+            #     msg = f"[CreateBeneficiario] Error al borrar benefs de {user} "
+            #     msg += ex
+            #     db_logger.info(msg)
 
             if name is not None:
                 name = name.strip()
             parentesco = Parentesco.objects.get(pk=parentesco)
+            print(user.User_Beneficiario.count())
             if user.User_Beneficiario.count() > 0:
-                raise Exception('User already has a beneficiary')
+                user.User_Beneficiario.all().delete()
             beneficiario = UserBeneficiario.objects.create(
                 nombre=name,
                 parentesco=parentesco,
@@ -2181,16 +2181,8 @@ class CreateBeneficiario(graphene.Mutation):
                 dir_estado=estado,
                 telefono=telefono,
             )
-            try:
-                InfoValidator.setCheckpoint(user=user, concepto='CBN',
-                                            beneficiario=beneficiario)
-                InfoValidator.setCheckpoint(user=user, concepto='BN',
-                                            beneficiario=beneficiario)
-            except Exception as e:
-                raise ValueError('no se pudo establecer el checkpoint', e)
-            validities = ComponentValidated.objects.filter(user=user)
-        return CreateBeneficiario(beneficiario=beneficiario,
-                                  profile_valid=validities)
+
+        return CreateBeneficiario(beneficiario=beneficiario)
 
 
 class UpdateBeneficiario(graphene.Mutation):
