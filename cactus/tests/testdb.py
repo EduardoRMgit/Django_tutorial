@@ -4,6 +4,7 @@ from .perms import load_groups
 
 def load_min_test():
     call_command('loaddata', 'customer', verbosity=0)
+    call_command('loaddata', 'nivelCuenta', verbosity=0)
     call_command('loaddata', 'adminUtils', verbosity=0)
     load_groups()
     call_command('loaddata', 'urls', verbosity=0)
