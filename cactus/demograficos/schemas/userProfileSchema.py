@@ -2151,13 +2151,6 @@ class CreateBeneficiario(graphene.Mutation):
             _valida(not user.Uprofile.check_password(nip),
                     'El NIP es incorrecto.')
 
-            # try:
-            #     user.User_Beneficiario.all().delete()
-            # except Exception as ex:
-            #     msg = f"[CreateBeneficiario] Error al borrar benefs de {user} "
-            #     msg += ex
-            #     db_logger.info(msg)
-
             if name is not None:
                 name = name.strip()
             parentesco = Parentesco.objects.get(pk=parentesco)
