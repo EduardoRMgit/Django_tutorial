@@ -63,7 +63,6 @@ class CreateUserTests(JWTAuthClientTestCase):
 
     def setUp(self):
         call_command('loaddata', 'statusRegistro', verbosity=0)
-        call_command('loaddata', 'nivelCuenta', verbosity=0)
         Telefono.objects.create(
             telefono="5551029634",
             activo=True,
@@ -119,9 +118,6 @@ class CreateUserTests(JWTAuthClientTestCase):
 
 class UserProfileTests(JWTAuthClientTestCase):
     """ Prueba la query userProfile. """
-
-    def setUp(self):
-        call_command('loaddata', 'nivelCuenta', verbosity=0)
 
     def test_user_profile(self):
         """ Prueba únicamente la mutación userProfile (requiere autenticación).
