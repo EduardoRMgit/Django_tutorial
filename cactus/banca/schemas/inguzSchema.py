@@ -66,7 +66,7 @@ class CreateInguzTransaccion(graphene.Mutation):
                                             activo=True,
                                             bloqueado=False)
         except Exception:
-            raise Exception("Contacto no valido")
+            raise Exception("Contacto no válido")
 
         if not es_cuenta_inguz(contacto.clabe):  # Inguz
             raise Exception("Cuenta de beneficiario no es inguz")
@@ -76,9 +76,11 @@ class CreateInguzTransaccion(graphene.Mutation):
 
         try:
             user_contacto = UserProfile.objects.get(
-                cuentaClabe=contacto.clabe, status="O").user
+                cuentaClabe=contacto.clabe,
+                status="O",
+                enrolamiento=True).user
         except Exception:
-            raise Exception("Destinatario fuera de servicio")
+            raise Exception("La cuenta destino está fuera de servicio")
         fecha = timezone.now()
         claveR = randomString()
         monto2F = "{:.2f}".format(round(float(abono), 2))

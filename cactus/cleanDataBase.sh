@@ -66,6 +66,11 @@ if [[ $LOADDATA == true ]] || [[ $PROD == false ]] ; then
   ./manage.py loaddata adminUtils.json
   ./manage.py loaddata countries.json
   ./manage.py loaddata parentesco.json
+  ./manage.py loaddata tipocomprobante.json
+  ./manage.py loaddata transferenciasmensuales.json
+  ./manage.py loaddata operacionesmensuales.json
+  ./manage.py loaddata origendeposito.json
+  ./manage.py loaddata usocuenta.json
 
   # BANCA
   # Catalogos
@@ -78,6 +83,7 @@ if [[ $LOADDATA == true ]] || [[ $PROD == false ]] ; then
   ./manage.py loaddata cami.json
   ./manage.py loaddata errorestransaccion.json
   ./manage.py loaddata codigoconfianza.json
+  ./manage.py loaddata nivelCuenta.json
 
   # Transaccion
   # ./manage.py loaddata transaccion.json
@@ -101,7 +107,7 @@ if [[ $LOADDATA == true ]] || [[ $PROD == false ]] ; then
 
   # SCOTIABANK
   ./manage.py loaddata catalogoCodigosTEF.json
-  ./manage.py loaddata datosFijos.json  
+  ./manage.py loaddata datosFijos.json
 
 fi;
 
