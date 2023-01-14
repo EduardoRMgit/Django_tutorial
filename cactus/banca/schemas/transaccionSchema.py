@@ -16,7 +16,7 @@ from banca.models.transaccion import (Transaccion,
                                       TipoAnual,
                                       SaldoReservado)
 from banca.models.catalogos import TipoTransaccion
-from banca.models import NotificacionCobro, InguzTransaction
+from banca.models import NotificacionCobro, InguzTransaction, NivelCuenta
 from banca.utils.clabe import es_cuenta_inguz
 
 from spei.models import StpTransaction
@@ -64,6 +64,17 @@ class NotificacionCobroType(DjangoObjectType):
 class TipoTransType(DjangoObjectType):
     class Meta:
         model = TipoTransaccion
+
+
+class NivelCuentaType(DjangoObjectType):
+
+    class Meta:
+        model = NivelCuenta
+
+    nivel = graphene.Int()
+
+    def resolve_nivel(self, info):
+        return int(self.nivel)
 
 
 class Query(graphene.ObjectType):
@@ -368,6 +379,8 @@ class Query(graphene.ObjectType):
                                ordering=graphene.String(),
                                token=graphene.String())
 
+    all_nivel = graphene.List(NivelCuentaType)
+
     @login_required
     def resolve_all_transaccion(self, info, limit=None, offset=None,
             ordering=None, status=None, **kwargs):
@@ -451,6 +464,9 @@ class Query(graphene.ObjectType):
                     cobro.id_contacto_solicitante = -1
                 cobro.save()
         return qs
+
+    def resolve_all_nivel(self, info):
+        return NivelCuenta.objects.all()
 
 
 class CreateTransferenciaEnviada(graphene.Mutation):

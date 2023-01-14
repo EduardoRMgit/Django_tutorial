@@ -69,6 +69,7 @@ class TestContacto(JSONWebTokenTestCase):
         """
     @classmethod
     def setUpTestData(self):
+        call_command('loaddata', 'nivelCuenta', verbosity=0)
         call_command('loaddata', 'usertesting', verbosity=0)
         call_command('loaddata', 'institutionbanjico', verbosity=0)
 

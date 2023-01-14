@@ -5,11 +5,13 @@ from django.test import TestCase
 from rest_framework.test import APIClient
 
 from ..testdb import load_min_test
+from django.core.management import call_command
 
 
 class TestSendImagen(TestCase):
 
     def setUp(self):
+        call_command('loaddata', 'nivelCuenta', verbosity=0)
         load_min_test()
         self.image_uri = "/api/sendimage/"
         self.client = APIClient()
