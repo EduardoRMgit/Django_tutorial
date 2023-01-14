@@ -3228,13 +3228,9 @@ class BlockAccountEmergency(graphene.Mutation):
             raise Exception(e)
         if not user.check_password(password):
             raise Exception(e)
-
         up = user.Uprofile
-
         if not up.check_password(nip):
             raise Exception("El NIP es incorrecto")
-        # if up.status == "B":
-        #     raise Exception ("Cuenta bloqueada")
         status = "Cuenta bloqueada"
         if up.status == 'O':
             date_blocked = timezone.now()
