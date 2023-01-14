@@ -3253,7 +3253,8 @@ class BlockAccountEmergency(graphene.Mutation):
                     clabe=up.cuentaClabe,
                     time=date_blocked,
                     status=status
-                    ))
+                )
+        )
 
 
 class GetRnScreen(graphene.Mutation):
