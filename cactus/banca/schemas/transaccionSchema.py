@@ -741,7 +741,8 @@ class LiquidarCobro(graphene.Mutation):
         importe = cobro.importe
         monto2F = "{:.2f}".format(round(float(importe), 2))
         status = StatusTrans.objects.get(nombre="exito")
-        tipo = TipoTransaccion.objects.get(codigo=13)
+        tipo = TipoTransaccion.objects.get(codigo=20)
+        tipo_recibida = TipoTransaccion.objects.get(codigo=21)
 
         # Actualizamos saldo del usuario
         _valida(float(importe) > ordenante.Uprofile.saldo_cuenta,
@@ -758,6 +759,18 @@ class LiquidarCobro(graphene.Mutation):
             monto=float(importe),
             statusTrans=status,
             tipoTrans=tipo,
+            concepto=concepto,
+            claveRastreo=claveR
+        )
+        # Padre de la entrada del beneficiario
+        user_contacto = cobro.usuario_solicitante
+        Transaccion.objects.create(
+            user=user_contacto,
+            fechaValor=fecha,
+            fechaAplicacion=fecha,
+            monto=float(importe),
+            statusTrans=status,
+            tipoTrans=tipo_recibida,
             concepto=concepto,
             claveRastreo=claveR
         )

@@ -56,5 +56,17 @@ class InguzTransaction(models.Model):
         null=True
     )
 
+    def get_main_transaccions(self):
+        """
+        Returns:
+            _type_: Este método regresa todas las transacciones \
+            que tengan la misma clave de rastreo que la transacción \
+            inguz de salida.
+        """
+        salida = self.transaccion
+        transaccions = Transaccion.objects.filter(
+            claveRastreo=salida.claveRastreo)
+        return transaccions
+
     def __str__(self):
         return self.ordenante.Uprofile.cuentaClabe

@@ -1764,7 +1764,7 @@
             "cuenta": 11,
             "regla_abono": "monto",
             "regla_cargo": "0",
-            "tipo": 16
+            "tipo": 18
         },
         "model": "contabilidad.cuentatipo",
         "pk": 181
@@ -1774,7 +1774,7 @@
             "cuenta": 10,
             "regla_abono": "monto",
             "regla_cargo": "0",
-            "tipo": 16
+            "tipo": 18
         },
         "model": "contabilidad.cuentatipo",
         "pk": 182
@@ -1784,7 +1784,7 @@
             "cuenta": 2,
             "regla_abono": "0",
             "regla_cargo": "monto",
-            "tipo": 16
+            "tipo": 18
         },
         "model": "contabilidad.cuentatipo",
         "pk": 183
@@ -1794,7 +1794,7 @@
             "cuenta": 11,
             "regla_abono": "0",
             "regla_cargo": "monto",
-            "tipo": 15
+            "tipo": 19
         },
         "model": "contabilidad.cuentatipo",
         "pk": 184
@@ -1804,7 +1804,7 @@
             "cuenta": 10,
             "regla_abono": "0",
             "regla_cargo": "monto",
-            "tipo": 15
+            "tipo": 19
         },
         "model": "contabilidad.cuentatipo",
         "pk": 185
@@ -1814,7 +1814,7 @@
             "cuenta": 2,
             "regla_abono": "monto",
             "regla_cargo": "0",
-            "tipo": 15
+            "tipo": 19
         },
         "model": "contabilidad.cuentatipo",
         "pk": 186
