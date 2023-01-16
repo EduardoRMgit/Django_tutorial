@@ -2163,69 +2163,42 @@ class CreateBeneficiario(graphene.Mutation):
             if name is not None:
                 name = name.strip()
             parentesco = Parentesco.objects.get(pk=parentesco)
+            defaults = dict(
+                nombre=name,
+                parentesco=parentesco,
+                apellido_paterno=apellidopat,
+                apellido_materno=apellidomat,
+                user=user,
+                participacion=100,
+                fecha_nacimiento=fecha_nacimiento,
+                direccion_L1=calle,
+                dir_num_ext=numeroexterior,
+                dir_num_int=numerointerior,
+                dir_CP=codigopostal,
+                dir_colonia=colonia,
+                dir_municipio=municipio,
+                dir_estado=estado,
+                telefono=telefono
+            )
             try:
                 try:
-                    beneficiario = UserBeneficiario.objects.get(user=user)
-                    beneficiario.nombre = name
-                    beneficiario.parentesco = parentesco
-                    beneficiario.apellido_paterno = apellidopat
-                    beneficiario.apellido_materno = apellidomat
-                    beneficiario.user = user
-                    beneficiario.participacion = 100
-                    beneficiario.fecha_nacimiento = fecha_nacimiento
-                    beneficiario.direccion_L1 = calle
-                    beneficiario.dir_num_ext = numeroexterior
-                    beneficiario.dir_num_int = numerointerior
-                    beneficiario.dir_CP = codigopostal
-                    beneficiario.dir_colonia = colonia
-                    beneficiario.dir_municipio = municipio
-                    beneficiario.dir_estado = estado
-                    beneficiario.telefono = telefono
-                    beneficiario.save()
-
-                except UserBeneficiario.DoesNotExist:
-                    beneficiario = UserBeneficiario.objects.create(
-                        nombre=name,
-                        parentesco=parentesco,
-                        apellido_paterno=apellidopat,
-                        apellido_materno=apellidomat,
-                        user=user,
-                        participacion=100,
-                        fecha_nacimiento=fecha_nacimiento,
-                        direccion_L1=calle,
-                        dir_num_ext=numeroexterior,
-                        dir_num_int=numerointerior,
-                        dir_CP=codigopostal,
-                        dir_colonia=colonia,
-                        dir_municipio=municipio,
-                        dir_estado=estado,
-                        telefono=telefono,
+                    bene, created = UserBeneficiario.objects.update_or_create(
+                        user = user,
+                        defaults=defaults,
                     )
                 except UserBeneficiario.MultipleObjectsReturned:
-                    beneficiario = UserBeneficiario.objects.create(
-                        nombre=name,
-                        parentesco=parentesco,
-                        apellido_paterno=apellidopat,
-                        apellido_materno=apellidomat,
-                        user=user,
-                        participacion=100,
-                        fecha_nacimiento=fecha_nacimiento,
-                        direccion_L1=calle,
-                        dir_num_ext=numeroexterior,
-                        dir_num_int=numerointerior,
-                        dir_CP=codigopostal,
-                        dir_colonia=colonia,
-                        dir_municipio=municipio,
-                        dir_estado=estado,
-                        telefono=telefono,
-                    )
+                    last = UserBeneficiario.objects.last().id
                     UserBeneficiario.objects.filter(
-                        user=user).exclude(id=beneficiario.id).delete()
+                        user=user).exclude(user=last).delete()
+                    bene, created = UserBeneficiario.objects.update_or_create(
+                        user = user,
+                        defaults=defaults,
+                    )
             except Exception:
                 raise Exception("Error al crear el beneficiario, revisa los " \
                     "datos ingresados.")
         return CreateBeneficiario(
-            beneficiario=beneficiario, profile_valid=None)
+            beneficiario=bene, profile_valid=None)
 
 
 class UpdateBeneficiario(graphene.Mutation):
