@@ -10,6 +10,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from banca.models.productos import Productos
 from banca.models.entidades import CodigoConfianza
+from banca.models import NivelCuenta
 from demograficos.models import Direccion
 
 
@@ -204,6 +205,14 @@ class UserProfile(AbstractBaseUser):
         primary_key=True,
         on_delete=models.CASCADE,
         related_name='Uprofile'
+    )
+
+    nivel_cuenta = models.ForeignKey(
+        NivelCuenta,
+        default=1,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL
     )
 
     alias = models.CharField(
