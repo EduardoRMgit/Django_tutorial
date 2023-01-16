@@ -282,6 +282,14 @@ class BuscadorInguzType(graphene.ObjectType):
             return None
 
 
+class BlockDetails(graphene.ObjectType):
+
+    username = graphene.String()
+    alias = graphene.String()
+    clabe = graphene.String()
+    time = graphene.types.datetime.DateTime()
+    status = graphene.String()
+
 class Query(graphene.ObjectType):
     """
         >>> Query (Pregunstas Secretas) Example:
@@ -3201,6 +3209,53 @@ class BlockAccount(graphene.Mutation):
             else:
                 raise AssertionError('invalid operation, Wrong Credentials')
 
+class BlockAccountEmergency(graphene.Mutation):
+
+    details = graphene.Field(BlockDetails)
+
+    class Arguments:
+        username = graphene.String(required=True)
+        password = graphene.String(required=True)
+        nip = graphene.String(required=True)
+
+    def mutate(self, info, username, password, nip):
+
+        e = "Usuario y/o contraseña incorrectos"
+
+        try:
+            user = User.objects.get(username=username)
+        except Exception:
+            raise Exception(e)
+        if not user.check_password(password):
+            raise Exception(e)
+        up = user.Uprofile
+        if not up.check_password(nip):
+            raise Exception("El NIP es incorrecto")
+        status = "Cuenta bloqueada"
+        if up.status == 'O':
+            date_blocked = timezone.now()
+            up.blocked_date = date_blocked
+            up.blockedReason = up.BLOCKED
+            user.Ufecha.bloqueo = date_blocked
+            up.blocked_reason = up.BLOCKED
+            up.status = up.BLOCKED
+            up.save()
+            user.Ufecha.save()
+            user.save()
+            InfoValidator.setComponentValidated(
+                'bloqueo', user, False, motivo=status)
+        else:
+            date_blocked = user.Ufecha.bloqueo
+        return BlockAccountEmergency(
+                details=BlockDetails(
+                    username=user.username,
+                    alias=up.alias,
+                    clabe=up.cuentaClabe,
+                    time=date_blocked,
+                    status=status
+                )
+        )
+
 
 class GetRnScreen(graphene.Mutation):
 
@@ -3545,3 +3600,4 @@ class Mutation(graphene.ObjectType):
     delete_bluepixel_user = DeleteBluepixelUser.Field()
     unblock_bluepixel_user = UnblockBluePixelUser.Field()
     set_perfil_transaccional = SetPerfilTransaccional.Field()
+    block_account_emergency = BlockAccountEmergency.Field()
