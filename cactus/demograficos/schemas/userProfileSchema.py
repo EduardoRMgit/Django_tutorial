@@ -2182,9 +2182,8 @@ class CreateBeneficiario(graphene.Mutation):
                     beneficiario.dir_estado = estado
                     beneficiario.telefono = telefono
                     beneficiario.save()
-                    print("update")
 
-                except UserBeneficiario.DoesNotExist as e:
+                except UserBeneficiario.DoesNotExist:
                     beneficiario = UserBeneficiario.objects.create(
                         nombre=name,
                         parentesco=parentesco,
@@ -2202,9 +2201,7 @@ class CreateBeneficiario(graphene.Mutation):
                         dir_estado=estado,
                         telefono=telefono,
                     )
-                    print("no existe: ", e)
-                except UserBeneficiario.MultipleObjectsReturned as e:
-                    UserBeneficiario.objects.filter(user=user).delete()
+                except UserBeneficiario.MultipleObjectsReturned:
                     beneficiario = UserBeneficiario.objects.create(
                         nombre=name,
                         parentesco=parentesco,
@@ -2222,7 +2219,8 @@ class CreateBeneficiario(graphene.Mutation):
                         dir_estado=estado,
                         telefono=telefono,
                     )
-                    print("multiples: ", e)
+                    UserBeneficiario.objects.filter(
+                        user=user).exclude(id=beneficiario.id).delete()
             except Exception:
                 raise Exception("Error al crear el beneficiario, revisa los " \
                     "datos ingresados.")
