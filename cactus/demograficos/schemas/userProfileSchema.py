@@ -2111,6 +2111,7 @@ class CreateBeneficiario(graphene.Mutation):
         }
     """
     beneficiario = graphene.Field(BeneficiarioType)
+    profile_valid = graphene.List(ComponentValidType)
 
     class Arguments:
         token = graphene.String(required=True)
@@ -2186,7 +2187,7 @@ class CreateBeneficiario(graphene.Mutation):
                 except UserBeneficiario.DoesNotExist as e:
                     beneficiario = UserBeneficiario.objects.create(
                         nombre=name,
-                        parentesco=30,
+                        parentesco=parentesco,
                         apellido_paterno=apellidopat,
                         apellido_materno=apellidomat,
                         user=user,
@@ -2225,7 +2226,8 @@ class CreateBeneficiario(graphene.Mutation):
             except Exception:
                 raise Exception("Error al crear el beneficiario, revisa los " \
                     "datos ingresados.")
-        return CreateBeneficiario(beneficiario=beneficiario)
+        return CreateBeneficiario(
+            beneficiario=beneficiario, profile_valid=None)
 
 
 class UpdateBeneficiario(graphene.Mutation):
