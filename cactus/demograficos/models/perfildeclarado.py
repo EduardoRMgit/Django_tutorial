@@ -56,7 +56,7 @@ class OrigenDeposito(models.Model):
 
 class PerfilTransaccionalDeclarado(models.Model):
 
-    user = models.ForeignKey(
+    user = models.OneToOneField(
         User,
         on_delete=models.CASCADE,
         related_name='user_perfil'
@@ -84,7 +84,8 @@ class PerfilTransaccionalDeclarado(models.Model):
 
     status = (
         ("Pendiente", "Pendiente"),
-        ("Aprobado", "Aprobado")
+        ("Aprobado", "Aprobado"),
+        ("Rechazado", "Rechazado")
     )
 
     status_perfil = models.CharField(null=True,

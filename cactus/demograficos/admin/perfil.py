@@ -7,9 +7,9 @@ class PerfilTransaccionalDeclaradoAdmin(admin.ModelAdmin):
 
     model = PerfilTransaccionalDeclarado
 
-    list_display = ('id',
-                    'user',
-                    'status_perfil',)
+    fields = [f.name for f in PerfilTransaccionalDeclarado._meta.fields]
+    fields.remove("id")
+    list_display = fields
 
 
 admin.site.register(PerfilTransaccionalDeclarado,

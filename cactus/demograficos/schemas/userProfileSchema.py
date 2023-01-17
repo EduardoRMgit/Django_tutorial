@@ -3539,23 +3539,34 @@ class SetPerfilTransaccional(graphene.Mutation):
         uso_id = graphene.Int(required=True)
         origen_id = graphene.Int(required=True)
 
+    @login_required
     def mutate(self, info, token, transferencias_id, operaciones_id,
-               uso_id, origen_id):
+        uso_id, origen_id
+    ):
         user = info.context.user
-        if not user.is_anonymous:
-            transferencias = TransferenciasMensuales.objects.get(
-                pk=transferencias_id)
-            operaciones = OperacionesMensual.objects.get(pk=operaciones_id)
-            uso = UsoCuenta.objects.get(pk=uso_id)
-            origen = OrigenDeposito.objects.get(pk=origen_id)
+        transferencias = TransferenciasMensuales.objects.get(
+            pk=transferencias_id)
+        operaciones = OperacionesMensual.objects.get(pk=operaciones_id)
+        uso = UsoCuenta.objects.get(pk=uso_id)
+        origen = OrigenDeposito.objects.get(pk=origen_id)
 
-            perfil_declarado = PerfilTransaccionalDeclarado.objects.create(
+        pd = PerfilTransaccionalDeclarado
+
+        defaults = dict(
+            transferencias_mensuales=transferencias,
+            operaciones_mensuales=operaciones,
+            uso_cuenta=uso,
+            origen=origen,
+            status_perfil='Pendiente'
+        )
+
+        try:
+            perfil_declarado, created = pd.objects.update_or_create(
                 user=user,
-                transferencias_mensuales=transferencias,
-                operaciones_mensuales=operaciones,
-                uso_cuenta=uso,
-                origen=origen,
-                status_perfil='Pendiente')
+                defaults=defaults
+                )
+        except Exception:
+            raise Exception("Error al crear perfil")
         return SetPerfilTransaccional(perfil=perfil_declarado)
 
 
