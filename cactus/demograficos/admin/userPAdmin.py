@@ -151,7 +151,7 @@ class BeneficiarioInLine(admin.TabularInline):
 
 class PerfilTransaccionalInLine(admin.TabularInline):
     model = PerfilTransaccionalDeclarado
-    can_delete = False
+    can_delete = True
     verbose_name_plural = "Perfil Transaccional Declarado"
     fk_name = "user"
     extra = 0
