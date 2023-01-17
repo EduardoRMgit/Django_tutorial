@@ -2160,19 +2160,10 @@ class CreateBeneficiario(graphene.Mutation):
             _valida(not user.Uprofile.check_password(nip),
                     'El NIP es incorrecto.')
 
-            try:
-                user.User_Beneficiario.all().delete()
-            except Exception as ex:
-                msg = f"[CreateBeneficiario] Error al borrar benefs de {user} "
-                msg += ex
-                db_logger.info(msg)
-
             if name is not None:
                 name = name.strip()
             parentesco = Parentesco.objects.get(pk=parentesco)
-            if user.User_Beneficiario.count() > 0:
-                raise Exception('User already has a beneficiary')
-            beneficiario = UserBeneficiario.objects.create(
+            defaults = dict(
                 nombre=name,
                 parentesco=parentesco,
                 apellido_paterno=apellidopat,
@@ -2187,18 +2178,27 @@ class CreateBeneficiario(graphene.Mutation):
                 dir_colonia=colonia,
                 dir_municipio=municipio,
                 dir_estado=estado,
-                telefono=telefono,
+                telefono=telefono
             )
             try:
-                InfoValidator.setCheckpoint(user=user, concepto='CBN',
-                                            beneficiario=beneficiario)
-                InfoValidator.setCheckpoint(user=user, concepto='BN',
-                                            beneficiario=beneficiario)
-            except Exception as e:
-                raise ValueError('no se pudo establecer el checkpoint', e)
-            validities = ComponentValidated.objects.filter(user=user)
-        return CreateBeneficiario(beneficiario=beneficiario,
-                                  profile_valid=validities)
+                try:
+                    bene, created = UserBeneficiario.objects.update_or_create(
+                        user = user,
+                        defaults=defaults,
+                    )
+                except UserBeneficiario.MultipleObjectsReturned:
+                    last = UserBeneficiario.objects.last().id
+                    UserBeneficiario.objects.filter(
+                        user=user).exclude(user=last).delete()
+                    bene, created = UserBeneficiario.objects.update_or_create(
+                        user = user,
+                        defaults=defaults,
+                    )
+            except Exception:
+                raise Exception("Error al crear el beneficiario, revisa los " \
+                    "datos ingresados.")
+        return CreateBeneficiario(
+            beneficiario=bene, profile_valid=None)
 
 
 class UpdateBeneficiario(graphene.Mutation):
