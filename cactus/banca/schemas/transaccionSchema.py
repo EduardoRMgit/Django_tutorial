@@ -667,7 +667,7 @@ class CreateNotificacionCobro(graphene.Mutation):
             activo=True
         )
 
-        _valida(qs, "No puedes mandar cobros a este Usuario")
+        _valida(qs, "CB_NP")
 
         usuario_contacto = usuario_contacto.first()
         cobro = NotificacionCobro.objects.create(
