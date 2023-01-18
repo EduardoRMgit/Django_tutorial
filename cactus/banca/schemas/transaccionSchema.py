@@ -660,6 +660,15 @@ class CreateNotificacionCobro(graphene.Mutation):
         _valida(usuario_contacto.count() == 0,
                 'No existe un usuario correspondiente al contacto.')
 
+        qs = Contacto.objects.filter(
+            user=usuario_contacto,
+            clabe=user.Uprofile.cuentaClabe,
+            bloqueado=True,
+            activo=True
+        )
+
+        _valida(qs, "CB_NP")
+
         usuario_contacto = usuario_contacto.first()
         cobro = NotificacionCobro.objects.create(
             usuario_solicitante=user,
