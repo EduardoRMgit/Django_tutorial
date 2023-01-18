@@ -1704,6 +1704,9 @@ class ChangePassword(graphene.Mutation):
         user = info.context.user
         if not user.is_anonymous:
             if user.check_password(old_password):
+                if user.check_password(new_password):
+                    raise Exception("La nueva contraseña no puede " \
+                        "ser igual a la anterior.")
                 user.set_password(new_password)
                 user.save()
                 return ChangePassword(user=user)
