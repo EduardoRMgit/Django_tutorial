@@ -10,10 +10,6 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='avatar',
-            name='avatar_min_img',
-        ),
         migrations.AddField(
             model_name='avatar',
             name='avatar_min',
