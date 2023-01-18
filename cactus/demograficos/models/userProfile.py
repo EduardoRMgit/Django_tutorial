@@ -122,7 +122,12 @@ class Avatar(models.Model):
                                    blank=True,
                                    null=True)
 
-    activo = models.BooleanField(default=False)
+    activo = models.BooleanField(default=True)
+
+    avatar_min_img = models.ImageField(
+        upload_to='avatars',
+        blank=True,
+        null=True)
 
     def __str__(self):
         return str(self.name)
@@ -327,7 +332,7 @@ class UserProfile(AbstractBaseUser):
     deOmision = models.CharField(max_length=255, null=True, blank=True)
     is_active = models.BooleanField(default=True)
     avatar = models.ForeignKey(Avatar,
-                               on_delete=models.CASCADE,
+                               on_delete=models.SET_NULL,
                                null=True,
                                blank=True)
     avatar_url = models.URLField(
