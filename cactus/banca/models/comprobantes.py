@@ -1,4 +1,5 @@
 from django.db import models
+from banca.models import TipoTransaccion
 
 
 class Comprobante(models.Model):
@@ -7,7 +8,11 @@ class Comprobante(models.Model):
         verbose_name = 'Template de Comprobante'
         verbose_name_plural = 'Templates de Comprobantes'
 
-    tipo = models.CharField(max_length=80)
+    tipo = models.ForeignKey(
+        TipoTransaccion,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL)
     codigo = models.IntegerField(unique=True)
     template = models.ImageField(
         upload_to='docs/plantillas',
