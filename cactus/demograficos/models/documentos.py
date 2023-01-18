@@ -13,6 +13,7 @@ import cv2
 import datetime
 from datetime import datetime, timedelta
 from demograficos.utils.meses import meses
+import re
 
 # Catalogo de documentos adjuntos
 class DocAdjuntoTipo(models.Model):
@@ -171,35 +172,21 @@ def imagen(sender, instance, created, **kwargs):
             list.append(result)
             min_confidence = 0
             listf = []
-            listl = []
-            listt = []
-            listw = []
-            listh = []
+            date_pattern = (r'^(0[1-9]|[12][0-9]|3[01])'
+                            r'([\/|.|\-|\s])([A-Za-z])+([\/|.|\-|\s])'
+                            r'([0-9][0-9]|19[0-9][0-9]|20[0-9][0-9])$')
+            pattern = re.compile(date_pattern)
             for i in range(0, len(result['text'])):
                 confidence = result['conf'][i]
                 if confidence > min_confidence:
                     text = result['text'][i]
-                    left = result['left'][i]
-                    top = result['top'][i]
-                    width = result['width'][i]
-                    height = result['height'][i]
-                    listf.append(text)
-                    listl.append(left)
-                    listt.append(top)
-                    listw.append(width)
-                    listh.append(height)
-
+                    if re.match(pattern, text):
+                        a = re.match(pattern, text)
+                        a = a.group()
+                        listf.append(a)
                     # print(text)
             print(len(listf))
             print(listf)
-            print(listf[98])
-            print(listl[98])
-            print(listt[98])
-            print(listw[98])
-            print(listh[98])
-            v = '555'
-            if v in listl:
-                print('yes')
             # date = listf[98]
             # date = meses(date)
             # print(date)
