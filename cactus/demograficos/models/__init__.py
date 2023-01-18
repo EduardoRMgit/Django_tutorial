@@ -1,7 +1,7 @@
 from .calculoDeLines import (Prospectos,
                              Depositos)
 from .direccion import Direccion, EntidadFed, TipoDireccion
-from .documentos import DocAdjuntoTipo, DocAdjunto
+from .documentos import DocAdjuntoTipo, DocAdjunto, TipoComprobante
 from .instituciones import Institucion, Columnas, SoyClienteDe, BinBanco
 from .solicitud import CatalogoCampos, SolicitudIncompleta, Respuestas
 from .tarjeta import StatusTarjeta, Tarjeta
@@ -27,3 +27,9 @@ from .fechas import Fecha
 from .adminUtils import adminUtils
 from .location import GeoDevice, GeoLocation, UserLocation, UDevice
 from .documentos import DocExtraction
+from .perfildeclarado import (TransferenciasMensuales,
+                              OperacionesMensual,
+                              UsoCuenta,
+                              OrigenDeposito,
+                              PerfilTransaccionalDeclarado,
+                              )

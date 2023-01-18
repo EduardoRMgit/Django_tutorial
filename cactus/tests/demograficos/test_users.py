@@ -19,6 +19,7 @@ class UsersTestCase(TestCase):
         call_command('loaddata', 'statusRegistro', verbosity=0)
         call_command('loaddata', 'errorestransaccion', verbosity=0)
         call_command('loaddata', 'urls', verbosity=0)
+        call_command('loaddata', 'nivelCuenta', verbosity=0)
         self._client = Client()
         self._user1 = None
         self._user2 = None

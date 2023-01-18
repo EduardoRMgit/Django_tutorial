@@ -1,0 +1,34 @@
+[
+{
+  "model": "demograficos.operacionesmensual",
+  "pk": 1,
+  "fields": {
+    "operaciones_mensuales": "1 a 3",
+    "codigo": "001"
+  }
+},
+{
+  "model": "demograficos.operacionesmensual",
+  "pk": 2,
+  "fields": {
+    "operaciones_mensuales": "4 a 7",
+    "codigo": "002"
+  }
+},
+{
+  "model": "demograficos.operacionesmensual",
+  "pk": 3,
+  "fields": {
+    "operaciones_mensuales": "8 a 10",
+    "codigo": "003"
+  }
+},
+{
+  "model": "demograficos.operacionesmensual",
+  "pk": 4,
+  "fields": {
+    "operaciones_mensuales": "Más de 10",
+    "codigo": "004"
+  }
+}
+]

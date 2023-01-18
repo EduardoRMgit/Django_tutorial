@@ -1,4 +1,5 @@
 from graphql_jwt.testcases import JSONWebTokenTestCase
+from django.core.management import call_command
 
 
 class DeviceTest(JSONWebTokenTestCase):
@@ -9,6 +10,10 @@ class DeviceTest(JSONWebTokenTestCase):
         Se prueba en seis pasos la creación y desactivación de un dipositivo
         y los posibles errores dentro del enrolamiento correspondiente.
     """
+
+    def setUp(self):
+        call_command('loaddata', 'nivelCuenta', verbosity=0)
+        super().setUp()
 
     def test_create_device(self):
         """

@@ -1,0 +1,26 @@
+[
+{
+  "model": "banca.nivelcuenta",
+  "pk": 1,
+  "fields": {
+    "nivel": 1,
+    "trans_mes": "5500.00",
+    "saldo_max": "7400.00",
+    "dep_efectivo_mes": "5500.00",
+    "dep_efectivo_dia": "5500.00",
+    "ret_efectivo_dia": "5500.00"
+  }
+},
+{
+  "model": "banca.nivelcuenta",
+  "pk": 2,
+  "fields": {
+    "nivel": 3,
+    "trans_mes": null,
+    "saldo_max": null,
+    "dep_efectivo_mes": "74000.00",
+    "dep_efectivo_dia": "29600.00",
+    "ret_efectivo_dia": "11100.00"
+  }
+}
+]

@@ -1,3 +1,4 @@
+from .nivelCuenta import NivelCuenta
 from .transaccion import (StatusTrans,
                           TipoAnual,
                           Transaccion,

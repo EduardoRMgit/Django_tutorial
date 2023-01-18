@@ -9,6 +9,7 @@ from django.core.management import call_command
 from django.contrib.auth import authenticate
 from django.http import HttpRequest
 from demograficos.models import Telefono
+from banca.models import NivelCuenta
 
 
 class DemograficosTestBase(JSONWebTokenTestCase):
@@ -17,6 +18,8 @@ class DemograficosTestBase(JSONWebTokenTestCase):
 
     def setUp(self):
         load_min_test()
+        NivelCuenta.objects.create(nivel=1)
+        call_command('loaddata', 'nivelCuenta', verbosity=0)
         call_command('loaddata', 'entidadFed', verbosity=0)
         call_command('loaddata', 'tipoDireccion', verbosity=0)
         call_command('loaddata', 'direccion', verbosity=0)

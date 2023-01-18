@@ -10,6 +10,7 @@ class TestInguzGraphQL(JSONWebTokenTestCase):
 
     def setUp(self):
         load_min_test()
+        call_command('loaddata', 'nivelCuenta', verbosity=0)
         call_command('loaddata', 'user.json', verbosity=0)
         call_command('loaddata', 'contactos.json', verbosity=0)
         call_command('loaddata', 'contable_cuenta.json', verbosity=0)

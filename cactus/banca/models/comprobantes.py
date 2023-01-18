@@ -14,5 +14,6 @@ class Comprobante(models.Model):
         blank=False,
         null=False
     )
+
     def __str__(self):
         return self.tipo
