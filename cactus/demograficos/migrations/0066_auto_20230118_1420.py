@@ -11,6 +11,11 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+        migrations.AddField(
+            model_name='avatar',
+            name='avatar_min_img',
+            field=models.ImageField(blank=True, null=True, upload_to='avatars'),
+        ),
         migrations.AlterField(
             model_name='avatar',
             name='activo',
