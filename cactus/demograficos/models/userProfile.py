@@ -124,9 +124,10 @@ class Avatar(models.Model):
 
     activo = models.BooleanField(default=True)
 
-    avatar_min_img = models.ImageField(
+    avatar_min = models.ImageField(
         upload_to='avatars',
         blank=True,
+        verbose_name="Avatar miniatura",
         null=True)
 
     def __str__(self):
