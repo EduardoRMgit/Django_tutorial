@@ -21,4 +21,4 @@ class Comprobante(models.Model):
     )
 
     def __str__(self):
-        return self.tipo
+        return self.tipo.nombre if self.tipo else "No definido"
