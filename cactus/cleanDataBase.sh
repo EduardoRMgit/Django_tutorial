@@ -42,6 +42,7 @@ if [[ $LOADDATA == true ]] || [[ $PROD == false ]] ; then
 
   # #DEMOGRAFICOS
   ./manage.py shell < tests/perms.py
+  ./manage.py loaddata nivelCuenta.json
   # ./manage.py loaddata user.json
   ./manage.py loaddata statusRegistro.json
   ./manage.py loaddata statusCuenta.json
@@ -83,7 +84,6 @@ if [[ $LOADDATA == true ]] || [[ $PROD == false ]] ; then
   ./manage.py loaddata cami.json
   ./manage.py loaddata errorestransaccion.json
   ./manage.py loaddata codigoconfianza.json
-  ./manage.py loaddata nivelCuenta.json
 
   # Transaccion
   # ./manage.py loaddata transaccion.json
