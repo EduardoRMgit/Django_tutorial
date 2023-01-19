@@ -1907,8 +1907,6 @@ class UpdateInfoPersonal(graphene.Mutation):
             u_profile.ocupacion = (
                 occupation if occupation else u_profile.ocupacion)
             u_profile.curp = curp if curp else u_profile.curp
-            u_profile.pais_origen_otro = (
-                country if country else u_profile.pais_origen_otro)
             alias = alias if alias else u_profile.alias
             if alias and alias != u_profile.alias:
                 if UserProfile.objects.filter(alias__iexact=alias).count() == 0:
