@@ -93,11 +93,8 @@ def ejecuta_balanza_notCreated(sender, instance, **kwargs):
         anterior = Transaccion.objects.get(id=instance.id)
         if (not anterior.statusTrans == instance.statusTrans) and instance.statusTrans == exito:  # noqa: E501
             tipo_trans = int(instance.tipoTrans.codigo)
-            if tipo_trans in [1, 2, 3, 6]:
+            if tipo_trans in [1, 2, 3, 6, 18, 19]:
                 balanza(instance, tipo_trans)
-            elif tipo_trans == 13:
-                balanza(instance, 15)  # Inguz-Inguz Recibida
-                balanza(instance, 16)  # Inguz-Inguz Enviada
 
 
 @receiver(post_save, sender=Transaccion)
@@ -106,11 +103,8 @@ def ejecuta_balanza_created(sender, instance, created, **kwargs):
     exito = StatusTrans.objects.get(nombre="exito")
     if created and instance.statusTrans == exito:
         tipo_trans = int(instance.tipoTrans.codigo)
-        if tipo_trans in [1, 2, 3, 6]:
+        if tipo_trans in [1, 2, 3, 6, 18, 19]:
             balanza(instance, tipo_trans)
-        elif tipo_trans == 13:
-            balanza(instance, 15)  # Inguz-Inguz Recibida
-            balanza(instance, 16)  # Inguz-Inguz Enviada
 
 
 class TransPago(models.Model):

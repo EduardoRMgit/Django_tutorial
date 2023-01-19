@@ -22,6 +22,14 @@ class DocAdjuntoTipo(models.Model):
         return self.tipo
 
 
+class TipoComprobante(models.Model):
+
+    tipo = models.CharField(max_length=15, blank=True, null=True)
+
+    def __str__(self):
+        return self.tipo
+
+
 class DocAdjunto(models.Model):
     """Document type uploaded by the user.
 
@@ -51,6 +59,13 @@ class DocAdjunto(models.Model):
     tipo = models.ForeignKey(
         DocAdjuntoTipo,
         related_name='tipo_documento',
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True
+    )
+    tipo_comprobante = models.ForeignKey(
+        TipoComprobante,
+        related_name='tipo_comprobante',
         on_delete=models.CASCADE,
         blank=True,
         null=True

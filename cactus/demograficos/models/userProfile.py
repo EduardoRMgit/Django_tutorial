@@ -10,6 +10,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from banca.models.productos import Productos
 from banca.models.entidades import CodigoConfianza
+from banca.models import NivelCuenta
 from demograficos.models import Direccion
 
 
@@ -99,6 +100,40 @@ def uProfilenuller(klass):
     return klass
 
 
+class Avatar(models.Model):
+
+    opciones_genero = (
+        ("M", "Mujer"),
+        ("H", "Hombre"),
+        ("O", "Otro")
+    )
+    genero = models.CharField(null=True,
+                              blank=True,
+                              max_length=15,
+                              choices=opciones_genero)
+    avatar_img = models.ImageField(upload_to='avatars',
+                                   blank=True,
+                                   null=True)
+    name = models.CharField(max_length=128,
+                            blank=True,
+                            null=True)
+
+    description = models.CharField(max_length=128,
+                                   blank=True,
+                                   null=True)
+
+    activo = models.BooleanField(default=True)
+
+    avatar_min = models.ImageField(
+        upload_to='avatars',
+        blank=True,
+        verbose_name="Avatar miniatura",
+        null=True)
+
+    def __str__(self):
+        return str(self.name)
+
+
 @uProfilenuller
 class UserProfile(AbstractBaseUser):
     """aditional information for the user.
@@ -177,6 +212,21 @@ class UserProfile(AbstractBaseUser):
         on_delete=models.CASCADE,
         related_name='Uprofile'
     )
+
+    nivel_cuenta = models.ForeignKey(
+        NivelCuenta,
+        default=1,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL
+    )
+
+    alias = models.CharField(
+        max_length=30,
+        null=True,
+        blank=True
+    )
+
     blocked_reason = models.CharField(
         max_length=1,
         choices=BLOCKED_REASONS,
@@ -218,6 +268,10 @@ class UserProfile(AbstractBaseUser):
     )
     autorizado = models.BooleanField(default=False)
     country = CountryField(blank=True, null=True)
+    pais_origen_otro = models.CharField(max_length=50,
+                                        blank=True,
+                                        null=True,
+                                        verbose_name='Pais de nacimiento')
     ineCaptura = models.ImageField(upload_to='docs/ine', blank=True, null=True)
     ineReversoCaptura = models.ImageField(upload_to='docs/ineReverso',
                                           blank=True,
@@ -237,13 +291,13 @@ class UserProfile(AbstractBaseUser):
     nip = models.CharField(max_length=6, null=True, blank=True)
     aceptaKitLegal = models.DateTimeField(blank=True, null=True)
     kitComisiones = models.FileField(upload_to='docs/pdfLegal',
-                                      blank=True, null=True)
+                                     blank=True, null=True)
     kitTerminos = models.FileField(upload_to='docs/pdfLegal',
-                                    blank=True, null=True)
+                                   blank=True, null=True)
     kitPrivacidad = models.FileField(upload_to='docs/pdfLegal',
-                                      blank=True, null=True)
+                                     blank=True, null=True)
     kitDeclaraciones = models.FileField(upload_to='docs/pdfLegal',
-                                         blank=True, null=True)
+                                        blank=True, null=True)
 
     saldo_cuenta = models.FloatField(null=True, blank=True, default=0)
     cuentaClabe = models.CharField(max_length=18, blank=True)
@@ -282,6 +336,16 @@ class UserProfile(AbstractBaseUser):
     cd = models.CharField(max_length=255, null=True, blank=True)
     deOmision = models.CharField(max_length=255, null=True, blank=True)
     is_active = models.BooleanField(default=True)
+    avatar = models.ForeignKey(Avatar,
+                               on_delete=models.SET_NULL,
+                               null=True,
+                               blank=True)
+    avatar_url = models.URLField(
+        max_length=600,
+        null=True,
+        blank=True
+    )
+    enrolamiento = models.BooleanField(default=False)
 
     class Meta():
         verbose_name_plural = 'Perfil del usuario'
@@ -542,7 +606,7 @@ class RestorePassword(models.Model):
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE
-        )
+    )
 
     def validate(self, testPassword):
         return self.passTemporal == testPassword
@@ -554,11 +618,11 @@ class RespuestaSeguridad(models.Model):
     pregunta = models.ForeignKey(
         PreguntaSeguridad,
         on_delete=models.CASCADE
-        )
+    )
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE
-        )
+    )
 
     def __str__(self):
         return self.respuesta_secreta
@@ -704,7 +768,7 @@ class NipTemporal(models.Model):
 
     def save(self, check=None, *args, **kwargs):
         if check is None:
-            self.nip_temp = randint(100000, 999999)
+            self.nip_temp = randint(1000, 9999)
             super().save(*args, **kwargs)
 
     def __str__(self):

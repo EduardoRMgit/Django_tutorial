@@ -1,20 +1,50 @@
+import logging
 import requests
 import json
 from pld.models.urls import UrlsPLD
+
+
+db_logger = logging.getLogger('db')
+
+
+def get_token():
+    url = 'https://gt-servicios.com/propld/keys/generateToken'
+    headers = {
+        'Accept': 'application/json',
+        'X-API-KEY': 'KYC-kmgO5JzyMYjty06Oqu1NIQV12Pyy',
+    }
+    body = {
+        'id_entidad': 5500
+    }
+
+    res = requests.post(
+        url,
+        data=body,
+        headers=headers
+    )
+
+    content = json.loads(res.content)
+    return content['token']
 
 
 def listaNegra(data):
     # url = 'https://gt-servicios.com/propld/listsapi/searchlist'
     url = UrlsPLD.objects.get(id=4)
 
+    url = "https://gt-servicios.com/prolistas/busquedaapi/searchperson"
+    token = get_token()
     headers = {
-            'Accept': 'application/json',
-            # 'X-API-KEY':'KYC-DSR92Sj2NgK8aPyPHXYSxjDs'
-            'X-API-KEY': 'KYC-eWTR92Sj2NgK8aPyPHXYSxjVr'
+        'Accept': 'application/json',
+        'X-API-KEY': 'KYC-kmgO5JzyMYjty06Oqu1NIQV12Pyy',
+        'Authorization': token
     }
 
     r = requests.post(url, data=data, headers=headers)
-    # k = json.loads(r.text)
+    k = json.loads(r.text)
+    print("listaNegra: ", k)
+    db_logger.info(
+        f"[STP listaNegra()] response: {k}")
+
     try:
         k = json.loads(r.text)
         result = k.get('results')
