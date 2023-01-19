@@ -3598,8 +3598,6 @@ class UpdateEmail(graphene.Mutation):
         _valida(not user.Uprofile.check_password(nip),
                 'El NIP es incorrecto.')
         _valida(not user.email == email_actual,
-                'El correo actual es incorrecto')
-        _valida(not user.email == email_actual,
                 'El correo actual no coincide')
         try:
             validate_email(email_nuevo)
