@@ -1,14 +1,22 @@
 # -*- coding: utf-8 -*-
 
 from django.contrib.auth import get_user_model
+from django.core.management import call_command
 
 from graphql_jwt.shortcuts import get_token
 
 from ..auth_client import JWTAuthClientTestCase
+from demograficos.models import Telefono
+from banca.models import NivelCuenta
 
 
 class TokenTests(JWTAuthClientTestCase):
     """ Pruebas de la mutación tokenAuth. """
+
+    def setUp(self):
+        NivelCuenta.objects.create(nivel=1)
+        call_command('loaddata', 'nivelCuenta', verbosity=0)
+        return super().setUp()
 
     def test_client_token_integrity(self):
         """ Prueba que el token que el cliente envía en los headers
@@ -50,11 +58,20 @@ class TokenTests(JWTAuthClientTestCase):
         res = self.client.execute(mutation, variables)
         self.assertEqual(res.data['tokenAuth'], None)
         self.assertEqual(res.errors[0].message,
-                         'Contraseña incorrecta')
+                         'Usuario y/o contraseña incorrectos')
 
 
 class CreateUserTests(JWTAuthClientTestCase):
     """ Pruebas de la mutación createUser. """
+
+    def setUp(self):
+        call_command('loaddata', 'nivelCuenta', verbosity=0)
+        call_command('loaddata', 'statusRegistro', verbosity=0)
+        Telefono.objects.create(
+            telefono="5551029634",
+            activo=True,
+            validado=True
+        )
 
     def test_create_user(self):
         """ Prueba la mutación createUser.
@@ -105,6 +122,10 @@ class CreateUserTests(JWTAuthClientTestCase):
 
 class UserProfileTests(JWTAuthClientTestCase):
     """ Prueba la query userProfile. """
+
+    def setUp(self):
+        call_command('loaddata', 'nivelCuenta', verbosity=0)
+        return super().setUp()
 
     def test_user_profile(self):
         """ Prueba únicamente la mutación userProfile (requiere autenticación).

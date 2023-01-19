@@ -26,7 +26,7 @@ class StatusLog(models.Model):
     trace = models.TextField(blank=True, null=True)
     create_datetime = models.DateTimeField(
         default=timezone.now,
-        verbose_name='Creado el'
+        verbose_name='fecha de creación'
     )
 
     def __str__(self):

@@ -128,8 +128,8 @@ class UrlPdfLegal(graphene.Mutation):
         _SWITCH_IDS = {
             1: 3,
             2: 4,
-            3: 2,
-            4: 1
+            3: 1,
+            4: 2
         }
         _ID = _SWITCH_IDS[id]
 

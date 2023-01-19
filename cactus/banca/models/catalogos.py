@@ -15,8 +15,18 @@ class ErroresTransaccion(models.Model):
 
 
 class TipoTransaccion(models.Model):
+    TIPO = (
+        ('E', 'Enviada'),
+        ('R', 'Recibida'),
+        ('S', 'Especial')
+    )
     codigo = models.CharField(max_length=3)
     nombre = models.CharField(max_length=128)
+    tipo = models.CharField(
+        max_length=1,
+        choices=TIPO,
+        null=True,
+        blank=True)
     salida = models.BooleanField(default=True)
 
     def __str__(self):

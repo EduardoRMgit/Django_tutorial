@@ -75,6 +75,8 @@ class Telefono(models.Model):
 
     user = models.ForeignKey(
         User,
+        null=True,
+        blank=True,
         on_delete=models.CASCADE,
         related_name='user_telefono'
     )
@@ -113,6 +115,7 @@ class Telefono(models.Model):
             datetime.timedelta(hours=2)
         if str(token) == tokenActual.token and delta:
             self.validado = True
+            self.activo = True
             self.save()
             return True
         else:
