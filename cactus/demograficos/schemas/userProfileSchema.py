@@ -3576,7 +3576,7 @@ class SetPerfilTransaccional(graphene.Mutation):
 
 class UpdateEmail(graphene.Mutation):
 
-    confirmacion = graphene.String()
+    correo = graphene.String()
 
     class Arguments:
         token = graphene.String(required=True)
@@ -3608,7 +3608,7 @@ class UpdateEmail(graphene.Mutation):
 
         user.email = email_nuevo.lower()
         user.save()
-        return UpdateEmail(confirmacion="OK")
+        return UpdateEmail(correo=user.email)
 
 
 class Mutation(graphene.ObjectType):
