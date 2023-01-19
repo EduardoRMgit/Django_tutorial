@@ -8,6 +8,7 @@ from graphene.utils.thenables import maybe_thenable
 from graphql_jwt import exceptions
 from graphql_jwt import signals
 from django.contrib.auth.models import User
+from demograficos.models import UserLocation
 from django.utils import timezone
 from graphql_jwt.decorators import (csrf_rotation,
                                     setup_jwt_cookie,
@@ -35,6 +36,7 @@ def token_auth(f):
             username=username,
             password=password,
         )
+
         if user is None:
             username_ = username
             try:
@@ -49,14 +51,26 @@ def token_auth(f):
                     log.save()
                     return Exception("Cuenta Bloqueada")
                 return exceptions.JSONWebTokenError(
-                    _("Contraseña incorrecta"),
+                    _("Usuario y/o contraseña incorrectos"),
                 )
             except Exception:
                 pass
             # return Exception("Inactive user")
             raise exceptions.JSONWebTokenError(
-                _("Please enter valid credentials"),
+                _("Usuario y/o contraseña incorrectos"),
             )
+
+        location = UserLocation.objects.filter(user=user).last()
+        if location:
+            location.login = True
+            location.save()
+        qs = UserLocation.objects.filter(user=user, login=True).order_by(
+            '-date')
+        if qs.count() > 1:
+            user.last_login = qs[1].date
+        else:
+            user.last_login = timezone.now()
+        user.save()
 
         if hasattr(context, "user"):
             context.user = user

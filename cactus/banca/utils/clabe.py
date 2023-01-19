@@ -1,13 +1,15 @@
 import sys
 
-# SPEI participant receiver key
-claveSpei = input("what is the SPEI participant key identifier?")
+from django.conf import settings
 
-# 3 digits from Plaza number where the account was opened
-plaza = input("what is the customer plaza?")
 
-# 11 digits from the account or contract of the customer
-accountNumber = input("what is the customer account/contract number?")
+PREFIJO_CUENTA_INGUZ = settings.PREFIJO_CUENTA_INGUZ
+
+
+def es_cuenta_inguz(clabe):
+
+    # Validar construcción de la clabe
+    return isinstance(clabe, str) and clabe[:10] == PREFIJO_CUENTA_INGUZ
 
 
 def calculateCheckerDigit(claveSpei, plaza, accountNumber):
@@ -86,4 +88,13 @@ def calculateCheckerDigit(claveSpei, plaza, accountNumber):
 
 
 if __name__ == "__main__":
+    # SPEI participant receiver key
+    claveSpei = input("what is the SPEI participant key identifier?")
+
+    # 3 digits from Plaza number where the account was opened
+    plaza = input("what is the customer plaza?")
+
+    # 11 digits from the account or contract of the customer
+    accountNumber = input("what is the customer account/contract number?")
+
     calculateCheckerDigit(claveSpei, plaza, accountNumber)

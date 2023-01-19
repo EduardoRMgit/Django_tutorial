@@ -69,6 +69,7 @@ class TestContacto(JSONWebTokenTestCase):
         """
     @classmethod
     def setUpTestData(self):
+        call_command('loaddata', 'nivelCuenta', verbosity=0)
         call_command('loaddata', 'usertesting', verbosity=0)
         call_command('loaddata', 'institutionbanjico', verbosity=0)
 
@@ -92,14 +93,16 @@ class TestContacto(JSONWebTokenTestCase):
                             $nombre: String!,
                             $nombreCompleto: String!,
                             $banco: String!,
-                            $clabe: String!
+                            $clabe: String!,
+                            $nip: String!
                         ){
                             createContacto(
                             token: $token,
                             nombre: $nombre,
                             nombreCompleto: $nombreCompleto,
                             banco: $banco,
-                            clabe: $clabe
+                            clabe: $clabe,
+                            nip: $nip
                             ){
                             allContactos{
                                 clabe
@@ -111,7 +114,8 @@ class TestContacto(JSONWebTokenTestCase):
                      'nombre': 'miaumiau',
                      'nombreCompleto': 'wazap',
                      'banco': 'fake',
-                     'clabe': '014122223333444455'}
+                     'clabe': '014122223333444455',
+                     'nip': '1234'}
         res = self.client.execute(mutation, variables)
         self.assertEqual(res.errors[0].message,
                          'Error decoding signature')
@@ -122,7 +126,10 @@ class TestContacto(JSONWebTokenTestCase):
                      'nombre': 'miaumiau',
                      'nombreCompleto': 'wazap',
                      'banco': 'fake',
-                     'clabe': '014122223333444455'}
+                     'clabe': '014122223333444455',
+                     'nip': '1234'}
+        self.user.Uprofile.set_password("1234")
+        self.user.Uprofile.save()
         res2 = self.client.execute(mutation, variables2)
         expected_res = {
                 "createContacto": {
@@ -220,7 +227,7 @@ class TestContacto(JSONWebTokenTestCase):
                       "clabe": "014111111111111111"}
         res6 = self.client.execute(mutation3, variables6)
         self.assertEqual(res6.errors[0].message,
-                         'Contacto matching query does not exist.')
+                         'No existe contacto activo')
         print("    [assert OK] Wrong CLABE for deleteContacto")
 
         # Ahora el (test)' deleteContacto <con token incorrecto>

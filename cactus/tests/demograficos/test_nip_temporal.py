@@ -12,6 +12,7 @@ class TestNipTemporal(JSONWebTokenTestCase):
 
     def setUp(self):
         call_command('loaddata', 'component', verbosity=0)
+        call_command('loaddata', 'nivelCuenta', verbosity=0)
         call_command('loaddata', 'usertesting', verbosity=0)
 
         self._client = Client()

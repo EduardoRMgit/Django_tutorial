@@ -1,0 +1,30 @@
+[
+{
+  "model": "demograficos.tipocomprobante",
+  "pk": 1,
+  "fields": {
+    "tipo": "CFE"
+  }
+},
+{
+  "model": "demograficos.tipocomprobante",
+  "pk": 2,
+  "fields": {
+    "tipo": "TELMEX"
+  }
+},
+{
+  "model": "demograficos.tipocomprobante",
+  "pk": 3,
+  "fields": {
+    "tipo": "IZZI"
+  }
+},
+{
+  "model": "demograficos.tipocomprobante",
+  "pk": 4,
+  "fields": {
+    "tipo": "TOTALPLAY"
+  }
+}
+]

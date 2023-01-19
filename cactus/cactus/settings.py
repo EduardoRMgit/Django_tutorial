@@ -14,6 +14,8 @@ import os
 import environ
 from datetime import timedelta
 
+SITE = os.getenv("SITE", "local")
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -41,10 +43,11 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'staging.inguz.site',
                  'test.inguz.site', 'prod.inguz.site',
                  'staging.zygoo.mx', 'test.zygoo.mx',
                  'inguz.site', 'zygoo.mx', '10.195.1.207',
-                 '10.5.1.1', 'inguzmx.com', ]
+                 '10.5.1.1', 'inguzmx.com', 'staging.inguz.online',
+                 'test.inguz.online']
 
-RECAPTCHA_PUBLIC_KEY = '6LcTX1AaAAAAAN30Sl2EMuGJHCnbsiX-934v91A7'
-RECAPTCHA_PRIVATE_KEY = '6LcTX1AaAAAAADsgnyMWbEy8H7DTAcVYdqs3KGU3'
+RECAPTCHA_PUBLIC_KEY = '6Lc_Z2ojAAAAAIi_BPRSrrmkle33Yk9pf4JtWEsQ'
+RECAPTCHA_PRIVATE_KEY = '6Lc_Z2ojAAAAAKxXKQwxFosKmzM7SHxxuKn2w1zP'
 RECAPTCHA_REQUIRED_SCORE = 0.85
 
 # Application definition
@@ -295,12 +298,6 @@ DATA_UPLOAD_MAX_NUMBER_FIELDS = 10240
 PASSWORD_RESET_TIMEOUT_DAYS = 2
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
-AUTO_LOGOUT = {
-    'IDLE_TIME': timedelta(minutes=5),
-    'SESSION_TIME': timedelta(hours=8),
-    'MESSAGE': 'Tu sesión ha expirado, por favor inicia sesión nuevamente.',
-    'REDIRECT_TO_LOGIN_IMMEDIATELY': True,
-}
 
 AXES_ONLY_USER_FAILURES = True
 
@@ -308,7 +305,33 @@ AXES_ONLY_ADMIN_SITE = True
 
 AXES_COOLOFF_TIME = timedelta(minutes=10)
 
-AXES_FAILURE_LIMIT = 5
 
 DAPP_KEY = env.str('DAPP_KEY', "dapp_key")
 DAPP_SECRET = env.str('DAPP_SECRET', "dapp_secret")
+
+if SITE == "local":
+    idle_time = 120
+    AXES_FAILURE_LIMIT = 10
+    INSTALLED_APPS.remove('multi_captcha_admin')
+elif SITE == "stage":
+    idle_time = 30
+    AXES_FAILURE_LIMIT = 5
+elif SITE == "test":
+    idle_time = 5
+    AXES_FAILURE_LIMIT = 5
+elif SITE == "prod":
+    idle_time = 5
+    AXES_FAILURE_LIMIT = 5
+
+AUTO_LOGOUT = {
+    'IDLE_TIME': timedelta(minutes=idle_time),
+    'SESSION_TIME': timedelta(hours=8),
+    'MESSAGE': 'Tu sesión ha expirado, por favor inicia sesión nuevamente.',
+    'REDIRECT_TO_LOGIN_IMMEDIATELY': True,
+}
+
+PREFIJO_CUENTA_INGUZ = "6461802180"
+
+AXES_LOCKOUT_CALLABLE = "cactus.customAuthBackend.lockout"
+
+URL_IMAGEN = "https://phototest420.s3.amazonaws.com/docs/docs/banca/comprobantes/comprobante_ejemplo.jpeg"
