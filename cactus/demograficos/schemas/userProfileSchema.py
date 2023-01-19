@@ -12,6 +12,8 @@ from graphene_django.types import DjangoObjectType
 from graphql_jwt.decorators import login_required
 from graphql_jwt.shortcuts import get_token
 
+from django.core.validators import validate_email
+
 from django.db.models import Q
 
 from django.conf import settings
@@ -3574,6 +3576,39 @@ class SetPerfilTransaccional(graphene.Mutation):
             raise Exception("Error al crear perfil")
         return SetPerfilTransaccional(perfil=perfil_declarado)
 
+class UpdateEmail(graphene.Mutation):
+
+    correo = graphene.String()
+
+    class Arguments:
+        token = graphene.String(required=True)
+        email_actual = graphene.String(required=True)
+        email_nuevo = graphene.String(required=True)
+        nip = graphene.String(required=True)
+
+    @login_required
+    def mutate(self, info, token, email_actual, email_nuevo, nip):
+
+        def _valida(expr, msg):
+            if expr:
+                raise Exception(msg)
+
+        user = info.context.user
+
+        _valida(user.Uprofile.password is None,
+                'El usuario no ha establecido su NIP.')
+        _valida(not user.Uprofile.check_password(nip),
+                'El NIP es incorrecto.')
+        _valida(not user.email == email_actual,
+                'El correo actual no coincide')
+        try:
+            validate_email(email_nuevo)
+        except Exception:
+            raise Exception("Ingrese un correo válido")
+
+        user.email = email_nuevo.lower()
+        user.save()
+        return UpdateEmail(correo=user.email)
 
 
 class Mutation(graphene.ObjectType):
@@ -3617,3 +3652,4 @@ class Mutation(graphene.ObjectType):
     unblock_bluepixel_user = UnblockBluePixelUser.Field()
     set_perfil_transaccional = SetPerfilTransaccional.Field()
     block_account_emergency = BlockAccountEmergency.Field()
+    update_email = UpdateEmail.Field()
