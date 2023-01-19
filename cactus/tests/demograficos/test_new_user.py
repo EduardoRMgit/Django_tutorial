@@ -9,6 +9,7 @@ from django.core.management import call_command
 from django.contrib.auth import authenticate
 from django.http import HttpRequest
 from demograficos.models import Telefono
+from banca.models import NivelCuenta
 
 
 class DemograficosTestBase(JSONWebTokenTestCase):
@@ -17,6 +18,8 @@ class DemograficosTestBase(JSONWebTokenTestCase):
 
     def setUp(self):
         load_min_test()
+        NivelCuenta.objects.create(nivel=1)
+        call_command('loaddata', 'nivelCuenta', verbosity=0)
         call_command('loaddata', 'entidadFed', verbosity=0)
         call_command('loaddata', 'tipoDireccion', verbosity=0)
         call_command('loaddata', 'direccion', verbosity=0)
@@ -103,14 +106,16 @@ class UserTests(DemograficosTestBase):
                         $nombre: String!,
                         $nombreCompleto: String!,
                         $banco: String!,
-                        $clabe: String!
+                        $clabe: String!,
+                        $nip: String!
                       ){
                         createContacto(
                           token: $token,
                           nombre: $nombre,
                           nombreCompleto: $nombreCompleto,
                           banco: $banco,
-                          clabe: $clabe
+                          clabe: $clabe,
+                          nip: $nip
                         ){
                         allContactos{
                             clabe
@@ -122,7 +127,10 @@ class UserTests(DemograficosTestBase):
                      'nombre': 'nombretest',
                      'nombreCompleto': 'nombreCompletotest',
                      'banco': 'bancotest',
-                     'clabe': '014456789098765432'}
+                     'clabe': '014456789098765432',
+                     'nip': '1234'}
+        self.user.Uprofile.set_password("1234")
+        self.user.Uprofile.save()
         res = self.client.execute(mutation, variables)
         expected_res = {
             'createContacto': {

@@ -7,6 +7,7 @@ from .perms import load_groups
 
 class Login(JSONWebTokenTestCase):
     def setUp(self):
+        call_command('loaddata', 'nivelCuenta', verbosity=0)
         call_command('loaddata', 'user.json', verbosity=0)
         load_groups()
 

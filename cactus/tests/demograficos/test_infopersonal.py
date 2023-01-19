@@ -11,6 +11,7 @@ class TestInfopersonal(JSONWebTokenTestCase):
     def setUp(self):
         call_command('loaddata', 'component', verbosity=0)
         call_command('loaddata', 'adminUtils', verbosity=0)
+        call_command('loaddata', 'nivelCuenta', verbosity=0)
         call_command('loaddata', 'usertesting', verbosity=0)
         call_command('loaddata', 'statusRegistro', verbosity=0)
         Avatar.objects.create(

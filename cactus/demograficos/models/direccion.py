@@ -109,6 +109,11 @@ class Direccion(models.Model):
         blank=True,
         null=True
     )
+    estado = models.CharField(
+        max_length=50,
+        null=True,
+        blank=True
+    )
 
     class Meta:
         verbose_name = 'Direccion'

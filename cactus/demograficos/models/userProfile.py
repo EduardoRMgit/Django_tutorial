@@ -10,6 +10,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from banca.models.productos import Productos
 from banca.models.entidades import CodigoConfianza
+from banca.models import NivelCuenta
 from demograficos.models import Direccion
 
 
@@ -101,6 +102,15 @@ def uProfilenuller(klass):
 
 class Avatar(models.Model):
 
+    opciones_genero = (
+            ("M", "Mujer"),
+            ("H", "Hombre"),
+            ("O", "Otro")
+    )
+    genero = models.CharField(null=True,
+                              blank=True,
+                              max_length=15,
+                              choices=opciones_genero)
     avatar_img = models.ImageField(upload_to='avatars',
                                    blank=True,
                                    null=True)
@@ -111,6 +121,14 @@ class Avatar(models.Model):
     description = models.CharField(max_length=128,
                                    blank=True,
                                    null=True)
+
+    activo = models.BooleanField(default=True)
+
+    avatar_min = models.ImageField(
+        upload_to='avatars',
+        blank=True,
+        verbose_name="Avatar miniatura",
+        null=True)
 
     def __str__(self):
         return str(self.name)
@@ -193,6 +211,14 @@ class UserProfile(AbstractBaseUser):
         primary_key=True,
         on_delete=models.CASCADE,
         related_name='Uprofile'
+    )
+
+    nivel_cuenta = models.ForeignKey(
+        NivelCuenta,
+        default=1,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL
     )
 
     alias = models.CharField(
@@ -311,7 +337,7 @@ class UserProfile(AbstractBaseUser):
     deOmision = models.CharField(max_length=255, null=True, blank=True)
     is_active = models.BooleanField(default=True)
     avatar = models.ForeignKey(Avatar,
-                               on_delete=models.CASCADE,
+                               on_delete=models.SET_NULL,
                                null=True,
                                blank=True)
     avatar_url = models.URLField(

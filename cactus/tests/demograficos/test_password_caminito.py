@@ -17,6 +17,7 @@ class PasswordTestBase(JSONWebTokenTestCase):
         call_command('loaddata', 'statusRegistro', verbosity=0)
         call_command('loaddata', 'component', verbosity=0)
         call_command('loaddata', 'preguntas_secretas', verbosity=0)
+        call_command('loaddata', 'nivelCuenta', verbosity=0)
         call_command('loaddata', 'usertesting', verbosity=0)
 
     def setUp(self):
@@ -121,7 +122,6 @@ class TestPreguntaNipPassword(PasswordTestBase):
                 tokenAuthPreguntaNip(preguntaId: $preguntaId,
                                      respuestaSecreta: $respuestaSecreta,
                                      username: $username){
-                    token
                     nip
                 }
             }
@@ -132,7 +132,6 @@ class TestPreguntaNipPassword(PasswordTestBase):
         res2 = self.client.execute(mutation2, variables2)
         expected_res2 = {
             "tokenAuthPreguntaNip": {
-                "token": res2.data['tokenAuthPreguntaNip']['token'],
                 "nip": res2.data['tokenAuthPreguntaNip']['nip']
             }
         }

@@ -4,7 +4,7 @@
 export IMAGE_DJANGO=true
 
 # Also build the python packages
-export IMAGE_PIP=true
+export IMAGE_PIP=false
 
 # Run the migrate command.
 export MIGRATIONS=true

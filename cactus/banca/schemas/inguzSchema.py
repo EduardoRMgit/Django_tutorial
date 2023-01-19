@@ -62,9 +62,11 @@ class CreateInguzTransaccion(graphene.Mutation):
         try:
             contacto = Contacto.objects.get(pk=contacto,
                                             verificacion="O",
-                                            user=ordenante)
+                                            user=ordenante,
+                                            activo=True,
+                                            bloqueado=False)
         except Exception:
-            raise Exception("Contacto no valido")
+            raise Exception("Contacto no válido")
 
         if not es_cuenta_inguz(contacto.clabe):  # Inguz
             raise Exception("Cuenta de beneficiario no es inguz")
@@ -72,13 +74,19 @@ class CreateInguzTransaccion(graphene.Mutation):
         if float(abono) <= 0:
             raise Exception("El abono debe ser mayor a cero")
 
-        user_contacto = UserProfile.objects.get(
-            cuentaClabe=contacto.clabe, status="O").user
+        try:
+            user_contacto = UserProfile.objects.get(
+                cuentaClabe=contacto.clabe,
+                status="O",
+                enrolamiento=True).user
+        except Exception:
+            raise Exception("La cuenta destino está fuera de servicio")
         fecha = timezone.now()
         claveR = randomString()
         monto2F = "{:.2f}".format(round(float(abono), 2))
         status = StatusTrans.objects.get(nombre="exito")
-        tipo = TipoTransaccion.objects.get(codigo=13)
+        tipo = TipoTransaccion.objects.get(codigo=18)
+        tipo_recibida = TipoTransaccion.objects.get(codigo=19)
 
         # Actualizamos saldo del usuario
         if float(abono) <= ordenante.Uprofile.saldo_cuenta:
@@ -92,6 +100,7 @@ class CreateInguzTransaccion(graphene.Mutation):
         main_trans = Transaccion.objects.create(
             user=ordenante,
             fechaValor=fecha,
+            fechaAplicacion=fecha,
             monto=float(abono),
             statusTrans=status,
             tipoTrans=tipo,
@@ -106,6 +115,18 @@ class CreateInguzTransaccion(graphene.Mutation):
             fechaOperacion=fecha,
             contacto=contacto,
             transaccion=main_trans,
+        )
+
+        # Recibida (sin transacción hija)
+        Transaccion.objects.create(
+            user=user_contacto,
+            fechaValor=fecha,
+            fechaAplicacion=fecha,
+            monto=float(abono),
+            statusTrans=status,
+            tipoTrans=tipo_recibida,
+            concepto=concepto,
+            claveRastreo=claveR
         )
 
         if cobro_id is not None:
@@ -127,9 +148,6 @@ class CreateInguzTransaccion(graphene.Mutation):
             contacto.clabe,
             monto2F
         )
-        contacto = Contacto.objects.get(pk=contacto.id,
-                                        verificacion="O",
-                                        user=ordenante)
         contacto.frecuencia = int(contacto.frecuencia) + 1
         contacto.save()
         db_logger.info(msg)

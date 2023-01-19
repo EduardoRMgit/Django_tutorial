@@ -7,7 +7,8 @@ from django.contrib.auth import get_user_model
 from django.utils import timezone
 
 from graphql_jwt.decorators import login_required
-from graphene_django_extras import all_directives, DjangoObjectType
+from graphene_django.types import DjangoObjectType
+from decimal import Decimal
 
 from spei.stpTools import randomString
 from spei.models import InstitutionBanjico
@@ -357,10 +358,10 @@ class CreateRetiroScotia(graphene.Mutation):
         scotia_retiro = ScotiaRetiro.objects.create(
             ordenante=user,
             transaccion=main_trans,
-            monto=monto,
+            monto=Decimal(monto),
             conceptoPago="Retiro Cliente",
             ubicacion=ubicacion,
-            comision=comision,
+            comision=Decimal(comision),
             clave_retiro=str(clave_ordenante),
             saldoReservado=scotia_retiro_reservado,
             referenciaPago=str(fecha_t) + "{}".format(
@@ -439,8 +440,8 @@ class CreateScotiaDeposito(graphene.Mutation):
                info,
                token,
                monto,
-               ubicacion,
-               nip):
+               nip,
+               ubicacion=None):
 
         def validar(expr, msg):
             if expr:
@@ -484,9 +485,9 @@ class CreateScotiaDeposito(graphene.Mutation):
         )
         scotia_deposito = ScotiaDeposito.objects.create(
             ordenante=ordenante,
-            importe_documento=float(float(monto) + comision),
+            importe_documento=Decimal(float(float(monto) + comision)),
             fecha_limite=hoy,
-            comision=comision,
+            comision=Decimal(comision),
             referencia_cobranza=referencia_cobranza,
             fecha_inicial=hoy,
             ubicacion=ubicacion,
@@ -504,8 +505,4 @@ class Mutation(graphene.ObjectType):
     create_scotia_deposito = CreateScotiaDeposito.Field()
 
 
-schema = graphene.Schema(
-    query=Query,
-    mutation=Mutation,
-    directives=all_directives
-)
+schema = graphene.Schema(query=Query, mutation=Mutation)
