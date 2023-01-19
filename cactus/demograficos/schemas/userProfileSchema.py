@@ -3593,10 +3593,10 @@ class UpdateEmail(graphene.Mutation):
 
         user = info.context.user
 
-        # _valida(user.Uprofile.password is None,
-        #         'El usuario no ha establecido su NIP.')
-        # _valida(not user.Uprofile.check_password(nip),
-        #         'El NIP es incorrecto.')
+        _valida(user.Uprofile.password is None,
+                'El usuario no ha establecido su NIP.')
+        _valida(not user.Uprofile.check_password(nip),
+                'El NIP es incorrecto.')
         _valida(not user.email == email_actual,
                 'El correo actual es incorrecto')
         _valida(not user.email == email_actual,
