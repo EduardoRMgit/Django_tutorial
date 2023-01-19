@@ -3415,6 +3415,10 @@ class UrlAvatar(graphene.Mutation):
 
     @login_required
     def mutate(self, info, token):
+
+        if settings.SITE not in ["stage", "local"]:
+            raise Exception("No está permitido el borrado en este ambiente")
+
         user = info.context.user
         try:
             avatar_url = (user.Uprofile.avatar.avatar_img.url).split("?")[0]
