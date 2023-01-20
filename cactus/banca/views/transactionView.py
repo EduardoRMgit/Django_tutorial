@@ -27,7 +27,7 @@ from banca.serializers import DetailSerializer, EstadoSerializer
 from demograficos.models import UserProfile
 
 
-trans_entrada = [1, 3, 8, 11, 12, 15, 19]
+trans_entrada = [1, 3, 8, 11, 12, 15, 19, 21]
 
 db_logger = logging.getLogger('db')
 

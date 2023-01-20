@@ -7,6 +7,7 @@ class AllCountriesTest(JSONWebTokenTestCase):
 
     def setUp(self):
         call_command('loaddata', 'countries', verbosity=0)
+        call_command('loaddata', 'nivelCuenta', verbosity=0)
         self._client = Client()
 
     def test_all_countries(self):

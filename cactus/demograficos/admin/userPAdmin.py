@@ -15,7 +15,9 @@ from demograficos.models import (UserProfile,
                                  EntidadFed,
                                  DocAdjunto,
                                  UserBeneficiario,
-                                 UserDevice)
+                                 UserDevice,
+                                 Avatar,
+                                 PerfilTransaccionalDeclarado)
 from banca.models import Transaccion
 from pld.models import (Customer,
                         Contrato,
@@ -141,8 +143,16 @@ class DocAdjuntoInLine(admin.TabularInline):
 
 class BeneficiarioInLine(admin.TabularInline):
     model = UserBeneficiario
-    can_delete = False
+    can_delete = True
     verbose_name_plural = "Beneficiarios"
+    fk_name = "user"
+    extra = 0
+
+
+class PerfilTransaccionalInLine(admin.TabularInline):
+    model = PerfilTransaccionalDeclarado
+    can_delete = True
+    verbose_name_plural = "Perfil Transaccional Declarado"
     fk_name = "user"
     extra = 0
 
@@ -163,8 +173,9 @@ class UserProfileAdmin(PasswordResetUserAdmin):
         UserContactoInline,
         ProfileComponentInline,
         DocAdjuntoInLine,
-        BeneficiarioInLine
-        )
+        BeneficiarioInLine,
+        PerfilTransaccionalInLine
+    )
     actions = ['registra_cuenta']
     list_filter = ('is_staff',
                    )
@@ -275,7 +286,7 @@ class ClienteAdmin(UserProfileAdmin):
         ProfileComponentInline,
         DocAdjuntoInLine,
         BeneficiarioInLine,
-        )
+    )
 
 # from demograficos.models import UserProfile, Telefono
 # from banca.models import Transaccion
@@ -387,4 +398,5 @@ admin.site.register(Cliente, ClienteAdmin)
 admin.site.register(TipoDireccion)
 admin.site.register(EntidadFed)
 admin.site.register(UserDevice)
+admin.site.register(Avatar)
 # admin.site.register(Administradore, AdministradoreAdmin)

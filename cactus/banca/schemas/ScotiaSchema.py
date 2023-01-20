@@ -8,6 +8,7 @@ from django.utils import timezone
 
 from graphql_jwt.decorators import login_required
 from graphene_django.types import DjangoObjectType
+from decimal import Decimal
 
 from spei.stpTools import randomString
 from spei.models import InstitutionBanjico
@@ -39,7 +40,8 @@ def upload_s3(nombre_archivo, archivo):
         's3',
         config=boto3.session.Config(signature_version='s3v4'),
         aws_access_key_id=AWS_ACCESS_KEY_ID,
-        aws_secret_access_key=AWS_SECRET_ACCESS_KEY)
+        aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
+        region_name="us-east-2")
     client.upload_fileobj(archivo, "scotia-reportes", file_path)
     file_url = client.generate_presigned_url(
         'get_object',
@@ -356,10 +358,10 @@ class CreateRetiroScotia(graphene.Mutation):
         scotia_retiro = ScotiaRetiro.objects.create(
             ordenante=user,
             transaccion=main_trans,
-            monto=monto,
+            monto=Decimal(monto),
             conceptoPago="Retiro Cliente",
             ubicacion=ubicacion,
-            comision=comision,
+            comision=Decimal(comision),
             clave_retiro=str(clave_ordenante),
             saldoReservado=scotia_retiro_reservado,
             referenciaPago=str(fecha_t) + "{}".format(
@@ -438,8 +440,8 @@ class CreateScotiaDeposito(graphene.Mutation):
                info,
                token,
                monto,
-               ubicacion,
-               nip):
+               nip,
+               ubicacion=None):
 
         def validar(expr, msg):
             if expr:
@@ -483,9 +485,9 @@ class CreateScotiaDeposito(graphene.Mutation):
         )
         scotia_deposito = ScotiaDeposito.objects.create(
             ordenante=ordenante,
-            importe_documento=float(float(monto) + comision),
+            importe_documento=Decimal(float(float(monto) + comision)),
             fecha_limite=hoy,
-            comision=comision,
+            comision=Decimal(comision),
             referencia_cobranza=referencia_cobranza,
             fecha_inicial=hoy,
             ubicacion=ubicacion,

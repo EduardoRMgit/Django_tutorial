@@ -12,6 +12,7 @@ class GetUserProfileTest(JWTAuthClientTestCase):
 
     def test_get_user_profile(self):
         call_command('loaddata', 'statusCuenta', verbosity=0)
+        call_command('loaddata', 'nivelCuenta', verbosity=0)
         call_command('loaddata', 'docAdjuntoTipo', verbosity=0)
         call_command('loaddata', 'docAdjunto', verbosity=0)
         call_command('loaddata', 'indiceDisponible', verbosity=0)
