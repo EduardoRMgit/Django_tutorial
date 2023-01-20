@@ -198,5 +198,15 @@
     "tipo": "R",
     "salida": true
   }
+},
+{
+  "model": "banca.tipotransaccion",
+  "pk": 22,
+  "fields": {
+    "codigo": "22",
+    "nombre": "Cancelación exitosa",
+    "tipo": "s",
+    "salida": false
+  }
 }
 ]
