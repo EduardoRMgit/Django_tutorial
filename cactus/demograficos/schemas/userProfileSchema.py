@@ -2362,8 +2362,8 @@ class TokenAuthPreguntaNip(graphene.Mutation):
         username = graphene.String()
 
     def mutate(self, info, pregunta_id, respuesta_secreta,
-        username=None, token=None
-    ):
+               username=None, token=None
+               ):
         pregunta = PreguntaSeguridad.objects.get(pk=pregunta_id)
         if username:
             user = User.objects.get(username=username)
@@ -3546,8 +3546,6 @@ class Mutation(graphene.ObjectType):
     block_contacto = BlockContacto.Field()
     buscador_usuario_inguz = BuscadorUsuarioInguz.Field()
     unblock_contacto = UnBlockContacto.Field()
-    delete_bluepixel_user = DeleteBluepixelUser.Field()
-    unblock_bluepixel_user = UnblockBluePixelUser.Field()
     set_perfil_transaccional = SetPerfilTransaccional.Field()
     block_account_emergency = BlockAccountEmergency.Field()
     update_email = UpdateEmail.Field()
