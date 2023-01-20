@@ -62,7 +62,7 @@ if [[ $LOADDATA == true ]] || [[ $PROD == false ]] ; then
   # ./manage.py loaddata direccion.json
   ./manage.py loaddata preguntas_secretas.json
   ./manage.py loaddata component.json
-  ./manage.py loaddata ssid.json
+  # ./manage.py loaddata ssid.json
   # ./manage.py loaddata contactos.json
   ./manage.py loaddata adminUtils.json
   ./manage.py loaddata countries.json
