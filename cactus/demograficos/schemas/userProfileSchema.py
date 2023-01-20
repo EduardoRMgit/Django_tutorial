@@ -2778,7 +2778,7 @@ class BlockContacto(graphene.Mutation):
                     db_logger.error(msg)
                 return BlockContacto(contacto=contacto, details='Contacto Bloqueado')
         else:
-            raise AssertionError("Nip o contacto incorrecto")
+            raise AssertionError("NIP esta mal")
 
 
 class UnBlockContacto(graphene.Mutation):
@@ -2918,7 +2918,7 @@ class DeleteContacto(graphene.Mutation):
                     contacto = associated_user.Contactos_Usuario.filter(
                         clabe=clabe).last()
             else:
-                raise AssertionError("Nip o contacto incorrecto")
+                raise AssertionError("NIP esta mal")
         return DeleteContacto(contacto=contacto,
                               all_contactos=associated_user.
                               Contactos_Usuario.all())
