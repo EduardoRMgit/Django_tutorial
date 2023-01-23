@@ -84,7 +84,7 @@ class Direccion(models.Model):
     codPostal = models.CharField(max_length=6, blank=True, null=True)
     colonia = models.CharField(max_length=80, blank=True, null=True)
     ciudad = models.CharField(max_length=50, blank=True, null=True)
-    delegMunicipio = models.CharField(max_length=50, blank=True, null=True)
+    delegMunicipio = models.CharField(max_length=100, blank=True, null=True)
     fechaCreacion = models.DateTimeField(default=timezone.now)
     telefono = models.CharField(max_length=30, blank=True, null=True)
     # Para saber la fecha activa y valida.
