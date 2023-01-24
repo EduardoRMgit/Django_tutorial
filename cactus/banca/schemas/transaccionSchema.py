@@ -16,7 +16,7 @@ from banca.models.transaccion import (Transaccion,
                                       TipoAnual,
                                       SaldoReservado)
 from banca.models.catalogos import TipoTransaccion
-from banca.models import NotificacionCobro, InguzTransaction
+from banca.models import NotificacionCobro, InguzTransaction, NivelCuenta
 from banca.utils.clabe import es_cuenta_inguz
 
 from spei.models import StpTransaction
@@ -64,6 +64,17 @@ class NotificacionCobroType(DjangoObjectType):
 class TipoTransType(DjangoObjectType):
     class Meta:
         model = TipoTransaccion
+
+
+class NivelCuentaType(DjangoObjectType):
+
+    class Meta:
+        model = NivelCuenta
+
+    nivel = graphene.Int()
+
+    def resolve_nivel(self, info):
+        return int(self.nivel)
 
 
 class Query(graphene.ObjectType):
@@ -368,6 +379,8 @@ class Query(graphene.ObjectType):
                                ordering=graphene.String(),
                                token=graphene.String())
 
+    all_nivel = graphene.List(NivelCuentaType)
+
     @login_required
     def resolve_all_transaccion(self, info, limit=None, offset=None,
             ordering=None, status=None, **kwargs):
@@ -451,6 +464,9 @@ class Query(graphene.ObjectType):
                     cobro.id_contacto_solicitante = -1
                 cobro.save()
         return qs
+
+    def resolve_all_nivel(self, info):
+        return NivelCuenta.objects.all()
 
 
 class CreateTransferenciaEnviada(graphene.Mutation):
@@ -645,6 +661,15 @@ class CreateNotificacionCobro(graphene.Mutation):
                 'No existe un usuario correspondiente al contacto.')
 
         usuario_contacto = usuario_contacto.first()
+        qs = Contacto.objects.filter(
+            user=usuario_contacto,
+            clabe=user.Uprofile.cuentaClabe,
+            bloqueado=True,
+            activo=True
+        )
+
+        _valida(qs, "CB_NP")
+
         cobro = NotificacionCobro.objects.create(
             usuario_solicitante=user,
             usuario_deudor=usuario_contacto,
@@ -741,7 +766,8 @@ class LiquidarCobro(graphene.Mutation):
         importe = cobro.importe
         monto2F = "{:.2f}".format(round(float(importe), 2))
         status = StatusTrans.objects.get(nombre="exito")
-        tipo = TipoTransaccion.objects.get(codigo=13)
+        tipo = TipoTransaccion.objects.get(codigo=20)
+        tipo_recibida = TipoTransaccion.objects.get(codigo=21)
 
         # Actualizamos saldo del usuario
         _valida(float(importe) > ordenante.Uprofile.saldo_cuenta,
@@ -758,6 +784,18 @@ class LiquidarCobro(graphene.Mutation):
             monto=float(importe),
             statusTrans=status,
             tipoTrans=tipo,
+            concepto=concepto,
+            claveRastreo=claveR
+        )
+        # Padre de la entrada del beneficiario
+        user_contacto = cobro.usuario_solicitante
+        Transaccion.objects.create(
+            user=user_contacto,
+            fechaValor=fecha,
+            fechaAplicacion=fecha,
+            monto=float(importe),
+            statusTrans=status,
+            tipoTrans=tipo_recibida,
             concepto=concepto,
             claveRastreo=claveR
         )

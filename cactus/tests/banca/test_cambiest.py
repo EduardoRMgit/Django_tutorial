@@ -16,6 +16,7 @@ class Testcambioestado(APITestCase):
         call_command('loaddata', 'contactos', verbosity=0)
         call_command('loaddata', 'stptrans', verbosity=0)
         call_command('loaddata', 'statusTrans', verbosity=0)
+        call_command('loaddata', 'nivelCuenta', verbosity=0)
         self.client = APIClient()
 
     def test_post_cambiestado(self):

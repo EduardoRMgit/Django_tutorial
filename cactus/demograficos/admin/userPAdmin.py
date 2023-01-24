@@ -16,7 +16,8 @@ from demograficos.models import (UserProfile,
                                  DocAdjunto,
                                  UserBeneficiario,
                                  UserDevice,
-                                 Avatar)
+                                 Avatar,
+                                 PerfilTransaccionalDeclarado)
 from banca.models import Transaccion
 from pld.models import (Customer,
                         Contrato,
@@ -148,6 +149,14 @@ class BeneficiarioInLine(admin.TabularInline):
     extra = 0
 
 
+class PerfilTransaccionalInLine(admin.TabularInline):
+    model = PerfilTransaccionalDeclarado
+    can_delete = True
+    verbose_name_plural = "Perfil Transaccional Declarado"
+    fk_name = "user"
+    extra = 0
+
+
 class UserProfileAdmin(PasswordResetUserAdmin):
     inlines = (
         DireccionInLine,
@@ -164,7 +173,8 @@ class UserProfileAdmin(PasswordResetUserAdmin):
         UserContactoInline,
         ProfileComponentInline,
         DocAdjuntoInLine,
-        BeneficiarioInLine
+        BeneficiarioInLine,
+        PerfilTransaccionalInLine
     )
     actions = ['registra_cuenta']
     list_filter = ('is_staff',

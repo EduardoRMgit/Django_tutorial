@@ -69,6 +69,7 @@ class TestContacto(JSONWebTokenTestCase):
         """
     @classmethod
     def setUpTestData(self):
+        call_command('loaddata', 'nivelCuenta', verbosity=0)
         call_command('loaddata', 'usertesting', verbosity=0)
         call_command('loaddata', 'institutionbanjico', verbosity=0)
 
@@ -211,9 +212,11 @@ class TestContacto(JSONWebTokenTestCase):
     # def test_delete_contacto(self):
         mutation3 = '''
                 mutation deleteContacto($token: String!,
-                                        $clabe: String!){
+                                        $clabe: String!,
+                                        $nip: String!){
                     deleteContacto(token: $token,
-                                   clabe: $clabe){
+                                   clabe: $clabe,
+                                   nip: $nip){
                         contacto{
                                 nombre
                                 activo
@@ -223,7 +226,8 @@ class TestContacto(JSONWebTokenTestCase):
         '''
         # (deleteContacto)' <con clabe incorrecta>
         variables6 = {"token": self.token,
-                      "clabe": "014111111111111111"}
+                      "clabe": "014111111111111111",
+                      "nip": "1234"}
         res6 = self.client.execute(mutation3, variables6)
         self.assertEqual(res6.errors[0].message,
                          'No existe contacto activo')
@@ -234,7 +238,8 @@ class TestContacto(JSONWebTokenTestCase):
         token_wrong3 = ''.join(
             (random.choice(letters_and_digits) for i in range(158)))
         variables7 = {"token": str(token_wrong3),
-                      "clabe": "014122223333444455"}
+                      "clabe": "014122223333444455",
+                      "nip": "1234"}
         res7 = self.client.execute(mutation3, variables7)
         self.assertEqual(res7.errors[0].message,
                          'Error decoding signature')
@@ -242,7 +247,8 @@ class TestContacto(JSONWebTokenTestCase):
 
         # deleteContacto con variables correctas
         variables8 = {"token": self.token,
-                      "clabe": "014122223333444455"}
+                      "clabe": "014122223333444455",
+                      "nip": "1234"}
         res8 = self.client.execute(mutation3, variables8)
         expected_res = {
                     "deleteContacto": {

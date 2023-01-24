@@ -27,3 +27,9 @@ from .fechas import Fecha
 from .adminUtils import adminUtils
 from .location import GeoDevice, GeoLocation, UserLocation, UDevice
 from .documentos import DocExtraction
+from .perfildeclarado import (TransferenciasMensuales,
+                              OperacionesMensual,
+                              UsoCuenta,
+                              OrigenDeposito,
+                              PerfilTransaccionalDeclarado,
+                              )

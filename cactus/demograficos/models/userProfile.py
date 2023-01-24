@@ -10,6 +10,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from banca.models.productos import Productos
 from banca.models.entidades import CodigoConfianza
+from banca.models import NivelCuenta
 from demograficos.models import Direccion
 
 
@@ -121,7 +122,13 @@ class Avatar(models.Model):
                                    blank=True,
                                    null=True)
 
-    activo = models.BooleanField(default=False)
+    activo = models.BooleanField(default=True)
+
+    avatar_min = models.ImageField(
+        upload_to='avatars',
+        blank=True,
+        verbose_name="Avatar miniatura",
+        null=True)
 
     def __str__(self):
         return str(self.name)
@@ -206,6 +213,14 @@ class UserProfile(AbstractBaseUser):
         related_name='Uprofile'
     )
 
+    nivel_cuenta = models.ForeignKey(
+        NivelCuenta,
+        default=1,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL
+    )
+
     alias = models.CharField(
         max_length=30,
         null=True,
@@ -253,6 +268,10 @@ class UserProfile(AbstractBaseUser):
     )
     autorizado = models.BooleanField(default=False)
     country = CountryField(blank=True, null=True)
+    pais_origen_otro = models.CharField(max_length=50,
+        blank=True,
+        null=True,
+        verbose_name='Pais de nacimiento')
     ineCaptura = models.ImageField(upload_to='docs/ine', blank=True, null=True)
     ineReversoCaptura = models.ImageField(upload_to='docs/ineReverso',
                                           blank=True,
@@ -318,7 +337,7 @@ class UserProfile(AbstractBaseUser):
     deOmision = models.CharField(max_length=255, null=True, blank=True)
     is_active = models.BooleanField(default=True)
     avatar = models.ForeignKey(Avatar,
-                               on_delete=models.CASCADE,
+                               on_delete=models.SET_NULL,
                                null=True,
                                blank=True)
     avatar_url = models.URLField(

@@ -2,6 +2,7 @@
 
 from ..auth_client import JWTAuthClientTestCase
 from graphql_jwt.shortcuts import get_token
+from django.core.management import call_command
 
 from spei.models import StpTransaction
 
@@ -9,6 +10,7 @@ from spei.models import StpTransaction
 class TokenTestCase(JWTAuthClientTestCase):
 
     def setUp(self):
+        call_command('loaddata', 'nivelCuenta', verbosity=0)
         super().setUp()
 
         self.token = get_token(self.user)

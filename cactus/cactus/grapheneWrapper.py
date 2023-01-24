@@ -17,16 +17,19 @@ noToken_validate = [
     'tokenAuth',
     'unBlockAccount',
     'updateDevice',
+    'blockAccountEmergency'
 ]
 
 block_exception = [
     'unBlock',
     'updateDevice',
+    'blockAccountEmergency',
 ]
 
 uuid_exception = [
     'updateDevice',
     'recoverPassword',
+    'blockAccountEmergency'
 ]
 
 

@@ -57,7 +57,7 @@ def token_auth(f):
                 pass
             # return Exception("Inactive user")
             raise exceptions.JSONWebTokenError(
-                _("Please enter valid credentials"),
+                _("Usuario y/o contraseña incorrectos"),
             )
 
         location = UserLocation.objects.filter(user=user).last()

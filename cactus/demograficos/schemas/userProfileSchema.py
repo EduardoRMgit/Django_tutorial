@@ -12,6 +12,8 @@ from graphene_django.types import DjangoObjectType
 from graphql_jwt.decorators import login_required
 from graphql_jwt.shortcuts import get_token
 
+from django.core.validators import validate_email
+
 from django.db.models import Q
 
 from django.conf import settings
@@ -49,6 +51,11 @@ from demograficos.models.profileChecks import (ComponentValidated,
                                                register_device)
 from demograficos.models.documentos import (DocAdjunto, DocAdjuntoTipo,
                                             DocExtraction)
+from demograficos.models.perfildeclarado import (TransferenciasMensuales,
+                                                 OperacionesMensual,
+                                                 UsoCuenta,
+                                                 OrigenDeposito,
+                                                 PerfilTransaccionalDeclarado,)
 
 from banca.models.entidades import CodigoConfianza
 from banca.utils.clabe import es_cuenta_inguz
@@ -170,6 +177,31 @@ class ParentescoType(DjangoObjectType):
         model = Parentesco
 
 
+class TransferenciasMensualesType(DjangoObjectType):
+    class Meta:
+        model = TransferenciasMensuales
+
+
+class OperacionesMensualType(DjangoObjectType):
+    class Meta:
+        model = OperacionesMensual
+
+
+class UsoCuentaType(DjangoObjectType):
+    class Meta:
+        model = UsoCuenta
+
+
+class OrigenDepositoType(DjangoObjectType):
+    class Meta:
+        model = OrigenDeposito
+
+
+class PerfilTransaccionalDeclaradoType(DjangoObjectType):
+    class Meta:
+        model = PerfilTransaccionalDeclarado
+
+
 class AvatarType(graphene.ObjectType):
     id = graphene.Int()
     name = graphene.String()
@@ -251,6 +283,14 @@ class BuscadorInguzType(graphene.ObjectType):
         except Exception:
             return None
 
+
+class BlockDetails(graphene.ObjectType):
+
+    username = graphene.String()
+    alias = graphene.String()
+    clabe = graphene.String()
+    time = graphene.types.datetime.DateTime()
+    status = graphene.String()
 
 class Query(graphene.ObjectType):
     """
@@ -441,6 +481,24 @@ class Query(graphene.ObjectType):
     all_avatars = graphene.List(AvatarType,
                                 description="Query all the objects from the\
                                 Avatar Model")
+
+    all_transferencias_mensuales = graphene.List(TransferenciasMensualesType,
+                                                 description="Query all \
+                                                 objects from the model \
+                                                 Transferencias Mensuales")
+
+    all_operaciones_mensuales = graphene.List(OperacionesMensualType,
+                                              description="Query all objects \
+                                              from the model \
+                                              OperacionesMensual")
+
+    all_uso_cuenta = graphene.List(UsoCuentaType,
+                                   description="Query all objects from the \
+                                   model UsoCuenta")
+
+    all_origen_deposito = graphene.List(OrigenDepositoType,
+                                        description="Query all objects from \
+                                        model OrigenDeposito")
     # Initiating resolvers for type all Queries
 
     def resolve_all_avatars(self, info, **kwargs):
@@ -1440,6 +1498,18 @@ class Query(graphene.ObjectType):
     def resolve_all_parentesco(self, info, **kwargs):
         return Parentesco.objects.all()
 
+    def resolve_all_transferencias_mensuales(self, info, **kwargs):
+        return TransferenciasMensuales.objects.all()
+
+    def resolve_all_operaciones_mensuales(self, info, **kwargs):
+        return OperacionesMensual.objects.all()
+
+    def resolve_all_uso_cuenta(self, info, **kwargs):
+        return UsoCuenta.objects.all()
+
+    def resolve_all_origen_deposito(self, info, **kwargs):
+        return OrigenDeposito.objects.all()
+
 
 class CreateUser(graphene.Mutation):
     """
@@ -1636,6 +1706,9 @@ class ChangePassword(graphene.Mutation):
         user = info.context.user
         if not user.is_anonymous:
             if user.check_password(old_password):
+                if user.check_password(new_password):
+                    raise Exception("La nueva contraseña no puede " \
+                        "ser igual a la anterior.")
                 user.set_password(new_password)
                 user.save()
                 return ChangePassword(user=user)
@@ -1936,6 +2009,8 @@ class UpdateInfoPersonal(graphene.Mutation):
             u_profile.ocupacion = (
                 occupation if occupation else u_profile.ocupacion)
             u_profile.curp = curp if curp else u_profile.curp
+            u_profile.pais_origen_otro = (
+                country if country else u_profile.pais_origen_otro)
             alias = alias if alias else u_profile.alias
             if alias and alias != u_profile.alias:
                 if UserProfile.objects.filter(alias__iexact=alias).count() == 0:
@@ -2092,19 +2167,10 @@ class CreateBeneficiario(graphene.Mutation):
             _valida(not user.Uprofile.check_password(nip),
                     'El NIP es incorrecto.')
 
-            try:
-                user.User_Beneficiario.all().delete()
-            except Exception as ex:
-                msg = f"[CreateBeneficiario] Error al borrar benefs de {user} "
-                msg += ex
-                db_logger.info(msg)
-
             if name is not None:
                 name = name.strip()
             parentesco = Parentesco.objects.get(pk=parentesco)
-            if user.User_Beneficiario.count() > 0:
-                raise Exception('User already has a beneficiary')
-            beneficiario = UserBeneficiario.objects.create(
+            defaults = dict(
                 nombre=name,
                 parentesco=parentesco,
                 apellido_paterno=apellidopat,
@@ -2119,18 +2185,27 @@ class CreateBeneficiario(graphene.Mutation):
                 dir_colonia=colonia,
                 dir_municipio=municipio,
                 dir_estado=estado,
-                telefono=telefono,
+                telefono=telefono
             )
             try:
-                InfoValidator.setCheckpoint(user=user, concepto='CBN',
-                                            beneficiario=beneficiario)
-                InfoValidator.setCheckpoint(user=user, concepto='BN',
-                                            beneficiario=beneficiario)
-            except Exception as e:
-                raise ValueError('no se pudo establecer el checkpoint', e)
-            validities = ComponentValidated.objects.filter(user=user)
-        return CreateBeneficiario(beneficiario=beneficiario,
-                                  profile_valid=validities)
+                try:
+                    bene, created = UserBeneficiario.objects.update_or_create(
+                        user = user,
+                        defaults=defaults,
+                    )
+                except UserBeneficiario.MultipleObjectsReturned:
+                    last = UserBeneficiario.objects.last().id
+                    UserBeneficiario.objects.filter(
+                        user=user).exclude(user=last).delete()
+                    bene, created = UserBeneficiario.objects.update_or_create(
+                        user = user,
+                        defaults=defaults,
+                    )
+            except Exception:
+                raise Exception("Error al crear el beneficiario, revisa los " \
+                    "datos ingresados.")
+        return CreateBeneficiario(
+            beneficiario=bene, profile_valid=None)
 
 
 class UpdateBeneficiario(graphene.Mutation):
@@ -2535,7 +2610,7 @@ mutation{
             raise Exception(
                 "Esta cuenta CLABE la tienes en un contacto bloqueado, " \
                 "desbloquéalo desde el buscador con su alias.")
-        
+
         if not user.is_anonymous:
             nombre = nombre.strip()
             ap_paterno = ap_paterno.strip()
@@ -2653,52 +2728,57 @@ class BlockContacto(graphene.Mutation):
         token = graphene.String(required=True)
         bloquear = graphene.Boolean(required=True)
         clabe = graphene.String(required=True)
+        nip = graphene.String(required=True)
 
-    def mutate(self, info, token, bloquear, clabe):
+    def mutate(self, info, token, bloquear, clabe, nip):
 
         user = info.context.user
-        if Contacto.objects.filter(user=user,
-                                   clabe=clabe,
-                                   activo=True).count() > 0:
-            contacto = Contacto.objects.filter(clabe=clabe).update(
-                bloqueado=True)
-            contacto = Contacto.objects.filter(clabe=clabe).first()
-            return BlockContacto(contacto=contacto, details='Contacto Bloqueado')
+        up = user.Uprofile
+        if up.check_password(nip):
+            if Contacto.objects.filter(user=user,
+                                       clabe=clabe,
+                                       activo=True).count() > 0:
+                contacto = Contacto.objects.filter(clabe=clabe).update(
+                    bloqueado=True)
+                contacto = Contacto.objects.filter(clabe=clabe).first()
+                return BlockContacto(contacto=contacto, details='Contacto Bloqueado')
+            else:
+                usuario_inguz = UserProfile.objects.filter(cuentaClabe=clabe)
+                if usuario_inguz.count() == 0:
+                    raise AssertionError('No existe el usuario con esta clabe')
+                usuario_inguz = usuario_inguz.first()
+                es_inguz = es_cuenta_inguz(clabe)
+                try:
+                    nombre_banco = InstitutionBanjico.objects.get(
+                        short_id=str(clabe[:3])).short_name
+                except Exception as e:
+                    raise AssertionError(
+                        'CLABE invalida, no existe banco valido para esa CLABE:', e)
+                try:
+                    nombre = usuario_inguz.user.first_name.strip()
+                    ap_paterno = usuario_inguz.user.last_name.strip()
+                    ap_materno = usuario_inguz.apMaterno.strip()
+                    nombre_completo = str(nombre) + " " + str(
+                        ap_paterno) + " " + str(ap_materno)
+                    contacto = Contacto.objects.create(
+                        nombre=nombre,
+                        ap_paterno=ap_paterno,
+                        ap_materno=ap_materno,
+                        nombreCompleto=nombre_completo,
+                        banco=nombre_banco,
+                        clabe=clabe,
+                        user=user,
+                        es_inguz=es_inguz,
+                        bloqueado=True
+                    )
+                except Exception as ex:
+                    print("ex: ", ex)
+                    msg = "[BlockContacto] Error al crear contacto {}"
+                    msg = msg.format(ex)
+                    db_logger.error(msg)
+                return BlockContacto(contacto=contacto, details='Contacto Bloqueado')
         else:
-            usuario_inguz = UserProfile.objects.filter(cuentaClabe=clabe)
-            if usuario_inguz.count() == 0:
-                raise AssertionError('No existe el usuario con esta clabe')
-            usuario_inguz = usuario_inguz.first()
-            es_inguz = es_cuenta_inguz(clabe)
-            try:
-                nombre_banco = InstitutionBanjico.objects.get(
-                    short_id=str(clabe[:3])).short_name
-            except Exception as e:
-                raise AssertionError(
-                    'CLABE invalida, no existe banco valido para esa CLABE:', e)
-            try:
-                nombre = usuario_inguz.user.first_name.strip()
-                ap_paterno = usuario_inguz.user.last_name.strip()
-                ap_materno = usuario_inguz.apMaterno.strip()
-                nombre_completo = str(nombre) + " " + str(
-                    ap_paterno) + " " + str(ap_materno)
-                contacto = Contacto.objects.create(
-                    nombre=nombre,
-                    ap_paterno=ap_paterno,
-                    ap_materno=ap_materno,
-                    nombreCompleto=nombre_completo,
-                    banco=nombre_banco,
-                    clabe=clabe,
-                    user=user,
-                    es_inguz=es_inguz,
-                    bloqueado=True
-                )
-            except Exception as ex:
-                print("ex: ", ex)
-                msg = "[BlockContacto] Error al crear contacto {}"
-                msg = msg.format(ex)
-                db_logger.error(msg)
-            return BlockContacto(contacto=contacto, details='Contacto Bloqueado')
+            raise AssertionError("NIP esta mal")
 
 
 class UnBlockContacto(graphene.Mutation):
@@ -2817,23 +2897,28 @@ class DeleteContacto(graphene.Mutation):
     class Arguments:
         token = graphene.String(required=True)
         clabe = graphene.String(required=True)
+        nip = graphene.String(required=True)
 
     @login_required
-    def mutate(self, info, token, clabe):
+    def mutate(self, info, token, clabe, nip):
         associated_user = info.context.user
         if not associated_user.is_anonymous:
-            try:
-                contacto = associated_user.Contactos_Usuario.get(
-                    clabe=clabe, activo=True)
-                contacto.activo = False
-                contacto.save()
-            except ObjectDoesNotExist:
-                raise Exception("No existe contacto activo")
-            except MultipleObjectsReturned:
-                associated_user.Contactos_Usuario.filter(
-                    clabe=clabe).update(activo=False)
-                contacto = associated_user.Contactos_Usuario.filter(
-                    clabe=clabe).last()
+            up = associated_user.Uprofile
+            if up.check_password(nip):
+                try:
+                    contacto = associated_user.Contactos_Usuario.get(
+                        clabe=clabe, activo=True)
+                    contacto.activo = False
+                    contacto.save()
+                except ObjectDoesNotExist:
+                    raise Exception("No existe contacto activo")
+                except MultipleObjectsReturned:
+                    associated_user.Contactos_Usuario.filter(
+                        clabe=clabe).update(activo=False)
+                    contacto = associated_user.Contactos_Usuario.filter(
+                        clabe=clabe).last()
+            else:
+                raise AssertionError("NIP esta mal")
         return DeleteContacto(contacto=contacto,
                               all_contactos=associated_user.
                               Contactos_Usuario.all())
@@ -3141,6 +3226,53 @@ class BlockAccount(graphene.Mutation):
             else:
                 raise AssertionError('invalid operation, Wrong Credentials')
 
+class BlockAccountEmergency(graphene.Mutation):
+
+    details = graphene.Field(BlockDetails)
+
+    class Arguments:
+        username = graphene.String(required=True)
+        password = graphene.String(required=True)
+        nip = graphene.String(required=True)
+
+    def mutate(self, info, username, password, nip):
+
+        e = "Usuario y/o contraseña incorrectos"
+
+        try:
+            user = User.objects.get(username=username)
+        except Exception:
+            raise Exception(e)
+        if not user.check_password(password):
+            raise Exception(e)
+        up = user.Uprofile
+        if not up.check_password(nip):
+            raise Exception("El NIP es incorrecto")
+        status = "Cuenta bloqueada"
+        if up.status == 'O':
+            date_blocked = timezone.now()
+            up.blocked_date = date_blocked
+            up.blockedReason = up.BLOCKED
+            user.Ufecha.bloqueo = date_blocked
+            up.blocked_reason = up.BLOCKED
+            up.status = up.BLOCKED
+            up.save()
+            user.Ufecha.save()
+            user.save()
+            InfoValidator.setComponentValidated(
+                'bloqueo', user, False, motivo=status)
+        else:
+            date_blocked = user.Ufecha.bloqueo
+        return BlockAccountEmergency(
+                details=BlockDetails(
+                    username=user.username,
+                    alias=up.alias,
+                    clabe=up.cuentaClabe,
+                    time=date_blocked,
+                    status=status
+                )
+        )
+
 
 class GetRnScreen(graphene.Mutation):
 
@@ -3172,9 +3304,9 @@ class UpdateDevice(graphene.Mutation):
         nip = graphene.String(required=True)
 
     def mutate(self, info,username, password, nip):
-        
+
         e = "Usuario y/o contraseña incorrectos"
-        
+
         try:
             user = User.objects.get(username=username)
         except Exception:
@@ -3297,6 +3429,10 @@ class UrlAvatar(graphene.Mutation):
 
     @login_required
     def mutate(self, info, token):
+
+        if settings.SITE not in ["stage", "local"]:
+            raise Exception("No está permitido el borrado en este ambiente")
+
         user = info.context.user
         try:
             avatar_url = (user.Uprofile.avatar.avatar_img.url).split("?")[0]
@@ -3413,6 +3549,82 @@ class UnblockBluePixelUser(graphene.Mutation):
             desbloqueado=f"Usuario {username} desbloqueado")
 
 
+class SetPerfilTransaccional(graphene.Mutation):
+
+    perfil = graphene.Field(PerfilTransaccionalDeclaradoType)
+
+    class Arguments:
+        token = graphene.String(required=True)
+        transferencias_id = graphene.Int(required=True)
+        operaciones_id = graphene.Int(required=True)
+        uso_id = graphene.Int(required=True)
+        origen_id = graphene.Int(required=True)
+
+    @login_required
+    def mutate(self, info, token, transferencias_id, operaciones_id,
+        uso_id, origen_id
+    ):
+        user = info.context.user
+        transferencias = TransferenciasMensuales.objects.get(
+            pk=transferencias_id)
+        operaciones = OperacionesMensual.objects.get(pk=operaciones_id)
+        uso = UsoCuenta.objects.get(pk=uso_id)
+        origen = OrigenDeposito.objects.get(pk=origen_id)
+
+        pd = PerfilTransaccionalDeclarado
+
+        defaults = dict(
+            transferencias_mensuales=transferencias,
+            operaciones_mensuales=operaciones,
+            uso_cuenta=uso,
+            origen=origen,
+            status_perfil='Pendiente'
+        )
+
+        try:
+            perfil_declarado, created = pd.objects.update_or_create(
+                user=user,
+                defaults=defaults
+                )
+        except Exception:
+            raise Exception("Error al crear perfil")
+        return SetPerfilTransaccional(perfil=perfil_declarado)
+
+class UpdateEmail(graphene.Mutation):
+
+    correo = graphene.String()
+
+    class Arguments:
+        token = graphene.String(required=True)
+        email_actual = graphene.String(required=True)
+        email_nuevo = graphene.String(required=True)
+        nip = graphene.String(required=True)
+
+    @login_required
+    def mutate(self, info, token, email_actual, email_nuevo, nip):
+
+        def _valida(expr, msg):
+            if expr:
+                raise Exception(msg)
+
+        user = info.context.user
+
+        _valida(user.Uprofile.password is None,
+                'El usuario no ha establecido su NIP.')
+        _valida(not user.Uprofile.check_password(nip),
+                'El NIP es incorrecto.')
+        _valida(not user.email == email_actual,
+                'El correo actual no coincide')
+        try:
+            validate_email(email_nuevo)
+        except Exception:
+            raise Exception("Ingrese un correo válido")
+
+        user.email = email_nuevo.lower()
+        user.save()
+        return UpdateEmail(correo=user.email)
+
+
 class Mutation(graphene.ObjectType):
     delete_pregunta_seguridad = BorrarPreguntaSeguridad.Field()
     create_user = CreateUser.Field()
@@ -3452,3 +3664,6 @@ class Mutation(graphene.ObjectType):
     unblock_contacto = UnBlockContacto.Field()
     delete_bluepixel_user = DeleteBluepixelUser.Field()
     unblock_bluepixel_user = UnblockBluePixelUser.Field()
+    set_perfil_transaccional = SetPerfilTransaccional.Field()
+    block_account_emergency = BlockAccountEmergency.Field()
+    update_email = UpdateEmail.Field()

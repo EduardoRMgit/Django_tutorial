@@ -63,7 +63,8 @@ class CreateInguzTransaccion(graphene.Mutation):
             contacto = Contacto.objects.get(pk=contacto,
                                             verificacion="O",
                                             user=ordenante,
-                                            activo=True)
+                                            activo=True,
+                                            bloqueado=False)
         except Exception:
             raise Exception("Contacto no válido")
 
@@ -84,7 +85,8 @@ class CreateInguzTransaccion(graphene.Mutation):
         claveR = randomString()
         monto2F = "{:.2f}".format(round(float(abono), 2))
         status = StatusTrans.objects.get(nombre="exito")
-        tipo = TipoTransaccion.objects.get(codigo=13)
+        tipo = TipoTransaccion.objects.get(codigo=18)
+        tipo_recibida = TipoTransaccion.objects.get(codigo=19)
 
         # Actualizamos saldo del usuario
         if float(abono) <= ordenante.Uprofile.saldo_cuenta:
@@ -98,6 +100,7 @@ class CreateInguzTransaccion(graphene.Mutation):
         main_trans = Transaccion.objects.create(
             user=ordenante,
             fechaValor=fecha,
+            fechaAplicacion=fecha,
             monto=float(abono),
             statusTrans=status,
             tipoTrans=tipo,
@@ -112,6 +115,18 @@ class CreateInguzTransaccion(graphene.Mutation):
             fechaOperacion=fecha,
             contacto=contacto,
             transaccion=main_trans,
+        )
+
+        # Recibida (sin transacción hija)
+        Transaccion.objects.create(
+            user=user_contacto,
+            fechaValor=fecha,
+            fechaAplicacion=fecha,
+            monto=float(abono),
+            statusTrans=status,
+            tipoTrans=tipo_recibida,
+            concepto=concepto,
+            claveRastreo=claveR
         )
 
         if cobro_id is not None:
@@ -133,9 +148,6 @@ class CreateInguzTransaccion(graphene.Mutation):
             contacto.clabe,
             monto2F
         )
-        contacto = Contacto.objects.get(pk=contacto.id,
-                                        verificacion="O",
-                                        user=ordenante)
         contacto.frecuencia = int(contacto.frecuencia) + 1
         contacto.save()
         db_logger.info(msg)

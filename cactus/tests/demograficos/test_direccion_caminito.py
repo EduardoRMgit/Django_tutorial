@@ -58,6 +58,7 @@ class TestDireccion(JSONWebTokenTestCase):
     """
 
     def setUp(self):
+        call_command('loaddata', 'nivelCuenta', verbosity=0)
         call_command('loaddata', 'entidadFed', verbosity=0)
         call_command('loaddata', 'tipoDireccion', verbosity=0)
         call_command('loaddata', 'customer', verbosity=0)
