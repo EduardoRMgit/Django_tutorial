@@ -5,12 +5,14 @@ from demograficos.utils.stringNormalize import normalize
 from renapo.models import Renapo
 from django.db import models
 from django.contrib.auth.models import User
+from django.conf import settings
+
 from demograficos.models.userProfile import (RespuestaSeguridad,
                                              StatusRegistro,
                                              UserProfile)
 from demograficos.models.telefono import Telefono
 from demograficos.models.adminUtils import adminUtils
-# from renapo.renapo_call import check_renapo
+from renapo.renapo_call import check_renapo
 from django.forms import ValidationError
 from django.dispatch import receiver
 from django.db.models.signals import post_save
@@ -106,14 +108,16 @@ class InfoValidator(models.Model):
         dia = fNacimiento[2]
         nacimiento = "{}/{}/{}".format(dia, mes, año)
 
-        # data, mensaje = check_renapo(curp)
-        data = {
-            'nombre_renapo': nombre,
-            'ap_pat_renapo': a_paterno,
-            'ap_mat_renapo': a_materno,
-            'fechNac_renapo': nacimiento
-        }
-        mensaje = ""
+        if settings.SITE == "prod":
+            data, mensaje = check_renapo(curp)
+        else:
+            data = {
+                'nombre_renapo': nombre,
+                'ap_pat_renapo': a_paterno,
+                'ap_mat_renapo': a_materno,
+                'fechNac_renapo': nacimiento
+            }
+            mensaje = ""
         valida = True
 
         try:

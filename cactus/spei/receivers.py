@@ -53,11 +53,12 @@ def stp_transaction_propagation(sender, instance, created, **kwargs):
         print("Transacción recibida: --->1.3")
         instance.user = user
         print("Transacción recibida: --->1.4")
-        status = StatusTrans.objects.get(nombre="esperando respuesta")
+        status = StatusTrans.objects.get(nombre="exito")
         print("Transacción recibida: --->2")
         main_trans = Transaccion.objects.create(
             user=user,
             fechaValor=instance.time,  # TODO: parse instance.fechaOperacion
+            fechaAplicacion=instance.time,
             monto=float(instance.monto),
             statusTrans=status,
             tipoTrans=tipo,

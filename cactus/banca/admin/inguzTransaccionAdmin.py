@@ -20,5 +20,18 @@ class InguzTransaccionAdmin(admin.ModelAdmin):
                     )
 
 
+class NotificacionCobroAdmin(admin.ModelAdmin):
+
+    list_filter = (
+        'status',
+    )
+
+    fields = [f.name for f in NotificacionCobro._meta.fields]
+    fields.remove("id")
+    fields.remove("id_contacto_solicitante")
+    fields.remove("concepto")
+    list_display = fields
+
+
 admin.site.register(InguzTransaction, InguzTransaccionAdmin)
-admin.site.register(NotificacionCobro)
+admin.site.register(NotificacionCobro, NotificacionCobroAdmin)

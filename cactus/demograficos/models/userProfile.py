@@ -124,9 +124,10 @@ class Avatar(models.Model):
 
     activo = models.BooleanField(default=True)
 
-    avatar_min_img = models.ImageField(
+    avatar_min = models.ImageField(
         upload_to='avatars',
         blank=True,
+        verbose_name="Avatar miniatura",
         null=True)
 
     def __str__(self):
@@ -267,6 +268,10 @@ class UserProfile(AbstractBaseUser):
     )
     autorizado = models.BooleanField(default=False)
     country = CountryField(blank=True, null=True)
+    pais_origen_otro = models.CharField(max_length=50,
+        blank=True,
+        null=True,
+        verbose_name='Pais de nacimiento')
     ineCaptura = models.ImageField(upload_to='docs/ine', blank=True, null=True)
     ineReversoCaptura = models.ImageField(upload_to='docs/ineReverso',
                                           blank=True,

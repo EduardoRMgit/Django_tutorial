@@ -37,7 +37,7 @@ class NotificacionCobro(models.Model):
     )
     importe = models.DecimalField(
         max_digits=30,
-        decimal_places=4,
+        decimal_places=2,
         null=True,
         blank=True
     )
