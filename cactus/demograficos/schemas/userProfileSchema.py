@@ -1570,7 +1570,7 @@ class Query(graphene.ObjectType):
     @login_required
     def resolve_all_respaldados(self, info, ordering, **kwargs):
         user = info.context.user
-        qs = user.respaldados.all(activo=True)
+        qs = user.respaldados.filter(activo=True)
         if ordering:
             qs = qs.order_by(ordering)
         return (qs)
