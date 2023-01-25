@@ -21,7 +21,6 @@ class ImageDoc(generics.CreateAPIView):
     serializer_class = ImageDocSerializer
 
     def post(self, request):
-        # print(request.data)
         imagen = request.data['imagen']
         tipo = request.data['tipo']
         user = request.data['user']
@@ -38,6 +37,7 @@ class ImageDoc(generics.CreateAPIView):
                                               tipo=doctipo,
                                               imagen=imagen,
                                               tipo_comprobante=tipocomprobante)
+                id = a.id
                 if tipo == '3':
                     url = "{}{}".format(
                         'http://127.0.0.1:8000/media/', a.imagen)
@@ -72,7 +72,8 @@ class ImageDoc(generics.CreateAPIView):
                         for h in dates:
                             try:
                                 if len(h) > 8:
-                                    c = datetime.strptime(h, "%d-%m-%Y")
+                                    c = datetime.datetime.strptime(
+                                        h, "%d-%m-%Y")
                                     datesn.append(c)
                             except Exception as e:
                                 print(e)
@@ -83,8 +84,7 @@ class ImageDoc(generics.CreateAPIView):
                             print(e)
                         try:
                             if b > a:
-                                hoy = datetime.now()
-                                print(a, b, hoy)
+                                hoy = datetime.datetime.now()
                                 comparacion = (hoy - a > datetime.timedelta(
                                     days=90))
                                 if comparacion:
@@ -92,6 +92,7 @@ class ImageDoc(generics.CreateAPIView):
                                         "comprobante mayor a 3 meses"})
                                 else:
                                     return Response({
+                                        'id': id,
                                         'user': request.data['user'],
                                         'tipo': request.data['tipo'],
                                         'imagen': url,
@@ -100,7 +101,7 @@ class ImageDoc(generics.CreateAPIView):
                                         'message': "Comprobante Valido",
                                     })
                             elif a > b:
-                                hoy = datetime.now()
+                                hoy = datetime.datetime.now()
                                 comparacion = (hoy - b > datetime.timedelta(
                                     days=90))
                                 if comparacion:
@@ -108,6 +109,7 @@ class ImageDoc(generics.CreateAPIView):
                                         "comprobante mayor a 3 meses"})
                                 else:
                                     return Response({
+                                        'id': id,
                                         'user': user_,
                                         'tipo': request.data['tipo'],
                                         'imagen': url,
@@ -128,7 +130,7 @@ class ImageDoc(generics.CreateAPIView):
                                 print(e)
                         for h in datesn:
                             try:
-                                c = datetime.strptime(h, "%d-%m-%y")
+                                c = datetime.datetime.strptime(h, "%d-%m-%y")
                                 datesh.append(c)
                             except Exception as e:
                                 print(e)
@@ -137,7 +139,7 @@ class ImageDoc(generics.CreateAPIView):
                             b = datesh[1]
                         except Exception as e:
                             print(e)
-                        hoy = datetime.now()
+                        hoy = datetime.datetime.now()
                         if a > b:
                             comparacion = (hoy - a > datetime.timedelta(
                                 days=90))
@@ -146,6 +148,7 @@ class ImageDoc(generics.CreateAPIView):
                                     "message": "Comprobante mayor a 3 meses"})
                             else:
                                 return Response({
+                                    'id': id,
                                     'user': request.data['user'],
                                     'tipo': request.data['tipo'],
                                     'imagen': url,
@@ -161,6 +164,7 @@ class ImageDoc(generics.CreateAPIView):
                                     "message": "Comprobante mayor a 3 meses"})
                             else:
                                 return Response({
+                                    'id': id,
                                     'user': request.data['user'],
                                     'tipo': request.data['tipo'],
                                     'imagen': url,
@@ -171,7 +175,6 @@ class ImageDoc(generics.CreateAPIView):
                     elif request.data['tipo_comprobante'] == '4':
                         datesn = []
                         datesh = []
-                        print(dates)
                         for i in dates:
                             try:
                                 k = meses(i)
@@ -180,12 +183,11 @@ class ImageDoc(generics.CreateAPIView):
                                 print(e)
                         for i in datesn:
                             try:
-                                c = datetime.strptime(i, "%d/%m/%Y")
+                                c = datetime.datetime.strptime(i, "%d/%m/%Y")
                                 datesh.append(c)
                             except Exception as e:
                                 print(e)
-                        hoy = datetime.now()
-                        print(len(datesh))
+                        hoy = datetime.datetime.now()
                         if len(datesh) >= 2:
                             try:
                                 a = datesh[0]
@@ -201,6 +203,7 @@ class ImageDoc(generics.CreateAPIView):
                                     "comprobante mayor a 3 meses"})
                             else:
                                 return Response({
+                                    'id': id,
                                     'user': request.data['user'],
                                     'tipo': request.data['tipo'],
                                     'imagen': url,
@@ -213,10 +216,12 @@ class ImageDoc(generics.CreateAPIView):
                 a = DocAdjunto.objects.create(user=user_,
                                               tipo=doctipo,
                                               imagen=imagen)
-                url = a
+                url = "{}{}".format('http://127.0.0.1:8000/media/', a.imagen)
+                id = a.id
         except Exception as e:
             print(e)
         return Response({
+            'id': id,
             'user': request.data['user'],
             'tipo': request.data['tipo'],
             'imagen': url},
