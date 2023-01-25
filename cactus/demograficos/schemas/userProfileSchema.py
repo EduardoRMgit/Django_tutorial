@@ -11,6 +11,7 @@ from random import randint
 from graphene_django.types import DjangoObjectType
 from graphql_jwt.decorators import login_required
 from graphql_jwt.shortcuts import get_token
+from graphene_django.filter import DjangoFilterConnectionField
 
 from django.core.validators import validate_email
 
@@ -20,7 +21,7 @@ from django.conf import settings
 from django.contrib.auth import authenticate
 from django.http import HttpRequest
 from django.contrib.auth.models import User
-from demograficos.models import GeoLocation, GeoDevice, UserLocation
+from demograficos.models import GeoLocation, GeoDevice, UserLocation, Respaldo
 from django.contrib.auth import authenticate
 from django.utils import timezone
 from spei.stpTools import randomString
@@ -70,6 +71,19 @@ from axes.models import AccessAttempt
 db_logger = logging.getLogger("db")
 
 # WRAPPERS
+
+class ExtendedConnection(graphene.Connection):
+    class Meta:
+        abstract = True
+
+    total_count = graphene.Int()
+    edge_count = graphene.Int()
+
+    def resolve_total_count(root, info, **kwargs):
+        return root.length
+
+    def resolve_edge_count(root, info, **kwargs):
+        return len(root.edges)
 
 
 class RespuestaType(DjangoObjectType):
@@ -292,6 +306,22 @@ class BlockDetails(graphene.ObjectType):
     time = graphene.types.datetime.DateTime()
     status = graphene.String()
 
+class RespaldoType(DjangoObjectType):
+
+    id = graphene.ID(source='pk', required=True)
+
+    class Meta:
+        model = Respaldo
+        filter_fields = {
+            'activo': ['exact',],
+            'contacto_id': ['exact',],
+            'status': ['exact',]
+        }
+
+        interfaces = (graphene.Node, )
+        connection_class = ExtendedConnection
+
+
 class Query(graphene.ObjectType):
     """
         >>> Query (Pregunstas Secretas) Example:
@@ -499,6 +529,25 @@ class Query(graphene.ObjectType):
     all_origen_deposito = graphene.List(OrigenDepositoType,
                                         description="Query all objects from \
                                         model OrigenDeposito")
+
+    all_respaldos = DjangoFilterConnectionField(
+        RespaldoType,
+        token=graphene.String(required=True),
+        ordering=graphene.String(),
+        description=
+        "Query all the objects from the \
+        Respaldo Model"
+    )
+
+    all_respaldados = DjangoFilterConnectionField(
+        RespaldoType,
+        token=graphene.String(required=True),
+        ordering=graphene.String(),
+        description=
+        "Query all the objects from the \
+        Respaldo Model"
+    )
+
     # Initiating resolvers for type all Queries
 
     def resolve_all_avatars(self, info, **kwargs):
@@ -1509,6 +1558,22 @@ class Query(graphene.ObjectType):
 
     def resolve_all_origen_deposito(self, info, **kwargs):
         return OrigenDeposito.objects.all()
+
+    @login_required
+    def resolve_all_respaldos(self, info, ordering, **kwargs):
+        user = info.context.user
+        qs = user.respaldos.filter(activo=True)
+        if ordering:
+            qs = qs.order_by(ordering)
+        return (qs)
+
+    @login_required
+    def resolve_all_respaldados(self, info, ordering, **kwargs):
+        user = info.context.user
+        qs = user.respaldados.all(activo=True)
+        if ordering:
+            qs = qs.order_by(ordering)
+        return (qs)
 
 
 class CreateUser(graphene.Mutation):
@@ -3624,6 +3689,136 @@ class UpdateEmail(graphene.Mutation):
         user.save()
         return UpdateEmail(correo=user.email)
 
+class CreateRespaldo(graphene.Mutation):
+
+    respaldos = graphene.List(RespaldoType)
+
+    class Arguments:
+        token = graphene.String(required=True)
+        nip = graphene.String(required=True)
+        contacto_list = graphene.List(graphene.Int)
+
+    @login_required
+    def mutate(self, info, token, nip, contacto=None, contacto_list=None):
+
+        user = info.context.user
+        up = user.Uprofile
+        if not up.check_password(nip):
+            raise Exception("El NIP es incorrecto")
+        
+        for contacto in contacto_list:
+            try:
+                contacto = Contacto.objects.get(
+                    user=user,
+                    id=contacto,
+                    es_inguz=True,
+                    bloqueado=False,
+                    activo=True
+                )
+                respaldo = UserProfile.objects.get(
+                                cuentaClabe=contacto.clabe,
+                                status="O").user
+                existe = Respaldo.objects.filter(
+                    ordenante=user,
+                    respaldo=respaldo,
+                    status="A",
+                    activo=True
+                )
+                pendiente = Respaldo.objects.filter(
+                    ordenante=user,
+                    respaldo=respaldo,
+                    status="P",
+                    activo=True
+                )
+            except Exception:
+                raise Exception("Contacto inválido")
+
+            if not existe and not pendiente:
+
+                Respaldo.objects.create(
+                    status="P",
+                    ordenante=user,
+                    respaldo=respaldo,
+                    contacto_id=contacto.id,
+                    contrato_ordenante=None,
+                    contrato_respaldo=None
+                )
+
+
+        return CreateRespaldo(
+            respaldos=user.respaldos.filter(activo=True)
+        )
+
+class ConfirmRespaldo(graphene.Mutation):
+
+    respaldo = graphene.List(RespaldoType)
+
+    class Arguments:
+        token = graphene.String(required=True)
+        nip = graphene.String(required=True)
+        respaldo = graphene.Int(required=True)
+        aceptar = graphene.Boolean(required=True)
+
+    @login_required
+    def mutate(self, info, token, nip, respaldo, aceptar):
+
+        user = info.context.user
+        up = user.Uprofile
+        if not up.check_password(nip):
+            raise Exception("El NIP es incorrecto")
+        
+        try:
+            respaldo = Respaldo.objects.get(
+                id=respaldo,
+                status="P",
+                respaldo=user,
+                activo=True
+            )
+        except Exception:
+            raise Exception("Datos inválidos")
+
+        if aceptar:
+            respaldo.status = "A"
+        else:
+            respaldo.status = "D"
+            respaldo.activo = False
+        respaldo.save()
+
+        return ConfirmRespaldo(
+            respaldo=respaldo
+        )
+
+class DeleteRespaldo(graphene.Mutation):
+
+    respaldo = graphene.List(RespaldoType)
+
+    class Arguments:
+        token = graphene.String(required=True)
+        nip = graphene.String(required=True)
+        respaldo = graphene.Int(required=True)
+
+    @login_required
+    def mutate(self, info, token, nip, respaldo):
+
+        user = info.context.user
+        up = user.Uprofile
+        if not up.check_password(nip):
+            raise Exception("El NIP es incorrecto")
+        
+        try:
+            respaldo = Respaldo.objects.get(
+                id=respaldo
+            )
+        except Exception:
+            raise Exception("Datos inválidos")
+
+
+        respaldo.activo = False
+        respaldo.save()
+
+        return DeleteRespaldo(
+            respaldo=respaldo
+        )
 
 class Mutation(graphene.ObjectType):
     delete_pregunta_seguridad = BorrarPreguntaSeguridad.Field()
@@ -3667,3 +3862,4 @@ class Mutation(graphene.ObjectType):
     set_perfil_transaccional = SetPerfilTransaccional.Field()
     block_account_emergency = BlockAccountEmergency.Field()
     update_email = UpdateEmail.Field()
+    create_respaldo = CreateRespaldo.Field()
