@@ -4,16 +4,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-import pytesseract
-from PIL import Image
-from pytesseract import Output
-import io
-import requests
-import cv2
-import datetime
-from datetime import datetime, timedelta
-from demograficos.utils.meses import meses
-import re
+
 
 # Catalogo de documentos adjuntos
 class DocAdjuntoTipo(models.Model):
@@ -100,105 +91,12 @@ def imagen(sender, instance, created, **kwargs):
     if created:
         user_ = User.objects.get(id=instance.user_id)
         uprofile = user_.Uprofile
-        # curp = uprofile.curp
         if instance.tipo_id == 1:
             uprofile.ineCaptura = instance.imagen
-            url = "{}{}".format(
-                'http://127.0.0.1:8000/media/', instance.imagen)
-            response = requests.get(url)
-            img = Image.open(io.BytesIO(response.content))
-            config_tesseract = '--tessdata-dir tessdata'
-            result = pytesseract.image_to_data(img,
-                                               config=config_tesseract,
-                                               lang='spa',
-                                               output_type=Output.DICT)
-            list = []
-            list.append(result)
-            print(list)
-            min_confidence = 40
-            listf = []
-            for i in range(0, len(result['text'])):
-                confidence = result['conf'][i]
-                if confidence > min_confidence:
-                    text = []
-                    text = result['text'][i]
-                    # print(text)
-                    # dicc['key'] = text
-                    listf.append(text)
-            print(listf)
-            # print(curp)
-            # for x in listf:
-            #     if (x == ''):
-            #         print("Curp valido")
         elif instance.tipo_id == 2:
             uprofile.ineReversoCaptura = instance.imagen
-            url = "{}{}".format(
-                'http://127.0.0.1:8000/media/', instance.imagen)
-            response = requests.get(url)
-            img = Image.open(io.BytesIO(response.content))
-            config_tesseract = '--tessdata-dir tessdata'
-            result = pytesseract.image_to_data(img,
-                                               config=config_tesseract,
-                                               output_type=Output.DICT)
-            print(result)
-            list = []
-            list.append(result)
-            print(list)
-            min_confidence = 15
-            for i in range(0, len(result['text'])):
-                confidence = result['conf'][i]
-                if confidence > min_confidence:
-                    text = result['text'][i]
-                    dict = {}
-                    dict = text
-                    print(text)
-                    print(dict)
         elif instance.tipo_id == 3:
             uprofile.comprobanteDomCaptura = instance.imagen
-            url = "{}{}".format(
-                'http://127.0.0.1:8000/media/', instance.imagen)
-            response = requests.get(url)
-            img = Image.open(io.BytesIO(response.content))
-            # print('---------------------')
-            # print(img)
-            # print('---------------------')
-            # img = cv2.imread(img)
-            # img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-            config_tesseract = '--tessdata-dir tessdata'
-            result = pytesseract.image_to_data(img,
-                                               config=config_tesseract,
-                                               output_type=Output.DICT)
-            list = []
-            list.append(result)
-            min_confidence = 0
-            listf = []
-            date_pattern = (r'^(0[1-9]|[12][0-9]|3[01])'
-                            r'([\/|.|\-|\s])([A-Za-z])+([\/|.|\-|\s])'
-                            r'([0-9][0-9]|19[0-9][0-9]|20[0-9][0-9])$')
-            pattern = re.compile(date_pattern)
-            for i in range(0, len(result['text'])):
-                confidence = result['conf'][i]
-                if confidence > min_confidence:
-                    text = result['text'][i]
-                    if re.match(pattern, text):
-                        a = re.match(pattern, text)
-                        a = a.group()
-                        listf.append(a)
-                    # print(text)
-            print(len(listf))
-            print(listf)
-            # date = listf[98]
-            # date = meses(date)
-            # print(date)
-            # date = datetime.strptime(date, "%d-%m-%y")
-            # fecha = datetime.now()
-            # comparacion = (fecha - date) > timedelta(days=90)
-            # print(fecha - date)
-            # if comparacion:
-            #     print("yes")
-            # print(comparacion)
-            # print(date)
-            # print(fecha)
         uprofile.save()
 
 
