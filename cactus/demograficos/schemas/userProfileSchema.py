@@ -306,20 +306,17 @@ class BlockDetails(graphene.ObjectType):
     time = graphene.types.datetime.DateTime()
     status = graphene.String()
 
+
 class RespaldoType(DjangoObjectType):
 
-    id = graphene.ID(source='pk', required=True)
+    alias = graphene.String()
+    avatar = graphene.String()
 
-    class Meta:
-        model = Respaldo
-        filter_fields = {
-            'activo': ['exact',],
-            'contacto_id': ['exact',],
-            'status': ['exact',]
-        }
 
-        interfaces = (graphene.Node, )
-        connection_class = ExtendedConnection
+class RespaldoRequestType(DjangoObjectType):
+
+    alias = graphene.String()
+    avatar = graphene.String()
 
 
 class Query(graphene.ObjectType):
@@ -979,7 +976,8 @@ class Query(graphene.ObjectType):
     @login_required
     def resolve_all_contactos(
             self, info, limit=None, offset=None, ordering=None, es_inguz=None,
-            bloqueado=None, activo=None, alias_inguz=None, nombre=None, **kwargs):
+            bloqueado=None, activo=None, alias_inguz=None,
+            nombre=None, **kwargs):
 
         user = info.context.user
         qs = user.Contactos_Usuario.all()
@@ -1008,7 +1006,8 @@ class Query(graphene.ObjectType):
             filter = (
                 Q(nombre__icontains=nombre) |
                 Q(ap_paterno__icontains=nombre) |
-                Q(ap_materno__icontains=nombre)
+                Q(ap_materno__icontains=nombre) |
+                Q(alias_inguz__icontains=nombre)
             )
             qs = qs.filter(filter)
         if ordering:
@@ -3331,7 +3330,7 @@ class BlockAccountEmergency(graphene.Mutation):
         return BlockAccountEmergency(
                 details=BlockDetails(
                     username=user.username,
-                    alias=up.alias,
+                    alias=up.get_nombre_completo(),
                     clabe=up.cuentaClabe,
                     time=date_blocked,
                     status=status
@@ -3715,25 +3714,50 @@ class CreateRespaldo(graphene.Mutation):
                     bloqueado=False,
                     activo=True
                 )
+            except Exception:
+                raise Exception("Contacto inválido")
+            try:
                 respaldo = UserProfile.objects.get(
                                 cuentaClabe=contacto.clabe,
                                 status="O").user
-                existe = Respaldo.objects.filter(
-                    ordenante=user,
-                    respaldo=respaldo,
-                    status="A",
-                    activo=True
-                )
-                pendiente = Respaldo.objects.filter(
-                    ordenante=user,
-                    respaldo=respaldo,
-                    status="P",
-                    activo=True
-                )
             except Exception:
-                raise Exception("Contacto inválido")
+                raise Exception("Perfil de contacto inválido")
 
-            if not existe and not pendiente:
+            existe = Respaldo.objects.filter(
+                Q(
+                    ordenante=user,
+                    respaldo=respaldo,
+                    status="A", 
+                    activo=True
+                ) |
+                Q(
+                    ordenante=respaldo,
+                    respaldo=user,
+                    status="A", 
+                    activo=True
+                )
+            )
+            pendiente = Respaldo.objects.filter(
+                ordenante=user,
+                respaldo=respaldo,
+                status="P",
+                activo=True
+            )
+            bloqueado = Contacto.objects.filter(
+                user=respaldo,
+                clabe=user.Uprofile.cuentaClabe,
+                bloqueado=True,
+                activo=True
+            )
+            espacio = Respaldo.objects.filter(
+                Q(ordenante=user, activo=True, status="A") |
+                Q(respaldo=user, activo=True, status="A",)
+            )
+
+            if espacio.count() >= 5:
+                raise Exception("RespaldoLimitEx")
+
+            if not existe and not pendiente and not bloqueado:
 
                 Respaldo.objects.create(
                     status="P",
@@ -3743,10 +3767,13 @@ class CreateRespaldo(graphene.Mutation):
                     contrato_ordenante=None,
                     contrato_respaldo=None
                 )
-
+            existentes = Respaldo.objects.filter(
+                Q(ordenante=user, activo=True, status="A") |
+                Q(respaldo=user, activo=True, status="A",)
+            )
 
         return CreateRespaldo(
-            respaldos=user.respaldos.filter(activo=True)
+            respaldos=existentes
         )
 
 class ConfirmRespaldo(graphene.Mutation):
@@ -3766,6 +3793,11 @@ class ConfirmRespaldo(graphene.Mutation):
         up = user.Uprofile
         if not up.check_password(nip):
             raise Exception("El NIP es incorrecto")
+
+        espacio = Respaldo.objects.filter(
+            Q(ordenante=user, activo=True, status="A") |
+            Q(respaldo=user, activo=True, status="A",)
+        )
         
         try:
             respaldo = Respaldo.objects.get(
@@ -3778,6 +3810,8 @@ class ConfirmRespaldo(graphene.Mutation):
             raise Exception("Datos inválidos")
 
         if aceptar:
+            if espacio.count() >= 5:
+                raise Exception("RespaldoLimitEx")
             respaldo.status = "A"
         else:
             respaldo.status = "D"

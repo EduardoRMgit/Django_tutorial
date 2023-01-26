@@ -11,6 +11,7 @@ class Respaldo(models.Model):
         ("A", "APROBADA"),
         ("P", "PENDIENTE"),
         ("D", "DECLINADA"),
+        ("V", "VENCIDA")
     )
 
     status = models.CharField(
@@ -39,14 +40,7 @@ class Respaldo(models.Model):
         blank=True
     )
 
-    contrato_ordenante = models.FileField(
-        null=True,
-        blank=True,
-        upload_to="contratos-respaldos",
-        max_length=100
-    )
-
-    contrato_respaldo = models.FileField(
+    contrato = models.FileField(
         null=True,
         blank=True,
         upload_to="contratos-respaldos",
