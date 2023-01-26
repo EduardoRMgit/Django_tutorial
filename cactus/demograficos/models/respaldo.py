@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 
 class Respaldo(models.Model):
@@ -33,6 +34,8 @@ class Respaldo(models.Model):
         related_name="respaldados",
         on_delete=models.CASCADE
     )
+
+    fecha_solicitud = models.DateTimeField(default=timezone.now)
 
     contacto_id = models.PositiveSmallIntegerField(
         verbose_name="ID del contacto",

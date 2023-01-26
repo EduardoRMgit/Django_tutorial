@@ -307,16 +307,17 @@ class BlockDetails(graphene.ObjectType):
     status = graphene.String()
 
 
-class RespaldoType(DjangoObjectType):
-
-    alias = graphene.String()
-    avatar = graphene.String()
-
-
 class RespaldoRequestType(DjangoObjectType):
 
-    alias = graphene.String()
-    avatar = graphene.String()
+    id = graphene.ID(source='pk', required=True)
+    class Meta:
+        model = Respaldo
+        filter_fields = {
+            'status': ['exact',],
+            'activo': ['exact',]
+        }
+        interfaces = (graphene.Node, )
+        connection_class = ExtendedConnection
 
 
 class Query(graphene.ObjectType):
@@ -527,17 +528,8 @@ class Query(graphene.ObjectType):
                                         description="Query all objects from \
                                         model OrigenDeposito")
 
-    all_respaldos = DjangoFilterConnectionField(
-        RespaldoType,
-        token=graphene.String(required=True),
-        ordering=graphene.String(),
-        description=
-        "Query all the objects from the \
-        Respaldo Model"
-    )
-
-    all_respaldados = DjangoFilterConnectionField(
-        RespaldoType,
+    all_respaldo_request = DjangoFilterConnectionField(
+        RespaldoRequestType,
         token=graphene.String(required=True),
         ordering=graphene.String(),
         description=
@@ -1559,17 +1551,10 @@ class Query(graphene.ObjectType):
         return OrigenDeposito.objects.all()
 
     @login_required
-    def resolve_all_respaldos(self, info, ordering, **kwargs):
+    def resolve_all_respaldo_request(self, info, ordering=None, **kwargs):
         user = info.context.user
-        qs = user.respaldos.filter(activo=True)
-        if ordering:
-            qs = qs.order_by(ordering)
-        return (qs)
-
-    @login_required
-    def resolve_all_respaldados(self, info, ordering, **kwargs):
-        user = info.context.user
-        qs = user.respaldados.filter(activo=True)
+        print(user)
+        qs = user.respaldados.all()
         if ordering:
             qs = qs.order_by(ordering)
         return (qs)
@@ -3690,7 +3675,7 @@ class UpdateEmail(graphene.Mutation):
 
 class CreateRespaldo(graphene.Mutation):
 
-    respaldos = graphene.List(RespaldoType)
+    respaldos = graphene.List(RespaldoRequestType)
 
     class Arguments:
         token = graphene.String(required=True)
@@ -3727,21 +3712,13 @@ class CreateRespaldo(graphene.Mutation):
                 Q(
                     ordenante=user,
                     respaldo=respaldo,
-                    status="A", 
                     activo=True
                 ) |
                 Q(
                     ordenante=respaldo,
                     respaldo=user,
-                    status="A", 
                     activo=True
                 )
-            )
-            pendiente = Respaldo.objects.filter(
-                ordenante=user,
-                respaldo=respaldo,
-                status="P",
-                activo=True
             )
             bloqueado = Contacto.objects.filter(
                 user=respaldo,
@@ -3750,14 +3727,15 @@ class CreateRespaldo(graphene.Mutation):
                 activo=True
             )
             espacio = Respaldo.objects.filter(
-                Q(ordenante=user, activo=True, status="A") |
-                Q(respaldo=user, activo=True, status="A",)
+                Q(ordenante=user, activo=True) |
+                Q(respaldo=user, activo=True) 
+                
             )
 
             if espacio.count() >= 5:
                 raise Exception("RespaldoLimitEx")
 
-            if not existe and not pendiente and not bloqueado:
+            if not existe and not bloqueado:
 
                 Respaldo.objects.create(
                     status="P",
@@ -3768,8 +3746,8 @@ class CreateRespaldo(graphene.Mutation):
                     contrato_respaldo=None
                 )
             existentes = Respaldo.objects.filter(
-                Q(ordenante=user, activo=True, status="A") |
-                Q(respaldo=user, activo=True, status="A",)
+                Q(ordenante=user, activo=True) |
+                Q(respaldo=user, activo=True)
             )
 
         return CreateRespaldo(
@@ -3778,7 +3756,7 @@ class CreateRespaldo(graphene.Mutation):
 
 class ConfirmRespaldo(graphene.Mutation):
 
-    respaldo = graphene.List(RespaldoType)
+    respaldo = graphene.List(RespaldoRequestType)
 
     class Arguments:
         token = graphene.String(required=True)
@@ -3795,8 +3773,8 @@ class ConfirmRespaldo(graphene.Mutation):
             raise Exception("El NIP es incorrecto")
 
         espacio = Respaldo.objects.filter(
-            Q(ordenante=user, activo=True, status="A") |
-            Q(respaldo=user, activo=True, status="A",)
+            Q(ordenante=user, activo=True) |
+            Q(respaldo=user, activo=True)
         )
         
         try:
@@ -3812,7 +3790,10 @@ class ConfirmRespaldo(graphene.Mutation):
         if aceptar:
             if espacio.count() >= 5:
                 raise Exception("RespaldoLimitEx")
-            respaldo.status = "A"
+            if respaldo.status == "P":
+                respaldo.status = "A"
+            else:
+                raise Exception("Invitación Inválida")
         else:
             respaldo.status = "D"
             respaldo.activo = False
@@ -3824,7 +3805,7 @@ class ConfirmRespaldo(graphene.Mutation):
 
 class DeleteRespaldo(graphene.Mutation):
 
-    respaldo = graphene.List(RespaldoType)
+    respaldo = graphene.List(RespaldoRequestType)
 
     class Arguments:
         token = graphene.String(required=True)
