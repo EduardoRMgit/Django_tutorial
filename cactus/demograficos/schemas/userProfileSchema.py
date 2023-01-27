@@ -1554,7 +1554,10 @@ class Query(graphene.ObjectType):
     def resolve_all_respaldo_request(self, info, ordering=None, **kwargs):
         user = info.context.user
         print(user)
-        qs = user.respaldados.all()
+        qs = Respaldo.objects.filter(
+                Q(ordenante=user) |
+                Q(respaldo=user)
+            )
         if ordering:
             qs = qs.order_by(ordering)
         return (qs)
@@ -3726,16 +3729,24 @@ class CreateRespaldo(graphene.Mutation):
                 bloqueado=True,
                 activo=True
             )
-            espacio = Respaldo.objects.filter(
+            espacio_user = Respaldo.objects.filter(
                 Q(ordenante=user, activo=True) |
                 Q(respaldo=user, activo=True) 
                 
             )
+            espacio_respaldo = Respaldo.objects.filter(
+                Q(ordenante=respaldo, activo=True) |
+                Q(respaldo=respaldo, activo=True) 
+                
+            )
 
-            if espacio.count() >= 5:
+            if espacio_user.count() >= 5:
+                raise Exception("UserLimitEx")
+
+            if espacio_user.count() >= 5:
                 raise Exception("RespaldoLimitEx")
 
-            if not existe and not bloqueado:
+            if not existe:
 
                 Respaldo.objects.create(
                     status="P",
@@ -3745,6 +3756,9 @@ class CreateRespaldo(graphene.Mutation):
                     contrato_ordenante=None,
                     contrato_respaldo=None
                 )
+            if bloqueado:
+                raise Exception("Contacto inválido")
+
             existentes = Respaldo.objects.filter(
                 Q(ordenante=user, activo=True) |
                 Q(respaldo=user, activo=True)
