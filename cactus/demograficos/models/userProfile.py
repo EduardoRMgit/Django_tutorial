@@ -454,6 +454,11 @@ class UserProfile(AbstractBaseUser):
             folio_stp = FolioStp.objects.last()
             folio = folio_stp.fol_dispatch()
             cuenta_clabe = CuentaClabe(folio_stp.fol_dispatch())
+            while UserProfile.objects.filter(
+                    cuentaClabe=cuenta_clabe).count() > 0:
+                folio = folio_stp.fol_dispatch()
+                cuenta_clabe = CuentaClabe(folio_stp.fol_dispatch())
+
             cuenta = CuentaPersonaFisica.objects.create(
                 nombre=first_name,
                 apellido_paterno=last_name,
