@@ -307,7 +307,7 @@ class BlockDetails(graphene.ObjectType):
     status = graphene.String()
 
 
-class RespaldoRequestType(DjangoObjectType):
+class RespaldoType(DjangoObjectType):
 
     id = graphene.ID(source='pk', required=True)
     class Meta:
@@ -528,8 +528,8 @@ class Query(graphene.ObjectType):
                                         description="Query all objects from \
                                         model OrigenDeposito")
 
-    all_respaldo_request = DjangoFilterConnectionField(
-        RespaldoRequestType,
+    all_respaldos = DjangoFilterConnectionField(
+        RespaldoType,
         token=graphene.String(required=True),
         ordering=graphene.String(),
         description=
@@ -1551,7 +1551,7 @@ class Query(graphene.ObjectType):
         return OrigenDeposito.objects.all()
 
     @login_required
-    def resolve_all_respaldo_request(self, info, ordering=None, **kwargs):
+    def resolve_all_respaldos(self, info, ordering=None, **kwargs):
         user = info.context.user
         print(user)
         qs = Respaldo.objects.filter(
@@ -3676,9 +3676,10 @@ class UpdateEmail(graphene.Mutation):
         user.save()
         return UpdateEmail(correo=user.email)
 
+
 class CreateRespaldo(graphene.Mutation):
 
-    respaldos = graphene.List(RespaldoRequestType)
+    respaldos = graphene.List(RespaldoType)
 
     class Arguments:
         token = graphene.String(required=True)
@@ -3686,7 +3687,7 @@ class CreateRespaldo(graphene.Mutation):
         contacto_list = graphene.List(graphene.Int)
 
     @login_required
-    def mutate(self, info, token, nip, contacto=None, contacto_list=None):
+    def mutate(self, info, token, nip, contacto_list=None):
 
         user = info.context.user
         up = user.Uprofile
@@ -3743,21 +3744,23 @@ class CreateRespaldo(graphene.Mutation):
             if espacio_user.count() >= 5:
                 raise Exception("UserLimitEx")
 
-            if espacio_user.count() >= 5:
+            if espacio_respaldo.count() >= 5:
                 raise Exception("RespaldoLimitEx")
 
-            if not existe:
-
-                Respaldo.objects.create(
-                    status="P",
-                    ordenante=user,
-                    respaldo=respaldo,
-                    contacto_id=contacto.id,
-                    contrato_ordenante=None,
-                    contrato_respaldo=None
-                )
             if bloqueado:
                 raise Exception("Contacto inválido")
+
+            if not existe:
+                try:
+                    Respaldo.objects.create(
+                        status="P",
+                        ordenante=user,
+                        respaldo=respaldo,
+                        contacto_id=contacto.id,
+                        contrato=None
+                    )
+                except Exception:
+                    raise Exception("Error al crear respaldo")
 
             existentes = Respaldo.objects.filter(
                 Q(ordenante=user, activo=True) |
@@ -3768,9 +3771,10 @@ class CreateRespaldo(graphene.Mutation):
             respaldos=existentes
         )
 
+
 class ConfirmRespaldo(graphene.Mutation):
 
-    respaldo = graphene.List(RespaldoRequestType)
+    respaldo = graphene.Field(RespaldoType)
 
     class Arguments:
         token = graphene.String(required=True)
@@ -3785,11 +3789,6 @@ class ConfirmRespaldo(graphene.Mutation):
         up = user.Uprofile
         if not up.check_password(nip):
             raise Exception("El NIP es incorrecto")
-
-        espacio = Respaldo.objects.filter(
-            Q(ordenante=user, activo=True) |
-            Q(respaldo=user, activo=True)
-        )
         
         try:
             respaldo = Respaldo.objects.get(
@@ -3802,8 +3801,6 @@ class ConfirmRespaldo(graphene.Mutation):
             raise Exception("Datos inválidos")
 
         if aceptar:
-            if espacio.count() >= 5:
-                raise Exception("RespaldoLimitEx")
             if respaldo.status == "P":
                 respaldo.status = "A"
             else:
@@ -3817,9 +3814,10 @@ class ConfirmRespaldo(graphene.Mutation):
             respaldo=respaldo
         )
 
+
 class DeleteRespaldo(graphene.Mutation):
 
-    respaldo = graphene.List(RespaldoRequestType)
+    respaldo = graphene.Field(RespaldoType)
 
     class Arguments:
         token = graphene.String(required=True)
@@ -3836,11 +3834,19 @@ class DeleteRespaldo(graphene.Mutation):
         
         try:
             respaldo = Respaldo.objects.get(
-                id=respaldo
+                Q(
+                    id=respaldo,
+                    ordenante=user,
+                    activo=True
+                ) |
+                Q(
+                    id=respaldo,
+                    respaldo=user,
+                    activo=True
+                )
             )
         except Exception:
             raise Exception("Datos inválidos")
-
 
         respaldo.activo = False
         respaldo.save()
@@ -3848,6 +3854,7 @@ class DeleteRespaldo(graphene.Mutation):
         return DeleteRespaldo(
             respaldo=respaldo
         )
+
 
 class Mutation(graphene.ObjectType):
     delete_pregunta_seguridad = BorrarPreguntaSeguridad.Field()
@@ -3892,3 +3899,5 @@ class Mutation(graphene.ObjectType):
     block_account_emergency = BlockAccountEmergency.Field()
     update_email = UpdateEmail.Field()
     create_respaldo = CreateRespaldo.Field()
+    confirm_respaldo = ConfirmRespaldo.Field()
+    delete_respaldo = DeleteRespaldo.Field()
