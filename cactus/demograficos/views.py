@@ -15,6 +15,157 @@ import datetime
 from demograficos.utils.meses import meses
 from demograficos.utils.dates import normalizeDates
 import re
+import os
+import boto3
+from django.conf import settings
+
+
+def upload_s3_docs(tipocomprobante, archivo, user):
+    from cactus.settings import AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY
+    if tipocomprobante == '1':
+        nombre_archivo = f"comprobante_cfe_{user}"
+        directory = 'cfe'
+        file_path = os.path.join(
+            directory,
+            nombre_archivo
+        )
+        file_path = os.path.join('docs/docs/comprobantes', file_path)
+        client = boto3.client(
+            's3',
+            config=boto3.session.Config(signature_version='s3v4'),
+            aws_acces_key_id=AWS_ACCESS_KEY_ID,
+            aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
+            region_name="us-east-2")
+        client.upload_fileobj(archivo, "phototest420", file_path)
+        file_url = client.generate_presigned_url(
+            'get_object',
+            Params={
+                'Bucket': "phototest420",
+                'Key': file_path
+            },
+            ExpiresIn=1440,
+            HttpMethod=None)
+    elif tipocomprobante == '2':
+        nombre_archivo = f"comprobante_telmex_{user}"
+        directory = 'telmex'
+        file_path = os.path.join(
+            directory,
+            nombre_archivo
+        )
+        file_path = os.path.join('docs/docs/comprobantes', file_path)
+        client = boto3.client(
+            's3',
+            config=boto3.session.Config(signature_version='s3v4'),
+            aws_acces_key_id=AWS_ACCESS_KEY_ID,
+            aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
+            region_name="us-east-2")
+        client.upload_fileobj(archivo, "phototest420", file_path)
+        file_url = client.generate_presigned_url(
+            'get_object',
+            Params={
+                'Bucket': "phototest420",
+                'Key': file_path
+            },
+            ExpiresIn=1440,
+            HttpMethod=None)
+    elif tipocomprobante == '3':
+        nombre_archivo = f"comprobante_izzi_{user}"
+        directory = 'izzi'
+        file_path = os.path.join(
+            directory,
+            nombre_archivo
+        )
+        file_path = os.path.join('docs/docs/comprobantes', file_path)
+        client = boto3.client(
+            's3',
+            config=boto3.session.Config(signature_version='s3v4'),
+            aws_acces_key_id=AWS_ACCESS_KEY_ID,
+            aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
+            region_name="us-east-2")
+        client.upload_fileobj(archivo, "phototest420", file_path)
+        file_url = client.generate_presigned_url(
+            'get_object',
+            Params={
+                'Bucket': "phototest420",
+                'Key': file_path
+            },
+            ExpiresIn=1440,
+            HttpMethod=None)
+    elif tipocomprobante == '4':
+        nombre_archivo = f"comprobante_totalplay_{user}"
+        directory = 'totalplay'
+        file_path = os.path.join(
+            directory,
+            nombre_archivo
+        )
+        file_path = os.path.join('docs/docs/comprobantes', file_path)
+        client = boto3.client(
+            's3',
+            config=boto3.session.Config(signature_version='s3v4'),
+            aws_acces_key_id=AWS_ACCESS_KEY_ID,
+            aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
+            region_name="us-east-2")
+        client.upload_fileobj(archivo, "phototest420", file_path)
+        file_url = client.generate_presigned_url(
+            'get_object',
+            Params={
+                'Bucket': "phototest420",
+                'Key': file_path
+            },
+            ExpiresIn=1440,
+            HttpMethod=None)
+    return file_url
+
+
+def upload_s3ine(archivo, user, tipo):
+    from cactus.settings import AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY
+    if tipo == "1":
+        nombre_archivo = f"ine_frontal_{user}"
+        directory = 'ine'
+        file_path = os.path.join(
+            directory,
+            nombre_archivo
+        )
+        file_path = os.path.join('docs/docs/', file_path)
+        client = boto3.client(
+            's3',
+            config=boto3.session.Config(signature_version='s3v4'),
+            aws_acces_key_id=AWS_ACCESS_KEY_ID,
+            aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
+            region_name="us-east-2")
+        client.upload_fileobj(archivo, "phototest420", file_path)
+        file_url = client.generate_presigned_url(
+            'get_object',
+            Params={
+                'Bucket': "phototest420",
+                'Key': file_path
+            },
+            ExpiresIn=1440,
+            HttpMethod=None)
+    elif tipo == "2":
+        nombre_archivo = f"ine_reverso_{user}"
+        directory = 'ineReverso'
+        file_path = os.path.join(
+            directory,
+            nombre_archivo
+        )
+        file_path = os.path.join('docs/docs/', file_path)
+        client = boto3.client(
+            's3',
+            config=boto3.session.Config(signature_version='s3v4'),
+            aws_acces_key_id=AWS_ACCESS_KEY_ID,
+            aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
+            region_name="us-east-2")
+        client.upload_fileobj(archivo, "phototest420", file_path)
+        file_url = client.generate_presigned_url(
+            'get_object',
+            Params={
+                'Bucket': "phototest420",
+                'Key': file_path
+            },
+            ExpiresIn=1440,
+            HttpMethod=None)
+    return file_url
 
 
 class ImageDoc(generics.CreateAPIView):
@@ -25,6 +176,7 @@ class ImageDoc(generics.CreateAPIView):
         tipo = request.data['tipo']
         user = request.data['user']
         user_ = User.objects.get(id=user)
+        username = user_.username
         doctipo = DocAdjuntoTipo.objects.get(id=tipo)
         reg = r"(0[1-9]|[12][0-9]|3[01])([\/|.|\-|\s])([A-Za-z0-9])+" \
               r"([\/|.|\-|\s])([0-9][0-9]|19[0-9][0-9]|20[0-9][0-9])"
@@ -33,14 +185,26 @@ class ImageDoc(generics.CreateAPIView):
                 tipo_comprobante = request.data['tipo_comprobante']
                 tipocomprobante = TipoComprobante.objects.get(
                     id=tipo_comprobante)
-                a = DocAdjunto.objects.create(user=user_,
-                                              tipo=doctipo,
-                                              imagen=imagen,
-                                              tipo_comprobante=tipocomprobante)
+                if settings.USE_S3:
+                    url = upload_s3_docs(tipocomprobante, imagen, username)
+                    a = DocAdjunto.objects.create(
+                        user=user_,
+                        tipo=doctipo,
+                        imagen=url,
+                        tipo_comprobante=tipocomprobante)
+                else:
+                    a = DocAdjunto.objects.create(
+                        user=user_,
+                        tipo=doctipo,
+                        imagen=imagen,
+                        tipo_comprobante=tipocomprobante)
                 id = a.id
                 if tipo == '3':
-                    url = "{}{}".format(
-                        'http://127.0.0.1:8000/media/', a.imagen)
+                    if settings.SITE == "local":
+                        url = "{}{}".format(
+                            'http://127.0.0.1:8000/media/', a.imagen)
+                    if settings.SITE not in "local":
+                        url = a.imagen
                     response = requests.get(url)
                     img = Image.open(io.BytesIO(response.content))
                     img = img.convert('RGB')
@@ -213,10 +377,20 @@ class ImageDoc(generics.CreateAPIView):
                                 })
 
             else:
-                a = DocAdjunto.objects.create(user=user_,
-                                              tipo=doctipo,
-                                              imagen=imagen)
-                url = "{}{}".format('http://127.0.0.1:8000/media/', a.imagen)
+                if settings.USE_S3:
+                    url = upload_s3ine(imagen, username, doctipo)
+                    a = DocAdjunto.objects.create(user=user_,
+                                                  tipo=doctipo,
+                                                  imagen=url)
+                else:
+                    a = DocAdjunto.objects.create(user=user_,
+                                                  tipo=doctipo,
+                                                  imagen=imagen)
+                if settings.SITE == "local":
+                    url = "{}{}".format(
+                        'http://127.0.0.1:8000/media/', a.imagen)
+                if settings.SITE not in "local":
+                    url = a.imagen
                 id = a.id
         except Exception as e:
             print(e)

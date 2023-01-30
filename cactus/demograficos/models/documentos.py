@@ -53,7 +53,7 @@ class DocAdjunto(models.Model):
     """
 
     # La ruta es dinamica, se construye con la "ruta"
-    imagen = models.ImageField(upload_to='demograficos/docs', blank=True,
+    imagen = models.ImageField(blank=True,
                                null=True)
     ruta = models.CharField(max_length=50, blank=True, null=True)
     tipo = models.ForeignKey(
