@@ -353,6 +353,17 @@ class UserProfile(AbstractBaseUser):
     def __str__(self):
         return str(self.user.username)
 
+    def get_nombre_completo(self):
+        x = []
+        if self.user.first_name:
+            x.append(self.user.first_name)
+        if self.user.last_name:
+            x.append(self.user.last_name)
+        if self.apMaterno:
+            x.append(self.apMaterno)
+        full_name = " ".join(x)
+        return full_name
+
     def reset_login_attempts(self):
         """
         **Description**
