@@ -320,6 +320,7 @@ elif SITE == "test":
     idle_time = 5
     AXES_FAILURE_LIMIT = 5
 elif SITE == "prod":
+    AWS_STORAGE_BUCKET_NAME = 'inguz-prod'
     idle_time = 5
     AXES_FAILURE_LIMIT = 5
 
