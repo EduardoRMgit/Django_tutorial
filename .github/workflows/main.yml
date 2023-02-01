@@ -93,8 +93,7 @@ jobs:
           echo "Brancha  ${GITHUB_REF##*/}"
           if [[ ${GITHUB_REF##*/} == main ]] ; then
             export SUFFIX=prod
-            export DB=cactus-prod-db.c4csey4k0tc5.us-east-2.rds.amazonaws.com
-            # kubernetes-django-east2.c4csey4k0tc5.us-east-2.rds.amazonaws.com
+            export DB=${{ secrets.RDS_ENDPOINT }}
             export DEBUG=false
             export STPSECRET=stpsecretprod
           elif [[ ${GITHUB_REF##*/} == staging ]] ; then
