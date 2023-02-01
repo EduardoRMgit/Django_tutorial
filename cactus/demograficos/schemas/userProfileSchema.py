@@ -478,6 +478,7 @@ class Query(graphene.ObjectType):
                                   ordering=graphene.String(),
                                   es_inguz=graphene.Boolean(),
                                   bloqueado=graphene.Boolean(),
+                                  no_respaldos=graphene.Boolean(),
                                   activo=graphene.Boolean(),
                                   alias_inguz=graphene.String(),
                                   nombre=graphene.String(),
@@ -969,22 +970,37 @@ class Query(graphene.ObjectType):
     def resolve_all_contactos(
             self, info, limit=None, offset=None, ordering=None, es_inguz=None,
             bloqueado=None, activo=None, alias_inguz=None,
-            nombre=None, **kwargs):
+            nombre=None, no_respaldos=None, **kwargs):
 
         user = info.context.user
         qs = user.Contactos_Usuario.all()
 
-        if es_inguz is not None:
+        if es_inguz:
             filter = (
                 Q(es_inguz__exact=es_inguz)
             )
             qs = qs.filter(filter)
-        if bloqueado is not None:
+        elif es_inguz is False:
+            filter = (
+                Q(es_inguz__exact=es_inguz)
+            )
+            qs = qs.filter(filter)
+        if bloqueado:
             filter = (
                 Q(bloqueado__exact=bloqueado)
             )
             qs = qs.filter(filter)
-        if activo is not None:
+        elif bloqueado is False:
+            filter = (
+                Q(bloqueado__exact=bloqueado)
+            )
+            qs = qs.filter(filter)
+        if activo:
+            filter = (
+                Q(activo__exact=activo)
+            )
+            qs = qs.filter(filter)
+        elif activo is False:
             filter = (
                 Q(activo__exact=activo)
             )
@@ -994,6 +1010,13 @@ class Query(graphene.ObjectType):
                 Q(alias_inguz__icontains=alias_inguz)
             )
             qs = qs.filter(filter)
+        if no_respaldos:
+            respaldos = Respaldo.objects.filter(
+                Q(ordenante=user, activo=True) |
+                Q(respaldo=user, activo=True)
+            )
+            for respaldo in respaldos:
+                qs = qs.filter(filter).exclude(id=respaldo.contacto_id)
         if nombre:
             filter = (
                 Q(nombre__icontains=nombre) |
