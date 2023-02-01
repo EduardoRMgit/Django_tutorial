@@ -9,7 +9,6 @@ from demograficos.models import (UserProfile,
                                  RespuestaSeguridad,
                                  PreguntaSeguridad,
                                  Fecha,
-                                 ComponentValidated,
                                  Direccion,
                                  TipoDireccion,
                                  EntidadFed,
@@ -26,6 +25,7 @@ from .cambio_password import PasswordResetUserAdmin
 from django import forms
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.utils.translation import gettext_lazy as _
+from cactus.settings import SITE
 
 
 class RequiredForm(forms.ModelForm):
@@ -46,6 +46,8 @@ class ProfileInline(admin.StackedInline):
     fk_name = 'user'
     form = RequiredForm
     exclude = ('password',)
+    if SITE == "prod":
+        readonly_fields = ['saldo_cuenta', ]
 
 
 class RespuestaInline(admin.StackedInline):
@@ -119,13 +121,6 @@ class UserContactoInline(admin.TabularInline):
     fk_name = 'user'
 
 
-class ProfileComponentInline(admin.StackedInline):
-    model = ComponentValidated
-    can_delete = False
-    verbose_name_plural = "Validaciones de Perfil"
-    fk_name = 'user'
-
-
 class DireccionInLine(admin.TabularInline):
     model = Direccion
     can_delete = False
@@ -171,34 +166,62 @@ class UserProfileAdmin(PasswordResetUserAdmin):
         UserComportamientoDiarioInline,
         UserComportamientoMensualInline,
         UserContactoInline,
-        ProfileComponentInline,
         DocAdjuntoInLine,
         BeneficiarioInLine,
         PerfilTransaccionalInLine
     )
     actions = ['registra_cuenta']
-    list_filter = ('is_staff',
-                   )
 
-    list_display = ('Uprofile',
+    list_filter = (
+        'Uprofile__nivel_cuenta',
+        'Uprofile__enrolamiento',
+        'Uprofile__status'
+    )
+
+    search_fields = (
+        'username',
+        'Uprofile__cuentaClabe',
+        'Uprofile__curp',
+        'Uprofile__alias'
+    )
+
+    list_display = ('username',
+                    'get_alias',
+                    'get_nombre',
+                    'get_nivel',
                     'get_saldo',
                     'get_estado',
                     'get_curp',
-                    'get_rfc',
                     'get_cuenta_clabe',
+                    'get_enrolamiento',
                     )
-
-    list_select_related = ('Uprofile', )
 
     list_per_page = 25
 
+    def get_nombre(self, obj):
+        return obj.Uprofile.get_nombre_completo()
+    get_nombre.short_description = 'Nombre'
+
+    def get_alias(self, obj):
+        return obj.Uprofile.alias
+    get_alias.short_description = 'Alias'
+
+    def get_enrolamiento(self, obj):
+        return obj.Uprofile.enrolamiento
+    get_enrolamiento.short_description = 'Completo'
+    get_enrolamiento.boolean = True
+
+    def get_nivel(self, obj):
+        return obj.Uprofile.nivel_cuenta
+    get_nivel.short_description = 'Nivel'
+
     def get_saldo(self, obj):
-        return obj.Uprofile.saldo_cuenta
-    get_saldo.short_description = 'Saldo cuenta'
+        return ("$" + str(obj.Uprofile.saldo_cuenta))
+    get_saldo.short_description = 'Saldo'
 
     def get_cuenta_clabe(self, obj):
         return obj.Uprofile.cuentaClabe
-    get_cuenta_clabe.short_description = 'Cuenta Clabe'
+    get_cuenta_clabe.short_description = 'CLABE'
 
     def get_estado(self, obj):
         return obj.Uprofile.status
@@ -206,11 +229,7 @@ class UserProfileAdmin(PasswordResetUserAdmin):
 
     def get_curp(self, obj):
         return obj.Uprofile.curp
-    get_curp.short_description = 'Check CURP'
-
-    def get_rfc(self, obj):
-        return obj.Uprofile.rfc
-    get_rfc.short_description = 'Check RFC'
+    get_curp.short_description = 'CURP'
 
     def get_inline_instances(self, request, obj=None):
         if not obj:
@@ -283,7 +302,6 @@ class ClienteAdmin(UserProfileAdmin):
         UserComportamientoDiarioInline,
         UserComportamientoMensualInline,
         UserContactoInline,
-        ProfileComponentInline,
         DocAdjuntoInLine,
         BeneficiarioInLine,
     )
