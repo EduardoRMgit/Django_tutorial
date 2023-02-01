@@ -16,7 +16,7 @@ def create_PLD_Customer(sender, instance, created, **kwargs):
     try:
         user = instance.user
         # admin_Util = adminUtils.objects.get(id=1)
-        customer = CustomerD.objects.get(pk=1)
+
         # if not created:
         #     customer = user.Ucustomer
         url_customer = UrlsPLD.objects.get(pk=2)
@@ -25,13 +25,19 @@ def create_PLD_Customer(sender, instance, created, **kwargs):
         # Autorizando
         headers_auth = {
             'Accept': 'application/json',
-            'X-API-KEY': 'KYC-kmgO5JzyMYjty06Oqu1NIQV12Pyy'
+            'X-API-KEY': 'KYC-kmhwgO5hJzyMYjty06Oqu1NIQV1-2Pyy'
         }
 
+        body = {
+            'usr': 'apiInvercratoSand',
+            'pass': '258onttsR-3',
+        }
         # Primer request
         try:
             r = requests.post(
-                url_auth, data={"id_entidad": 5500}, headers=headers_auth)
+                url_auth,
+                data={},
+                headers=headers_auth)
         except Exception:
             r = {}
         try:
@@ -46,10 +52,10 @@ def create_PLD_Customer(sender, instance, created, **kwargs):
         serialized = serializers.serialize('json', [customer, ])
         d = json.loads(serialized)[0]
 
-        d['fields']['rfc'] = instance.rfc or customer.rfc
-        d['fields']['curp'] = instance.curp or customer.curp
-        d['fields']['amaterno'] = instance.apMaterno or customer.amaterno
-        d['fields']['id_entidad'] = 5500
+        d['fields']['rfc'] = instance.rfc
+        d['fields']['curp'] = instance.curp
+        d['fields]']['apaterno'] = user.last_name
+        d['fields']['amaterno'] = instance.apMaterno
         d['fields']['genero'] = instance.sexo or customer.genero
         d['fields']['nombre'] = user.first_name or customer.nombre
         if instance.fecha_nacimiento:
@@ -57,21 +63,8 @@ def create_PLD_Customer(sender, instance, created, **kwargs):
                 instance.fecha_nacimiento.strftime("%Y-%m-%d") or \
                 customer.fecha_nacimiento
 
-        tels = user.user_telefono.filter(tipoTelefono_id__gte=0)
-        if len(tels):
-            tels_active = tels.filter(activo=True)
-            if len(tels_active):
-                tels = tels_active
-            d['fields']['telefono_fijo'] = tels[0].telefono \
-                or customer.telefono_fijo
-
-        tels = user.user_telefono.filter(tipoTelefono_id=0)
-        if len(tels):
-            tels_active = tels.filter(activo=True)
-            if len(tels_active):
-                tels = tels_active
-            d['fields']['telefono_movil'] = tels[0].telefono \
-                or customer.telefono_movil
+        tels = user.user_telefono.get(telefono=user, activo=True)
+        d['fields']['telefono_movil'] = tels[0].telefono
 
         d['fields']['correo_electronico'] = user.email or \
             customer.correo_electronico

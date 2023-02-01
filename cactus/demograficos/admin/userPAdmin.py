@@ -26,6 +26,7 @@ from django import forms
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.utils.translation import gettext_lazy as _
 from cactus.settings import SITE
+from import_export.admin import ExportActionMixin
 
 
 class RequiredForm(forms.ModelForm):
@@ -152,7 +153,7 @@ class PerfilTransaccionalInLine(admin.TabularInline):
     extra = 0
 
 
-class UserProfileAdmin(PasswordResetUserAdmin):
+class UserProfileAdmin(ExportActionMixin, PasswordResetUserAdmin):
     inlines = (
         DireccionInLine,
         ProfileInline,
