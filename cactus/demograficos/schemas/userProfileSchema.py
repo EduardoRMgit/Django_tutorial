@@ -2765,8 +2765,9 @@ class VerifyAddContactos(graphene.Mutation):
                         nombre = usuario_inguz.first_name.strip()
                         ap_paterno = usuario_inguz.last_name.strip()
                         ap_materno = usuario_inguz.Uprofile.apMaterno.strip()
-                        nombre_completo = str(nombre) + " " + str(
-                            ap_paterno) + " " + str(ap_materno)
+                        nombre_completo = (
+                            usuario_inguz.Uprofile.get_nombre_completo()
+                        )
                         contacto = Contacto.objects.create(
                             nombre=nombre,
                             ap_paterno=ap_paterno,
@@ -3702,21 +3703,28 @@ class UpdateEmail(graphene.Mutation):
 
 class CreateRespaldo(graphene.Mutation):
 
-    respaldos = graphene.List(RespaldoType)
+    agregados = graphene.List(RespaldoType)
+    errores = graphene.List(ContactosType)
 
     class Arguments:
         token = graphene.String(required=True)
         nip = graphene.String(required=True)
-        contacto_list = graphene.List(graphene.Int)
+        contacto_list = graphene.List(graphene.Int, required=True)
 
     @login_required
-    def mutate(self, info, token, nip, contacto_list=None):
+    def mutate(self, info, token, nip, contacto_list):
+
+        errores = []
+        agregados = []
 
         user = info.context.user
         up = user.Uprofile
         if not up.check_password(nip):
             raise Exception("El NIP es incorrecto")
         
+        if len(contacto_list) >= 5:
+            raise Exception("No pueden seleccionarse mas de 5 contactos")
+
         for contacto in contacto_list:
             try:
                 contacto = Contacto.objects.get(
@@ -3727,14 +3735,14 @@ class CreateRespaldo(graphene.Mutation):
                     activo=True
                 )
             except Exception:
-                raise Exception("Contacto inválido")
+                raise Exception("Uno o más contactos inválidos")
             try:
                 respaldo = UserProfile.objects.get(
                                 cuentaClabe=contacto.clabe,
                                 status="O").user
             except Exception:
-                raise Exception("Perfil de contacto inválido")
-
+                errores.append(contacto.id)
+                continue
             existe = Respaldo.objects.filter(
                 Q(
                     ordenante=user,
@@ -3768,30 +3776,37 @@ class CreateRespaldo(graphene.Mutation):
                 raise Exception("UserLimitEx")
 
             if espacio_respaldo.count() >= 5:
-                raise Exception("RespaldoLimitEx")
+                errores.append(contacto.id)
+                continue
 
             if bloqueado:
-                raise Exception("Contacto inválido")
+                errores.append(contacto.id)
+                continue
 
             if not existe:
                 try:
-                    Respaldo.objects.create(
+                    agregado = Respaldo.objects.create(
                         status="P",
                         ordenante=user,
                         respaldo=respaldo,
                         contacto_id=contacto.id,
                         contrato=None
                     )
+                    agregados.append(agregado.id)
                 except Exception:
-                    raise Exception("Error al crear respaldo")
+                    errores.append(contacto.id)
+                    continue
+            else:
+                errores.append(contacto.id)
+                continue
 
-            existentes = Respaldo.objects.filter(
-                Q(ordenante=user, activo=True) |
-                Q(respaldo=user, activo=True)
-            )
-
+        if agregados:
+            agregados = Respaldo.objects.filter(id__in=agregados)
+        if errores:
+            errores = Contacto.objects.filter(id__in=errores)
         return CreateRespaldo(
-            respaldos=existentes
+            agregados=agregados,
+            errores=errores
         )
 
 
