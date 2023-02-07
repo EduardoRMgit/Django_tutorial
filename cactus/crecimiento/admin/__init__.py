@@ -1,2 +1,2 @@
-from .bartolaAdmin import BartolaAdmin
+from .podcastLinkAdmin import PodcastLinkAdmin
 from .respaldoAdmin import RespaldoAdmin

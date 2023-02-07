@@ -1,2 +1,2 @@
-from .bartola import Bartola
+from .podcastLink import PodcastLink
 from .respaldo import Respaldo

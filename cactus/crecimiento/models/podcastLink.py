@@ -1,7 +1,7 @@
 from django.db import models
 
 
-class Bartola(models.Model):
+class PodcastLink(models.Model):
 
     class Meta():
         verbose_name = 'Link e imagen'

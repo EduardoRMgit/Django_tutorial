@@ -8,7 +8,7 @@ from demograficos.schemas.userProfileSchema import ContactosType
 from django.db.models import Q
 
 from demograficos.models import Contacto, UserProfile
-from crecimiento.models import Bartola
+from crecimiento.models import PodcastLink
 from crecimiento.models import Respaldo
 
 
@@ -26,9 +26,9 @@ class ExtendedConnection(graphene.Connection):
         return len(root.edges)
 
 
-class BartolaType(DjangoObjectType):
+class PodcastLinkType(DjangoObjectType):
     class Meta:
-        model = Bartola
+        model = PodcastLink
 
 
 class RespaldoType(DjangoObjectType):
@@ -47,10 +47,10 @@ class RespaldoType(DjangoObjectType):
 
 class Query(object):
 
-    all_bartola = graphene.List(
-        BartolaType,
+    all_podcastLink = graphene.List(
+        PodcastLinkType,
         description="Query all the objects from the \
-        Bartola Model"
+        PodcastLink Model"
     )
 
     all_respaldos = DjangoFilterConnectionField(
@@ -61,8 +61,8 @@ class Query(object):
         Respaldo Model"
     )
 
-    def resolve_all_bartola(self, info, **kwargs):
-        return Bartola.objects.filter(activo=True)
+    def resolve_all_podcastLink(self, info, **kwargs):
+        return PodcastLink.objects.filter(activo=True)
 
     @login_required
     def resolve_all_respaldos(self, info, ordering=None, **kwargs):
