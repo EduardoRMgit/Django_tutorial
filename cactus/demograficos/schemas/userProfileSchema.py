@@ -67,6 +67,7 @@ from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 
 from axes.models import AccessAttempt
 
+from demograficos.utils.customerpld import create_pld_customer
 
 db_logger = logging.getLogger("db")
 
@@ -2543,11 +2544,12 @@ class UpdateNip(graphene.Mutation):
                         nip_temporal = user.user_nipTemp.filter(
                             activo=True).last().nip_temp
                     except Exception:
-                        raise ValueError("NIP tempral no está activo")
+                        raise ValueError("NIP temporal no está activo")
                     if nip_temporal == old_nip:
                         UP.set_password(new_nip)
                         UP.statusNip = 'A'
                         UP.enrolamiento = True
+                        create_pld_customer(user)
                     else:
                         raise ValueError('nip no coincide con el temporal')
             elif (UP.statusNip == 'A'):
@@ -3693,7 +3695,7 @@ class CreateRespaldo(graphene.Mutation):
         up = user.Uprofile
         if not up.check_password(nip):
             raise Exception("El NIP es incorrecto")
-        
+
         for contacto in contacto_list:
             try:
                 contacto = Contacto.objects.get(
@@ -3732,13 +3734,13 @@ class CreateRespaldo(graphene.Mutation):
             )
             espacio_user = Respaldo.objects.filter(
                 Q(ordenante=user, activo=True) |
-                Q(respaldo=user, activo=True) 
-                
+                Q(respaldo=user, activo=True)
+
             )
             espacio_respaldo = Respaldo.objects.filter(
                 Q(ordenante=respaldo, activo=True) |
-                Q(respaldo=respaldo, activo=True) 
-                
+                Q(respaldo=respaldo, activo=True)
+
             )
 
             if espacio_user.count() >= 5:
@@ -3789,7 +3791,7 @@ class ConfirmRespaldo(graphene.Mutation):
         up = user.Uprofile
         if not up.check_password(nip):
             raise Exception("El NIP es incorrecto")
-        
+
         try:
             respaldo = Respaldo.objects.get(
                 id=respaldo,
@@ -3831,7 +3833,7 @@ class DeleteRespaldo(graphene.Mutation):
         up = user.Uprofile
         if not up.check_password(nip):
             raise Exception("El NIP es incorrecto")
-        
+
         try:
             respaldo = Respaldo.objects.get(
                 Q(
