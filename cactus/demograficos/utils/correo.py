@@ -7,11 +7,10 @@ from django.utils.html import strip_tags
 def mandar_email(correo, username):
 
     receptor = correo
-    user = username
     print(correo, username)
     subject = 'Bienvenido a Inguz'
     html_message = render_to_string(f'mail/correo.html',
-                                   {'username': user})
+                                   {'username': username})
     body = strip_tags(html_message)
 
 
