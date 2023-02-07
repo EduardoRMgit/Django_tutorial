@@ -91,6 +91,7 @@ INSTALLED_APPS = [
     'scotiabank.apps.ScotiabankConfig',
     'renapo.apps.RenapoConfig',
     'dapp.apps.DappConfig',
+    'crecimiento.apps.CrecimientoConfig',
 ]
 
 if (PROD):

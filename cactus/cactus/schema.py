@@ -15,6 +15,7 @@ from demograficos.schemas import (userProfileSchema,
 from spei.schemas import listabancosSchema
 from seguros.schemas import asignar_seguro
 from dde.schemas import (createddeSchema, imagenesddeSchema)
+from crecimiento.schemas import crecimientoSchema
 from pagos.rapydcollect import schemacollect
 from django.contrib.auth.models import User
 from graphene_django.types import DjangoObjectType
@@ -106,6 +107,7 @@ class Query(transaccionSchema.Query,
             schemacollect.Query,
             ScotiaSchema.Query,
             creacionSchema.Query,
+            crecimientoSchema.Query,
             graphene.ObjectType):
     pass
 
@@ -123,6 +125,7 @@ class Mutation(transaccionSchema.Mutation,
                schemacollect.Mutation,
                inguzSchema.Mutation,
                ScotiaSchema.Mutation,
+               crecimientoSchema.Mutation,
                graphene.ObjectType):
     token_auth = ObtainToken.Field()
     verify_token = graphql_jwt.Verify.Field()
