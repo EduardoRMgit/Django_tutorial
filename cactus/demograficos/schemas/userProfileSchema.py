@@ -2498,7 +2498,6 @@ class UpdateNip(graphene.Mutation):
                         UP.set_password(new_nip)
                         UP.statusNip = 'A'
                         UP.enrolamiento = True
-                        # create_pld_customer(user)
                         mandar_email(user.email, user.first_name)
                     else:
                         raise ValueError('nip no coincide con el temporal')
