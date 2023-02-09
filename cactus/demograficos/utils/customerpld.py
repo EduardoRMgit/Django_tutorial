@@ -2,6 +2,11 @@ from pld.models import (Customer,
                         UrlsPLD)
 import json
 import requests
+import logging
+from cactus.settings import (UBCUBO_USER,
+                             UBCUBO_PWD,
+                             UBCUBO_KEY,
+                             UBCUBO_ENTIDAD)
 
 
 def create_pld_customer(user):
@@ -11,12 +16,12 @@ def create_pld_customer(user):
 
         headers_auth = {
             'Accept': 'application/json',
-            'X-API-KEY': 'KYC-kmhwgO5hJzyMYjty06Oqu1NIQV1-2Pyy'
+            'X-API-KEY': UBCUBO_KEY
         }
 
         body_auth = {
-            'usr': 'apiInvercratoSand',
-            'pass': '258onttsR-3'
+            'usr': UBCUBO_USER,
+            'pass': UBCUBO_KEY
         }
 
         res = requests.post(
@@ -24,12 +29,13 @@ def create_pld_customer(user):
             data=body_auth,
             headers=headers_auth
         )
+
         content = json.loads(res.content)
         token = content['token']
-        print(token)
+
         body = {
-            'usr': 'apiInvercratoSand',
-            'pass': '258onttsR-3',
+            'usr': UBCUBO_USER,
+            'pass': UBCUBO_PWD,
             'tipo': 1,
             'apaterno': user.last_name,
             'amaterno': user.Uprofile.apMaterno,
@@ -45,9 +51,10 @@ def create_pld_customer(user):
             'clabe': user.Uprofile.cuentaClabe,
             'correo_electronico': user.email,
         }
+
         headers = {
             'Accept': 'application/json',
-            'X-API-KEY': 'KYC-kmhwgO5hJzyMYjty06Oqu1NIQV1-2Pyy',
+            'X-API-KEY': UBCUBO_KEY,
             'Authorization':  token
         }
 
@@ -56,10 +63,10 @@ def create_pld_customer(user):
             data=body,
             headers=headers
         )
-        print(url_customer)
+
         content_customer = json.loads(res2.content)
         Customer.objects.create(
-            id_entidad=5501,
+            id_entidad=UBCUBO_ENTIDAD,
             tipo=1,
             apaterno=user.last_name,
             amaterno=user.Uprofile.apMaterno,
@@ -79,6 +86,5 @@ def create_pld_customer(user):
                 'response_api']['customer_info']['riesgo'],
             user=user
         )
-        print(content_customer['response_api'])
     except Exception as e:
-        print(e)
+        return e
