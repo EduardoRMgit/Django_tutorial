@@ -2,10 +2,14 @@ from pld.models import (Customer,
                         UrlsPLD)
 import json
 import requests
+import logging
 from cactus.settings import (UBCUBO_USER,
                              UBCUBO_PWD,
                              UBCUBO_KEY,
                              UBCUBO_ENTIDAD)
+
+
+db_logger = logging.getLogger('db')
 
 
 def create_pld_customer(user):
@@ -88,3 +92,6 @@ def create_pld_customer(user):
         )
     except Exception as e:
         return e
+        msg_pld = f"[Create Customer] Error al crear customer en ubcubo para" \
+                  f"el usuario: {user}"
+        db_logger.warning(msg_pld, e)
