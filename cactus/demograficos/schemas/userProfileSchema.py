@@ -11,7 +11,6 @@ from random import randint
 from graphene_django.types import DjangoObjectType
 from graphql_jwt.decorators import login_required
 from graphql_jwt.shortcuts import get_token
-from graphene_django.filter import DjangoFilterConnectionField
 
 from django.core.validators import validate_email
 
@@ -21,7 +20,8 @@ from django.conf import settings
 from django.contrib.auth import authenticate
 from django.http import HttpRequest
 from django.contrib.auth.models import User
-from demograficos.models import GeoLocation, GeoDevice, UserLocation, Respaldo
+from demograficos.models import GeoLocation, GeoDevice, UserLocation
+from crecimiento.models import Respaldo
 from django.contrib.auth import authenticate
 from django.utils import timezone
 from spei.stpTools import randomString
@@ -72,20 +72,6 @@ from demograficos.utils.customerpld import create_pld_customer
 db_logger = logging.getLogger("db")
 
 # WRAPPERS
-
-class ExtendedConnection(graphene.Connection):
-    class Meta:
-        abstract = True
-
-    total_count = graphene.Int()
-    edge_count = graphene.Int()
-
-    def resolve_total_count(root, info, **kwargs):
-        return root.length
-
-    def resolve_edge_count(root, info, **kwargs):
-        return len(root.edges)
-
 
 class RespuestaType(DjangoObjectType):
     class Meta:
@@ -308,19 +294,6 @@ class BlockDetails(graphene.ObjectType):
     status = graphene.String()
 
 
-class RespaldoType(DjangoObjectType):
-
-    id = graphene.ID(source='pk', required=True)
-    class Meta:
-        model = Respaldo
-        filter_fields = {
-            'status': ['exact',],
-            'activo': ['exact',]
-        }
-        interfaces = (graphene.Node, )
-        connection_class = ExtendedConnection
-
-
 class Query(graphene.ObjectType):
     """
         >>> Query (Pregunstas Secretas) Example:
@@ -529,15 +502,6 @@ class Query(graphene.ObjectType):
     all_origen_deposito = graphene.List(OrigenDepositoType,
                                         description="Query all objects from \
                                         model OrigenDeposito")
-
-    all_respaldos = DjangoFilterConnectionField(
-        RespaldoType,
-        token=graphene.String(required=True),
-        ordering=graphene.String(),
-        description=
-        "Query all the objects from the \
-        Respaldo Model"
-    )
 
     # Initiating resolvers for type all Queries
 
@@ -1573,18 +1537,6 @@ class Query(graphene.ObjectType):
 
     def resolve_all_origen_deposito(self, info, **kwargs):
         return OrigenDeposito.objects.all()
-
-    @login_required
-    def resolve_all_respaldos(self, info, ordering=None, **kwargs):
-        user = info.context.user
-        print(user)
-        qs = Respaldo.objects.filter(
-                Q(ordenante=user) |
-                Q(respaldo=user)
-            )
-        if ordering:
-            qs = qs.order_by(ordering)
-        return (qs)
 
 
 class CreateUser(graphene.Mutation):
@@ -3703,6 +3655,7 @@ class UpdateEmail(graphene.Mutation):
         return UpdateEmail(correo=user.email)
 
 
+<<<<<<< HEAD
 class CreateRespaldo(graphene.Mutation):
 
     agregados = graphene.List(RespaldoType)
@@ -3896,6 +3849,8 @@ class DeleteRespaldo(graphene.Mutation):
         )
 
 
+=======
+>>>>>>> 350d82625935cb11e44a7eca34a2709776a4279a
 class Mutation(graphene.ObjectType):
     delete_pregunta_seguridad = BorrarPreguntaSeguridad.Field()
     create_user = CreateUser.Field()
@@ -3938,6 +3893,3 @@ class Mutation(graphene.ObjectType):
     set_perfil_transaccional = SetPerfilTransaccional.Field()
     block_account_emergency = BlockAccountEmergency.Field()
     update_email = UpdateEmail.Field()
-    create_respaldo = CreateRespaldo.Field()
-    confirm_respaldo = ConfirmRespaldo.Field()
-    delete_respaldo = DeleteRespaldo.Field()

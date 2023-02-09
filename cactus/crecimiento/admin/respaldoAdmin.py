@@ -1,5 +1,5 @@
 from django.contrib import admin
-from demograficos.models import Respaldo
+from crecimiento.models import Respaldo
 
 
 class RespaldoAdmin(admin.ModelAdmin):
