@@ -67,7 +67,7 @@ from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 
 from axes.models import AccessAttempt
 
-from demograficos.utils.customerpld import create_pld_customer
+from pld.utils.customerpld import create_pld_customer
 
 db_logger = logging.getLogger("db")
 
