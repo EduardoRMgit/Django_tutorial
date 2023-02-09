@@ -9,10 +9,9 @@ def mandar_email(correo, username):
     receptor = correo
     print(correo, username)
     subject = 'Bienvenido a Inguz'
-    html_message = render_to_string(f'mail/correo.html',
-                                   {'username': username})
+    html_message = render_to_string('mail/correo.html',
+                                    {'username': username})
     body = strip_tags(html_message)
-
 
     send_mail(
         subject,
