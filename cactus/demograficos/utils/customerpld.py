@@ -2,7 +2,6 @@ from pld.models import (Customer,
                         UrlsPLD)
 import json
 import requests
-import logging
 from cactus.settings import (UBCUBO_USER,
                              UBCUBO_PWD,
                              UBCUBO_KEY,
@@ -84,7 +83,8 @@ def create_pld_customer(user):
             no_cliente=content_customer['response_api']['id'],
             riesgo=content_customer[
                 'response_api']['customer_info']['riesgo'],
-            user=user
+            user=user,
+            response=content_customer,
         )
     except Exception as e:
         return e
