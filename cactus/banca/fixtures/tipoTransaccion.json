@@ -225,7 +225,7 @@
   "fields": {
     "codigo": "22",
     "nombre": "Cancelación de cuenta",
-    "tipo": "E",
+    "tipo": "S",
     "salida": false
   }
 },
@@ -235,7 +235,7 @@
   "fields": {
     "codigo": "23",
     "nombre": "Ticket de soporte",
-    "tipo": "E",
+    "tipo": "S",
     "salida": false
   }
 }
