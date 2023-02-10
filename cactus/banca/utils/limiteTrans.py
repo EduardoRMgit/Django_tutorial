@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from decimal import Decimal
 
+
 class LimiteTrans(object):
     def __init__(self, id) -> None:
         """LimitesTrans
