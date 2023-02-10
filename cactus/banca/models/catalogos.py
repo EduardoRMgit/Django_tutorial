@@ -20,9 +20,18 @@ class TipoTransaccion(models.Model):
         ('R', 'Recibida'),
         ('S', 'Especial')
     )
+    MEDIO = (
+        ('E', 'Efectivo'),
+        ('T', 'Transferencia')
+    )
     codigo = models.CharField(max_length=3)
     nombre = models.CharField(max_length=128)
     tipo = models.CharField(
+        max_length=1,
+        choices=TIPO,
+        null=True,
+        blank=True)
+    medio = models.CharField(
         max_length=1,
         choices=TIPO,
         null=True,
