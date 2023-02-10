@@ -382,8 +382,10 @@ class Query(graphene.ObjectType):
     all_nivel = graphene.List(NivelCuentaType)
 
     @login_required
-    def resolve_all_transaccion(self, info, limit=None, offset=None,
-            ordering=None, status=None, **kwargs):
+    def resolve_all_transaccion(
+        self, info, limit=None, offset=None, ordering=None, status=None,
+        **kwargs
+    ):
         user = info.context.user
         qs = user.user_transaccion.all()
 
