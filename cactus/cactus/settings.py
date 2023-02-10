@@ -344,3 +344,4 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 DEFAULT_FROM_EMAIL = 'noreply@inguzmx.com'
+AUTH_PWD = 'pipweonnrzertwfv'
