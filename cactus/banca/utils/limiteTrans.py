@@ -25,7 +25,7 @@ class LimiteTrans(object):
             raise Exception(e)
 
     def trans_mes(self, monto):
-        if monto is None:
+        if self.nivel.trans_mes is None:
             return True
         trans = self.user.user_transaccion.filter(
             tipoTrans__medio="T",
@@ -39,7 +39,7 @@ class LimiteTrans(object):
         return True
 
     def saldo_max(self, monto):
-        if monto is None:
+        if self.nivel.saldo_max is None:
             return True
         if not self.up.saldo_cuenta + monto <= self.nivel.saldo_max:
             return False
