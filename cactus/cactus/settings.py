@@ -13,7 +13,6 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 import os
 import environ
 from datetime import timedelta
-from cactus.utils import cluster_secret
 
 SITE = os.getenv("SITE", "local")
 
@@ -338,9 +337,3 @@ PREFIJO_CUENTA_INGUZ = "6461802180"
 AXES_LOCKOUT_CALLABLE = "cactus.customAuthBackend.lockout"
 
 URL_IMAGEN = "https://phototest420.s3.amazonaws.com/docs/docs/banca/comprobantes/comprobante_ejemplo.jpeg"
-
-
-UBCUBO_USER = cluster_secret('ubcubo-credentials', 'user')
-UBCUBO_PWD = cluster_secret('ubcubo-credentials', 'password')
-UBCUBO_KEY = cluster_secret('ubcubo-credentials', 'key')
-UBCUBO_ENTIDAD = cluster_secret('ubcubo-credentials', 'entity')

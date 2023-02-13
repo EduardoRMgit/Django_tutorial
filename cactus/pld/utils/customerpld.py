@@ -3,10 +3,7 @@ from pld.models import (Customer,
 import json
 import requests
 import logging
-from cactus.settings import (UBCUBO_USER,
-                             UBCUBO_PWD,
-                             UBCUBO_KEY,
-                             UBCUBO_ENTIDAD)
+from cactus.utils import cluster_secret
 
 
 db_logger = logging.getLogger('db')
@@ -19,12 +16,12 @@ def create_pld_customer(user):
 
         headers_auth = {
             'Accept': 'application/json',
-            'X-API-KEY': UBCUBO_KEY
+            'X-API-KEY': cluster_secret('ubcubo-credentials', 'key')
         }
 
         body_auth = {
-            'usr': UBCUBO_USER,
-            'pass': UBCUBO_PWD
+            'usr': cluster_secret('ubcubo-credentials', 'user'),
+            'pass': cluster_secret('ubcubo-credentials', 'password')
         }
 
         res = requests.post(
@@ -37,8 +34,8 @@ def create_pld_customer(user):
         token = content['token']
 
         body = {
-            'usr': UBCUBO_USER,
-            'pass': UBCUBO_PWD,
+            'usr': cluster_secret('ubcubo-credentials', 'user'),
+            'pass': cluster_secret('ubcubo-credentials', 'password'),
             'tipo': 1,
             'apaterno': user.last_name,
             'amaterno': user.Uprofile.apMaterno,
@@ -57,7 +54,7 @@ def create_pld_customer(user):
 
         headers = {
             'Accept': 'application/json',
-            'X-API-KEY': UBCUBO_KEY,
+            'X-API-KEY': cluster_secret('ubcubo-credentials', 'key'),
             'Authorization':  token
         }
 
@@ -73,7 +70,7 @@ def create_pld_customer(user):
             pass
         else:
             Customer.objects.create(
-                id_entidad=UBCUBO_ENTIDAD,
+                id_entidad=cluster_secret('ubcubo-credentials', 'entity'),
                 tipo=1,
                 apaterno=user.last_name,
                 amaterno=user.Uprofile.apMaterno,
