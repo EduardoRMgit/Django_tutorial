@@ -53,7 +53,7 @@ class Transaccion(models.Model):
     fechaAplicacion = models.DateTimeField(null=True, blank=True)
 
     monto = models.DecimalField(
-        max_digits=30, decimal_places=4, null=True, blank=True)
+        max_digits=30, decimal_places=2, null=True, blank=True)
     statusTrans = models.ForeignKey(
         StatusTrans,
         on_delete=models.SET_NULL,
