@@ -39,7 +39,9 @@ class RespaldoType(DjangoObjectType):
         model = Respaldo
         filter_fields = {
             'status': ['exact', ],
-            'activo': ['exact', ]
+            'activo': ['exact', ],
+            'ordenante': ['exact', ],
+            'respaldo': ['exact', ]
         }
         interfaces = (graphene.Node, )
         connection_class = ExtendedConnection
