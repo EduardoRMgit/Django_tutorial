@@ -90,8 +90,8 @@ def create_pld_customer(user):
             user=user,
             response=content_customer,
         )
+        return content_customer
     except Exception as e:
-        return e
         msg_pld = f"[Create Customer] Error al crear customer en ubcubo para" \
                   f"el usuario: {user}"
         db_logger.warning(msg_pld, e)
