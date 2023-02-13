@@ -12,7 +12,7 @@ def cluster_secret(key, value):
         v1 = client.CoreV1Api()
         secret = v1.read_namespaced_secret(key, 'default')
         secret = base64.b64decode(secret.data[value]).decode('utf-8')
-    except Exception as ex:
+    except Exception:
         env = environ.Env()
         secret = env.str(value, 'a')
     return secret
