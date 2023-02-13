@@ -24,7 +24,7 @@ def create_pld_customer(user):
 
         body_auth = {
             'usr': UBCUBO_USER,
-            'pass': UBCUBO_KEY
+            'pass': UBCUBO_PWD
         }
 
         res = requests.post(
@@ -68,30 +68,35 @@ def create_pld_customer(user):
         )
 
         content_customer = json.loads(res2.content)
-        Customer.objects.create(
-            id_entidad=UBCUBO_ENTIDAD,
-            tipo=1,
-            apaterno=user.last_name,
-            amaterno=user.Uprofile.apMaterno,
-            nombre=user.first_name,
-            genero=user.Uprofile.sexo,
-            rfc=user.Uprofile.rfc,
-            curp=user.Uprofile.curp,
-            fecha_nacimiento=user.Uprofile.fecha_nacimiento,
-            pais_nacimiento=user.Uprofile.nacionalidad,
-            nacionalidad=user.Uprofile.nacionalidad,
-            actividad=user.Uprofile.ocupacion,
-            correo_electronico=user.email,
-            actua_cuenta_propia=1,
-            mensaje=content_customer['response_api']['message'],
-            no_cliente=content_customer['response_api']['id'],
-            riesgo=content_customer[
-                'response_api']['customer_info']['riesgo'],
-            user=user,
-            response=content_customer,
-        )
-        return content_customer
+        if content_customer['response_api']['message'] == \
+                            'THE CURP IS ALREADY REGISTERED':
+            pass
+        else:
+            Customer.objects.create(
+                id_entidad=UBCUBO_ENTIDAD,
+                tipo=1,
+                apaterno=user.last_name,
+                amaterno=user.Uprofile.apMaterno,
+                nombre=user.first_name,
+                genero=user.Uprofile.sexo,
+                rfc=user.Uprofile.rfc,
+                curp=user.Uprofile.curp,
+                fecha_nacimiento=user.Uprofile.fecha_nacimiento,
+                pais_nacimiento=user.Uprofile.nacionalidad,
+                nacionalidad=user.Uprofile.nacionalidad,
+                actividad=user.Uprofile.ocupacion,
+                correo_electronico=user.email,
+                actua_cuenta_propia=1,
+                mensaje=content_customer['response_api']['message'],
+                no_cliente=content_customer['response_api']['id'],
+                riesgo=content_customer[
+                    'response_api']['customer_info']['riesgo'],
+                user=user,
+                response=content_customer,
+            )
+            return content_customer
     except Exception as e:
+        raise Exception(e)
         msg_pld = f"[Create Customer] Error al crear customer en ubcubo para" \
                   f"el usuario: {user}"
         db_logger.warning(msg_pld, e)
