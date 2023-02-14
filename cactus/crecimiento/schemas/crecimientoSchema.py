@@ -30,6 +30,9 @@ class PodcastLinkType(DjangoObjectType):
     class Meta:
         model = PodcastLink
 
+    def resolve_imagen(self, info):
+        return (self.imagen.url)
+
 
 class RespaldoType(DjangoObjectType):
 
@@ -71,9 +74,9 @@ class Query(object):
         user = info.context.user
         print(user)
         qs = Respaldo.objects.filter(
-                Q(ordenante=user) |
-                Q(respaldo=user)
-            )
+            Q(ordenante=user) |
+            Q(respaldo=user)
+        )
         if ordering:
             qs = qs.order_by(ordering)
         return (qs)
