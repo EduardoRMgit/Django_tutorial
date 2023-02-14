@@ -238,6 +238,7 @@ class TestPreguntaNipPassword(PasswordTestBase):
                     }
                 }
             }
+        print(res2.data)
         self.assertEqual(res2.data, expected_res2)
         print("   [assert OK] UpdateNip, done")
 
