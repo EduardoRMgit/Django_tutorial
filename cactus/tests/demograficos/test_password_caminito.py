@@ -208,7 +208,9 @@ class TestPreguntaNipPassword(PasswordTestBase):
                           oldNip: $oldNip,
                           newNip: $newNip){
                     userProfile{
-                    apMaterno
+                    user{
+                        username
+                        }
                     }
                 }
             }
@@ -229,15 +231,18 @@ class TestPreguntaNipPassword(PasswordTestBase):
                       "oldNip": nip_temp,
                       "newNip": "1111"}
         res2 = self.client.execute(mutation2, variables2)
+        print(res2.data)
         expected_res2 = {
                 "updateNip": {
                     "userProfile": {
-                        "apMaterno": res2.data['updateNip']['userProfile']
-                                              ['apMaterno']
+                        "user": {
+                            "username": res2.data['updateNip']['userProfile']
+                                                 ['user']['username']
+                        }
                     }
                 }
             }
-        self.assertEqual(res2.data, expected_res2)
+        self.assertEqual(res2.data['updateNip'], expected_res2['updateNip'])
         print("   [assert OK] UpdateNip, done")
 
     # Caminit createUpdatePreguntaForUser + tokenAuthPregunta + recoverPassword
