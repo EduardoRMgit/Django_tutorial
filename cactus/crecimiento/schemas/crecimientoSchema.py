@@ -31,7 +31,7 @@ class PodcastLinkType(DjangoObjectType):
         model = PodcastLink
 
     def resolve_imagen(self, info):
-        return (self.imagen.url)
+        return ((self.imagen.url).split("?")[0])
 
 
 class RespaldoType(DjangoObjectType):
