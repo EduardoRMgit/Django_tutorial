@@ -9,7 +9,6 @@ headers = {
 }
 
 data = {
-    'id_entidad': 5500,
     'tipo': 1,
     'actividad_empresarial': 0,
     'sector_economico': 0,

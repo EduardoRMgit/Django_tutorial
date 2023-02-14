@@ -21,6 +21,7 @@ from django.contrib.auth import authenticate
 from django.http import HttpRequest
 from django.contrib.auth.models import User
 from demograficos.models import GeoLocation, GeoDevice, UserLocation
+from crecimiento.models import Respaldo
 from django.contrib.auth import authenticate
 from django.utils import timezone
 from spei.stpTools import randomString
@@ -66,11 +67,11 @@ from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 
 from axes.models import AccessAttempt
 
+from pld.utils.customerpld import create_pld_customer
 
 db_logger = logging.getLogger("db")
 
 # WRAPPERS
-
 
 class RespuestaType(DjangoObjectType):
     class Meta:
@@ -292,6 +293,7 @@ class BlockDetails(graphene.ObjectType):
     time = graphene.types.datetime.DateTime()
     status = graphene.String()
 
+
 class Query(graphene.ObjectType):
     """
         >>> Query (Pregunstas Secretas) Example:
@@ -450,6 +452,7 @@ class Query(graphene.ObjectType):
                                   ordering=graphene.String(),
                                   es_inguz=graphene.Boolean(),
                                   bloqueado=graphene.Boolean(),
+                                  no_respaldos=graphene.Boolean(),
                                   activo=graphene.Boolean(),
                                   alias_inguz=graphene.String(),
                                   nombre=graphene.String(),
@@ -499,6 +502,7 @@ class Query(graphene.ObjectType):
     all_origen_deposito = graphene.List(OrigenDepositoType,
                                         description="Query all objects from \
                                         model OrigenDeposito")
+
     # Initiating resolvers for type all Queries
 
     def resolve_all_avatars(self, info, **kwargs):
@@ -930,22 +934,38 @@ class Query(graphene.ObjectType):
     @login_required
     def resolve_all_contactos(
             self, info, limit=None, offset=None, ordering=None, es_inguz=None,
-            bloqueado=None, activo=None, alias_inguz=None, nombre=None, **kwargs):
+            bloqueado=None, activo=None, alias_inguz=None,
+            nombre=None, no_respaldos=None, **kwargs):
 
         user = info.context.user
         qs = user.Contactos_Usuario.all()
 
-        if es_inguz is not None:
+        if es_inguz:
             filter = (
                 Q(es_inguz__exact=es_inguz)
             )
             qs = qs.filter(filter)
-        if bloqueado is not None:
+        elif es_inguz is False:
+            filter = (
+                Q(es_inguz__exact=es_inguz)
+            )
+            qs = qs.filter(filter)
+        if bloqueado:
             filter = (
                 Q(bloqueado__exact=bloqueado)
             )
             qs = qs.filter(filter)
-        if activo is not None:
+        elif bloqueado is False:
+            filter = (
+                Q(bloqueado__exact=bloqueado)
+            )
+            qs = qs.filter(filter)
+        if activo:
+            filter = (
+                Q(activo__exact=activo)
+            )
+            qs = qs.filter(filter)
+        elif activo is False:
             filter = (
                 Q(activo__exact=activo)
             )
@@ -955,11 +975,19 @@ class Query(graphene.ObjectType):
                 Q(alias_inguz__icontains=alias_inguz)
             )
             qs = qs.filter(filter)
+        if no_respaldos:
+            respaldos = Respaldo.objects.filter(
+                Q(ordenante=user, activo=True) |
+                Q(respaldo=user, activo=True)
+            )
+            for respaldo in respaldos:
+                qs = qs.filter(filter).exclude(id=respaldo.contacto_id)
         if nombre:
             filter = (
                 Q(nombre__icontains=nombre) |
                 Q(ap_paterno__icontains=nombre) |
-                Q(ap_materno__icontains=nombre)
+                Q(ap_materno__icontains=nombre) |
+                Q(alias_inguz__icontains=nombre)
             )
             qs = qs.filter(filter)
         if ordering:
@@ -2491,11 +2519,12 @@ class UpdateNip(graphene.Mutation):
                         nip_temporal = user.user_nipTemp.filter(
                             activo=True).last().nip_temp
                     except Exception:
-                        raise ValueError("NIP tempral no está activo")
+                        raise ValueError("NIP temporal no está activo")
                     if nip_temporal == old_nip:
                         UP.set_password(new_nip)
                         UP.statusNip = 'A'
                         UP.enrolamiento = True
+                        create_pld_customer(user)
                     else:
                         raise ValueError('nip no coincide con el temporal')
             elif (UP.statusNip == 'A'):
@@ -2690,8 +2719,9 @@ class VerifyAddContactos(graphene.Mutation):
                         nombre = usuario_inguz.first_name.strip()
                         ap_paterno = usuario_inguz.last_name.strip()
                         ap_materno = usuario_inguz.Uprofile.apMaterno.strip()
-                        nombre_completo = str(nombre) + " " + str(
-                            ap_paterno) + " " + str(ap_materno)
+                        nombre_completo = (
+                            usuario_inguz.Uprofile.get_nombre_completo()
+                        )
                         contacto = Contacto.objects.create(
                             nombre=nombre,
                             ap_paterno=ap_paterno,
@@ -3266,7 +3296,7 @@ class BlockAccountEmergency(graphene.Mutation):
         return BlockAccountEmergency(
                 details=BlockDetails(
                     username=user.username,
-                    alias=up.alias,
+                    alias=up.get_nombre_completo(),
                     clabe=up.cuentaClabe,
                     time=date_blocked,
                     status=status

@@ -2,8 +2,6 @@
 from django.db import models
 
 from django.contrib.auth.models import User
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 
 
 # Catalogo de documentos adjuntos
@@ -83,21 +81,6 @@ class DocAdjunto(models.Model):
 
     def __str__(self):
         return "{} de {}".format(self.tipo, self.user)
-
-
-# Guarda la imagen subida a algun usuario para verla directo desde user profile
-@receiver(post_save, sender=DocAdjunto)
-def imagen(sender, instance, created, **kwargs):
-    if created:
-        user_ = User.objects.get(id=instance.user_id)
-        uprofile = user_.Uprofile
-        if instance.tipo_id == 1:
-            uprofile.ineCaptura = instance.imagen
-        elif instance.tipo_id == 2:
-            uprofile.ineReversoCaptura = instance.imagen
-        elif instance.tipo_id == 3:
-            uprofile.comprobanteDomCaptura = instance.imagen
-        uprofile.save()
 
 
 class DocExtraction(models.Model):

@@ -13,7 +13,7 @@ export MIGRATIONS=true
 export CUSTOM_SHELL=false
 
 # Load the fixtures
-export LOADDATA=false
+export LOADDATA=true
 
 # Upload the static files to a bucket
 export STATIC=false
