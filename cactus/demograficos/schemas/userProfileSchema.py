@@ -67,6 +67,7 @@ from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 
 from axes.models import AccessAttempt
 
+from pld.utils.customerpld import create_pld_customer
 
 db_logger = logging.getLogger("db")
 
@@ -2518,11 +2519,12 @@ class UpdateNip(graphene.Mutation):
                         nip_temporal = user.user_nipTemp.filter(
                             activo=True).last().nip_temp
                     except Exception:
-                        raise ValueError("NIP tempral no está activo")
+                        raise ValueError("NIP temporal no está activo")
                     if nip_temporal == old_nip:
                         UP.set_password(new_nip)
                         UP.statusNip = 'A'
                         UP.enrolamiento = True
+                        create_pld_customer(user)
                     else:
                         raise ValueError('nip no coincide con el temporal')
             elif (UP.statusNip == 'A'):

@@ -4,7 +4,7 @@
 export IMAGE_DJANGO=true
 
 # Also build the python packages
-export IMAGE_PIP=false
+export IMAGE_PIP=true
 
 # Run the migrate command.
 export MIGRATIONS=true
@@ -13,7 +13,7 @@ export MIGRATIONS=true
 export CUSTOM_SHELL=false
 
 # Load the fixtures
-export LOADDATA=false
+export LOADDATA=true
 
 # Upload the static files to a bucket
 export STATIC=false
