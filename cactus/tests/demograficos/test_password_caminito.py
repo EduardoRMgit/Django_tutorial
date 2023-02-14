@@ -232,6 +232,7 @@ class TestPreguntaNipPassword(PasswordTestBase):
                       "oldNip": nip_temp,
                       "newNip": "1111"}
         res2 = self.client.execute(mutation2, variables2)
+        print(res2)
         expected_res2 = {
                 "updateNip": {
                     "userProfile": {
