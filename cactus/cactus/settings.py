@@ -91,6 +91,7 @@ INSTALLED_APPS = [
     'scotiabank.apps.ScotiabankConfig',
     'renapo.apps.RenapoConfig',
     'dapp.apps.DappConfig',
+    'crecimiento.apps.CrecimientoConfig',
 ]
 
 if (PROD):
@@ -320,6 +321,7 @@ elif SITE == "test":
     idle_time = 5
     AXES_FAILURE_LIMIT = 5
 elif SITE == "prod":
+    AWS_STORAGE_BUCKET_NAME = 'inguz-prod'
     idle_time = 5
     AXES_FAILURE_LIMIT = 5
 

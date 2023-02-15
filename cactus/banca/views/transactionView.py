@@ -27,6 +27,7 @@ from spei.models import StpTransaction
 from banca.models import Transaccion, StatusTrans, SaldoReservado
 from banca.utils.comprobantesPng import CompTrans
 from banca.serializers import DetailSerializer, EstadoSerializer
+from banca.utils.limiteTrans import LimiteTrans
 from demograficos.models import UserProfile
 
 
@@ -158,6 +159,7 @@ class TransactionList(generics.CreateAPIView):
         """
 
         cuenta_clabe = request.data['cuentaBeneficiario']
+        monto = float(request.data['monto'])
 
         try:
             profile = UserProfile.objects.get(
@@ -170,8 +172,19 @@ class TransactionList(generics.CreateAPIView):
             return Response({"mensaje": "devolver", "id": 1},
                             status=status.HTTP_400_BAD_REQUEST)
 
+        valida_limite = LimiteTrans(profile.user.id)
+
         if profile.cuenta_clabe_bloqueada:
             msg_logg = "{} cuenta bloqueada: {}".format(
+                "[STP sendabono] (post)",
+                cuenta_clabe)
+            db_logger.info(msg_logg)
+            return Response({"mensaje": "devolver", "id": 2},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        elif not valida_limite.saldo_max(monto) or \
+                not valida_limite.trans_mes(monto):
+            msg_logg = "{} Límte transaccional superado: {}".format(
                 "[STP sendabono] (post)",
                 cuenta_clabe)
             db_logger.info(msg_logg)

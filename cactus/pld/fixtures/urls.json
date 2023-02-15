@@ -10,14 +10,14 @@
  "model": "pld.UrlsPLD",
  "pk": 2,
  "fields": {
-   "urls": "https://gt-servicios.com/propld/customersapi/customer"
+   "urls": "https://gt-servicios.com/propld/5501/V1/customersapi/customer"
  }
 },
 {
   "model": "pld.UrlsPLD",
   "pk": 3,
   "fields": {
-    "urls": "https://gt-servicios.com/propld/movementsapi/movements"
+    "urls": "https://gt-servicios.com/propld/5501/V1/movementsapi/movements"
   }
 },
 {
@@ -31,7 +31,7 @@
   "model": "pld.UrlsPLD",
   "pk": 5,
   "fields": {
-    "urls": "https://gt-servicios.com/propld/keys/generateToken"
+    "urls": "https://gt-servicios.com/propld/5501/V1/keys/generateToken"
   }
 }
 ]

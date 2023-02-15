@@ -137,6 +137,8 @@ class Customer(models.Model):
         blank=True,
         null=True,
         related_name='Ucustomer')
+    riesgo = models.CharField(max_length=255, null=True, blank=True)
+    response = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return str(self.user)

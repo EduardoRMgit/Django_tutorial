@@ -272,13 +272,6 @@ class UserProfile(AbstractBaseUser):
         blank=True,
         null=True,
         verbose_name='Pais de nacimiento')
-    ineCaptura = models.ImageField(upload_to='docs/ine', blank=True, null=True)
-    ineReversoCaptura = models.ImageField(upload_to='docs/ineReverso',
-                                          blank=True,
-                                          null=True)
-    comprobanteDomCaptura = models.ImageField(upload_to='docs/comprobanteDom',
-                                              blank=True,
-                                              null=True)
     indiceDisponible = models.ForeignKey(
         IndiceDisponible,
         on_delete=models.SET_NULL,
@@ -310,7 +303,6 @@ class UserProfile(AbstractBaseUser):
     id_dde = models.IntegerField(null=True, blank=True)
     fechaCreacion_dde = models.DateTimeField(null=True, blank=True)
     confirmacion_dde = models.BooleanField(default=False)
-    saldo_dde = models.FloatField(null=True, blank=True, default=0)
 
     validacion_telefono = models.BooleanField(default=False)
     validacion_perfil = models.BooleanField(default=False)
@@ -352,6 +344,17 @@ class UserProfile(AbstractBaseUser):
 
     def __str__(self):
         return str(self.user.username)
+
+    def get_nombre_completo(self):
+        x = []
+        if self.user.first_name:
+            x.append(self.user.first_name)
+        if self.user.last_name:
+            x.append(self.user.last_name)
+        if self.apMaterno:
+            x.append(self.apMaterno)
+        full_name = " ".join(x)
+        return full_name
 
     def reset_login_attempts(self):
         """
@@ -454,6 +457,11 @@ class UserProfile(AbstractBaseUser):
             folio_stp = FolioStp.objects.last()
             folio = folio_stp.fol_dispatch()
             cuenta_clabe = CuentaClabe(folio_stp.fol_dispatch())
+            while UserProfile.objects.filter(
+                    cuentaClabe=cuenta_clabe).count() > 0:
+                folio = folio_stp.fol_dispatch()
+                cuenta_clabe = CuentaClabe(folio_stp.fol_dispatch())
+
             cuenta = CuentaPersonaFisica.objects.create(
                 nombre=first_name,
                 apellido_paterno=last_name,
