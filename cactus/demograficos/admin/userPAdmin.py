@@ -19,8 +19,7 @@ from demograficos.models import (UserProfile,
                                  PerfilTransaccionalDeclarado)
 from banca.models import Transaccion
 from pld.models import (Customer,
-                        Contrato,
-                        Movimiento)
+                        Contrato)
 from .cambio_password import PasswordResetUserAdmin
 from django import forms
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
@@ -100,14 +99,6 @@ class UserPLDContratoInline(admin.StackedInline):
     verbose_name_plural = 'Contrato (UBCUBO)'
     fk_name = 'user'
 
-
-class UserPLDMovimientoInline(admin.TabularInline):
-    model = Movimiento
-    can_delete = False
-    verbose_name_plural = 'Movimiento (PLD)'
-    fk_name = 'user'
-
-
 class UserTransaccionInline(admin.TabularInline):
     model = Transaccion
     can_delete = False
@@ -162,7 +153,6 @@ class UserProfileAdmin(ExportActionMixin, PasswordResetUserAdmin):
         UserTelefonoInline,
         UserPLDCustomerInline,
         UserPLDContratoInline,
-        UserPLDMovimientoInline,
         UserTransaccionInline,
         UserComportamientoDiarioInline,
         UserComportamientoMensualInline,
@@ -298,7 +288,6 @@ class ClienteAdmin(UserProfileAdmin):
         UserTelefonoInline,
         UserPLDCustomerInline,
         UserPLDContratoInline,
-        UserPLDMovimientoInline,
         UserTransaccionInline,
         UserComportamientoDiarioInline,
         UserComportamientoMensualInline,

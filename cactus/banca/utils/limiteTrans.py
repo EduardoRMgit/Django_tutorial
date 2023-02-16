@@ -65,7 +65,7 @@ class LimiteTrans(object):
             fechaValor__year=self.today.year,
             fechaValor__month=self.today.month,
             fechaValor__day=self.today.day,
-            statusTrans__nombre="exito"
+            statusTrans__nombre=["exito", "esperando respuesta"]
         )
         total = sum([x.monto for x in trans]) + Decimal(monto)
         if not total <= self.nivel.dep_efectivo_dia:
@@ -79,7 +79,7 @@ class LimiteTrans(object):
             fechaValor__year=self.today.year,
             fechaValor__month=self.today.month,
             fechaValor__day=self.today.day,
-            statusTrans__nombre="exito"
+            statusTrans__nombre__in=["exito", "esperando respuesta"]
         )
         total = sum([x.monto for x in trans]) + Decimal(monto)
         if not total <= self.nivel.ret_efectivo_dia:

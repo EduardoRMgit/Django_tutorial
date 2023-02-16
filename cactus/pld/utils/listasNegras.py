@@ -28,9 +28,6 @@ def get_token():
 
 
 def listaNegra(data):
-    # url = 'https://gt-servicios.com/propld/listsapi/searchlist'
-    url = UrlsPLD.objects.get(id=4)
-
     url = "https://gt-servicios.com/prolistas/busquedaapi/searchperson"
     token = get_token()
     headers = {
