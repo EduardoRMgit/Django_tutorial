@@ -3,7 +3,7 @@ from pld.models import UrlsPLD
 
 
 class UrlsPLDAdmin(admin.ModelAdmin):
-    
+
     fields = [f.name for f in UrlsPLD._meta.fields]
     fields.remove("id")
     list_display = fields

@@ -43,8 +43,8 @@ def create_pld_movement(trans):
             'usr': cluster_secret('ubcubo-credentials', 'user'),
             'pass': cluster_secret('ubcubo-credentials', 'password'),
             'curp': trans.user.Uprofile.curp,
-            'origen_pago': origen_pago,
-            'tipo_cargo': tipo_cargo,
+            'origen_pago': "aaaaaaaaaaaaaaaaaaaa",
+            'tipo_cargo': "aaaaaaaaaaaaaaaaaaaa",
             'tipo_moneda': "MXN",
             'monto_pago': trans.monto,
             'fecha_pago': trans.fechaValor.strftime("%Y/%m/%d"),
@@ -52,7 +52,7 @@ def create_pld_movement(trans):
             'created_at': timezone.now().strftime("%Y/%m/%d"),
             'payment_made_by': "MC",
             'cuentaclabeB': trans.user.Uprofile.cuentaClabe,
-            'cuentaclabeS': cuentaclabeS,
+            'cuentaclabeS': "aaaaaaaaaaaaaaaaaaaa",
             'concepto': trans.concepto,
             'usuario': trans.user.Ucustomer.no_cliente
         }
@@ -75,8 +75,8 @@ def create_pld_movement(trans):
             customer=trans.user.Ucustomer,
             transaccion=trans,
             curp=trans.user.Uprofile.curp,
-            origen_pago=origen_pago,
-            tipo_cargo=tipo_cargo,
+            origen_pago="aaaaaaaaaaaaaaaaaaaa",
+            tipo_cargo="aaaaaaaaaaaaaaaaaaaa",
             tipo_moneda="MXN",
             monto_pago=trans.monto,
             fecha_pago=trans.fechaValor("%Y/%m/%d"),
@@ -84,10 +84,10 @@ def create_pld_movement(trans):
             created_at=timezone.now().strftime("%Y/%m/%d"),
             payment_made_by="MC",
             cuentaclabeB=trans.user.Uprofile.cuentaClabe,
-            cuentaclabeS=cuentaclabeS,
+            cuentaclabeS="aaaaaaaaaaaaaaaaaaaa",
             usuario_pld=trans.user.Ucustomer.no_cliente,
             concepto=trans.concepto
-    )
+        )
         return content_customer
     except Exception as e:
         msg_pld = f"[Create Customer] Error al crear movement en ubcubo" \

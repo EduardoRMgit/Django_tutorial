@@ -99,6 +99,7 @@ class UserPLDContratoInline(admin.StackedInline):
     verbose_name_plural = 'Contrato (UBCUBO)'
     fk_name = 'user'
 
+
 class UserTransaccionInline(admin.TabularInline):
     model = Transaccion
     can_delete = False

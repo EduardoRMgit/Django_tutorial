@@ -1,7 +1,6 @@
 import logging
 import requests
 import json
-from pld.models.urls import UrlsPLD
 
 
 db_logger = logging.getLogger('db')
