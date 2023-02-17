@@ -13,11 +13,11 @@ def create_pld_customer(user):
     if SITE == 'local':
         return
     elif SITE == 'prod':
-        url_customer = UrlsPLD.objects.get(nombre="customer")
-        url_auth = UrlsPLD.objects.get(nombre="generateToken")
+        url_customer = UrlsPLD.objects.get(nombre="customer").urls
+        url_auth = UrlsPLD.objects.get(nombre="generateToken").urls
     else:
-        url_customer = UrlsPLD.objects.get(nombre="customer_sandbox")
-        url_auth = UrlsPLD.objects.get(nombre="generateToken_sandbox")
+        url_customer = UrlsPLD.objects.get(nombre="customer_sandbox").urls
+        url_auth = UrlsPLD.objects.get(nombre="generateToken_sandbox").urls
     try:
         headers_auth = {
             'Accept': 'application/json',
@@ -68,6 +68,9 @@ def create_pld_customer(user):
             data=body,
             headers=headers
         )
+        if res2.status_code != 200:
+            print(res2.status_code)
+            return
 
         content_customer = json.loads(res2.content)
         if content_customer['response_api']['message'] == \

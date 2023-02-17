@@ -98,6 +98,7 @@ def succesful_transaction_created(sender, instance, created, **kwargs):
     from contabilidad.balanza import balanza
     exito = StatusTrans.objects.get(nombre="exito")
     if created and instance.statusTrans == exito:
+        create_pld_movement(instance)
         tipo_trans = int(instance.tipoTrans.codigo)
         if tipo_trans in [1, 2, 3, 6, 18, 19]:
             balanza(instance, tipo_trans)
