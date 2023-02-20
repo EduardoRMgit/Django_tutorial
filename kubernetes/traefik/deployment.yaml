@@ -61,8 +61,8 @@ spec:
             - --providers.file.directory=/config
 
             # Esta es la parte para hacer tls con Let's encrypt
-            - --certificatesresolvers.default.acme.tlschallenge=true
-            - --certificatesresolvers.default.acme.email=mjaramillo@inguzmx.com
+            - --certificatesresolvers.default.acme.tlschallenge
+            - --certificatesresolvers.default.acme.email=farza@invercratos.com
             - --certificatesresolvers.default.acme.storage=acme.json
 
             # Tracing

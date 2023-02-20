@@ -4,6 +4,7 @@ http:
       basicAuth:
         users:
           - test:$apr1$YmN5e0XU$.MImON.h26fKUoRIsQnmH/
+          - aldo:$apr1$maNHUzQR$sfb/dwhtYTk3K6kYtqs861
 
     redirect:
       redirectScheme:
