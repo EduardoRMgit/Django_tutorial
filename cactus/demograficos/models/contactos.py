@@ -1,8 +1,13 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 
 class Contacto(models.Model):
+
+    class Meta():
+        verbose_name_plural = 'Lista de Contactos'
+
     OK = 'O'
     PEP = 'P'
     LISTANEGRA = 'N'
@@ -18,6 +23,16 @@ class Contacto(models.Model):
     ap_paterno = models.CharField(max_length=30, default='')
     ap_materno = models.CharField(max_length=30, default='')
     banco = models.CharField(max_length=69)
+    alias_inguz = models.CharField(
+        max_length=30,
+        blank=True,
+        null=True
+    )
+    avatar_url = models.URLField(
+        max_length=600,
+        null=True,
+        blank=True
+    )
     clabe = models.CharField(max_length=18)
     activo = models.BooleanField(default=True)
     verificacion = models.CharField(
@@ -30,12 +45,21 @@ class Contacto(models.Model):
         related_name='Contactos_Usuario',
         on_delete=models.CASCADE,
     )
+    frecuencia = models.PositiveSmallIntegerField(default=0)
+    es_inguz = models.BooleanField(
+        default=True,
+        null=True,
+        blank=True)
+    bloqueado = models.BooleanField(
+        default=False,
+        null=True,
+        blank=True
+    )
+    fecha = models.DateTimeField(
+        default=timezone.now)
 
     def __str__(self):
         return self.nombre
-
-    class Meta():
-        verbose_name_plural = 'Lista de Contactos'
 
 
 # TODO ARREGLAR ESTA CHINGADERA PARA QUE SI FUNCIONE

@@ -30,5 +30,6 @@
     {"model": "demograficos.entidadfed", "pk": 29, "fields": {"entidad": "Tlaxcala"}},
     {"model": "demograficos.entidadfed", "pk": 30, "fields": {"entidad": "Veracruz"}},
     {"model": "demograficos.entidadfed", "pk": 31, "fields": {"entidad": "Yucatán"}},
-    {"model": "demograficos.entidadfed", "pk": 32, "fields": {"entidad": "Zacatecas"}}
+    {"model": "demograficos.entidadfed", "pk": 32, "fields": {"entidad": "Zacatecas"}},
+    {"model": "demograficos.entidadfed", "pk": 33, "fields": {"entidad": "Otro"}}
 ]

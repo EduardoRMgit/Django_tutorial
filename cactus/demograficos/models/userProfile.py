@@ -10,6 +10,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from banca.models.productos import Productos
 from banca.models.entidades import CodigoConfianza
+from banca.models import NivelCuenta
 from demograficos.models import Direccion
 
 
@@ -101,7 +102,16 @@ def uProfilenuller(klass):
 
 class Avatar(models.Model):
 
-    avatar_img = models.ImageField(upload_to='docs/avatars',
+    opciones_genero = (
+            ("M", "Mujer"),
+            ("H", "Hombre"),
+            ("O", "Otro")
+    )
+    genero = models.CharField(null=True,
+                              blank=True,
+                              max_length=15,
+                              choices=opciones_genero)
+    avatar_img = models.ImageField(upload_to='avatars',
                                    blank=True,
                                    null=True)
     name = models.CharField(max_length=128,
@@ -111,6 +121,14 @@ class Avatar(models.Model):
     description = models.CharField(max_length=128,
                                    blank=True,
                                    null=True)
+
+    activo = models.BooleanField(default=True)
+
+    avatar_min = models.ImageField(
+        upload_to='avatars',
+        blank=True,
+        verbose_name="Avatar miniatura",
+        null=True)
 
     def __str__(self):
         return str(self.name)
@@ -194,6 +212,21 @@ class UserProfile(AbstractBaseUser):
         on_delete=models.CASCADE,
         related_name='Uprofile'
     )
+
+    nivel_cuenta = models.ForeignKey(
+        NivelCuenta,
+        default=1,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL
+    )
+
+    alias = models.CharField(
+        max_length=30,
+        null=True,
+        blank=True
+    )
+
     blocked_reason = models.CharField(
         max_length=1,
         choices=BLOCKED_REASONS,
@@ -235,6 +268,10 @@ class UserProfile(AbstractBaseUser):
     )
     autorizado = models.BooleanField(default=False)
     country = CountryField(blank=True, null=True)
+    pais_origen_otro = models.CharField(max_length=50,
+        blank=True,
+        null=True,
+        verbose_name='Pais de nacimiento')
     ineCaptura = models.ImageField(upload_to='docs/ine', blank=True, null=True)
     ineReversoCaptura = models.ImageField(upload_to='docs/ineReverso',
                                           blank=True,
@@ -300,15 +337,32 @@ class UserProfile(AbstractBaseUser):
     deOmision = models.CharField(max_length=255, null=True, blank=True)
     is_active = models.BooleanField(default=True)
     avatar = models.ForeignKey(Avatar,
-                               on_delete=models.CASCADE,
+                               on_delete=models.SET_NULL,
                                null=True,
                                blank=True)
+    avatar_url = models.URLField(
+        max_length=600,
+        null=True,
+        blank=True
+    )
+    enrolamiento = models.BooleanField(default=False)
 
     class Meta():
         verbose_name_plural = 'Perfil del usuario'
 
     def __str__(self):
         return str(self.user.username)
+
+    def get_nombre_completo(self):
+        x = []
+        if self.user.first_name:
+            x.append(self.user.first_name)
+        if self.user.last_name:
+            x.append(self.user.last_name)
+        if self.apMaterno:
+            x.append(self.apMaterno)
+        full_name = " ".join(x)
+        return full_name
 
     def reset_login_attempts(self):
         """
@@ -411,6 +465,11 @@ class UserProfile(AbstractBaseUser):
             folio_stp = FolioStp.objects.last()
             folio = folio_stp.fol_dispatch()
             cuenta_clabe = CuentaClabe(folio_stp.fol_dispatch())
+            while UserProfile.objects.filter(
+                    cuentaClabe=cuenta_clabe).count() > 0:
+                folio = folio_stp.fol_dispatch()
+                cuenta_clabe = CuentaClabe(folio_stp.fol_dispatch())
+
             cuenta = CuentaPersonaFisica.objects.create(
                 nombre=first_name,
                 apellido_paterno=last_name,
@@ -725,7 +784,7 @@ class NipTemporal(models.Model):
 
     def save(self, check=None, *args, **kwargs):
         if check is None:
-            self.nip_temp = randint(100000, 999999)
+            self.nip_temp = randint(1000, 9999)
             super().save(*args, **kwargs)
 
     def __str__(self):

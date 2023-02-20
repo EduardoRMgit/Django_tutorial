@@ -410,28 +410,22 @@ class setDireccion(graphene.Mutation):
 
     class Arguments:
         token = graphene.String(required=True)
-        id = graphene.Int()
         edit = graphene.Boolean()
-        linea1 = graphene.String()
-        linea2 = graphene.String()
+        calle = graphene.String()
         num_int = graphene.String()
         num_ext = graphene.String()
         codPostal = graphene.String()
         tipo_direccion = graphene.Int()
-        ciudad = graphene.String()
-        telefono = graphene.String()
         colonia = graphene.String()
-        email = graphene.String()
-        delegMunicipio = graphene.String()
+        alcaldiaMunicipio = graphene.String()
         estado = graphene.Int()
-        country = graphene.String()
+        ciudad = graphene.String()
 
     def mutate(
-        self, info, token, edit=False, id=None, linea1=None, linea2=None,
-        codPostal=None, tipo_direccion=1, ciudad=None, delegMunicipio=None,
-        num_int=None, num_ext=None, telefono=None, colonia=None, email=None,
-        estado=1, country="MX"
-            ):
+            self, info, token, edit=False, calle=None,
+            codPostal=None, tipo_direccion=1, ciudad=None,
+            alcaldiaMunicipio=None, num_int=None, num_ext=None, colonia=None,
+            estado=None, country='MX'):
 
         try:
             entidad = EntidadFed.objects.get(pk=estado)
@@ -442,17 +436,13 @@ class setDireccion(graphene.Mutation):
         except Exception:
             tipo_direccion = TipoDireccion.objects.get(pk=1)
 
-        dir_dict = {'linea1': linea1, 'linea2': linea2, 'codPostal': codPostal,
-                    'tipo_direccion': tipo_direccion, 'ciudad': ciudad,
-                    'delegMunicipio': delegMunicipio, 'num_int': num_int,
-                    'num_ext': num_ext, 'telefono': telefono,
+        dir_dict = {'codPostal': codPostal, 'tipo_direccion': tipo_direccion,
+                    'ciudad': ciudad, 'delegMunicipio': alcaldiaMunicipio,
+                    'num_int': num_int, 'num_ext': num_ext,
                     'colonia': colonia, 'entidadFed': entidad,
                     'country': country}
         user = info.context.user
         if not user.is_anonymous:
-            if email:
-                user.email = email
-                user.save()
             dirs = user.user_direccion.filter(activo=True)
             if edit:
                 try:
@@ -480,18 +470,15 @@ class setDireccion(graphene.Mutation):
 
             direccion = (Direccion.
                          objects.create(
-                                        linea1=linea1,
-                                        linea2=linea2,
+                                        calle=calle,
                                         num_int=num_int,
                                         num_ext=num_ext,
                                         codPostal=codPostal,
                                         ciudad=ciudad,
-                                        telefono=telefono,
-                                        delegMunicipio=delegMunicipio,
+                                        delegMunicipio=alcaldiaMunicipio,
                                         user=user,
                                         entidadFed=entidad,
                                         colonia=colonia,
-                                        country=country,
                                         tipo_direccion=tipo_direccion,
                                         activo=True))
             message = InfoValidator.setCheckpoint(user=user, concepto='DIR',
@@ -538,6 +525,49 @@ class deleteDireccion(graphene.Mutation):
         return deleteDireccion(direccion=dir)
 
 
+class CreateDireccion(graphene.Mutation):
+
+    direccion = graphene.Field(DireccionType)
+
+    class Arguments:
+
+        token = graphene.String(required=True)
+        nip = graphene.String(required=True)
+        calle = graphene.String()
+        num_int = graphene.String()
+        num_ext = graphene.String()
+        codPostal = graphene.String()
+        colonia = graphene.String()
+        alcaldiaMunicipio = graphene.String()
+        estado = graphene.String()
+
+    def mutate(self, info, token, nip, calle=None, codPostal=None,
+               num_int=None, num_ext=None, colonia=None,
+               alcaldiaMunicipio=None, estado=None):
+
+        user = info.context.user
+        if user.is_anonymous:
+            raise Exception('User does not exist')
+        if not user.Uprofile.check_password(nip):
+            raise Exception('Nip incorrecto')
+        direccion = Direccion.objects.create(
+            calle=calle,
+            num_int=num_int,
+            num_ext=num_ext,
+            codPostal=codPostal,
+            delegMunicipio=alcaldiaMunicipio,
+            colonia=colonia,
+            user=user,
+            estado=estado,
+            activo=True)
+        Direccion.objects.filter(
+            activo=True, user=user).update(activo=False)
+        direccion.activo = True
+        direccion.save()
+        return CreateDireccion(direccion=direccion)
+
+
 class Mutation(graphene.ObjectType):
     set_direccion = setDireccion.Field()
     delete_direccion = deleteDireccion.Field()
+    create_direccion = CreateDireccion.Field()

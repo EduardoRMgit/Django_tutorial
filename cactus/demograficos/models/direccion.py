@@ -82,9 +82,9 @@ class Direccion(models.Model):
     num_int = models.CharField(max_length=30, blank=True, null=True)
     num_ext = models.CharField(max_length=30, blank=True, null=True)
     codPostal = models.CharField(max_length=6, blank=True, null=True)
-    colonia = models.CharField(max_length=30, blank=True, null=True)
+    colonia = models.CharField(max_length=80, blank=True, null=True)
     ciudad = models.CharField(max_length=50, blank=True, null=True)
-    delegMunicipio = models.CharField(max_length=50, blank=True, null=True)
+    delegMunicipio = models.CharField(max_length=100, blank=True, null=True)
     fechaCreacion = models.DateTimeField(default=timezone.now)
     telefono = models.CharField(max_length=30, blank=True, null=True)
     # Para saber la fecha activa y valida.
@@ -108,6 +108,11 @@ class Direccion(models.Model):
         on_delete=models.SET_NULL,
         blank=True,
         null=True
+    )
+    estado = models.CharField(
+        max_length=50,
+        null=True,
+        blank=True
     )
 
     class Meta:
