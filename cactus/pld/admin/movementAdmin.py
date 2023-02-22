@@ -5,17 +5,28 @@ from pld.models import Movimiento
 class MovimientoAdmin(admin.ModelAdmin):
     list_display = (
         'transaccion',
+        "get_customer",
         'curp',
-        'origen_pago',
-        'tipo_cargo',
-        'tipo_cargo_e',
+        'get_origen_pago',
+        'get_tipo_cargo',
         'monto_pago',
         'tipo_moneda',
         'fecha_pago',
-        'payment_made_by',
-        'status_code',
         'mensaje',
+        'alertas'
     )
+
+    def get_tipo_cargo(self, obj):
+        return ("Enviado" if obj.tipo_cargo == 1 else "Recibido")
+    get_tipo_cargo.short_description = 'Tipo cargo'
+
+    def get_customer(self, obj):
+        return (obj.customer.no_cliente if obj.customer else "-")
+    get_customer.short_description = 'Customer'
+
+    def get_origen_pago(self, obj):
+        return ("Efectivo" if obj.origen_pago == 1 else "Transferencia")
+    get_origen_pago.short_description = 'Origen pago'
 
     def has_delete_permission(self, request, obj=None):
         return False

@@ -32,8 +32,11 @@ class Movimiento(models.Model):
     payment_made_by = models.CharField(max_length=45, null=True)
     cuentaclabeB = models.CharField(max_length=20, null=True)
     cuentaclabeS = models.CharField(max_length=20, null=True)
+    concepto = models.CharField(null=True, blank=True, max_length=100)
     status_code = models.CharField(max_length=3, blank=True, null=True)
     mensaje = models.CharField(max_length=420, null=True, blank=True)
+    alertas = models.CharField(null=True, blank=True, max_length=100)
+    response = models.TextField(null=True, blank=True)
 
     def __str__(self):
         return self.curp

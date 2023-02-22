@@ -59,6 +59,7 @@ def create_pld_customer(user):
 
         headers = {
             'Accept': 'application/json',
+            'Content-Type': 'application/x-www-form-urlencoded',
             'X-API-KEY': cluster_secret('ubcubo-credentials', 'key'),
             'Authorization': token
         }
@@ -68,15 +69,16 @@ def create_pld_customer(user):
             data=body,
             headers=headers
         )
+        content_customer = json.loads(res2.content)
+
         if res2.status_code != 200:
-            print(res2.status_code)
+            db_logger.warning(
+                f"[Create Customer]: {user} / {content_customer}"
+            )
             return
 
-        content_customer = json.loads(res2.content)
-        if content_customer['response_api']['message'] == \
+        if not content_customer['response_api']['message'] == \
                             'THE CURP IS ALREADY REGISTERED':
-            pass
-        else:
             Customer.objects.create(
                 id_entidad=cluster_secret('ubcubo-credentials', 'entity'),
                 tipo=1,
@@ -99,9 +101,7 @@ def create_pld_customer(user):
                 user=user,
                 response=content_customer,
             )
-            return content_customer
     except Exception as e:
         msg_pld = f"[Create Customer] Error al crear customer en ubcubo" \
-                  f"para el usuario: {user}"
-        db_logger.warning(msg_pld, e)
-        raise Exception(e)
+                  f"para el usuario: {user}. Error: {e}"
+        db_logger.warning(msg_pld)

@@ -12,8 +12,8 @@ db_logger = logging.getLogger('db')
 
 def create_pld_movement(trans):
 
-    # if SITE == 'local':
-    #     return
+    if SITE == 'local':
+        return
 
     if SITE == 'prod':
         url_transaction = UrlsPLD.objects.get(nombre="movements").urls
@@ -54,7 +54,7 @@ def create_pld_movement(trans):
         body = {
             'usr': cluster_secret('ubcubo-credentials', 'user'),
             'pass': cluster_secret('ubcubo-credentials', 'password'),
-            'curp': "CARD870628MTCSCN00",  # trans.user.Uprofile.curp,
+            'curp': trans.user.Uprofile.curp,
             'origen_pago': origen_pago,
             'tipo_cargo': tipo_cargo,
             'tipo_moneda': "MXN",
@@ -68,7 +68,7 @@ def create_pld_movement(trans):
 
         headers = {
             'Accept': 'application/json',
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/x-www-form-urlencoded',
             'X-API-KEY': cluster_secret('ubcubo-credentials', 'key'),
             'Authorization': token
         }
@@ -79,18 +79,21 @@ def create_pld_movement(trans):
             headers=headers
         )
 
-        print(res2.request.method)
-        print(res2.request.headers)
-        print(res2.request.body)
-        print(res2.request.url)
-
-        if res2.status_code != 200:
-            print(res2.status_code)
-            return
-
         content_movement = json.loads(res2.content)
 
-        print(content_movement)
+        if res2.status_code != 200:
+            db_logger.warning(
+                f"[Create PLD Movement]: {trans.user} / {content_movement}"
+            )
+            return
+
+        alerta = content_movement['response_api'][
+            'alertas'] if content_movement[
+                'response_api']['alertas'] else None,
+
+        if alerta:
+            msg_pld = f"[ALERTAS PLD]: {alerta} para el usuario: {trans.user}"
+            db_logger.info(msg_pld)
 
         Movimiento.objects.create(
             customer=trans.user.Ucustomer,
@@ -100,16 +103,17 @@ def create_pld_movement(trans):
             tipo_cargo=tipo_cargo,
             tipo_moneda="MXN",
             monto_pago=trans.monto,
-            fecha_pago=trans.fechaValor("%Y/%m/%d"),
+            fecha_pago=trans.fechaValor,
             cuenta=trans.user.Uprofile.cuentaClabe,
-            created_at=timezone.now().strftime("%Y/%m/%d"),
+            created_at=timezone.now(),
             payment_made_by="MC",
-            concepto=trans.concepto
+            concepto=trans.concepto,
+            status_code=res2.status_code,
+            mensaje=content_movement['response_api']['message'],
+            alertas=alerta,
+            response=content_movement
         )
-        return content_movement
     except Exception as e:
-        msg_pld = "[Create Customer] Error al crear movement en ubcubo" \
+        msg_pld = "[Create Movement] Error al crear movement en ubcubo" \
                   f"para el usuario: {trans.user}"
         db_logger.warning(f"{msg_pld}:error {e}")
-        print(e)
-        raise Exception(e)
