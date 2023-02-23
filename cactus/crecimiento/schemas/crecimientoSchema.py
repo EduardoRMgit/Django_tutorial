@@ -119,8 +119,9 @@ class CreateRespaldo(graphene.Mutation):
                 raise Exception("Uno o más contactos inválidos")
             try:
                 respaldo = UserProfile.objects.get(
-                                cuentaClabe=contacto.clabe,
-                                status="O").user
+                    cuentaClabe=contacto.clabe,
+                    status="O"
+                ).user
             except Exception:
                 errores.append(contacto.id)
                 continue
@@ -266,6 +267,7 @@ class DeleteRespaldo(graphene.Mutation):
             raise Exception("Datos inválidos")
 
         respaldo.activo = False
+        respaldo.status = "D"
         respaldo.save()
 
         return DeleteRespaldo(
