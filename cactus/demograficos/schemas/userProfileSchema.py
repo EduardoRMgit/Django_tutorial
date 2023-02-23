@@ -2953,8 +2953,8 @@ class DeleteContacto(graphene.Mutation):
                     ) |
                     Q(
                         respaldo=associated_user,
-                    ).update(activo=False, status="D")
-                )
+                    )
+                ).update(activo=False, status="D")
             else:
                 raise AssertionError("NIP esta mal")
         return DeleteContacto(contacto=contacto,
