@@ -2947,6 +2947,18 @@ class DeleteContacto(graphene.Mutation):
                         clabe=clabe).update(activo=False)
                     contacto = associated_user.Contactos_Usuario.filter(
                         clabe=clabe).last()
+                respaldo = Respaldo.objects.filter(
+                    Q(
+                        id=respaldo,
+                        ordenante=associated_user,
+                        activo=True
+                    ) |
+                    Q(
+                        id=respaldo,
+                        respaldo=associated_user,
+                        activo=True
+                    ).update(activo=False, status="D")
+                )
             else:
                 raise AssertionError("NIP esta mal")
         return DeleteContacto(contacto=contacto,
