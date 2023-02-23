@@ -2950,9 +2950,11 @@ class DeleteContacto(graphene.Mutation):
                 Respaldo.objects.filter(
                     Q(
                         ordenante=associated_user,
+                        respaldo=contacto
                     ) |
                     Q(
-                        respaldo=associated_user,
+                        ordenante=contacto,
+                        respaldo=associated_user
                     )
                 ).update(activo=False, status="D")
             else:
