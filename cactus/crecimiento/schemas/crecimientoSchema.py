@@ -77,6 +77,10 @@ class Query(object):
             Q(ordenante=user) |
             Q(respaldo=user)
         )
+        for respaldo in qs:
+            if respaldo.status == 'P':
+                respaldo.valida_vencido()
+
         if ordering:
             qs = qs.order_by(ordering)
         return (qs)
