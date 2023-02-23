@@ -2947,16 +2947,22 @@ class DeleteContacto(graphene.Mutation):
                         clabe=clabe).update(activo=False)
                     contacto = associated_user.Contactos_Usuario.filter(
                         clabe=clabe).last()
-                Respaldo.objects.filter(
-                    Q(
-                        ordenante=associated_user,
-                        respaldo=contacto
-                    ) |
-                    Q(
-                        ordenante=contacto,
-                        respaldo=associated_user
-                    )
-                ).update(activo=False, status="D")
+                if contacto.es_inguz:
+                    try:
+                        contacto_user = User.objects.get(
+                            user__uprofile__cuentaClabe=contacto.clabe)
+                        Respaldo.objects.filter(
+                            Q(
+                                ordenante=associated_user,
+                                respaldo=contacto_user
+                            ) |
+                            Q(
+                                ordenante=contacto_user,
+                                respaldo=associated_user
+                            )
+                        ).update(activo=False, status="D")
+                    except Exception:
+                        pass
             else:
                 raise AssertionError("NIP esta mal")
         return DeleteContacto(contacto=contacto,
