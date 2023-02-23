@@ -2950,7 +2950,7 @@ class DeleteContacto(graphene.Mutation):
                 if contacto.es_inguz:
                     try:
                         contacto_user = User.objects.get(
-                            user__uprofile__cuentaClabe=contacto.clabe)
+                            Uprofile__cuentaClabe=contacto.clabe)
                         Respaldo.objects.filter(
                             Q(
                                 ordenante=associated_user,
