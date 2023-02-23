@@ -107,7 +107,7 @@ class CreateRespaldo(graphene.Mutation):
         if not up.check_password(nip):
             raise Exception("El NIP es incorrecto")
 
-        if len(contacto_list) >= 5:
+        if len(contacto_list) > 5:
             raise Exception("No pueden seleccionarse mas de 5 contactos")
 
         for contacto in contacto_list:
