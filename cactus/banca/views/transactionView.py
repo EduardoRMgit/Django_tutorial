@@ -188,46 +188,50 @@ class TransactionList(generics.CreateAPIView):
 
         elif not valida_limite.saldo_max(monto) or \
                 not valida_limite.trans_mes(monto):
-            status_trans = StatusTrans.objects.get(nombre="devolucion")
-            tipo = TipoTransaccion.objects.get(codigo=1)
-            claveR = claveRastreo
-            causa = "Límte transaccional superado"
-            trans = Transaccion.objects.create(
-                user=profile.user,
-                fechaValor=timezone.now(),
-                fechaAplicacion=timezone.now(),
-                monto=float(monto),
-                statusTrans=status_trans,
-                tipoTrans=tipo,
-                concepto=concepto,
-                claveRastreo=randomString()
-            )
-            StpTransaction.objects.create(
-                user=profile.user,
-                nombre=profile.get_nombre_completo(),
-                monto=float(monto),
-                banco=ordenante,
-                clabe=cuenta_clabe,
-                concepto=concepto,
-                referencia=referencia,
-                claveRastreo=claveR,
-                nombreBeneficiario=profile.get_nombre_completo(),
-                fechaOperacion=fechaOperacion,
-                cuentaOrdenante=cuentaOrdenante,
-                referenciaNumerica=referencia,
-                conceptoPago=concepto,
-                cuentaBeneficiario=cuenta_clabe,
-                transaccion=trans,
-                causaDevolucion=causa,
-                stpEstado=2,
-                rechazada=True,
-                RechazadaMsj=causa
-            )
-            msg_logg = "{} {}: {}".format(
-                "[STP sendabono] (post)",
-                causa,
-                cuenta_clabe)
-            db_logger.info(msg_logg)
+            try:
+                status_trans = StatusTrans.objects.get(nombre="devolucion")
+                tipo = TipoTransaccion.objects.get(codigo=1)
+                claveR = claveRastreo
+                causa = "Límte transaccional superado"
+                trans = Transaccion.objects.create(
+                    user=profile.user,
+                    fechaValor=timezone.now(),
+                    fechaAplicacion=timezone.now(),
+                    monto=float(monto),
+                    statusTrans=status_trans,
+                    tipoTrans=tipo,
+                    concepto=concepto,
+                    claveRastreo=randomString()
+                )
+                StpTransaction.objects.create(
+                    user=profile.user,
+                    nombre=profile.get_nombre_completo(),
+                    monto=float(monto),
+                    banco=ordenante,
+                    clabe=cuenta_clabe,
+                    concepto=concepto,
+                    referencia=referencia,
+                    claveRastreo=claveR,
+                    nombreBeneficiario=profile.get_nombre_completo(),
+                    fechaOperacion=fechaOperacion,
+                    cuentaOrdenante=cuentaOrdenante,
+                    referenciaNumerica=referencia,
+                    conceptoPago=concepto,
+                    cuentaBeneficiario=cuenta_clabe,
+                    transaccion=trans,
+                    causaDevolucion=causa,
+                    stpEstado=2,
+                    rechazada=True,
+                    RechazadaMsj=causa
+                )
+                msg_logg = "{} {}: {}".format(
+                    "[STP sendabono] (post)",
+                    causa,
+                    cuenta_clabe)
+                db_logger.info(msg_logg)
+            except Exception as ex:
+                msg_logg = f"[STP sendabono devolución]: {profile.user}: {ex}"
+                db_logger.error(msg_logg)
             return Response({"mensaje": "devolver", "id": 2},
                             status=status.HTTP_400_BAD_REQUEST)
 
