@@ -316,7 +316,7 @@ class CreateRetiroScotia(graphene.Mutation):
         _valida(saldo_inicial_usuario - (monto + comision) < 0,
                 'Saldo insuficiente.')
         _valida(
-            LimiteTrans(user.id).ret_efectivo_dia(float(monto)),
+            not LimiteTrans(user.id).ret_efectivo_dia(float(monto)),
             'Límite transaccional superado'
         )
 
@@ -461,6 +461,14 @@ class CreateScotiaDeposito(graphene.Mutation):
         validar(not ordenante.Uprofile.check_password(nip),
                 'El NIP es incorrecto.')
         validar(monto == 0 or monto is None, 'Ingrese un monto válido')
+        validar(
+            not LimiteTrans(ordenante.id).dep_efectivo_mes(float(monto)),
+            'Límite transaccional superado'
+        )
+        validar(
+            not LimiteTrans(ordenante.id).dep_efectivo_dia(float(monto)),
+            'Límite transaccional superado'
+        )
 
         hoy = timezone.now().date()
         comision = 18
