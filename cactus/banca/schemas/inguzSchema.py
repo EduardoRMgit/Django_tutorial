@@ -146,7 +146,6 @@ class CreateInguzTransaccion(graphene.Mutation):
             cobro.transaccion = inguz_transaccion
             cobro.save()
 
-        print(f"transacción creada: {inguz_transaccion.__dict__}")
         msg = "[Inguz_Inguz] Transaccion exitosa del usuario: {} \
             con cuenta: {} \
             a la cuenta: {} \
