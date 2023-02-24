@@ -122,7 +122,7 @@ class Customer(models.Model):
     pais_domicilio = CountryField(null=True, blank=True)
     fecha_proxima_revision = models.DateField(null=True, blank=True)
     comentarios = models.CharField(max_length=420, null=True, blank=True)
-    mensaje = models.CharField(max_length=420, null=True, blank=True)
+    mensaje = models.CharField(max_length=2000, null=True, blank=True)
     no_cliente = models.CharField(max_length=60, blank=True, null=True)
     created_at = models.DateField(null=True, blank=True)
     updated_at = models.DateField(null=True, blank=True)

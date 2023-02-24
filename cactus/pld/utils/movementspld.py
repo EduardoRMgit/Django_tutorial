@@ -89,7 +89,7 @@ def create_pld_movement(trans):
 
         alerta = content_movement['response_api'][
             'alertas'] if content_movement[
-                'response_api']['alertas'] else None,
+                'response_api']['alertas'] else None
 
         if alerta:
             msg_pld = f"[ALERTAS PLD]: {alerta} para el usuario: {trans.user}"
