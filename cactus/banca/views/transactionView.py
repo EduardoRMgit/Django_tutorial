@@ -155,15 +155,18 @@ class TransactionList(generics.CreateAPIView):
         """
         Transacción recibida (sendabono)
         """
-
-        cuenta_clabe = request.data['cuentaBeneficiario']
-        monto = float(request.data['monto'])
-        referencia = request.data['referenciaNumerica']
-        concepto = request.data['conceptoPago']
-        ordenante = request.data['institucionOrdenante']
-        claveRastreo = request.data['claveRastreo']
-        cuentaOrdenante = request.data['cuentaOrdenante']
-        fechaOperacion = request.data['fechaOperacion']
+        try:
+            cuenta_clabe = request.data['cuentaBeneficiario']
+            monto = float(request.data['monto'])
+            referencia = request.data['referenciaNumerica']
+            concepto = request.data['conceptoPago']
+            ordenante = request.data['institucionOrdenante']
+            claveRastreo = request.data['claveRastreo']
+            cuentaOrdenante = request.data['cuentaOrdenante']
+            fechaOperacion = request.data['fechaOperacion']
+        except Exception as ex:
+            msg = f"[STP post sendabono]:{ex}"
+            db_logger.error(msg)
 
         try:
             profile = UserProfile.objects.get(
