@@ -28,8 +28,5 @@ class MovimientoAdmin(admin.ModelAdmin):
         return ("Efectivo" if obj.origen_pago == 1 else "Transferencia")
     get_origen_pago.short_description = 'Origen pago'
 
-    def has_delete_permission(self, request, obj=None):
-        return False
-
 
 admin.site.register(Movimiento, MovimientoAdmin)

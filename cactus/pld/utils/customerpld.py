@@ -71,9 +71,14 @@ def create_pld_customer(user):
         )
         content_customer = json.loads(res2.content)
 
+        db_logger.info(
+            f"[Create Customer]: {user} request: {res2.request.__dict__}"
+            f"response: {content_customer}"
+        )
+
         if res2.status_code != 200:
             db_logger.warning(
-                f"[Create Customer]: {user} / {content_customer}"
+                f"[Create Customer]: Error en la respuesta {user}"
             )
             return
 
