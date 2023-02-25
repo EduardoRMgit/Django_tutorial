@@ -71,9 +71,8 @@ def create_pld_customer(user):
         )
         content_customer = json.loads(res2.content)
 
-
         db_logger.info(
-            f"[Create Customer]: {user} request: {res2.request.__dict__}" \
+            f"[Create Customer]: {user} request: {res2.request.__dict__}"
             f"response: {content_customer}"
         )
 
