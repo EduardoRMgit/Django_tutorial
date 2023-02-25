@@ -91,8 +91,8 @@ class Customer(models.Model):
     #  LLave UNIQUE: CURP
     curp = models.CharField(max_length=18, default=0, blank=True, null=True)
     fecha_nacimiento = models.DateField(null=True, blank=True)
-    pais_nacimiento = CountryField(null=True, blank=True)
-    nacionalidad = CountryField(null=True, blank=True)
+    pais_nacimiento = models.CharField(max_length=30, blank=True, null=True)
+    nacionalidad = models.CharField(max_length=30, blank=True, null=True)
     e_f_nacimiento = models.CharField(max_length=60, null=True, blank=True)
     telefono_fijo = models.CharField(max_length=20, null=True, blank=True)
     telefono_movil = models.CharField(max_length=30, null=True, blank=True)
