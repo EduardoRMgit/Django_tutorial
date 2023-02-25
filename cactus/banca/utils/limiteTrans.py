@@ -1,6 +1,6 @@
 from banca.models import NivelCuenta
 from django.contrib.auth.models import User
-from django.utils import timezone
+from datetime import datetime
 from decimal import Decimal
 
 
@@ -19,7 +19,7 @@ class LimiteTrans(object):
             self.user = User.objects.get(id=id)
             self.up = self.user.Uprofile
             self.nivel = NivelCuenta.objects.get(id=self.up.nivel_cuenta.id)
-            self.today = timezone.now()
+            self.today = datetime.now()
         except Exception as e:
             raise Exception(e)
 
