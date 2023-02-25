@@ -33,7 +33,7 @@ class TipoTransaccion(models.Model):
         blank=True)
     medio = models.CharField(
         max_length=1,
-        choices=TIPO,
+        choices=MEDIO,
         null=True,
         blank=True)
     salida = models.BooleanField(default=True)
