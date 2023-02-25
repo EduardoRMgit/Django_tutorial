@@ -17,7 +17,7 @@ class Movimiento(models.Model):
         blank=True,
         null=True,
         related_name='TransaccionPld')
-    usuario_pld = models.CharField(max_length=20, null=True)
+    usuario_pld = models.CharField(max_length=30, null=True)
     curp = models.CharField(max_length=20, null=True)
     origen_pago = models.IntegerField(null=True)
     tipo_cargo = models.IntegerField(null=True)
@@ -34,8 +34,8 @@ class Movimiento(models.Model):
     cuentaclabeS = models.CharField(max_length=20, null=True)
     concepto = models.CharField(null=True, blank=True, max_length=100)
     status_code = models.CharField(max_length=3, blank=True, null=True)
-    mensaje = models.CharField(max_length=420, null=True, blank=True)
-    alertas = models.CharField(null=True, blank=True, max_length=100)
+    mensaje = models.CharField(max_length=1000, null=True, blank=True)
+    alertas = models.CharField(null=True, blank=True, max_length=1000)
     response = models.TextField(null=True, blank=True)
 
     def __str__(self):
