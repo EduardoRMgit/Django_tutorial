@@ -83,7 +83,7 @@ class LimiteTrans(object):
         total = monto
         for t in trans:
             if t.tipoTrans.codigo == "6":
-                total += sum([x.scotiaRetiro.monto for x in trans])
+                total += float(sum([x.scotiaRetiro.monto for x in trans]))
         if not total <= self.nivel.ret_efectivo_dia:
             return False
         return True
