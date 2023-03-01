@@ -36,15 +36,52 @@
     }
   },
   {
-    "model": "demograficos.tipodireccion", 
-    "pk": 1, 
+    "model": "demograficos.userprofile",
+    "pk": 17,
+    "fields": {
+      "password": "pbkdf2_sha256$150000$UBAKM0ZSNTlF$29s197W5XYQcRcZUj11slu1urrthmg2eUQi501Vh+X8=",
+      "last_login": null,
+      "blocked_reason": "K",
+      "blocked_date": null,
+      "login_attempts": 0,
+      "login_attempts_inside": 0,
+      "status": "O",
+      "apMaterno": "Contreras",
+      "sexo": "F",
+      "curp": "AAZD911216YVM05",
+      "numero_INE": null,
+      "verificacion_curp": false,
+      "fecha_nacimiento": "1997-07-25",
+      "verificacion_email": false,
+      "statusRegistro": null,
+      "statusCuenta": null,
+      "autorizado": false,
+      "country": "CD",
+      "indiceDisponible": null,
+      "statusNip": "U",
+      "nip": null,
+      "aceptaKitLegal": null,
+      "saldo_cuenta": 104049.0,
+      "cuentaClabe": "646180190000000171",
+      "ocupacion": "",
+      "nacionalidad": "",
+      "ciudad_nacimiento": "",
+      "rfc": null,
+      "id_dde": 117,
+      "fechaCreacion_dde": null,
+      "confirmacion_dde": true
+    }
+  },
+  {
+    "model": "demograficos.tipodireccion",
+    "pk": 1,
     "fields": {
       "tipo": "Casa"
     }
   },
   {
     "model": "demograficos.entidadfed",
-    "pk": 2, 
+    "pk": 2,
     "fields": {
       "entidad": "Aguascalientes"
       }

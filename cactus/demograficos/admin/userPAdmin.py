@@ -9,7 +9,6 @@ from demograficos.models import (UserProfile,
                                  RespuestaSeguridad,
                                  PreguntaSeguridad,
                                  Fecha,
-                                 ComponentValidated,
                                  Direccion,
                                  TipoDireccion,
                                  EntidadFed,
@@ -19,13 +18,13 @@ from demograficos.models import (UserProfile,
                                  Avatar,
                                  PerfilTransaccionalDeclarado)
 from banca.models import Transaccion
-from pld.models import (Customer,
-                        Contrato,
-                        Movimiento)
+from pld.models import (Customer)
 from .cambio_password import PasswordResetUserAdmin
 from django import forms
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.utils.translation import gettext_lazy as _
+from cactus.settings import SITE
+from import_export.admin import ExportActionMixin
 
 
 class RequiredForm(forms.ModelForm):
@@ -46,6 +45,8 @@ class ProfileInline(admin.StackedInline):
     fk_name = 'user'
     form = RequiredForm
     exclude = ('password',)
+    if SITE == "prod":
+        readonly_fields = ['saldo_cuenta', ]
 
 
 class RespuestaInline(admin.StackedInline):
@@ -91,20 +92,6 @@ class UserPLDCustomerInline(admin.StackedInline):
     fk_name = 'user'
 
 
-class UserPLDContratoInline(admin.StackedInline):
-    model = Contrato
-    can_delete = False
-    verbose_name_plural = 'Contrato (UBCUBO)'
-    fk_name = 'user'
-
-
-class UserPLDMovimientoInline(admin.TabularInline):
-    model = Movimiento
-    can_delete = False
-    verbose_name_plural = 'Movimiento (PLD)'
-    fk_name = 'user'
-
-
 class UserTransaccionInline(admin.TabularInline):
     model = Transaccion
     can_delete = False
@@ -116,13 +103,6 @@ class UserContactoInline(admin.TabularInline):
     model = Contacto
     can_delete = False
     verbose_name_plural = 'Lista de Contactos'
-    fk_name = 'user'
-
-
-class ProfileComponentInline(admin.StackedInline):
-    model = ComponentValidated
-    can_delete = False
-    verbose_name_plural = "Validaciones de Perfil"
     fk_name = 'user'
 
 
@@ -157,7 +137,7 @@ class PerfilTransaccionalInLine(admin.TabularInline):
     extra = 0
 
 
-class UserProfileAdmin(PasswordResetUserAdmin):
+class UserProfileAdmin(ExportActionMixin, PasswordResetUserAdmin):
     inlines = (
         DireccionInLine,
         ProfileInline,
@@ -165,40 +145,66 @@ class UserProfileAdmin(PasswordResetUserAdmin):
         RespuestaInline,
         UserTelefonoInline,
         UserPLDCustomerInline,
-        UserPLDContratoInline,
-        UserPLDMovimientoInline,
         UserTransaccionInline,
         UserComportamientoDiarioInline,
         UserComportamientoMensualInline,
         UserContactoInline,
-        ProfileComponentInline,
         DocAdjuntoInLine,
         BeneficiarioInLine,
         PerfilTransaccionalInLine
     )
     actions = ['registra_cuenta']
-    list_filter = ('is_staff',
-                   )
 
-    list_display = ('Uprofile',
+    list_filter = (
+        'Uprofile__nivel_cuenta',
+        'Uprofile__enrolamiento',
+        'Uprofile__status'
+    )
+
+    search_fields = (
+        'username',
+        'Uprofile__cuentaClabe',
+        'Uprofile__curp',
+        'Uprofile__alias'
+    )
+
+    list_display = ('username',
+                    'get_alias',
+                    'get_nombre',
+                    'get_nivel',
                     'get_saldo',
                     'get_estado',
                     'get_curp',
-                    'get_rfc',
                     'get_cuenta_clabe',
+                    'get_enrolamiento',
                     )
-
-    list_select_related = ('Uprofile', )
 
     list_per_page = 25
 
+    def get_nombre(self, obj):
+        return obj.Uprofile.get_nombre_completo()
+    get_nombre.short_description = 'Nombre'
+
+    def get_alias(self, obj):
+        return obj.Uprofile.alias
+    get_alias.short_description = 'Alias'
+
+    def get_enrolamiento(self, obj):
+        return obj.Uprofile.enrolamiento
+    get_enrolamiento.short_description = 'Completo'
+    get_enrolamiento.boolean = True
+
+    def get_nivel(self, obj):
+        return obj.Uprofile.nivel_cuenta
+    get_nivel.short_description = 'Nivel'
+
     def get_saldo(self, obj):
-        return obj.Uprofile.saldo_cuenta
-    get_saldo.short_description = 'Saldo cuenta'
+        return ("$" + str(obj.Uprofile.saldo_cuenta))
+    get_saldo.short_description = 'Saldo'
 
     def get_cuenta_clabe(self, obj):
         return obj.Uprofile.cuentaClabe
-    get_cuenta_clabe.short_description = 'Cuenta Clabe'
+    get_cuenta_clabe.short_description = 'CLABE'
 
     def get_estado(self, obj):
         return obj.Uprofile.status
@@ -206,11 +212,7 @@ class UserProfileAdmin(PasswordResetUserAdmin):
 
     def get_curp(self, obj):
         return obj.Uprofile.curp
-    get_curp.short_description = 'Check CURP'
-
-    def get_rfc(self, obj):
-        return obj.Uprofile.rfc
-    get_rfc.short_description = 'Check RFC'
+    get_curp.short_description = 'CURP'
 
     def get_inline_instances(self, request, obj=None):
         if not obj:
@@ -277,117 +279,13 @@ class ClienteAdmin(UserProfileAdmin):
         RespuestaInline,
         UserTelefonoInline,
         UserPLDCustomerInline,
-        UserPLDContratoInline,
-        UserPLDMovimientoInline,
         UserTransaccionInline,
         UserComportamientoDiarioInline,
         UserComportamientoMensualInline,
         UserContactoInline,
-        ProfileComponentInline,
         DocAdjuntoInLine,
         BeneficiarioInLine,
     )
-
-# from demograficos.models import UserProfile, Telefono
-# from banca.models import Transaccion
-# from pld.models import (Customer,
-#                         CustomerD,
-#                         adminUtils,
-#                         Contrato,
-#                         ContratoD,
-#                         Movimiento)
-# from pld.utils.customer import llamada1
-# from pld.utils.contract import llamada2
-#
-#
-# def save_model(self, request, obj, form, change):
-#     super().save_model(request, obj, form, change)
-#     admin_Util = adminUtils.objects.get(id=1)
-#     aprobado = False
-#     stat = ""
-#     cod = ""
-#     bak = ""
-#     if admin_Util.activo:
-#         obj.tienePLD = True
-#         obj.save()
-#         tel = Telefono.objects.last()
-#         lastD = CustomerD.objects.last()
-#         last = Customer.objects.last()
-#         data = {'id_entidad': lastD.id_entidad,
-#                 'tipo': lastD.tipo,
-#                 'nombre': obj.first_name,
-#                 'actua_cuenta_propia': lastD.actua_cuenta_propia,
-#                 'rfc': obj.Uprofile.rfc,
-#                 'curp': obj.Uprofile.curp,
-#                 'apaterno': obj.last_name,
-#                 'amaterno': obj.Uprofile.apMaterno,
-#                 'telefono_fijo': tel.telefono
-#                 }
-#         print('NEL, NO ES COCA... ES HARINA\n')cuentaClabe
-#         [bak, cod, stat] = llamada1(data)
-#         last.id_back = bak
-#         last.status_code = stat
-#         last.mensaje = cod
-#         if stat == 200:
-#             aprobado = True
-#         Customer.objects.create(id_entidad=lastD.id_entidad,
-#                                 tipo=lastD.tipo,
-#                                 nombre=obj.first_name,
-#                                 actua_cuenta_propia=(
-#                                     lastD.actua_cuenta_propia),
-#                                 rfc=obj.Uprofile.rfc,
-#                                 curp=obj.Uprofile.curp,
-#                                 apaterno=obj.last_name,
-#                                 amaterno=obj.Uprofile.apMaterno,
-#                                 telefono_fijo=tel.telefono,
-#                                 status_code=stat,
-#                                 mensaje=cod,
-#                                 id_back=bak,
-#                                 tienePLD=aprobado,
-#                                 )
-#         self.message_user(request, "PLD:{}".format(cod))
-#         last.save()
-#         rnd = bak
-#         ultD = ContratoD.objects.last()
-#         ult = Contrato.objects.last()
-#         data = {'id_entidad': last.id_entidad,
-#                 'rfc': obj.Uprofile.rfc,
-#                 'curp': obj.Uprofile.curp,
-#                 'no_credito': rnd,
-#                 # 'no_credito': id.no_credito,
-#                 'unidad_credito': ultD.unidad_credito,
-#                 'tipo_moneda': ultD.tipo_moneda,
-#                 'T1': ultD.T1,
-#                 'T2': ultD.T2,
-#                 'T3': ultD.T3,
-#                 'instrumento_monetario':
-#                     ultD.instrumento_monetario,
-#                 'canales_distribucion': ultD.canales_distribucion,
-#                 'Estado': ultD.Estado
-#                 }
-#         print(data, '\nPINCHE CUMBION BIEN LOCO')
-#         [cod, stat] = llamada2(data)
-#         ult.status_code = stat
-#         ult.mensaje = cod
-#         Contrato.objects.create(id_entidad=ultD.id_entidad,
-#                                 rfc=obj.Uprofile.rfc,
-#                                 curp=obj.Uprofile.curp,
-#                                 no_credito=rnd,
-#                                 unidad_credito=ultD.unidad_credito,
-#                                 tipo_moneda=ultD.tipo_moneda,
-#                                 T1=ultD.T1,
-#                                 T2=ultD.T2,
-#                                 T3=ultD.T3,
-#                                 instrumento_monetario=(
-#                                     ultD.instrumento_monetario),
-#                                 canales_distribucion=(
-#                                     ultD.canales_distribucion),
-#                                 Estado=ultD.Estado,
-#                                 status_code=stat,
-#                                 mensaje=cod,
-#                                 )
-#         self.message_user(request, "PLD:{}".format(cod))
-#         ult.save()
 
 
 admin.site.unregister(User)

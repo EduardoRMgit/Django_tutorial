@@ -93,19 +93,21 @@ jobs:
           echo "Brancha  ${GITHUB_REF##*/}"
           if [[ ${GITHUB_REF##*/} == main ]] ; then
             export SUFFIX=prod
-            export DB=cactus-prod-db.c4csey4k0tc5.us-east-2.rds.amazonaws.com
-            # kubernetes-django-east2.c4csey4k0tc5.us-east-2.rds.amazonaws.com
+            export DB=${{ secrets.RDS_ENDPOINT }}
+            export DB_NAME=inguzprodb
             export DEBUG=false
             export STPSECRET=stpsecretprod
           elif [[ ${GITHUB_REF##*/} == staging ]] ; then
             echo "IN STAGING"
             export SUFFIX=stage
+            export DB_NAME=brattdev
             export DB=cactus-stage-east-2.c4csey4k0tc5.us-east-2.rds.amazonaws.com
             export DEBUG=true
             export STPSECRET=stpsecrettest
           elif [[ ${GITHUB_REF##*/} == test ]] ; then
             echo "IN TEST"
             export SUFFIX=test
+            export DB_NAME=brattdev
             export DB=cactus-test-db.c4csey4k0tc5.us-east-2.rds.amazonaws.com
             export DEBUG=true
             export STPSECRET=stpsecrettest
@@ -119,6 +121,7 @@ jobs:
             fi;
             echo "Install helm chart"
             helm upgrade $REPO-$SUFFIX --install --force $REPO-0.1.0.tgz \
+            --set dbName=$DB_NAME \
             --set rdsExternal=$DB \
             --set dbSecret=postgres-credentials \
             --set nameOverride=$REPO-$SUFFIX \
@@ -132,6 +135,7 @@ jobs:
             kubectl set image deployments/$REPO-$SUFFIX \
               $REPO=906062568112.dkr.ecr.us-east-2.amazonaws.com/$REPO:$IMAGE_TAG
             helm template $REPO-$SUFFIX $REPO-0.1.0.tgz -s templates/job-migration.yaml \
+              --set dbName=$DB_NAME \
               --set rdsExternal=$DB \
               --set dbSecret=postgres-credentials \
               --set nameOverride=$REPO-$SUFFIX \
@@ -150,6 +154,7 @@ jobs:
             fi;
             helm package kubernetes/charts/cronjob-django
             helm upgrade cron-$REPO-$SUFFIX --install --force cronjob-django-0.1.0.tgz \
+            --set dbName=$DB_NAME \
             --set rdsExternal=$DB \
             --set dbSecret=postgres-credentials \
             --set nameOverride=cron-$REPO-$SUFFIX \

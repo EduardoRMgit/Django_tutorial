@@ -47,3 +47,4 @@ django-auto-logout==0.5.0
 django-axes==5.39.0
 pycryptodome==3.15.0
 all-escapes==0.1
+django-import-export==3.0.2

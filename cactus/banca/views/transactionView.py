@@ -22,8 +22,12 @@ from django.http import (JsonResponse,
 from django.template.loader import render_to_string
 
 from spei.models import StpTransaction
-from banca.models import Transaccion, StatusTrans, SaldoReservado
+from spei.stpTools import randomString
+from banca.models import (
+    Transaccion, StatusTrans, SaldoReservado, TipoTransaccion
+)
 from banca.serializers import DetailSerializer, EstadoSerializer
+from banca.utils.limiteTrans import LimiteTrans
 from demograficos.models import UserProfile
 
 
@@ -45,8 +49,6 @@ def _sum_montos(transes):
             suma += float("{:.2f}".format(trans.monto))
         else:
             suma -= float("{:.2f}".format(trans.monto))
-
-    return round(suma, 2)
 
     return round(suma, 2)
 
@@ -153,8 +155,18 @@ class TransactionList(generics.CreateAPIView):
         """
         Transacción recibida (sendabono)
         """
-
-        cuenta_clabe = request.data['cuentaBeneficiario']
+        try:
+            cuenta_clabe = request.data['cuentaBeneficiario']
+            monto = float(request.data['monto'])
+            referencia = request.data['referenciaNumerica']
+            concepto = request.data['conceptoPago']
+            ordenante = request.data['institucionOrdenante']
+            claveRastreo = request.data['claveRastreo']
+            cuentaOrdenante = request.data['cuentaOrdenante']
+            fechaOperacion = request.data['fechaOperacion']
+        except Exception as ex:
+            msg = f"[STP post sendabono]:{ex}"
+            db_logger.error(msg)
 
         try:
             profile = UserProfile.objects.get(
@@ -167,11 +179,62 @@ class TransactionList(generics.CreateAPIView):
             return Response({"mensaje": "devolver", "id": 1},
                             status=status.HTTP_400_BAD_REQUEST)
 
+        valida_limite = LimiteTrans(profile.user.id)
+
         if profile.cuenta_clabe_bloqueada:
             msg_logg = "{} cuenta bloqueada: {}".format(
                 "[STP sendabono] (post)",
                 cuenta_clabe)
             db_logger.info(msg_logg)
+            return Response({"mensaje": "devolver", "id": 2},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        elif not valida_limite.saldo_max(monto) or \
+                not valida_limite.trans_mes(monto):
+            try:
+                status_trans = StatusTrans.objects.get(nombre="devolucion")
+                tipo = TipoTransaccion.objects.get(codigo=1)
+                claveR = claveRastreo
+                causa = "Límte transaccional superado"
+                trans = Transaccion.objects.create(
+                    user=profile.user,
+                    fechaValor=timezone.now(),
+                    fechaAplicacion=timezone.now(),
+                    monto=float(monto),
+                    statusTrans=status_trans,
+                    tipoTrans=tipo,
+                    concepto=concepto,
+                    claveRastreo=randomString()
+                )
+                StpTransaction.objects.create(
+                    user=profile.user,
+                    nombre=profile.get_nombre_completo(),
+                    monto=float(monto),
+                    banco=ordenante,
+                    clabe=cuenta_clabe,
+                    concepto=concepto,
+                    referencia=referencia,
+                    claveRastreo=claveR,
+                    nombreBeneficiario=profile.get_nombre_completo(),
+                    fechaOperacion=fechaOperacion,
+                    cuentaOrdenante=cuentaOrdenante,
+                    referenciaNumerica=referencia,
+                    conceptoPago=concepto,
+                    cuentaBeneficiario=cuenta_clabe,
+                    transaccion=trans,
+                    causaDevolucion=causa,
+                    stpEstado=2,
+                    rechazada=True,
+                    RechazadaMsj=causa
+                )
+                msg_logg = "{} {}: {}".format(
+                    "[STP sendabono] (post)",
+                    causa,
+                    cuenta_clabe)
+                db_logger.info(msg_logg)
+            except Exception as ex:
+                msg_logg = f"[STP sendabono devolución]: {profile.user}: {ex}"
+                db_logger.error(msg_logg)
             return Response({"mensaje": "devolver", "id": 2},
                             status=status.HTTP_400_BAD_REQUEST)
 
