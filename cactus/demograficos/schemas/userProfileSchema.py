@@ -2105,7 +2105,6 @@ class UpdateInfoPersonal(graphene.Mutation):
             try:
                 if not u_profile.cuentaClabe:
                     u_profile.registra_cuenta(user.first_name, user.last_name)
-                    mandar_email(user.email, user.first_name)
             except Exception as ex:
                 AssertionError('Error al registrar la cuenta clabe.',
                                ex)
