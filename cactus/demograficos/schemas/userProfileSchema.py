@@ -983,7 +983,7 @@ class Query(graphene.ObjectType):
             for respaldo in respaldos:
                 qs = qs.filter(filter).exclude(id=respaldo.contacto_id)
                 if respaldo.respaldo == user:
-                    u_clabe = respaldo.ordenante.cuentaClabe
+                    u_clabe = respaldo.ordenante.Uprofile.cuentaClabe
                     qs = qs.filter(filter).exclude(clabe=u_clabe)
 
         if nombre:
