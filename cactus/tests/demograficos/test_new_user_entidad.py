@@ -14,7 +14,6 @@ class TestNewUserReferencia(JSONWebTokenTestCase):
     GRAPHQL_SCHEMA = schema
 
     def setUp(self):
-        call_command('loaddata', 'customer', verbosity=0)
         call_command('loaddata', 'adminUtils', verbosity=0)
         load_groups()
         call_command('loaddata', 'urls', verbosity=0)

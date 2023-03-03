@@ -1,6 +1,6 @@
 from banca.models import NivelCuenta
 from django.contrib.auth.models import User
-from django.utils import timezone
+from datetime import datetime
 from decimal import Decimal
 
 
@@ -10,8 +10,7 @@ class LimiteTrans(object):
 
         Args:
             id (int): ID del usuario a evaluar.
-            tipo (int): Tipo de transacción basada en el catálogo TipoTrans \
-            declarada como entero.
+            monto (float): Monto que está por transaccionarse.
 
         Raises:
             Exception para loggear errores al construir las variables.
@@ -20,7 +19,7 @@ class LimiteTrans(object):
             self.user = User.objects.get(id=id)
             self.up = self.user.Uprofile
             self.nivel = NivelCuenta.objects.get(id=self.up.nivel_cuenta.id)
-            self.today = timezone.now()
+            self.today = datetime.now()
         except Exception as e:
             raise Exception(e)
 
@@ -51,7 +50,7 @@ class LimiteTrans(object):
             tipoTrans__tipo="R",
             fechaValor__year=self.today.year,
             fechaValor__month=self.today.month,
-            statusTrans__nombre="exito"
+            statusTrans__nombre__in=["exito", "esperando respuesta"]
         )
         total = sum([x.monto for x in trans]) + Decimal(monto)
         if not total <= self.nivel.dep_efectivo_mes:
@@ -65,7 +64,7 @@ class LimiteTrans(object):
             fechaValor__year=self.today.year,
             fechaValor__month=self.today.month,
             fechaValor__day=self.today.day,
-            statusTrans__nombre="exito"
+            statusTrans__nombre__in=["exito", "esperando respuesta"]
         )
         total = sum([x.monto for x in trans]) + Decimal(monto)
         if not total <= self.nivel.dep_efectivo_dia:
@@ -79,9 +78,12 @@ class LimiteTrans(object):
             fechaValor__year=self.today.year,
             fechaValor__month=self.today.month,
             fechaValor__day=self.today.day,
-            statusTrans__nombre="exito"
+            statusTrans__nombre__in=["exito", "esperando respuesta"]
         )
-        total = sum([x.monto for x in trans]) + Decimal(monto)
+        total = monto
+        for t in trans:
+            if t.tipoTrans.codigo == "6":
+                total += float(sum([x.scotiaRetiro.monto for x in trans]))
         if not total <= self.nivel.ret_efectivo_dia:
             return False
         return True

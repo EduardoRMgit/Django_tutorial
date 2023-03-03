@@ -77,6 +77,10 @@ class Query(object):
             Q(ordenante=user) |
             Q(respaldo=user)
         )
+        for respaldo in qs:
+            if respaldo.status == 'P':
+                respaldo.valida_vencido()
+
         if ordering:
             qs = qs.order_by(ordering)
         return (qs)
@@ -103,7 +107,7 @@ class CreateRespaldo(graphene.Mutation):
         if not up.check_password(nip):
             raise Exception("El NIP es incorrecto")
 
-        if len(contacto_list) >= 5:
+        if len(contacto_list) > 5:
             raise Exception("No pueden seleccionarse mas de 5 contactos")
 
         for contacto in contacto_list:
@@ -119,8 +123,9 @@ class CreateRespaldo(graphene.Mutation):
                 raise Exception("Uno o más contactos inválidos")
             try:
                 respaldo = UserProfile.objects.get(
-                                cuentaClabe=contacto.clabe,
-                                status="O").user
+                    cuentaClabe=contacto.clabe,
+                    status="O"
+                ).user
             except Exception:
                 errores.append(contacto.id)
                 continue
@@ -266,6 +271,7 @@ class DeleteRespaldo(graphene.Mutation):
             raise Exception("Datos inválidos")
 
         respaldo.activo = False
+        respaldo.status = "D"
         respaldo.save()
 
         return DeleteRespaldo(

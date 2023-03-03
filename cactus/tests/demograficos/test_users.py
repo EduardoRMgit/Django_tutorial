@@ -14,7 +14,6 @@ from demograficos.models import Telefono
 class UsersTestCase(TestCase):
 
     def setUp(self):
-        call_command('loaddata', 'customer', verbosity=0)
         call_command('loaddata', 'adminUtils', verbosity=0)
         call_command('loaddata', 'statusRegistro', verbosity=0)
         call_command('loaddata', 'errorestransaccion', verbosity=0)

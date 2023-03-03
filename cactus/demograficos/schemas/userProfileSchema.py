@@ -69,6 +69,8 @@ from axes.models import AccessAttempt
 
 from pld.utils.customerpld import create_pld_customer
 
+from demograficos.utils.correo import mandar_email
+
 db_logger = logging.getLogger("db")
 
 # WRAPPERS
@@ -982,6 +984,10 @@ class Query(graphene.ObjectType):
             )
             for respaldo in respaldos:
                 qs = qs.filter(filter).exclude(id=respaldo.contacto_id)
+                if respaldo.respaldo == user:
+                    u_clabe = respaldo.ordenante.Uprofile.cuentaClabe
+                    qs = qs.filter(filter).exclude(clabe=u_clabe)
+
         if nombre:
             filter = (
                 Q(nombre__icontains=nombre) |
@@ -2525,6 +2531,7 @@ class UpdateNip(graphene.Mutation):
                         UP.statusNip = 'A'
                         UP.enrolamiento = True
                         create_pld_customer(user)
+                        mandar_email(user.email, user.first_name)
                     else:
                         raise ValueError('nip no coincide con el temporal')
             elif (UP.statusNip == 'A'):
@@ -2947,6 +2954,22 @@ class DeleteContacto(graphene.Mutation):
                         clabe=clabe).update(activo=False)
                     contacto = associated_user.Contactos_Usuario.filter(
                         clabe=clabe).last()
+                if contacto.es_inguz:
+                    try:
+                        contacto_user = User.objects.get(
+                            Uprofile__cuentaClabe=contacto.clabe)
+                        Respaldo.objects.filter(
+                            Q(
+                                ordenante=associated_user,
+                                respaldo=contacto_user
+                            ) |
+                            Q(
+                                ordenante=contacto_user,
+                                respaldo=associated_user
+                            )
+                        ).update(activo=False, status="D")
+                    except Exception:
+                        pass
             else:
                 raise AssertionError("NIP esta mal")
         return DeleteContacto(contacto=contacto,

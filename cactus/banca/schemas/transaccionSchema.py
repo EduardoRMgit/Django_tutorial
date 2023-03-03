@@ -619,7 +619,6 @@ class CreateTransferenciaEnviada(graphene.Mutation):
             user.Uprofile.saldo_cuenta = round(
                 float(saldo_inicial_usuario) - float(reservado_stp_trans), 2)
             user.Uprofile.save()
-        print("\n\ntransacción creada:")
         for k in stp_transaccion.__dict__:
             print(f"    {k}:   {stp_transaccion.__dict__[k]}")
 
