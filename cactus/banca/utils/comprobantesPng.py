@@ -8,7 +8,6 @@ from cactus.settings import MEDIA_ROOT
 class CompTrans(object):
     def __init__(self, trans: Transaccion):
         self._trans = trans
-        print(trans)
         self._tipo = trans.tipoTrans
         self._tp = Comprobante.objects.get(tipo=self._tipo).template
         self._dir = os.path.abspath(os.path.join(MEDIA_ROOT, self._tp.name))
@@ -19,11 +18,12 @@ class CompTrans(object):
         trans = self._trans
 
         alias = trans.user.Uprofile.alias
+        avatar = trans.user.Uprofile.avatar
         monto = round(float(trans.monto), 2)
         fecha = trans.fechaValor.strftime("%m/%d/%Y")
         hora = trans.fechaValor.strftime("%H:%M:%S")
-        concepto = trans.inguztransaction.concepto
-        print(alias, monto, fecha, hora, concepto)
+        concepto = trans.concepto
+        print(trans.user.username, monto, fecha, hora, concepto)
 
         # instance = self._trans
 
@@ -57,17 +57,18 @@ class CompTrans(object):
             )
 
         # ComprobanteUsuario.objects.create(transaccion=trans, img=img1)
-        cv2.imwrite("hoja.jpg", img)
-        img1 = Image.open("hoja.jpg")
-        # img2 = Image.open("banca/OTROSBANCOS.png")
-        # img1.paste(img2, (650, 300), mask=img2)
+        cv2.imwrite("hojainguz.jpg", img)
+        img1 = Image.open("hojainguz.jpg")
+        img2 = Image.open(avatar.avatar_min)
+        img1.paste(img2, (1, 1))
         sha = img1
-        if show:
-            sha.show()
-        sha.save("otrorecibo.jpg", "JPEG")
-        comp_img = open("otrorecibo.jpg", "rb")
-        # os.remove("hoja.jpg")
-        # os.remove("otrorecibo.jpg")
+        # if show:
+        
+        sha.save("otroreciboinguz.jpg", "JPEG")
+        comp_img = open("otroreciboinguz.jpg", "rb")
+        os.remove("hojainguz.jpg")
+        os.remove("otroreciboinguz.jpg")
+        sha.show()
         return comp_img
 
     def cobro(self):
@@ -77,7 +78,7 @@ class CompTrans(object):
         monto = round(float(trans.monto), 2)
         fecha = trans.fechaValor.strftime("%m/%d/%Y")
         hora = trans.fechaValor.strftime("%H:%M:%S")
-        concepto = trans.inguztransaction.concepto
+        concepto = trans.concepto
         print(alias, monto, fecha, hora, concepto)
 
         # instance = self._trans
@@ -121,22 +122,26 @@ class CompTrans(object):
         #     sha.show()
         sha.save("otrorecibo.jpg", "JPEG")
         comp_img = open("otrorecibo.jpg", "rb")
-        # os.remove("hoja.jpg")
-        # os.remove("otrorecibo.jpg")
+        sha.show()
+        os.remove("hoja.jpg")
+        os.remove("otrorecibo.jpg")
+        
         return comp_img
 
     def cobroL(self, cobro):
         pass
 
-    def stp(self, stp):
+    def stp(self):
         trans = self._trans
-
+        usertrans = trans.user.username
         alias = trans.user.Uprofile.alias
+        avatar = trans.user.Uprofile.avatar
+
         monto = round(float(trans.monto), 2)
         fecha = trans.fechaValor.strftime("%m/%d/%Y")
         hora = trans.fechaValor.strftime("%H:%M:%S")
-        concepto = trans.inguztransaction.concepto
-        print(alias, monto, fecha, hora, concepto)
+        concepto = trans.concepto
+        print(usertrans, monto, fecha, hora, concepto)
 
         # instance = self._trans
 
@@ -170,17 +175,23 @@ class CompTrans(object):
             )  # noqa: E501
 
         # ComprobanteUsuario.objects.create(transaccion=trans, img=img1)
-        cv2.imwrite("hoja.jpg", img)
-        img1 = Image.open("hoja.jpg")
-        img2 = Image.open("banca/OTROSBANCOS.png")
-        img1.paste(img2, (650, 300), mask=img2)
+        cv2.imwrite("hojastp.jpg", img)
+        img1 = Image.open("hojastp.jpg")
+        print(trans.user)
+        print("****************************************************")
+        img2 = Image.open(avatar.avatar_img)
+        img1.paste(img2, (1, 1))
+        print("++++++++++++++++++++++++++++++++++++++++++++++++++++")
         sha = img1
+
         # if show:
         #     sha.show()
-        sha.save("otrorecibo.jpg", "JPEG")
-        comp_img = open("otrorecibo.jpg", "rb")
-        # os.remove("hoja.jpg")
-        # os.remove("otrorecibo.jpg")
+        sha.save("otrorecibostp.jpg", "JPEG")
+        comp_img = open("otrorecibostp.jpg", "rb")
+        sha.show()
+        os.remove("hojastp.jpg")
+        os.remove("otrorecibostp.jpg")
+        
         return comp_img
 
     def spei(self, trans):
@@ -199,11 +210,12 @@ class CompTrans(object):
         pass
 
     def trans(self):
+        print(self._tipo.codigo)
         if self._tipo.codigo == "18":
 
             return self.inguz()
         if self._tipo.codigo == "20":
-            return self.cobro
+            return self.cobro()
 
         if self._tipo.codigo == "2":
-            return self.stp
+            return self.stp()

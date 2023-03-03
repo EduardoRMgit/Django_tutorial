@@ -275,6 +275,7 @@ def parse_dates_cuenta(req):
 
 
 def upload_s3(file, user):
+    print("------")
     from cactus.storage_backends import PrivateMediaStorage
 
     file_directory_within_bucket = 'estado_cuenta/{username}'.format(username=user.username)  # noqa:E501
@@ -479,23 +480,28 @@ def comprobante_trans(request, trans_id):
     user = request.user
     trans = None
     trans = Transaccion.objects.get(pk=trans_id)
-    print(trans)
-
+    # print(trans)
+    print("rielrielriel")
+    print(trans.tipoTrans)
     comp = CompTrans(trans)
     comp_file = comp.trans()
-
+    print(type(comp_file))
     if settings.USE_S3:
+       
         file_url = upload_s3(comp_file, user)
+        
         json_response = JsonResponse({
             'message': 'OK',
             'fileUrl': file_url,
         })
     else:
+        print("sadfsafasdfsadfadsf")
         # json = {"error": "Debug estado cuenta" +
         #         " not implented yet, set USE_S3 in .env to 1"}
-        # json_response = JsonResponse(json, status=400)
-        return HttpResponse(comp_file, content_type="image/jpg")
+        # json_response = JsonResponse(json, status=400) print("cacacacacacacacaca")
 
+        return HttpResponse(comp_file, content_type="image/jpg")
+    
     return json_response
 
 
