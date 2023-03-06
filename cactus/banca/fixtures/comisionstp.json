@@ -1,0 +1,10 @@
+[{
+  "model": "banca.comisionestp",
+  "pk": 1,
+  "fields": {
+    "stp": 4.0,
+    "ivaSTP": 0.64,
+    "cliente": 6.0,
+    "ivaCliente": 0.96
+  }
+}]

@@ -10,6 +10,7 @@ from pld.utils.movementspld import create_pld_movement
 
 from .catalogos import (ErroresTransaccion,
                         TipoTransaccion)
+from banca.models import ComisioneSTP
 
 
 class StatusTrans(models.Model):
@@ -72,6 +73,10 @@ class Transaccion(models.Model):
     )
     concepto = models.CharField(max_length=250, blank=True, null=True)
     claveRastreo = models.CharField(max_length=64, null=True)
+    comision = models.ForeignKey(ComisioneSTP,
+                                 on_delete=models.CASCADE,
+                                 blank=True,
+                                 null=True)
 
     class Meta():
         verbose_name_plural = 'Transacciones'
@@ -83,10 +88,14 @@ class Transaccion(models.Model):
 @receiver(pre_save, sender=Transaccion)
 def succesful_transaction_notCreated(sender, instance, **kwargs):
     from contabilidad.balanza import balanza
+    from banca.utils.cobroComision import comisionSTP
+    if instance.tipoTrans.medio == 'T' and instance.tipoTrans.tipo == 'E':
+        instance.comision = ComisioneSTP.objects.last()
     exito = StatusTrans.objects.get(nombre="exito")
     if instance.id and instance.tipoTrans:
         anterior = Transaccion.objects.get(id=instance.id)
         if (not anterior.statusTrans == instance.statusTrans) and instance.statusTrans == exito:  # noqa: E501
+            instance.monto = round(comisionSTP(instance), 2)
             tipo_trans = int(instance.tipoTrans.codigo)
             create_pld_movement(instance)
             if tipo_trans in [1, 2, 3, 6, 18, 19]:
