@@ -33,4 +33,3 @@ from .perfildeclarado import (TransferenciasMensuales,
                               OrigenDeposito,
                               PerfilTransaccionalDeclarado,
                               )
-from .respaldo import Respaldo

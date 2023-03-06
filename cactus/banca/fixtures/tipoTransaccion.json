@@ -4,6 +4,7 @@
   "pk": 1,
   "fields": {
     "codigo": "1",
+    "medio": "T",
     "nombre": "Transferencia Recibida",
     "tipo": "R",
     "salida": true
@@ -14,6 +15,7 @@
   "pk": 2,
   "fields": {
     "codigo": "2",
+    "medio": "T",
     "nombre": "Transferencia Enviada",
     "tipo": "E",
     "salida": false
@@ -24,6 +26,7 @@
   "pk": 3,
   "fields": {
     "codigo": "3",
+    "medio": "E",
     "nombre": "Depósito Scotiabank",
     "tipo": "R",
     "salida": false
@@ -34,6 +37,7 @@
   "pk": 4,
   "fields": {
     "codigo": "4",
+    "medio": "T",
     "nombre": "STP",
     "tipo": "E",
     "salida": true
@@ -44,6 +48,7 @@
   "pk": 5,
   "fields": {
     "codigo": "5",
+    "medio": "T",
     "nombre": "Pago de Servicios",
     "tipo": "E",
     "salida": true
@@ -54,6 +59,7 @@
   "pk": 6,
   "fields": {
     "codigo": "6",
+    "medio": "E",
     "nombre": "Retiro Scotiabank",
     "tipo": "E",
     "salida": true
@@ -64,6 +70,7 @@
   "pk": 7,
   "fields": {
     "codigo": "7",
+    "medio": "T",
     "nombre": "Pago a través de QR",
     "tipo": "E",
     "salida": true
@@ -74,6 +81,7 @@
   "pk": 8,
   "fields": {
     "codigo": "8",
+    "medio": "E",
     "nombre": "Depósito en Efectivo",
     "tipo": "R",
     "salida": false
@@ -84,6 +92,7 @@
   "pk": 9,
   "fields": {
     "codigo": "9",
+    "medio": "E",
     "nombre": "Retiro de Efectivo",
     "tipo": "E",
     "salida": true
@@ -94,6 +103,7 @@
   "pk": 10,
   "fields": {
     "codigo": "10",
+    "medio": "T",
     "nombre": "Seguros",
     "tipo": "E",
     "salida": true
@@ -104,6 +114,7 @@
   "pk": 11,
   "fields": {
     "codigo": "11",
+    "medio": "T",
     "nombre": "STP Entrada",
     "tipo": "R",
     "salida": true
@@ -114,6 +125,7 @@
   "pk": 12,
   "fields": {
     "codigo": "12",
+    "medio": "T",
     "nombre": "DDE Entrada",
     "tipo": "R",
     "salida": false
@@ -124,6 +136,7 @@
   "pk": 14,
   "fields": {
     "codigo": "14",
+    "medio": "T",
     "nombre": "DDE",
     "tipo": null,
     "salida": true
@@ -134,6 +147,7 @@
   "pk": 15,
   "fields": {
     "codigo": "15",
+    "medio": "T",
     "nombre": "Cobro a través de QR",
     "tipo": "R",
     "salida": false
@@ -144,6 +158,7 @@
   "pk": 16,
   "fields": {
     "codigo": "16",
+    "medio": "T",
     "nombre": "Transferencia Interna Scotiabank",
     "tipo": "E",
     "salida": false
@@ -154,6 +169,7 @@
   "pk": 17,
   "fields": {
     "codigo": "17",
+    "medio": "T",
     "nombre": "Transferencia Interbancaria Scotiabank",
     "tipo": "E",
     "salida": false
@@ -164,6 +180,7 @@
   "pk": 18,
   "fields": {
     "codigo": "18",
+    "medio": "T",
     "nombre": "Inguz-Inguz Transaccion Enviada",
     "tipo": "E",
     "salida": false
@@ -174,6 +191,7 @@
   "pk": 19,
   "fields": {
     "codigo": "19",
+    "medio": "T",
     "nombre": "Inguz-Inguz Transaccion Recibida",
     "tipo": "R",
     "salida": true
@@ -184,6 +202,7 @@
   "pk": 20,
   "fields": {
     "codigo": "20",
+    "medio": "T",
     "nombre": "Inguz-Inguz Cobro Enviado",
     "tipo": "E",
     "salida": false
@@ -194,9 +213,30 @@
   "pk": 21,
   "fields": {
     "codigo": "21",
+    "medio": "T",
     "nombre": "Inguz-Inguz Cobro Recibido",
     "tipo": "R",
     "salida": true
+  }
+},
+{
+  "model": "banca.tipotransaccion",
+  "pk": 22,
+  "fields": {
+    "codigo": "22",
+    "nombre": "Cancelación de cuenta",
+    "tipo": "S",
+    "salida": false
+  }
+},
+{
+  "model": "banca.tipotransaccion",
+  "pk": 23,
+  "fields": {
+    "codigo": "23",
+    "nombre": "Ticket de soporte",
+    "tipo": "S",
+    "salida": false
   }
 }
 ]
