@@ -27,9 +27,7 @@ from spei.models import StpTransaction
 from banca.models import Transaccion, StatusTrans, SaldoReservado
 from banca.utils.comprobantesPng import CompTrans
 from spei.stpTools import randomString
-from banca.models import (
-    Transaccion, StatusTrans, SaldoReservado, TipoTransaccion
-)
+from banca.models import (Transaccion, StatusTrans, SaldoReservado, TipoTransaccion)   # noqa: E501
 from banca.serializers import DetailSerializer, EstadoSerializer
 from banca.utils.limiteTrans import LimiteTrans
 from demograficos.models import UserProfile
@@ -538,9 +536,9 @@ def comprobante_trans(request, trans_id):
     comp_file = comp.trans()
     print(type(comp_file))
     if settings.USE_S3:
-       
+
         file_url = upload_s3(comp_file, user)
-        
+
         json_response = JsonResponse({
             'message': 'OK',
             'fileUrl': file_url,
@@ -549,10 +547,10 @@ def comprobante_trans(request, trans_id):
         print("sadfsafasdfsadfadsf")
         # json = {"error": "Debug estado cuenta" +
         #         " not implented yet, set USE_S3 in .env to 1"}
-        # json_response = JsonResponse(json, status=400) print("cacacacacacacacaca")
+        # json_response = JsonResponse(json, status=400)
 
         return HttpResponse(comp_file, content_type="image/jpg")
-    
+
     return json_response
 
 

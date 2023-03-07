@@ -63,7 +63,7 @@ class CompTrans(object):
         img1.paste(img2, (1, 1))
         sha = img1
         # if show:
-        
+
         sha.save("otroreciboinguz.jpg", "JPEG")
         comp_img = open("otroreciboinguz.jpg", "rb")
         os.remove("hojainguz.jpg")
@@ -125,7 +125,7 @@ class CompTrans(object):
         sha.show()
         os.remove("hoja.jpg")
         os.remove("otrorecibo.jpg")
-        
+
         return comp_img
 
     def cobroL(self, cobro):
@@ -191,7 +191,7 @@ class CompTrans(object):
         sha.show()
         os.remove("hojastp.jpg")
         os.remove("otrorecibostp.jpg")
-        
+
         return comp_img
 
     def spei(self, trans):
