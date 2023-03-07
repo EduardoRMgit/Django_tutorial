@@ -27,7 +27,6 @@ from spei.models import StpTransaction
 from banca.models import Transaccion, StatusTrans, SaldoReservado
 from banca.utils.comprobantesPng import CompTrans
 from spei.stpTools import randomString
-from banca.models import (Transaccion, StatusTrans, SaldoReservado, TipoTransaccion)   # noqa: E501
 from banca.serializers import DetailSerializer, EstadoSerializer
 from banca.utils.limiteTrans import LimiteTrans
 from demograficos.models import UserProfile
