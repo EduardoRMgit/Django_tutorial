@@ -6,6 +6,8 @@ from django.db.models.signals import pre_save, post_save
 from django.core.validators import MinValueValidator
 from decimal import Decimal
 
+from pld.utils.movementspld import create_pld_movement
+
 from .catalogos import (ErroresTransaccion,
                         TipoTransaccion)
 
@@ -37,13 +39,6 @@ class Transaccion(models.Model):
         on_delete=models.CASCADE,
         related_name='user_transaccion'
     )
-    """
-    receptor = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        related_name='receptor_transaccion'
-    )
-    """
 
     """Cuando se solicita el movimiento."""
     fechaValor = models.DateTimeField(
@@ -53,7 +48,7 @@ class Transaccion(models.Model):
     fechaAplicacion = models.DateTimeField(null=True, blank=True)
 
     monto = models.DecimalField(
-        max_digits=30, decimal_places=4, null=True, blank=True)
+        max_digits=30, decimal_places=2, null=True, blank=True)
     statusTrans = models.ForeignKey(
         StatusTrans,
         on_delete=models.SET_NULL,
@@ -86,22 +81,24 @@ class Transaccion(models.Model):
 
 
 @receiver(pre_save, sender=Transaccion)
-def ejecuta_balanza_notCreated(sender, instance, **kwargs):
+def succesful_transaction_notCreated(sender, instance, **kwargs):
     from contabilidad.balanza import balanza
     exito = StatusTrans.objects.get(nombre="exito")
     if instance.id and instance.tipoTrans:
         anterior = Transaccion.objects.get(id=instance.id)
         if (not anterior.statusTrans == instance.statusTrans) and instance.statusTrans == exito:  # noqa: E501
             tipo_trans = int(instance.tipoTrans.codigo)
+            create_pld_movement(instance)
             if tipo_trans in [1, 2, 3, 6, 18, 19]:
                 balanza(instance, tipo_trans)
 
 
 @receiver(post_save, sender=Transaccion)
-def ejecuta_balanza_created(sender, instance, created, **kwargs):
+def succesful_transaction_created(sender, instance, created, **kwargs):
     from contabilidad.balanza import balanza
     exito = StatusTrans.objects.get(nombre="exito")
     if created and instance.statusTrans == exito:
+        create_pld_movement(instance)
         tipo_trans = int(instance.tipoTrans.codigo)
         if tipo_trans in [1, 2, 3, 6, 18, 19]:
             balanza(instance, tipo_trans)

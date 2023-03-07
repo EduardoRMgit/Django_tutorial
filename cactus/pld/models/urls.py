@@ -12,10 +12,11 @@ class UrlsPLD(models.Model):
     - urls = URLField()
 
     """
+    nombre = models.CharField(max_length=50, null=True, blank=True)
     urls = models.URLField()
 
     def __str__(self):
-        return self.urls
+        return self.nombre
 
     class Meta:
         verbose_name_plural = 'UBcuboUrlsPLD'

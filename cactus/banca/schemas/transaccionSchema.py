@@ -18,6 +18,7 @@ from banca.models.transaccion import (Transaccion,
 from banca.models.catalogos import TipoTransaccion
 from banca.models import NotificacionCobro, InguzTransaction, NivelCuenta
 from banca.utils.clabe import es_cuenta_inguz
+from banca.utils.limiteTrans import LimiteTrans
 
 from spei.models import StpTransaction
 from spei.stpTools import randomString
@@ -382,8 +383,10 @@ class Query(graphene.ObjectType):
     all_nivel = graphene.List(NivelCuentaType)
 
     @login_required
-    def resolve_all_transaccion(self, info, limit=None, offset=None,
-            ordering=None, status=None, **kwargs):
+    def resolve_all_transaccion(
+        self, info, limit=None, offset=None, ordering=None, status=None,
+        **kwargs
+    ):
         user = info.context.user
         qs = user.user_transaccion.all()
 
@@ -556,6 +559,9 @@ class CreateTransferenciaEnviada(graphene.Mutation):
         status = StatusTrans.objects.get(nombre="esperando respuesta")
         tipo = TipoTransaccion.objects.get(codigo=2)  # Transferencia Enviada
         rfc_beneficiario = None
+        if not LimiteTrans(user.id).trans_mes(float(monto_stp_trans)):
+            raise Exception("Límite transaccional superado")
+
         main_trans = Transaccion.objects.create(
             user=user,
             fechaValor=fecha,
@@ -613,7 +619,6 @@ class CreateTransferenciaEnviada(graphene.Mutation):
             user.Uprofile.saldo_cuenta = round(
                 float(saldo_inicial_usuario) - float(reservado_stp_trans), 2)
             user.Uprofile.save()
-        print("\n\ntransacción creada:")
         for k in stp_transaccion.__dict__:
             print(f"    {k}:   {stp_transaccion.__dict__[k]}")
 

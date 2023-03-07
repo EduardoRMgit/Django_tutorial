@@ -91,8 +91,8 @@ class Customer(models.Model):
     #  LLave UNIQUE: CURP
     curp = models.CharField(max_length=18, default=0, blank=True, null=True)
     fecha_nacimiento = models.DateField(null=True, blank=True)
-    pais_nacimiento = CountryField(null=True, blank=True)
-    nacionalidad = CountryField(null=True, blank=True)
+    pais_nacimiento = models.CharField(max_length=30, blank=True, null=True)
+    nacionalidad = models.CharField(max_length=30, blank=True, null=True)
     e_f_nacimiento = models.CharField(max_length=60, null=True, blank=True)
     telefono_fijo = models.CharField(max_length=20, null=True, blank=True)
     telefono_movil = models.CharField(max_length=30, null=True, blank=True)
@@ -122,7 +122,7 @@ class Customer(models.Model):
     pais_domicilio = CountryField(null=True, blank=True)
     fecha_proxima_revision = models.DateField(null=True, blank=True)
     comentarios = models.CharField(max_length=420, null=True, blank=True)
-    mensaje = models.CharField(max_length=420, null=True, blank=True)
+    mensaje = models.CharField(max_length=2000, null=True, blank=True)
     no_cliente = models.CharField(max_length=60, blank=True, null=True)
     created_at = models.DateField(null=True, blank=True)
     updated_at = models.DateField(null=True, blank=True)
@@ -137,6 +137,8 @@ class Customer(models.Model):
         blank=True,
         null=True,
         related_name='Ucustomer')
+    riesgo = models.CharField(max_length=255, null=True, blank=True)
+    response = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return str(self.user)
