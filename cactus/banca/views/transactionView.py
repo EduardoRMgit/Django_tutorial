@@ -24,7 +24,7 @@ from django.http import (JsonResponse,
 from django.template.loader import render_to_string
 
 from spei.models import StpTransaction
-from banca.models import Transaccion, StatusTrans, SaldoReservado
+from banca.models import Transaccion, StatusTrans, SaldoReservado, TipoTransaccion   # noqa: E501
 from banca.utils.comprobantesPng import CompTrans
 from spei.stpTools import randomString
 from banca.serializers import DetailSerializer, EstadoSerializer
