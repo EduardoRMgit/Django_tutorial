@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Bienvenido a Inguz</title>
+    <style>
+        img {
+            -ms-interpolation-mode: bicubic;
+        }
+
+        table,
+        td {
+            mso-table-lspace: 0pt;
+            mso-table-rspace: 0pt;
+        }
+
+        .mceStandardButton,
+        .mceStandardButton td,
+        .mceStandardButton td a {
+            mso-hide: all !important;
+        }
+
+        p,
+        a,
+        li,
+        td,
+        blockquote {
+            mso-line-height-rule: exactly;
+        }
+
+        p,
+        a,
+        li,
+        td,
+        body,
+        table,
+        blockquote {
+            -ms-text-size-adjust: 100%;
+            -webkit-text-size-adjust: 100%;
+        }
+
+        @media only screen and (max-width: 480px) {
+
+            body,
+            table,
+            td,
+            p,
+            a,
+            li,
+            blockquote {
+                -webkit-text-size-adjust: none !important;
+            }
+        }
+
+        .mcnPreviewText {
+            display: none !important;
+        }
+
+        .bodyCell {
+            margin: 0 auto;
+            padding: 0;
+            width: 100%;
+        }
+
+        .ExternalClass,
+        .ExternalClass p,
+        .ExternalClass td,
+        .ExternalClass div,
+        .ExternalClass span,
+        .ExternalClass font {
+            line-height: 100%;
+        }
+
+        .ReadMsgBody {
+            width: 100%;
+        }
+
+        .ExternalClass {
+            width: 100%;
+        }
+
+        a[x-apple-data-detectors] {
+            color: inherit !important;
+            text-decoration: none !important;
+            font-size: inherit !important;
+            font-family: inherit !important;
+            font-weight: inherit !important;
+            line-height: inherit !important;
+        }
+
+        body {
+            height: 100%;
+            margin: 0px;
+            padding: 0px;
+            width: 100%;
+            background: rgb(255, 255, 255);
+        }
+
+        p {
+            margin: 0px;
+            padding: 0px;
+        }
+
+        table {
+            border-collapse: collapse;
+        }
+
+        td,
+        p,
+        a {
+            word-break: break-word;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            display: block;
+            margin: 0px;
+            padding: 0px;
+        }
+
+        img,
+        a img {
+            border: 0px;
+            height: auto;
+            outline: none;
+            text-decoration: none;
+        }
+
+        @media only screen and (max-width: 480px) {
+            body {
+                width: 100% !important;
+                min-width: 100% !important;
+            }
+
+            colgroup {
+                display: none;
+            }
+
+            img {
+                height: auto !important;
+            }
+
+            .mceColumn {
+                display: block !important;
+                width: 100% !important;
+            }
+
+            .mceSpacing-24 {
+                padding-right: 12px !important;
+                padding-left: 12px !important;
+            }
+
+            .mceFooterSection .mceText,
+            .mceFooterSection .mceText p,
+            .mceFooterSection span {
+                font-size: 16px !important;
+                line-height: 150% !important;
+            }
+
+            .mceText,
+            .mceText p {
+                font-size: 16px !important;
+                line-height: 150% !important;
+            }
+
+            h1 {
+                font-size: 36px !important;
+                line-height: 125% !important;
+            }
+        }
+
+        body {
+            background-color: rgb(244, 244, 244);
+        }
+
+        .mceText,
+        .mceLabel {
+            font-family: "Helvetica Neue", Helvetica, Arial, Verdana, sans-serif;
+        }
+
+        .mceText,
+        .mceLabel {
+            color: rgb(0, 0, 0);
+        }
+
+        .mceText h1 {
+            margin-bottom: 0px;
+        }
+
+        .mceText p {
+            margin-bottom: 0px;
+        }
+
+        .mceText label {
+            margin-bottom: 0px;
+        }
+
+        .mceText input {
+            margin-bottom: 0px;
+        }
+
+        .mceSpacing-12 .mceInput+.mceErrorMessage {
+            margin-top: -6px;
+        }
+
+        .mceText h1 {
+            margin-bottom: 0px;
+        }
+
+        .mceSpacing-24 h1:last-child {
+            margin-bottom: 0px;
+        }
+
+        .mceSpacing-24 .last-child {
+            margin-bottom: 0px;
+        }
+
+        .mceSpacing-24 .last-child {
+            margin-bottom: 0px;
+        }
+
+        .mceSpacing-24 .last-child {
+            margin-bottom: 0px;
+        }
+
+        .mceSpacing-24 .last-child {
+            margin-bottom: 0px;
+        }
+
+        .mceText p {
+            margin-bottom: 0px;
+        }
+
+        .mceSpacing-24 p:last-child {
+            margin-bottom: 0px;
+        }
+
+        .mceSpacing-24 .last-child {
+            margin-bottom: 0px;
+        }
+
+        .mceSpacing-24 .last-child {
+            margin-bottom: 0px;
+        }
+
+        .mceSpacing-24 .last-child {
+            margin-bottom: 0px;
+        }
+
+        .mceText label {
+            margin-bottom: 0px;
+        }
+
+        .mceText input {
+            margin-bottom: 0px;
+        }
+
+        .mceSpacing-24 .last-child {
+            margin-bottom: 0px;
+        }
+
+        .mceSpacing-24 .mceInput+.mceErrorMessage {
+            margin-top: -12px;
+        }
+
+        .mceInput {
+            background-color: transparent;
+            border: 2px solid rgb(208, 208, 208);
+            width: 60%;
+            color: rgb(77, 77, 77);
+            display: block;
+        }
+
+        .mceInput[type="radio"],
+        .mceInput[type="checkbox"] {
+            float: left;
+            margin-right: 12px;
+            display: inline;
+            width: auto !important;
+        }
+
+        .mceLabel>.mceInput {
+            margin-bottom: 0px;
+            margin-top: 2px;
+        }
+
+        .mceLabel {
+            display: block;
+        }
+
+        .mceText h1 {
+            font-size: 31.248px;
+            font-weight: 700;
+        }
+
+        .mceText p {
+            color: rgb(0, 0, 0);
+            font-family: "Helvetica Neue", Helvetica, Arial, Verdana, sans-serif;
+            font-size: 16px;
+        }
+
+        .mceText h1 {
+            color: rgb(0, 0, 0);
+            font-family: "Helvetica Neue", Helvetica, Arial, Verdana, sans-serif;
+            font-size: 31px;
+        }
+
+        .mceText a {
+            color: rgb(0, 0, 0);
+        }
+    </style>
+</head>
+
+<body>
+    <p>Hola bienvenido a Inguz {{username}}</p>
+    <span class="mcnPreviewText" style="display:none; font-size:0px; line-height:0px; max-height:0px; max-width:0px; opacity:0; overflow:hidden; visibility:hidden; mso-hide:all;"></span>
+    <center>
+        <table border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" id="bodyTable" style="background-color: rgb(244, 244, 244);">
+            <tbody>
+                <tr>
+                    <td id="root" class="bodyCell" align="center" valign="top">
+                        <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width:660px" role="presentation">
+                            <tbody>
+                                <tr class="mceRow">
+                                    <td style="background-position:center;background-repeat:no-repeat;background-size:cover" valign="top">
+                                        <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation">
+                                            <tbody>
+                                                <tr>
+                                                    <td style="background-color:#ffffff;background-position:center;background-repeat:no-repeat;background-size:cover" class="mceColumn" valign="top" colspan="12" width="100%">
+                                                        <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation">
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td style="padding-top:48px;padding-bottom:12px;padding-right:24px;padding-left:24px" class="mceSpacing-24" valign="top">
+                                                                        <div class="mceText" style="font-size:16px;text-align:center;width:100%">
+                                                                            <p class="last-child"><a href="">View this email in your browser</a></p>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td style="background-color:transparent;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0" class="mceSpacing-24" valign="top">
+                                                                        <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color:transparent" role="presentation">
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td style="min-width:100%;border-top:20px solid transparent" valign="top"></td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td style="padding-top:12px;padding-bottom:12px;padding-right:24px;padding-left:24px" class="mceSpacing-24" align="center" valign="top"><img width="215"
+                                                                            style="width:215px;height:auto;max-width:100%;display:block" alt="Logo"
+                                                                            src="https://dim.mcusercontent.com/cs/46662a668c3062a53b1bf06ab/images/e99bc408-d746-b1ea-b55e-7665275ee17c.png?w=215&dpr=2" class="" /></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td style="padding-top:12px;padding-bottom:12px;padding-right:12px;padding-left:12px" class="mceSpacing-24" valign="top">
+                                                                        <div class="mceText" style="font-size:16px;text-align:center;width:100%">
+                                                                            <p><br /></p>
+                                                                            <p><strong><span style="color:#3e8eb3;"><span style="font-size: 24px"><span style="font-family: 'DM Sans', sans-serif">¡Bienvenido a inguz {{ username }}!</span></span></span></strong></p>
+                                                                            <p class="last-child"><br /></p>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td style="padding-top:8px;padding-bottom:8px;padding-right:8px;padding-left:8px" class="mceSpacing-24" valign="top">
+                                                                        <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" id="section_45888c211a14271d904f005ad362a73d">
+                                                                            <tbody>
+                                                                                <tr class="mceRow">
+                                                                                    <td style="background-position:center;background-repeat:no-repeat;background-size:cover" valign="top">
+                                                                                        <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation">
+                                                                                            <tbody>
+                                                                                                <tr>
+                                                                                                    <td style="background-position:center;background-repeat:no-repeat;background-size:cover" class="mceColumn" valign="top" colspan="12" width="100%">
+                                                                                                        <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation">
+                                                                                                            <tbody>
+                                                                                                                <tr>
+                                                                                                                    <td class="mceSpacing-24" align="center" valign="top">
+                                                                                                                        <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation">
+                                                                                                                            <tbody>
+                                                                                                                                <tr class="mceRow">
+                                                                                                                                    <td style="background-position:center;background-repeat:no-repeat;background-size:cover;padding-top:0px;padding-bottom:0px"
+                                                                                                                                        valign="top">
+                                                                                                                                        <table border="0" cellpadding="0" cellspacing="24" width="100%" style="table-layout:fixed" role="presentation">
+                                                                                                                                            <colgroup>
+                                                                                                                                                <col span="1" width="8.333333333333332%" />
+                                                                                                                                                <col span="1" width="8.333333333333332%" />
+                                                                                                                                                <col span="1" width="8.333333333333332%" />
+                                                                                                                                                <col span="1" width="8.333333333333332%" />
+                                                                                                                                                <col span="1" width="8.333333333333332%" />
+                                                                                                                                                <col span="1" width="8.333333333333332%" />
+                                                                                                                                                <col span="1" width="8.333333333333332%" />
+                                                                                                                                                <col span="1" width="8.333333333333332%" />
+                                                                                                                                                <col span="1" width="8.333333333333332%" />
+                                                                                                                                                <col span="1" width="8.333333333333332%" />
+                                                                                                                                                <col span="1" width="8.333333333333332%" />
+                                                                                                                                                <col span="1" width="8.333333333333332%" />
+                                                                                                                                            </colgroup>
+                                                                                                                                            <tbody>
+                                                                                                                                                <tr>
+                                                                                                                                                    <td style="background-position:center;background-repeat:no-repeat;background-size:cover;padding-top:0;padding-bottom:0;margin-bottom:24px"
+                                                                                                                                                        class="mceColumn" valign="center" colspan="6" width="50%">
+                                                                                                                                                        <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation">
+                                                                                                                                                            <tbody>
+                                                                                                                                                                <tr>
+                                                                                                                                                                    <td style="padding-top:12px;padding-bottom:12px;padding-right:16px;padding-left:16px"
+                                                                                                                                                                        class="mceSpacing-24" valign="top">
+                                                                                                                                                                        <div class="mceText" style="font-size:16px;text-align:left;width:100%">
+                                                                                                                                                                            <p style="text-align: right;"><strong><span style="color:#363d4a;"><span
+                                                                                                                                                                                            style="font-family: 'DM Sans', sans-serif">Estamos muy
+                                                                                                                                                                                            contentos de que estés aquí :)</span></span></strong></p>
+                                                                                                                                                                            <p style="text-align: right;"><span
+                                                                                                                                                                                    style="color:#363d4a;"><span><br /></span><span
+                                                                                                                                                                                        style="font-size: 12pt"><span>Tu dinero tiene un nuevo hogar
+                                                                                                                                                                                            digital donde será más fácil que lo manejes como antes, pero
+                                                                                                                                                                                            desde tu celular. ¿Necesitas darle dinero a un familiar?
+                                                                                                                                                                                            ¿Pagarle a algún amigo? ¿Cobrar por tus servicios? ¡Hazlo con
+                                                                                                                                                                                        </span></span></span><strong><span style="color:#363d4a;"><span
+                                                                                                                                                                                            style="font-size: 12pt"><span>inguz</span></span></span></strong><span
+                                                                                                                                                                                    style="color:#363d4a;"><span style="font-size: 12pt"><span
+                                                                                                                                                                                            style="font-family: 'DM Sans', sans-serif">! Con
+                                                                                                                                                                                        </span></span></span><strong><span style="color:#363d4a;"><span
+                                                                                                                                                                                            style="font-size: 12pt"><span
+                                                                                                                                                                                                style="font-family: 'DM Sans', sans-serif">inguz</span></span></span></strong><span
+                                                                                                                                                                                    style="color:#363d4a;"><span style="font-size: 12pt"><span
+                                                                                                                                                                                            style="font-family: 'DM Sans', sans-serif"> vas a poder hacer
+                                                                                                                                                                                            transferencias ¡en solo segundos!</span></span></span></p>
+                                                                                                                                                                            <p style="text-align: right;"><span
+                                                                                                                                                                                    style="color:#363d4a;"><span><br /></span><span
+                                                                                                                                                                                        style="font-size: 12pt"><span>Olvídate de trasladarte para enviar
+                                                                                                                                                                                            dinero desde tu cuenta; si ofreces algún producto o servicio,
+                                                                                                                                                                                            tus clientes pueden transferirte a tu cuenta
+                                                                                                                                                                                        </span></span></span><strong><span style="color:#363d4a;"><span
+                                                                                                                                                                                            style="font-size: 12pt"><span>inguz</span></span></span></strong><span
+                                                                                                                                                                                    style="color:#363d4a;"><span style="font-size: 12pt"><span
+                                                                                                                                                                                            style="font-family: 'DM Sans', sans-serif"> sin que tengas que
+                                                                                                                                                                                            cargar efectivo; si tus amigos o familiares se suman a
+                                                                                                                                                                                        </span></span></span><strong><span style="color:#363d4a;"><span
+                                                                                                                                                                                            style="font-size: 12pt"><span>inguz</span></span></span></strong><span
+                                                                                                                                                                                    style="color:#363d4a;"><span style="font-size: 12pt"><span> y abren su
+                                                                                                                                                                                            cuenta, enviar o recibir dinero entre ustedes no tendrá ningún
+                                                                                                                                                                                            costo, ¡y más beneficios se irán sumando!</span></span></span>
+                                                                                                                                                                            </p>
+                                                                                                                                                                            <p style="text-align: right;" class="last-child"><span
+                                                                                                                                                                                    style="color:#363d4a;"><span
+                                                                                                                                                                                        style="font-family: 'DM Sans', sans-serif"><br />Ya diste el paso
+                                                                                                                                                                                        más importante: </span></span><strong><span
+                                                                                                                                                                                        style="color:#363d4a;"><span
+                                                                                                                                                                                            style="font-family: 'DM Sans', sans-serif">¡abriste tu nueva
+                                                                                                                                                                                            cuenta inguz! </span></span></strong><span
+                                                                                                                                                                                    style="color:#363d4a;"><span
+                                                                                                                                                                                        style="font-family: 'DM Sans', sans-serif">Para que comiences a
+                                                                                                                                                                                        usarla, lo primero que debes hacer es agregar dinero en ella. Para
+                                                                                                                                                                                        esto, necesitarás tu CLABE.</span></span></p>
+                                                                                                                                                                        </div>
+                                                                                                                                                                    </td>
+                                                                                                                                                                </tr>
+                                                                                                                                                            </tbody>
+                                                                                                                                                        </table>
+                                                                                                                                                    </td>
+                                                                                                                                                    <td style="background-position:center;background-repeat:no-repeat;background-size:cover;padding-top:0;padding-bottom:0"
+                                                                                                                                                        class="mceColumn" valign="center" colspan="6" width="50%">
+                                                                                                                                                        <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation">
+                                                                                                                                                            <tbody>
+                                                                                                                                                                <tr>
+                                                                                                                                                                    <td style="padding-top:12px;padding-bottom:12px;padding-right:16px;padding-left:16px"
+                                                                                                                                                                        class="mceSpacing-24" align="center" valign="top"><img width="270"
+                                                                                                                                                                            style="width:270px;height:auto;max-width:100%;display:block" alt=""
+                                                                                                                                                                            src="https://dim.mcusercontent.com/cs/46662a668c3062a53b1bf06ab/images/4acd0cf8-58a4-a214-15f5-5013c5262a6c.png?w=270&dpr=2"
+                                                                                                                                                                            role="presentation" class="imageDropZone" /></td>
+                                                                                                                                                                </tr>
+                                                                                                                                                            </tbody>
+                                                                                                                                                        </table>
+                                                                                                                                                    </td>
+                                                                                                                                                </tr>
+                                                                                                                                            </tbody>
+                                                                                                                                        </table>
+                                                                                                                                    </td>
+                                                                                                                                </tr>
+                                                                                                                            </tbody>
+                                                                                                                        </table>
+                                                                                                                    </td>
+                                                                                                                </tr>
+                                                                                                            </tbody>
+                                                                                                        </table>
+                                                                                                    </td>
+                                                                                                </tr>
+                                                                                            </tbody>
+                                                                                        </table>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td style="padding-top:8px;padding-bottom:8px;padding-right:8px;padding-left:8px" class="mceSpacing-24" valign="top">
+                                                                        <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" id="section_5cf1ac0ef95988dfe0fea03b8d2b113c">
+                                                                            <tbody>
+                                                                                <tr class="mceRow">
+                                                                                    <td style="background-position:center;background-repeat:no-repeat;background-size:cover" valign="top">
+                                                                                        <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation">
+                                                                                            <tbody>
+                                                                                                <tr>
+                                                                                                    <td style="background-position:center;background-repeat:no-repeat;background-size:cover" class="mceColumn" valign="top" colspan="12" width="100%">
+                                                                                                        <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation">
+                                                                                                            <tbody>
+                                                                                                                <tr>
+                                                                                                                    <td class="mceSpacing-24" align="center" valign="top">
+                                                                                                                        <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation">
+                                                                                                                            <tbody>
+                                                                                                                                <tr class="mceRow">
+                                                                                                                                    <td style="background-position:center;background-repeat:no-repeat;background-size:cover;padding-top:0px;padding-bottom:0px"
+                                                                                                                                        valign="top">
+                                                                                                                                        <table border="0" cellpadding="0" cellspacing="24" width="100%" style="table-layout:fixed" role="presentation">
+                                                                                                                                            <colgroup>
+                                                                                                                                                <col span="1" width="8.333333333333332%" />
+                                                                                                                                                <col span="1" width="8.333333333333332%" />
+                                                                                                                                                <col span="1" width="8.333333333333332%" />
+                                                                                                                                                <col span="1" width="8.333333333333332%" />
+                                                                                                                                                <col span="1" width="8.333333333333332%" />
+                                                                                                                                                <col span="1" width="8.333333333333332%" />
+                                                                                                                                                <col span="1" width="8.333333333333332%" />
+                                                                                                                                                <col span="1" width="8.333333333333332%" />
+                                                                                                                                                <col span="1" width="8.333333333333332%" />
+                                                                                                                                                <col span="1" width="8.333333333333332%" />
+                                                                                                                                                <col span="1" width="8.333333333333332%" />
+                                                                                                                                                <col span="1" width="8.333333333333332%" />
+                                                                                                                                            </colgroup>
+                                                                                                                                            <tbody>
+                                                                                                                                                <tr>
+                                                                                                                                                    <td style="background-position:center;background-repeat:no-repeat;background-size:cover;padding-top:0;padding-bottom:0;margin-bottom:24px"
+                                                                                                                                                        class="mceColumn" valign="center" colspan="6" width="50%">
+                                                                                                                                                        <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation">
+                                                                                                                                                            <tbody>
+                                                                                                                                                                <tr>
+                                                                                                                                                                    <td style="padding-top:12px;padding-bottom:12px;padding-right:16px;padding-left:16px"
+                                                                                                                                                                        class="mceSpacing-24" align="center" valign="top"><img width="270"
+                                                                                                                                                                            style="width:270px;height:auto;max-width:100%;display:block" alt=""
+                                                                                                                                                                            src="https://dim.mcusercontent.com/cs/46662a668c3062a53b1bf06ab/images/68eccdbf-0ce6-d28c-213b-56648d3118cf.png?w=270&dpr=2"
+                                                                                                                                                                            role="presentation" class="imageDropZone" /></td>
+                                                                                                                                                                </tr>
+                                                                                                                                                            </tbody>
+                                                                                                                                                        </table>
+                                                                                                                                                    </td>
+                                                                                                                                                    <td style="background-position:center;background-repeat:no-repeat;background-size:cover;padding-top:0;padding-bottom:0"
+                                                                                                                                                        class="mceColumn" valign="center" colspan="6" width="50%">
+                                                                                                                                                        <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation">
+                                                                                                                                                            <tbody>
+                                                                                                                                                                <tr>
+                                                                                                                                                                    <td style="padding-top:12px;padding-bottom:12px;padding-right:16px;padding-left:16px"
+                                                                                                                                                                        class="mceSpacing-24" align="left" valign="top">
+                                                                                                                                                                        <div class="mceText" style="font-size:16px;text-align:left;width:100%">
+                                                                                                                                                                            <p style="text-align: justify;" class="last-child"><strong><span
+                                                                                                                                                                                        style="color:#363d4a;"><span style="font-size: 12pt"><span
+                                                                                                                                                                                                style="font-family: 'DM Sans', sans-serif">La CLABE (Clave
+                                                                                                                                                                                                Bancaria Estandarizada)</span></span></span></strong><span
+                                                                                                                                                                                    style="color:#363d4a;"><span style="font-size: 12pt"><span
+                                                                                                                                                                                            style="font-family: 'DM Sans', sans-serif"> es un número de 18
+                                                                                                                                                                                            dígitos, única e irrepetible, que en México se utiliza para
+                                                                                                                                                                                            realizar transferencias entre distintos bancos. Siempre vas a
+                                                                                                                                                                                            poder encontrarla aquí.</span></span></span></p>
+                                                                                                                                                                        </div>
+                                                                                                                                                                    </td>
+                                                                                                                                                                </tr>
+                                                                                                                                                            </tbody>
+                                                                                                                                                        </table>
+                                                                                                                                                    </td>
+                                                                                                                                                </tr>
+                                                                                                                                            </tbody>
+                                                                                                                                        </table>
+                                                                                                                                    </td>
+                                                                                                                                </tr>
+                                                                                                                            </tbody>
+                                                                                                                        </table>
+                                                                                                                    </td>
+                                                                                                                </tr>
+                                                                                                            </tbody>
+                                                                                                        </table>
+                                                                                                    </td>
+                                                                                                </tr>
+                                                                                            </tbody>
+                                                                                        </table>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td style="background-color:transparent;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0" class="mceSpacing-24" valign="top">
+                                                                        <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color:transparent" role="presentation">
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td style="min-width:100%;border-top:20px solid transparent" valign="top"></td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td style="background-color:transparent;padding-top:20px;padding-bottom:20px;padding-right:24px;padding-left:24px" class="mceSpacing-24" valign="top">
+                                                                        <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color:transparent" role="presentation">
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td style="min-width:100%;border-top:2px solid #d0d0d0" valign="top"></td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td style="padding-top:10px;padding-bottom:0;padding-right:8px;padding-left:8px" class="mceSpacing-24" valign="top">
+                                                                        <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" id="section_db36408837c39d9e58b65575584ee550">
+                                                                            <tbody>
+                                                                                <tr class="mceRow">
+                                                                                    <td style="background-position:center;background-repeat:no-repeat;background-size:cover" valign="top">
+                                                                                        <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation">
+                                                                                            <tbody>
+                                                                                                <tr>
+                                                                                                    <td style="background-position:center;background-repeat:no-repeat;background-size:cover" class="mceColumn" valign="top" colspan="12" width="100%">
+                                                                                                        <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation">
+                                                                                                            <tbody>
+                                                                                                                <tr>
+                                                                                                                    <td class="mceSpacing-24" align="center" valign="top">
+                                                                                                                        <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation">
+                                                                                                                            <tbody>
+                                                                                                                                <tr class="mceRow">
+                                                                                                                                    <td style="background-position:center;background-repeat:no-repeat;background-size:cover;padding-top:0px;padding-bottom:0px"
+                                                                                                                                        valign="top">
+                                                                                                                                        <table border="0" cellpadding="0" cellspacing="24" width="100%" role="presentation">
+                                                                                                                                            <tbody>
+                                                                                                                                                <tr>
+                                                                                                                                                    <td style="background-position:center;background-repeat:no-repeat;background-size:cover;padding-top:0;padding-bottom:0"
+                                                                                                                                                        class="mceColumn" valign="top" colspan="12" width="100%">
+                                                                                                                                                        <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation">
+                                                                                                                                                            <tbody>
+                                                                                                                                                                <tr>
+                                                                                                                                                                    <td style="padding-top:12px;padding-bottom:12px;padding-right:16px;padding-left:16px"
+                                                                                                                                                                        class="mceSpacing-24" valign="top">
+                                                                                                                                                                        <div class="mceText" style="font-size:16px;text-align:center;width:100%">
+                                                                                                                                                                            <h1 class="last-child"><span style="color:#3e8eb3;"><span
+                                                                                                                                                                                        style="font-size: 24px"><span
+                                                                                                                                                                                            style="font-family: 'DM Sans', sans-serif">¿Cómo agregar
+                                                                                                                                                                                            dinero a tu cuenta inguz?</span></span></span></h1>
+                                                                                                                                                                        </div>
+                                                                                                                                                                    </td>
+                                                                                                                                                                </tr>
+                                                                                                                                                                <tr>
+                                                                                                                                                                    <td style="padding-top:12px;padding-bottom:0;padding-right:16px;padding-left:16px"
+                                                                                                                                                                        class="mceSpacing-24" valign="top">
+                                                                                                                                                                        <div class="mceText" style="font-size:16px;text-align:left;width:100%">
+                                                                                                                                                                            <p><strong><span style="color:#32e3ec;"><span style="font-size: 18px"><span
+                                                                                                                                                                                                style="font-family: 'DM Sans', sans-serif">Para comenzar,
+                                                                                                                                                                                                puedes realizar una transferencia
+                                                                                                                                                                                                electrónica</span></span></span></strong></p>
+                                                                                                                                                                            <p><br /></p>
+                                                                                                                                                                            <p style="text-align: justify;"><span style="color:rgb(0, 0, 0);"><span
+                                                                                                                                                                                        style="font-size: 12pt"><span
+                                                                                                                                                                                            style="font-family: 'DM Sans', sans-serif">Esto se hace desde
+                                                                                                                                                                                            una cuenta en cualquier otro banco o institución financiera
+                                                                                                                                                                                            (tuya o de alguien más que vaya a ayudarte). Deberás entrar a
+                                                                                                                                                                                            la app bancaria o sitio web del banco donde está la cuenta de
+                                                                                                                                                                                            origen y seguir los pasos para enviar dinero a tu cuenta
+                                                                                                                                                                                        </span></span></span><strong><span
+                                                                                                                                                                                        style="color:rgb(0, 0, 0);"><span style="font-size: 12pt"><span
+                                                                                                                                                                                                style="font-family: 'DM Sans', sans-serif">inguz</span></span></span></strong><span
+                                                                                                                                                                                    style="color:rgb(0, 0, 0);"><span style="font-size: 12pt"><span
+                                                                                                                                                                                            style="font-family: 'DM Sans', sans-serif">. Recuerda que vas
+                                                                                                                                                                                            a necesitar tu CLABE. El dinero llegará a tu cuenta de manera
+                                                                                                                                                                                            inmediata.</span></span></span></p>
+                                                                                                                                                                            <p class="last-child"><span style="color:rgb(0, 0, 0);"><br /><br /></span>
+                                                                                                                                                                            </p>
+                                                                                                                                                                        </div>
+                                                                                                                                                                    </td>
+                                                                                                                                                                </tr>
+                                                                                                                                                            </tbody>
+                                                                                                                                                        </table>
+                                                                                                                                                    </td>
+                                                                                                                                                </tr>
+                                                                                                                                            </tbody>
+                                                                                                                                        </table>
+                                                                                                                                    </td>
+                                                                                                                                </tr>
+                                                                                                                            </tbody>
+                                                                                                                        </table>
+                                                                                                                    </td>
+                                                                                                                </tr>
+                                                                                                            </tbody>
+                                                                                                        </table>
+                                                                                                    </td>
+                                                                                                </tr>
+                                                                                            </tbody>
+                                                                                        </table>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td style="background-color:transparent;padding-top:20px;padding-bottom:20px;padding-right:24px;padding-left:24px" class="mceSpacing-24" valign="top">
+                                                                        <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color:transparent" role="presentation">
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td style="min-width:100%;border-top:2px solid #797979" valign="top"></td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td style="padding-top:12px;padding-bottom:12px;padding-right:24px;padding-left:24px" class="mceSpacing-24" valign="top">
+                                                                        <div class="mceText" style="font-size:16px;width:100%">
+                                                                            <h1 class="last-child"><em><span style="color:#d0d0d0;"><span style="font-size: 24px"><span style="font-family: 'DM Sans', sans-serif">Comic: </span></span></span></em></h1>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td style="padding-top:12px;padding-bottom:12px;padding-right:0;padding-left:0" class="mceSpacing-24" align="center" valign="top"><img width="564"
+                                                                            style="width:564px;height:auto;max-width:100%;display:block" alt=""
+                                                                            src="https://dim.mcusercontent.com/cs/46662a668c3062a53b1bf06ab/images/f916a149-0593-cc00-db0e-a624cd6a18cd.png?w=564&dpr=2" role="presentation" class="imageDropZone" /></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td style="background-color:transparent;padding-top:20px;padding-bottom:20px;padding-right:24px;padding-left:24px" class="mceSpacing-24" valign="top">
+                                                                        <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color:transparent" role="presentation">
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td style="min-width:100%;border-top:2px solid #d0d0d0" valign="top"></td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td style="padding-top:8px;padding-bottom:8px;padding-right:8px;padding-left:8px" class="mceSpacing-24" valign="top">
+                                                                        <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" id="section_0a0d8a53f16c89d7593ecedbad133ab7" class="mceFooterSection">
+                                                                            <tbody>
+                                                                                <tr class="mceRow">
+                                                                                    <td style="background-position:center;background-repeat:no-repeat;background-size:cover" valign="top">
+                                                                                        <table border="0" cellpadding="0" cellspacing="12" width="100%" role="presentation">
+                                                                                            <tbody>
+                                                                                                <tr>
+                                                                                                    <td style="background-position:center;background-repeat:no-repeat;background-size:cover;padding-top:0;padding-bottom:0" class="mceColumn" valign="top"
+                                                                                                        colspan="12" width="100%">
+                                                                                                        <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation">
+                                                                                                            <tbody>
+                                                                                                                <tr>
+                                                                                                                    <td style="padding-top:12px;padding-bottom:12px;padding-right:0;padding-left:0" class="mceSpacing-24" align="center" valign="top"><img
+                                                                                                                            width="108" style="width:108px;height:auto;max-width:100%;display:block" alt="Logo"
+                                                                                                                            src="https://dim.mcusercontent.com/cs/46662a668c3062a53b1bf06ab/images/aa3d4a1f-8dc2-7b0b-1985-16363867a61e.png?w=108&dpr=2"
+                                                                                                                            class="" /></td>
+                                                                                                                </tr>
+                                                                                                                <tr>
+                                                                                                                    <td style="padding-top:12px;padding-bottom:12px;padding-right:24px;padding-left:24px" class="mceSpacing-24" align="center"
+                                                                                                                        valign="top">
+                                                                                                                        <div class="mceText" style="font-size:16px;display:inline-block;width:100%">
+                                                                                                                            <p class="last-child"><em><span style="font-size: 12px">Copyright (C). All rights
+                                                                                                                                        reserved.</span></em><br /><span
+                                                                                                                                    style="font-size: 12px"></span><br /><br /><span
+                                                                                                                                    style="font-size: 12px">Our mailing address is:</span><br /><span
+                                                                                                                                    style="font-size: 12px"></span><br /><br /><span
+                                                                                                                                    style="font-size: 12px">Want to change how you receive these emails?</span><br /><span style="font-size: 12px">You can
+                                                                                                                                </span><a href="*|UPDATE_PROFILE|*"><span style="font-size: 12px">update your preferences</span></a><span
+                                                                                                                                    style="font-size: 12px"> or </span><a href=""><span style="font-size: 12px">unsubscribe</span></a></p>
+                                                                                                                        </div>
+                                                                                                                    </td>
+                                                                                                                </tr>
+                                                                                                                <tr>
+                                                                                                                    <td class="mceSpacing-24" align="center" valign="top">
+                                                                                                                        <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation">
+                                                                                                                            <tbody>
+                                                                                                                                <tr class="mceRow">
+                                                                                                                                    <td style="background-position:center;background-repeat:no-repeat;background-size:cover" valign="top">
+                                                                                                                                        <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation">
+                                                                                                                                            <tbody>
+                                                                                                                                                <tr>
+                                                                                                                                                    <td style="background-position:center;background-repeat:no-repeat;background-size:cover"
+                                                                                                                                                        class="mceColumn" valign="top" colspan="12" width="100%">
+                                                                                                                                                        <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation">
+                                                                                                                                                            <tbody>
+                                                                                                                                                                <tr>
+                                                                                                                                                                    <td class="mceSpacing-24" align="center" valign="top">
+                                                                                                                                                                        <div>
+                                                                                                                                                                            <div><a href="http://eepurl.com/ieRdTL" target="_blank"
+                                                                                                                                                                                    rel="noopener noreferrer"><img style="max-width:100%" width="360"
+                                                                                                                                                                                        height="64" alt="Email Marketing Powered by Mailchimp"
+                                                                                                                                                                                        title="Mailchimp Email Marketing"
+                                                                                                                                                                                        src="https://cdn-images.mailchimp.com/monkey_rewards/grow-business-banner-2.png" /></a>
+                                                                                                                                                                            </div>
+                                                                                                                                                                        </div>
+                                                                                                                                                                    </td>
+                                                                                                                                                                </tr>
+                                                                                                                                                            </tbody>
+                                                                                                                                                        </table>
+                                                                                                                                                    </td>
+                                                                                                                                                </tr>
+                                                                                                                                            </tbody>
+                                                                                                                                        </table>
+                                                                                                                                    </td>
+                                                                                                                                </tr>
+                                                                                                                            </tbody>
+                                                                                                                        </table>
+                                                                                                                    </td>
+                                                                                                                </tr>
+                                                                                                            </tbody>
+                                                                                                        </table>
+                                                                                                    </td>
+                                                                                                </tr>
+                                                                                            </tbody>
+                                                                                        </table>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </center>
+</body>
+
+</html>

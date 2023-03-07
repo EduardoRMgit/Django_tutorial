@@ -11,7 +11,6 @@ from random import randint
 from graphene_django.types import DjangoObjectType
 from graphql_jwt.decorators import login_required
 from graphql_jwt.shortcuts import get_token
-from graphene_django.filter import DjangoFilterConnectionField
 
 from django.core.validators import validate_email
 
@@ -21,7 +20,8 @@ from django.conf import settings
 from django.contrib.auth import authenticate
 from django.http import HttpRequest
 from django.contrib.auth.models import User
-from demograficos.models import GeoLocation, GeoDevice, UserLocation, Respaldo
+from demograficos.models import GeoLocation, GeoDevice, UserLocation
+from crecimiento.models import Respaldo
 from django.contrib.auth import authenticate
 from django.utils import timezone
 from spei.stpTools import randomString
@@ -67,24 +67,13 @@ from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 
 from axes.models import AccessAttempt
 
+from pld.utils.customerpld import create_pld_customer
+
+from demograficos.utils.correo import mandar_email
 
 db_logger = logging.getLogger("db")
 
 # WRAPPERS
-
-class ExtendedConnection(graphene.Connection):
-    class Meta:
-        abstract = True
-
-    total_count = graphene.Int()
-    edge_count = graphene.Int()
-
-    def resolve_total_count(root, info, **kwargs):
-        return root.length
-
-    def resolve_edge_count(root, info, **kwargs):
-        return len(root.edges)
-
 
 class RespuestaType(DjangoObjectType):
     class Meta:
@@ -307,19 +296,6 @@ class BlockDetails(graphene.ObjectType):
     status = graphene.String()
 
 
-class RespaldoType(DjangoObjectType):
-
-    id = graphene.ID(source='pk', required=True)
-    class Meta:
-        model = Respaldo
-        filter_fields = {
-            'status': ['exact',],
-            'activo': ['exact',]
-        }
-        interfaces = (graphene.Node, )
-        connection_class = ExtendedConnection
-
-
 class Query(graphene.ObjectType):
     """
         >>> Query (Pregunstas Secretas) Example:
@@ -478,6 +454,7 @@ class Query(graphene.ObjectType):
                                   ordering=graphene.String(),
                                   es_inguz=graphene.Boolean(),
                                   bloqueado=graphene.Boolean(),
+                                  no_respaldos=graphene.Boolean(),
                                   activo=graphene.Boolean(),
                                   alias_inguz=graphene.String(),
                                   nombre=graphene.String(),
@@ -527,15 +504,6 @@ class Query(graphene.ObjectType):
     all_origen_deposito = graphene.List(OrigenDepositoType,
                                         description="Query all objects from \
                                         model OrigenDeposito")
-
-    all_respaldos = DjangoFilterConnectionField(
-        RespaldoType,
-        token=graphene.String(required=True),
-        ordering=graphene.String(),
-        description=
-        "Query all the objects from the \
-        Respaldo Model"
-    )
 
     # Initiating resolvers for type all Queries
 
@@ -969,22 +937,37 @@ class Query(graphene.ObjectType):
     def resolve_all_contactos(
             self, info, limit=None, offset=None, ordering=None, es_inguz=None,
             bloqueado=None, activo=None, alias_inguz=None,
-            nombre=None, **kwargs):
+            nombre=None, no_respaldos=None, **kwargs):
 
         user = info.context.user
         qs = user.Contactos_Usuario.all()
 
-        if es_inguz is not None:
+        if es_inguz:
             filter = (
                 Q(es_inguz__exact=es_inguz)
             )
             qs = qs.filter(filter)
-        if bloqueado is not None:
+        elif es_inguz is False:
+            filter = (
+                Q(es_inguz__exact=es_inguz)
+            )
+            qs = qs.filter(filter)
+        if bloqueado:
             filter = (
                 Q(bloqueado__exact=bloqueado)
             )
             qs = qs.filter(filter)
-        if activo is not None:
+        elif bloqueado is False:
+            filter = (
+                Q(bloqueado__exact=bloqueado)
+            )
+            qs = qs.filter(filter)
+        if activo:
+            filter = (
+                Q(activo__exact=activo)
+            )
+            qs = qs.filter(filter)
+        elif activo is False:
             filter = (
                 Q(activo__exact=activo)
             )
@@ -994,6 +977,17 @@ class Query(graphene.ObjectType):
                 Q(alias_inguz__icontains=alias_inguz)
             )
             qs = qs.filter(filter)
+        if no_respaldos:
+            respaldos = Respaldo.objects.filter(
+                Q(ordenante=user, activo=True) |
+                Q(respaldo=user, activo=True)
+            )
+            for respaldo in respaldos:
+                qs = qs.filter(filter).exclude(id=respaldo.contacto_id)
+                if respaldo.respaldo == user:
+                    u_clabe = respaldo.ordenante.Uprofile.cuentaClabe
+                    qs = qs.filter(filter).exclude(clabe=u_clabe)
+
         if nombre:
             filter = (
                 Q(nombre__icontains=nombre) |
@@ -1549,18 +1543,6 @@ class Query(graphene.ObjectType):
 
     def resolve_all_origen_deposito(self, info, **kwargs):
         return OrigenDeposito.objects.all()
-
-    @login_required
-    def resolve_all_respaldos(self, info, ordering=None, **kwargs):
-        user = info.context.user
-        print(user)
-        qs = Respaldo.objects.filter(
-                Q(ordenante=user) |
-                Q(respaldo=user)
-            )
-        if ordering:
-            qs = qs.order_by(ordering)
-        return (qs)
 
 
 class CreateUser(graphene.Mutation):
@@ -2543,11 +2525,13 @@ class UpdateNip(graphene.Mutation):
                         nip_temporal = user.user_nipTemp.filter(
                             activo=True).last().nip_temp
                     except Exception:
-                        raise ValueError("NIP tempral no está activo")
+                        raise ValueError("NIP temporal no está activo")
                     if nip_temporal == old_nip:
                         UP.set_password(new_nip)
                         UP.statusNip = 'A'
                         UP.enrolamiento = True
+                        create_pld_customer(user)
+                        mandar_email(user.email, user.first_name)
                     else:
                         raise ValueError('nip no coincide con el temporal')
             elif (UP.statusNip == 'A'):
@@ -2742,8 +2726,9 @@ class VerifyAddContactos(graphene.Mutation):
                         nombre = usuario_inguz.first_name.strip()
                         ap_paterno = usuario_inguz.last_name.strip()
                         ap_materno = usuario_inguz.Uprofile.apMaterno.strip()
-                        nombre_completo = str(nombre) + " " + str(
-                            ap_paterno) + " " + str(ap_materno)
+                        nombre_completo = (
+                            usuario_inguz.Uprofile.get_nombre_completo()
+                        )
                         contacto = Contacto.objects.create(
                             nombre=nombre,
                             ap_paterno=ap_paterno,
@@ -2969,6 +2954,22 @@ class DeleteContacto(graphene.Mutation):
                         clabe=clabe).update(activo=False)
                     contacto = associated_user.Contactos_Usuario.filter(
                         clabe=clabe).last()
+                if contacto.es_inguz:
+                    try:
+                        contacto_user = User.objects.get(
+                            Uprofile__cuentaClabe=contacto.clabe)
+                        Respaldo.objects.filter(
+                            Q(
+                                ordenante=associated_user,
+                                respaldo=contacto_user
+                            ) |
+                            Q(
+                                ordenante=contacto_user,
+                                respaldo=associated_user
+                            )
+                        ).update(activo=False, status="D")
+                    except Exception:
+                        pass
             else:
                 raise AssertionError("NIP esta mal")
         return DeleteContacto(contacto=contacto,
@@ -3677,185 +3678,6 @@ class UpdateEmail(graphene.Mutation):
         return UpdateEmail(correo=user.email)
 
 
-class CreateRespaldo(graphene.Mutation):
-
-    respaldos = graphene.List(RespaldoType)
-
-    class Arguments:
-        token = graphene.String(required=True)
-        nip = graphene.String(required=True)
-        contacto_list = graphene.List(graphene.Int)
-
-    @login_required
-    def mutate(self, info, token, nip, contacto_list=None):
-
-        user = info.context.user
-        up = user.Uprofile
-        if not up.check_password(nip):
-            raise Exception("El NIP es incorrecto")
-        
-        for contacto in contacto_list:
-            try:
-                contacto = Contacto.objects.get(
-                    user=user,
-                    id=contacto,
-                    es_inguz=True,
-                    bloqueado=False,
-                    activo=True
-                )
-            except Exception:
-                raise Exception("Contacto inválido")
-            try:
-                respaldo = UserProfile.objects.get(
-                                cuentaClabe=contacto.clabe,
-                                status="O").user
-            except Exception:
-                raise Exception("Perfil de contacto inválido")
-
-            existe = Respaldo.objects.filter(
-                Q(
-                    ordenante=user,
-                    respaldo=respaldo,
-                    activo=True
-                ) |
-                Q(
-                    ordenante=respaldo,
-                    respaldo=user,
-                    activo=True
-                )
-            )
-            bloqueado = Contacto.objects.filter(
-                user=respaldo,
-                clabe=user.Uprofile.cuentaClabe,
-                bloqueado=True,
-                activo=True
-            )
-            espacio_user = Respaldo.objects.filter(
-                Q(ordenante=user, activo=True) |
-                Q(respaldo=user, activo=True) 
-                
-            )
-            espacio_respaldo = Respaldo.objects.filter(
-                Q(ordenante=respaldo, activo=True) |
-                Q(respaldo=respaldo, activo=True) 
-                
-            )
-
-            if espacio_user.count() >= 5:
-                raise Exception("UserLimitEx")
-
-            if espacio_respaldo.count() >= 5:
-                raise Exception("RespaldoLimitEx")
-
-            if bloqueado:
-                raise Exception("Contacto inválido")
-
-            if not existe:
-                try:
-                    Respaldo.objects.create(
-                        status="P",
-                        ordenante=user,
-                        respaldo=respaldo,
-                        contacto_id=contacto.id,
-                        contrato=None
-                    )
-                except Exception:
-                    raise Exception("Error al crear respaldo")
-
-            existentes = Respaldo.objects.filter(
-                Q(ordenante=user, activo=True) |
-                Q(respaldo=user, activo=True)
-            )
-
-        return CreateRespaldo(
-            respaldos=existentes
-        )
-
-
-class ConfirmRespaldo(graphene.Mutation):
-
-    respaldo = graphene.Field(RespaldoType)
-
-    class Arguments:
-        token = graphene.String(required=True)
-        nip = graphene.String(required=True)
-        respaldo = graphene.Int(required=True)
-        aceptar = graphene.Boolean(required=True)
-
-    @login_required
-    def mutate(self, info, token, nip, respaldo, aceptar):
-
-        user = info.context.user
-        up = user.Uprofile
-        if not up.check_password(nip):
-            raise Exception("El NIP es incorrecto")
-        
-        try:
-            respaldo = Respaldo.objects.get(
-                id=respaldo,
-                status="P",
-                respaldo=user,
-                activo=True
-            )
-        except Exception:
-            raise Exception("Datos inválidos")
-
-        if aceptar:
-            if respaldo.status == "P":
-                respaldo.status = "A"
-            else:
-                raise Exception("Invitación Inválida")
-        else:
-            respaldo.status = "D"
-            respaldo.activo = False
-        respaldo.save()
-
-        return ConfirmRespaldo(
-            respaldo=respaldo
-        )
-
-
-class DeleteRespaldo(graphene.Mutation):
-
-    respaldo = graphene.Field(RespaldoType)
-
-    class Arguments:
-        token = graphene.String(required=True)
-        nip = graphene.String(required=True)
-        respaldo = graphene.Int(required=True)
-
-    @login_required
-    def mutate(self, info, token, nip, respaldo):
-
-        user = info.context.user
-        up = user.Uprofile
-        if not up.check_password(nip):
-            raise Exception("El NIP es incorrecto")
-        
-        try:
-            respaldo = Respaldo.objects.get(
-                Q(
-                    id=respaldo,
-                    ordenante=user,
-                    activo=True
-                ) |
-                Q(
-                    id=respaldo,
-                    respaldo=user,
-                    activo=True
-                )
-            )
-        except Exception:
-            raise Exception("Datos inválidos")
-
-        respaldo.activo = False
-        respaldo.save()
-
-        return DeleteRespaldo(
-            respaldo=respaldo
-        )
-
-
 class Mutation(graphene.ObjectType):
     delete_pregunta_seguridad = BorrarPreguntaSeguridad.Field()
     create_user = CreateUser.Field()
@@ -3898,6 +3720,3 @@ class Mutation(graphene.ObjectType):
     set_perfil_transaccional = SetPerfilTransaccional.Field()
     block_account_emergency = BlockAccountEmergency.Field()
     update_email = UpdateEmail.Field()
-    create_respaldo = CreateRespaldo.Field()
-    confirm_respaldo = ConfirmRespaldo.Field()
-    delete_respaldo = DeleteRespaldo.Field()

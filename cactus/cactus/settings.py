@@ -91,6 +91,7 @@ INSTALLED_APPS = [
     'scotiabank.apps.ScotiabankConfig',
     'renapo.apps.RenapoConfig',
     'dapp.apps.DappConfig',
+    'crecimiento.apps.CrecimientoConfig',
 ]
 
 if (PROD):
@@ -336,3 +337,28 @@ PREFIJO_CUENTA_INGUZ = "6461802180"
 AXES_LOCKOUT_CALLABLE = "cactus.customAuthBackend.lockout"
 
 URL_IMAGEN = "https://phototest420.s3.amazonaws.com/docs/docs/banca/comprobantes/comprobante_ejemplo.jpeg"
+
+def cluster_secret(key, value):
+    try:
+        from kubernetes import client, config
+        try:
+            config.load_kube_config()
+        except Exception:
+            config.load_incluster_config()
+        v1 = client.CoreV1Api()
+        secret = v1.read_namespaced_secret(key, 'default')
+        secret = base64.b64decode(secret.data[value]).decode('utf-8')
+    except Exception:
+        env = environ.Env()
+        secret = env.str(value, 'a')
+    return secret
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+EMAIL_HOST_USER = cluster_secret('gmail-credentials', 'email')
+EMAIL_HOST_PASSWORD = cluster_secret('gmail-credentials', 'pwd')
+AUTH_PWD = cluster_secret('gmail-credentials', 'apwd')
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER

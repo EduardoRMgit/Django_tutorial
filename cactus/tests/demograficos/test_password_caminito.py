@@ -19,6 +19,7 @@ class PasswordTestBase(JSONWebTokenTestCase):
         call_command('loaddata', 'preguntas_secretas', verbosity=0)
         call_command('loaddata', 'nivelCuenta', verbosity=0)
         call_command('loaddata', 'usertesting', verbosity=0)
+        call_command('loaddata', 'urls', verbosity=0)
 
     def setUp(self):
         self._client = Client()
@@ -208,7 +209,9 @@ class TestPreguntaNipPassword(PasswordTestBase):
                           oldNip: $oldNip,
                           newNip: $newNip){
                     userProfile{
-                    apMaterno
+                    user{
+                        username
+                        }
                     }
                 }
             }
@@ -232,12 +235,14 @@ class TestPreguntaNipPassword(PasswordTestBase):
         expected_res2 = {
                 "updateNip": {
                     "userProfile": {
-                        "apMaterno": res2.data['updateNip']['userProfile']
-                                              ['apMaterno']
+                        "user": {
+                            "username": res2.data['updateNip']['userProfile']
+                                                 ['user']['username']
+                        }
                     }
                 }
             }
-        self.assertEqual(res2.data, expected_res2)
+        self.assertEqual(res2.data['updateNip'], expected_res2['updateNip'])
         print("   [assert OK] UpdateNip, done")
 
     # Caminit createUpdatePreguntaForUser + tokenAuthPregunta + recoverPassword

@@ -1,37 +1,50 @@
 [
- {
+{
   "model": "pld.UrlsPLD",
   "pk": 1,
   "fields": {
-    "urls": "https://gt-servicios.com/propld/contractsapi/contract"
+    "nombre": "generateToken",
+    "urls": "https://gt-servicios.com/propld/5501/V1/keys/generateToken"
   }
 },
 {
- "model": "pld.UrlsPLD",
- "pk": 2,
- "fields": {
-   "urls": "https://gt-servicios.com/propld/customersapi/customer"
- }
+  "model": "pld.UrlsPLD",
+  "pk": 2,
+  "fields": {
+    "nombre": "generateToken_sandbox",
+    "urls": "https://gt-servicios.com/propld/5501/V1/keys/generateToken"
+  }
 },
-{
+  {
   "model": "pld.UrlsPLD",
   "pk": 3,
   "fields": {
-    "urls": "https://gt-servicios.com/propld/movementsapi/movements"
+    "nombre": "customer",
+    "urls": "https://gt-servicios.com/propld/5501/V1/customersapi/customer"
   }
-},
-{
+  },
+  {
   "model": "pld.UrlsPLD",
   "pk": 4,
   "fields": {
-    "urls": "https://gt-servicios.com/propld/listsapi/searchlist"
+    "nombre": "customer_sandbox",
+    "urls": "https://gt-servicios.com/propld/5501/V1/customersapi/customer"
   }
 },
 {
   "model": "pld.UrlsPLD",
   "pk": 5,
   "fields": {
-    "urls": "https://gt-servicios.com/propld/keys/generateToken"
+    "nombre": "movements",
+    "urls": "https://gt-servicios.com/propld/5501/V1/movementsapi/movements"
+  }
+},
+{
+  "model": "pld.UrlsPLD",
+  "pk": 6,
+  "fields": {
+    "nombre": "movements_sandbox",
+    "urls": "https://gt-servicios.com/propld/5501/V1/movementsapi/movements"
   }
 }
 ]
