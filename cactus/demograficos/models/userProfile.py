@@ -272,13 +272,6 @@ class UserProfile(AbstractBaseUser):
                                         blank=True,
                                         null=True,
                                         verbose_name='Pais de nacimiento')
-    ineCaptura = models.ImageField(upload_to='docs/ine', blank=True, null=True)
-    ineReversoCaptura = models.ImageField(upload_to='docs/ineReverso',
-                                          blank=True,
-                                          null=True)
-    comprobanteDomCaptura = models.ImageField(upload_to='docs/comprobanteDom',
-                                              blank=True,
-                                              null=True)
     indiceDisponible = models.ForeignKey(
         IndiceDisponible,
         on_delete=models.SET_NULL,
@@ -310,7 +303,6 @@ class UserProfile(AbstractBaseUser):
     id_dde = models.IntegerField(null=True, blank=True)
     fechaCreacion_dde = models.DateTimeField(null=True, blank=True)
     confirmacion_dde = models.BooleanField(default=False)
-    saldo_dde = models.FloatField(null=True, blank=True, default=0)
 
     validacion_telefono = models.BooleanField(default=False)
     validacion_perfil = models.BooleanField(default=False)

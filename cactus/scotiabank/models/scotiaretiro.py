@@ -61,7 +61,8 @@ class ScotiaRetiro(models.Model):
     transaccion = models.OneToOneField(Transaccion,
                                        on_delete=models.CASCADE,
                                        blank=True,
-                                       null=True)
+                                       null=True,
+                                       related_name="scotiaRetiro")
     ordenante = models.ForeignKey(User,
                                   on_delete=models.CASCADE,
                                   null=False,

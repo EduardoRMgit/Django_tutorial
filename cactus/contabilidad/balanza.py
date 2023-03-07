@@ -50,9 +50,7 @@ def balanza(transaccion, _tipo):
                 movimiento_data
             )
             db_logger.error(msg)
-            print(msg)
 
-        print("cuenta", cuenta)
         # movimientos = ContableMovimiento.objects.filter(
         #     cuenta=cuenta,
         #     es_total=False,

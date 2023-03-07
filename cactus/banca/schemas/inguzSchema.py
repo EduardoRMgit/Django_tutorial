@@ -14,6 +14,7 @@ from demograficos.models.userProfile import UserProfile
 from demograficos.models import Contacto
 from spei.stpTools import randomString
 from django.conf import settings
+from banca.utils.limiteTrans import LimiteTrans
 
 
 URL_IMAGEN = settings.URL_IMAGEN
@@ -88,6 +89,13 @@ class CreateInguzTransaccion(graphene.Mutation):
         tipo = TipoTransaccion.objects.get(codigo=18)
         tipo_recibida = TipoTransaccion.objects.get(codigo=19)
 
+        if not LimiteTrans(ordenante.id).trans_mes(float(monto2F)):
+            raise Exception("Límite transaccional superado")
+
+        if not LimiteTrans(user_contacto.id).saldo_max(float(monto2F)) or \
+                not LimiteTrans(user_contacto.id).trans_mes(float(monto2F)):
+            raise Exception("El contacto no puede recibir ese saldo")
+
         # Actualizamos saldo del usuario
         if float(abono) <= ordenante.Uprofile.saldo_cuenta:
             ordenante.Uprofile.saldo_cuenta -= round(float(abono), 2)
@@ -138,7 +146,6 @@ class CreateInguzTransaccion(graphene.Mutation):
             cobro.transaccion = inguz_transaccion
             cobro.save()
 
-        print(f"transacción creada: {inguz_transaccion.__dict__}")
         msg = "[Inguz_Inguz] Transaccion exitosa del usuario: {} \
             con cuenta: {} \
             a la cuenta: {} \
@@ -214,7 +221,6 @@ class UrlImagenComprobanteCobro(graphene.Mutation):
             return UrlImagenComprobanteCobro(url=url)
 
 
-# 4
 class Mutation(graphene.ObjectType):
     create_inguz_transaccion = CreateInguzTransaccion.Field()
     url_imagen_comprobante_inguz = UrlImagenComprobanteInguz.Field()
