@@ -19,6 +19,7 @@ urlpatterns = [
     path("graphql", csrf_exempt(LoggingGraphQLView.as_view(graphiql=True))),
     path('api/', include('banca.urls')),
     path('api/', include('demograficos.urls')),
+    path('api/', include('pld.urls')),
     path('api/token-auth/', csrf_exempt(obtain_auth_token),
          name='api_token_auth'),
     path('qr/', my_image, name='qr'),
