@@ -1,12 +1,12 @@
 import mailchimp_marketing as MailchimpMarketing
 import logging
 from mailchimp_marketing.api_client import ApiClientError
-from cactus.utils import cluster_secret
+from cactus.settings import cluster_secret
 
 db_logger = logging.getLogger('db')
 
 
-def RegistrarMail(email):
+def RegistrarMail(user):
     try:
         client = MailchimpMarketing.Client()
         client.set_config({
@@ -16,7 +16,7 @@ def RegistrarMail(email):
 
         response = client.lists.add_list_member(
             cluster_secret('list', 'id'), {
-                           "email_address": email,
+                           "email_address": user.email,
                            "status": "subscribed"})
         db_logger.info(
             f"[Create Customer]: {user}"
@@ -29,4 +29,3 @@ def RegistrarMail(email):
             f"[Create Customer] Error al crear customer en ubcubo"
             f"para el usuario: {user}. Error: {error}")
         db_logger.warning(msg_mailchimp)
-
