@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 import os
 import environ
 from datetime import timedelta
+import base64
 
 SITE = os.getenv("SITE", "local")
 
