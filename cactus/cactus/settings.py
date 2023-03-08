@@ -54,6 +54,10 @@ RECAPTCHA_REQUIRED_SCORE = 0.85
 # Application definition
 
 INSTALLED_APPS = [
+    'django_otp',
+	'django_otp.plugins.otp_static',
+	'django_otp.plugins.otp_totp',
+	'two_factor',
     'rest_framework.authtoken',
     'rest_framework',
     'corsheaders',
@@ -128,6 +132,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django_otp.middleware.OTPMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django_auto_logout.middleware.auto_logout',
@@ -194,6 +199,9 @@ AUTHENTICATION_BACKENDS = [
     'cactus.customAuthBackend.EmailBackend',
 ]
 
+TWO_FACTOR_FORCE_OTP_ADMIN = True
+LOGIN_URL = 'two_factor:login'
+LOGIN_REDIRECTION_URL = '/admin'
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
