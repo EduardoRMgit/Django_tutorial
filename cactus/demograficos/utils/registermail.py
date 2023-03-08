@@ -10,7 +10,7 @@ def RegistrarMail(user):
     try:
         client = MailchimpMarketing.Client()
         client.set_config({
-            "api_key": cluster_secret('server-prefix', 'server'),
+            "api_key": cluster_secret('api-key', 'key'),
             "server": cluster_secret('server-prefix', 'server')
         })
 
