@@ -10,12 +10,12 @@ def RegistrarMail(user):
     try:
         client = MailchimpMarketing.Client()
         client.set_config({
-            "api_key": cluster_secret('api-key', 'key'),
-            "server": cluster_secret('server-prefix', 'server')
+            "api_key": cluster_secret('mailchim-credentials', 'key'),
+            "server": cluster_secret('mailchimp-credentials', 'server')
         })
 
         response = client.lists.add_list_member(
-            cluster_secret('list', 'id'), {
+            cluster_secret('mailchimp-credentials', 'id'), {
                            "email_address": user.email,
                            "status": "subscribed"})
         db_logger.info(
