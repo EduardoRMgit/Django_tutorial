@@ -47,10 +47,6 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'staging.inguz.site',
                  '10.5.1.1', 'inguzmx.com', 'staging.inguz.online',
                  'test.inguz.online']
 
-RECAPTCHA_PUBLIC_KEY = '6Lc_Z2ojAAAAAIi_BPRSrrmkle33Yk9pf4JtWEsQ'
-RECAPTCHA_PRIVATE_KEY = '6Lc_Z2ojAAAAAKxXKQwxFosKmzM7SHxxuKn2w1zP'
-RECAPTCHA_REQUIRED_SCORE = 0.85
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -61,7 +57,6 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'rest_framework',
     'corsheaders',
-    'multi_captcha_admin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -188,9 +183,6 @@ GRAPHENE = {
     ],
 }
 
-MULTI_CAPTCHA_ADMIN = {
-    'engine': 'recaptcha2',
-}
 
 AUTHENTICATION_BACKENDS = [
     'axes.backends.AxesStandaloneBackend',
@@ -322,7 +314,6 @@ DAPP_SECRET = env.str('DAPP_SECRET',
 if SITE == "local":
     idle_time = 120
     AXES_FAILURE_LIMIT = 10
-    INSTALLED_APPS.remove('multi_captcha_admin')
 elif SITE == "stage":
     idle_time = 30
     AXES_FAILURE_LIMIT = 5

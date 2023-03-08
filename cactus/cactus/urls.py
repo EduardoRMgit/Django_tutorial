@@ -25,7 +25,6 @@ from two_factor.admin import AdminSiteOTPRequired, AdminSiteOTPRequiredMixin
 
 class AdminSiteOTPRequiredMixinRedirSetup(AdminSiteOTPRequired):
     def login(self, request, extra_context=None):
-        print('*********************************************************')
         redirect_to = request.POST.get(
             REDIRECT_FIELD_NAME, request.GET.get(REDIRECT_FIELD_NAME)
         )
