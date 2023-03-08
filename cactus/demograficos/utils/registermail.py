@@ -6,7 +6,7 @@ from cactus.utils import cluster_secret
 db_logger = logging.getLogger('db')
 
 
-def RegistrarMail(user):
+def RegistrarMail(email):
     try:
         client = MailchimpMarketing.Client()
         client.set_config({
@@ -16,7 +16,7 @@ def RegistrarMail(user):
 
         response = client.lists.add_list_member(
             cluster_secret('list', 'id'), {
-                           "email_address": user.Uprofile.correo_electronico,
+                           "email_address": email,
                            "status": "subscribed"})
         db_logger.info(
             f"[Create Customer]: {user}"

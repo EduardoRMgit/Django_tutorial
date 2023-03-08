@@ -3,7 +3,7 @@ from pld.models import (Customer,
 import json
 import requests
 import logging
-from cactus.utils import cluster_secret
+from cactus.settings import cluster_secret
 from cactus.settings import SITE
 
 db_logger = logging.getLogger('db')
