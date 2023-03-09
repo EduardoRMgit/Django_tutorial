@@ -1,3 +1,5 @@
+import logging
+
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
@@ -6,6 +8,9 @@ from banca.models import Transaccion, ErroresTransaccion, SaldoReservado
 from demograficos.models import Contacto
 
 from .stpTools import pago as stpPago, registra_cuenta_persona_fisica
+
+
+db_logger = logging.getLogger("db")
 
 
 class StpNotificacionEstadoDeCuenta(models.Model):
@@ -91,6 +96,8 @@ class CuentaPersonaFisica(models.Model):
         print("EN spei cuenta: nombre:", self.nombre)
         print("EN spei last_name:", self.apellido_paterno)
 
+        msg = f"[curp (3) registra() - modelsSPEI] ->{self.rfc_curp}<-"
+        db_logger.info(msg)
         data_registro = {
 
             # Con Mayúsculas, sin acentos ni tildes ni coma ni punto ni guión
