@@ -6,7 +6,7 @@ import calendar
 
 from weasyprint import HTML
 
-from rest_framework import generics
+from rest_framework import generics, renderers
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -16,16 +16,17 @@ from django.shortcuts import render
 from django.utils import timezone
 from django.conf import settings
 from django.http import (JsonResponse,
+                         HttpResponse,
                          HttpResponseBadRequest,
-                         HttpResponseNotAllowed)
+                         HttpResponseNotAllowed,)
+#  FileResponse
 
 from django.template.loader import render_to_string
 
 from spei.models import StpTransaction
+from banca.models import Transaccion, StatusTrans, SaldoReservado, TipoTransaccion   # noqa: E501
+from banca.utils.comprobantesPng import CompTrans
 from spei.stpTools import randomString
-from banca.models import (
-    Transaccion, StatusTrans, SaldoReservado, TipoTransaccion
-)
 from banca.serializers import DetailSerializer, EstadoSerializer
 from banca.utils.limiteTrans import LimiteTrans
 from demograficos.models import UserProfile
@@ -322,6 +323,7 @@ def parse_dates_cuenta(req):
 
 
 def upload_s3(file, user):
+    print("------")
     from cactus.storage_backends import PrivateMediaStorage
 
     file_directory_within_bucket = 'estado_cuenta/{username}'.format(username=user.username)  # noqa:E501
@@ -503,6 +505,50 @@ def cuenta_pdf(request):
         json = {"error": "Debug estado cuenta" +
                 " not implented yet, set USE_S3 in .env to 1"}
         json_response = JsonResponse(json, status=400)
+
+    return json_response
+
+
+class CustomRenderer(renderers.BaseRenderer):
+    media_type = 'image/png'
+    format = 'png'
+    charset = None
+    render_style = 'binary'
+
+    def render(self, data, media_type=None, renderer_context=None):
+        return data
+
+
+@api_view(['GET'])
+def comprobante_trans(request, trans_id):
+
+    # req = request.data
+    # trans_id = req.get("trans_id", "")
+    # trans_id = request.GET["trans_id"]
+    user = request.user
+    trans = None
+    trans = Transaccion.objects.get(pk=trans_id)
+    # print(trans)
+    print("rielrielriel")
+    print(trans.tipoTrans)
+    comp = CompTrans(trans)
+    comp_file = comp.trans()
+    print(type(comp_file))
+    if settings.USE_S3:
+
+        file_url = upload_s3(comp_file, user)
+
+        json_response = JsonResponse({
+            'message': 'OK',
+            'fileUrl': file_url,
+        })
+    else:
+        print("sadfsafasdfsadfadsf")
+        # json = {"error": "Debug estado cuenta" +
+        #         " not implented yet, set USE_S3 in .env to 1"}
+        # json_response = JsonResponse(json, status=400)
+
+        return HttpResponse(comp_file, content_type="image/jpg")
 
     return json_response
 
