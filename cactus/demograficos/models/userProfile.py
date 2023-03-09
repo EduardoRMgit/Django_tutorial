@@ -462,6 +462,8 @@ class UserProfile(AbstractBaseUser):
                 folio = folio_stp.fol_dispatch()
                 cuenta_clabe = CuentaClabe(folio_stp.fol_dispatch())
 
+            msg = f"[curp (2) registra_cuenta() userProfile] ->{self.curp}<-"
+            db_logger.info(msg)
             cuenta = CuentaPersonaFisica.objects.create(
                 nombre=first_name,
                 apellido_paterno=last_name,

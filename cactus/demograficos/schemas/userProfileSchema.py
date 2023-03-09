@@ -2039,6 +2039,8 @@ class UpdateInfoPersonal(graphene.Mutation):
                 numero_INE if numero_INE else u_profile.numero_INE)
             u_profile.ocupacion = (
                 occupation if occupation else u_profile.ocupacion)
+            msg = f"[curp (1) UpdateInfoPersonal userProfileSchema] ->{curp}<-"
+            db_logger.info(msg)
             u_profile.curp = curp if curp else u_profile.curp
             u_profile.pais_origen_otro = (
                 country if country else u_profile.pais_origen_otro)
@@ -2098,6 +2100,9 @@ class UpdateInfoPersonal(graphene.Mutation):
                                      e)
             print("first_name: ", user.first_name)
             print("last_name: ", user.last_name)
+
+            msg = f"[curp (1.5) UpdtInfoPersonal userProfileSchema] ->{curp}<-"
+            db_logger.info(msg)
 
             try:
                 if not u_profile.cuentaClabe:
@@ -2640,9 +2645,10 @@ mutation{
                                    clabe=clabe,
                                    activo=True,
                                    bloqueado=True).count() > 0:
-            raise Exception(
-                "Esta cuenta CLABE la tienes en un contacto bloqueado, " \
+            msg = "{}{}".format(
+                "Esta cuenta CLABE la tienes en un contacto bloqueado, ",
                 "desbloquéalo desde el buscador con su alias.")
+            raise Exception(msg)
 
         if not user.is_anonymous:
             nombre = nombre.strip()
@@ -3276,6 +3282,7 @@ class BlockAccount(graphene.Mutation):
             else:
                 raise AssertionError('invalid operation, Wrong Credentials')
 
+
 class BlockAccountEmergency(graphene.Mutation):
 
     details = graphene.Field(BlockDetails)
@@ -3314,13 +3321,13 @@ class BlockAccountEmergency(graphene.Mutation):
         else:
             date_blocked = user.Ufecha.bloqueo
         return BlockAccountEmergency(
-                details=BlockDetails(
-                    username=user.username,
-                    alias=up.get_nombre_completo(),
-                    clabe=up.cuentaClabe,
-                    time=date_blocked,
-                    status=status
-                )
+            details=BlockDetails(
+                username=user.username,
+                alias=up.get_nombre_completo(),
+                clabe=up.cuentaClabe,
+                time=date_blocked,
+                status=status
+            )
         )
 
 
@@ -3347,13 +3354,12 @@ class UpdateDevice(graphene.Mutation):
 
     validacion = graphene.String()
 
-
     class Arguments:
         username = graphene.String(required=True)
         password = graphene.String(required=True)
         nip = graphene.String(required=True)
 
-    def mutate(self, info,username, password, nip):
+    def mutate(self, info, username, password, nip):
 
         e = "Usuario y/o contraseña incorrectos"
 
@@ -3369,8 +3375,11 @@ class UpdateDevice(graphene.Mutation):
             register_device(user=user)
             return UpdateDevice(validacion='Validado')
         except Exception as ex:
-            db_logger.error("No se pudo actualizar dispositivo del usuario" \
-            f"{user}. Error: {ex}")
+            msg = "{} {}. Error: {}".format(
+                "No se pudo actualizar dispositivo del usuario",
+                user,
+                ex)
+            db_logger.error(msg)
             raise Exception('No se pudo actualizar dispositivo')
 
 
@@ -3381,13 +3390,12 @@ class CancelacionCuenta(graphene.Mutation):
     fecha = graphene.types.datetime.DateTime()
     url = graphene.String()
 
-
     class Arguments:
-        token = graphene.String(required=True)
-        nip = graphene.String(required=True)
+        token=graphene.String(required=True)
+        nip=graphene.String(required=True)
 
     def mutate(self, info, token, nip):
-        user = info.context.user
+        user=info.context.user
         if user.is_anonymous:
             return
         if user.Uprofile.password is None:
@@ -3505,8 +3513,8 @@ class SetPerfilTransaccional(graphene.Mutation):
 
     @login_required
     def mutate(self, info, token, transferencias_id, operaciones_id,
-        uso_id, origen_id
-    ):
+               uso_id, origen_id
+               ):
         user = info.context.user
         transferencias = TransferenciasMensuales.objects.get(
             pk=transferencias_id)
@@ -3528,10 +3536,11 @@ class SetPerfilTransaccional(graphene.Mutation):
             perfil_declarado, created = pd.objects.update_or_create(
                 user=user,
                 defaults=defaults
-                )
+            )
         except Exception:
             raise Exception("Error al crear perfil")
         return SetPerfilTransaccional(perfil=perfil_declarado)
+
 
 class UpdateEmail(graphene.Mutation):
 

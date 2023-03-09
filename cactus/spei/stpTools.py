@@ -268,6 +268,10 @@ def cadena_original_registro_cuenta(data):
         data['cuenta'],
         data['rfcCurp']
     )
+    msg = "{}{}".format("[(4) cadena_original_registro_cuenta]: ",
+                        cadena_original)
+    db_logger.info(msg)
+
     print("cadena_original: ", cadena_original)
     return cadena_original
 
@@ -317,7 +321,9 @@ def registra_cuenta_persona_fisica(data):
         'Content-Type': 'application/json',
     }
 
-    db_logger.info("Data para registro de cuenta STP: " + str(data))
+    msg = f"[(5)] Data para registro de cuenta STP: {data}"
+    db_logger.info(msg)
+
     try:
         cert = os.path.join(
             os.path.dirname(__file__),
