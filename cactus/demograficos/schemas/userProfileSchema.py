@@ -2105,7 +2105,7 @@ class UpdateInfoPersonal(graphene.Mutation):
             db_logger.info(msg)
 
             try:
-                if not u_profile.cuentaClabe:
+                if not u_profile.cuentaClabe and curp:
                     u_profile.registra_cuenta(user.first_name, user.last_name)
             except Exception as ex:
                 AssertionError('Error al registrar la cuenta clabe.',
@@ -3391,11 +3391,11 @@ class CancelacionCuenta(graphene.Mutation):
     url = graphene.String()
 
     class Arguments:
-        token=graphene.String(required=True)
-        nip=graphene.String(required=True)
+        token = graphene.String(required=True)
+        nip = graphene.String(required=True)
 
     def mutate(self, info, token, nip):
-        user=info.context.user
+        user = info.context.user
         if user.is_anonymous:
             return
         if user.Uprofile.password is None:
