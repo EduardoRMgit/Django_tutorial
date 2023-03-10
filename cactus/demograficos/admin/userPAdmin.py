@@ -240,7 +240,6 @@ class UserProfileAdmin(ExportActionMixin, PasswordResetUserAdmin):
 
     def delete_stp_cuenta(self, request, usuarios):
         for user in usuarios:
-            print("a")
             try:
                 id_, descripcion = delete_stp(user)
                 if id_ == 0:
@@ -254,7 +253,9 @@ class UserProfileAdmin(ExportActionMixin, PasswordResetUserAdmin):
                         descripcion: {descripcion}"
                     db_logger.error(msg)
             except Exception as ex:
-                print(ex)
+                msg = f"[ERROR accion STP delete cuenta] \
+                        descripcion: {ex}"
+                db_logger.error(msg)
         # if usuarios.count() != 1:
         #     print("Elegir sólo un usuario")
         #     return
