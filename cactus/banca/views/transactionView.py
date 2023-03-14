@@ -466,8 +466,8 @@ def cuenta_pdf(request):
 
     if parser[0] is None:
         date_format_error = "Either 'month' and 'year or " + \
-                    "'date_from' and 'date_to'" + \
-                    " must be given"
+            "'date_from' and 'date_to'" + \
+            " must be given"
         return HttpResponseBadRequest(date_format_error)
     else:
         date_from, date_to, is_cuenta = parser
@@ -531,13 +531,15 @@ def comprobante_trans(request, trans_id):
     # print(trans)
     print("rielrielriel")
     print(trans.tipoTrans)
+
     comp = CompTrans(trans)
+
     comp_file = comp.trans()
+
     print(type(comp_file))
+
     if settings.USE_S3:
-
         file_url = upload_s3(comp_file, user)
-
         json_response = JsonResponse({
             'message': 'OK',
             'fileUrl': file_url,

@@ -338,6 +338,7 @@ AXES_LOCKOUT_CALLABLE = "cactus.customAuthBackend.lockout"
 
 URL_IMAGEN = "https://phototest420.s3.amazonaws.com/docs/docs/banca/comprobantes/comprobante_ejemplo.jpeg"
 
+
 def cluster_secret(key, value):
     try:
         from kubernetes import client, config
@@ -352,6 +353,7 @@ def cluster_secret(key, value):
         env = environ.Env()
         secret = env.str(value, 'a')
     return secret
+
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'

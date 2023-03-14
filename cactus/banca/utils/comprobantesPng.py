@@ -9,14 +9,12 @@ class CompTrans(object):
     def __init__(self, trans: Transaccion):
         self._trans = trans
         self._tipo = trans.tipoTrans
-        self._tp = Comprobante.objects.get(tipo=self._tipo).template
+        self._tp = Comprobante.objects.last().template
         self._dir = os.path.abspath(os.path.join(MEDIA_ROOT, self._tp.name))
         self._tp = cv2.imread(self._dir)
 
     def inguz(self, show=False):
-
         trans = self._trans
-
         alias = trans.user.Uprofile.alias
         avatar = trans.user.Uprofile.avatar
         monto = round(float(trans.monto), 2)
@@ -73,7 +71,6 @@ class CompTrans(object):
 
     def cobro(self):
         trans = self._trans
-
         alias = trans.user.Uprofile.alias
         monto = round(float(trans.monto), 2)
         fecha = trans.fechaValor.strftime("%m/%d/%Y")
@@ -133,65 +130,32 @@ class CompTrans(object):
 
     def stp(self):
         trans = self._trans
-        usertrans = trans.user.username
-        alias = trans.user.Uprofile.alias
-        avatar = trans.user.Uprofile.avatar
-
-        monto = round(float(trans.monto), 2)
+        nombre = trans.user.Uprofile.get_nombre_completo()
+        importe = "${:,.2f}".format(round(float(trans.monto), 2))
         fecha = trans.fechaValor.strftime("%m/%d/%Y")
         hora = trans.fechaValor.strftime("%H:%M:%S")
         concepto = trans.concepto
-        print(usertrans, monto, fecha, hora, concepto)
+        cuenta = f"*{trans.user.Uprofile.cuentaClabe[13:-1]}"
+        rastreo = trans.claveRastreo
 
-        # instance = self._trans
-
-        lista = [concepto, trans.claveRastreo, fecha, hora, monto, alias]
+        fields = [
+            [nombre,   (112,  383), 2, 0.9, (0, 0, 0), 1, 16],
+            [importe,  (112,  470), 2, 1.0, (0, 0, 0), 2, 16],
+            [cuenta,   (378,  468), 2, 0.9, (0, 0, 0), 1, 16],
+            [fecha,    (112,  580), 2, 0.9, (0, 0, 0), 1, 16],
+            [hora,     (378,  580), 2, 0.9, (0, 0, 0), 1, 16],
+            [concepto, (112,  685), 2, 0.9, (0, 0, 0), 1, 16],
+            [rastreo,  (112, 1010), 2, 0.9, (0, 0, 0), 1, 16]
+        ]
 
         img = cv2.imread(self._dir)
-        coord = [
-            (118, 408),
-            (116, 513),
-            (118, 620),
-            (119, 725),
-            (385, 407),
-            (385, 514),
-        ]  # noqa: E501
-        for i in range(len(lista)):
-            texto = str(lista[i])
-            ubicacion = coord[i]
-            font = cv2.FONT_ITALIC
-            tamañoLetra = 1
-            colorLetra = (35, 82, 50)
-            grosorLetra = 2
+        for field in fields:
+            cv2.putText(img, *field)
 
-            cv2.putText(
-                img,
-                texto,
-                ubicacion,
-                font,
-                tamañoLetra,
-                colorLetra,
-                grosorLetra
-            )  # noqa: E501
-
-        # ComprobanteUsuario.objects.create(transaccion=trans, img=img1)
-        cv2.imwrite("hojastp.jpg", img)
-        img1 = Image.open("hojastp.jpg")
-        print(trans.user)
-        print("****************************************************")
-        img2 = Image.open(avatar.avatar_img)
-        img1.paste(img2, (1, 1))
-        print("++++++++++++++++++++++++++++++++++++++++++++++++++++")
-        sha = img1
-
-        # if show:
-        #     sha.show()
-        sha.save("otrorecibostp.jpg", "JPEG")
-        comp_img = open("otrorecibostp.jpg", "rb")
-        sha.show()
-        os.remove("hojastp.jpg")
-        os.remove("otrorecibostp.jpg")
-
+        img_name = "comprobanteSTP.jpg"
+        cv2.imwrite(img_name, img)
+        comp_img = open(img_name, "rb")
+        os.remove(img_name)
         return comp_img
 
     def spei(self, trans):
@@ -210,7 +174,6 @@ class CompTrans(object):
         pass
 
     def trans(self):
-        print(self._tipo.codigo)
         if self._tipo.codigo == "18":
 
             return self.inguz()

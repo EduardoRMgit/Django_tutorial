@@ -19,6 +19,7 @@ from banca.models.catalogos import TipoTransaccion
 from banca.models import NotificacionCobro, InguzTransaction, NivelCuenta
 from banca.utils.clabe import es_cuenta_inguz
 from banca.utils.limiteTrans import LimiteTrans
+from banca.utils.comprobantesPng import CompTrans
 
 from spei.models import StpTransaction
 from spei.stpTools import randomString
@@ -832,15 +833,20 @@ class UrlImagenComprobanteInter(graphene.Mutation):
         user = info.context.user
         if not user.is_anonymous:
 
-            transaccion = StpTransaction.objects.filter(id=id)
-            if transaccion.count() == 0:
+            trans = Transaccion.objects.filter(pk=id)
+            if trans.count() == 0:
                 raise Exception("Transacción inexistente.")
-            transaccion = transaccion.first()
-            transaccion.comprobante_img = URL_IMAGEN
-            transaccion.url_comprobante = URL_IMAGEN
-            transaccion.save()
-            url = transaccion.url_comprobante
-            return UrlImagenComprobanteInter(url=url)
+
+            trans = trans.last()
+            comp = CompTrans(trans)
+            comp_file = comp.trans()
+
+            if not settings.USE_S3:
+                return UrlImagenComprobanteInter(url=comp_file.name)
+
+            # file_url = upload_s3(comp_file, user)
+            file_url = comp_file.name
+            return UrlImagenComprobanteInter(url=file_url)
 
 
 class Mutation(graphene.ObjectType):
