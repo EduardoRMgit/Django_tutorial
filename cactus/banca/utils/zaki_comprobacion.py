@@ -11,7 +11,7 @@ def ZakiComprobar(request):
         curp = request['curp']
         username = request['username']
         valida_curp = request['valida_curp']
-        users = User.objects.all()
+        users = User.objects.filter(is_active=True)
         for user in users:
             if valida_curp:
                 if curp == user.Uprofile.curp:
