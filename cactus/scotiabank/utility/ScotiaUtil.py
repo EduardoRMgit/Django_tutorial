@@ -17,12 +17,11 @@ from cactus.settings import cluster_secret
 
 import logging
 
-referencia_empresa = cluster_secret('scotia-secret', 'referencia')
-cuenta_cargo = cluster_secret('scotia-secret', 'cuenta')
 
-
-def GeneraRetiro(movimientos, referencia_empresa, cuenta_cargo):
+def GeneraRetiro(movimientos):
     numero_convenio = cluster_secret('scotia-secret', 'convenior')
+    referencia_empresa = cluster_secret('scotia-secret', 'referencia')
+    cuenta_cargo = cluster_secret('scotia-secret', 'cuenta')
     db_logger = logging.getLogger("db")
     hoy = timezone.now()
     dias_delta = (hoy.day) != ((
@@ -177,6 +176,8 @@ def GeneraRetiro(movimientos, referencia_empresa, cuenta_cargo):
 
 def GeneraTransferencia(movimientos, referencia_empresa, cuenta_cargo):
     numero_convenio = cluster_secret('scotia-secret', 'conveniot')
+    referencia_empresa = cluster_secret('scotia-secret', 'referencia')
+    cuenta_cargo = cluster_secret('scotia-secret', 'cuenta')
     db_logger = logging.getLogger("db")
     hoy = timezone.now()
     dias_delta = (hoy.day) != ((
