@@ -81,7 +81,7 @@ def upload_s3_docs(tipocomprobante, archivo, user):
         # file_path = os.path.join('docs', file_path)
         file_path = os.path.join('docs/', nombre_archivo)
         file_url = get_file_url(archivo, file_path)
-    return file_url
+    return file_url, nombre_archivo
 
 
 def upload_s3ine(archivo, user, tipo):
@@ -106,7 +106,7 @@ def upload_s3ine(archivo, user, tipo):
         # file_path = os.path.join('docs/', file_path)
         file_path = os.path.join('docs/', nombre_archivo)
         file_url = get_file_url(archivo, file_path)
-    return file_url
+    return file_url, nombre_archivo
 
 
 class ImageDoc(generics.CreateAPIView):
@@ -127,13 +127,13 @@ class ImageDoc(generics.CreateAPIView):
                 tipocomprobante = TipoComprobante.objects.get(
                     id=tipo_comprobante)
                 if settings.USE_S3:
-                    url = upload_s3_docs(
+                    url, nombre_archivo = upload_s3_docs(
                         str(tipo_comprobante), imagen, username)
                     a = DocAdjunto.objects.create(
                         user=user_,
                         tipo=doctipo,
                         tipo_comprobante=tipocomprobante,
-                        imagen=imagen.name,
+                        imagen=nombre_archivo,
                         imagen_url=url)
                 else:
                     a = DocAdjunto.objects.create(
@@ -150,10 +150,11 @@ class ImageDoc(generics.CreateAPIView):
                     url = a.imagen
             else:
                 if settings.USE_S3:
-                    url = upload_s3ine(imagen, username, str(tipo))
+                    url, nombre_archivo = upload_s3ine(imagen, username,
+                                                       str(tipo))
                     a = DocAdjunto.objects.create(user=user_,
                                                   tipo=doctipo,
-                                                  imagen=imagen.name,
+                                                  imagen=nombre_archivo,
                                                   imagen_url=url)
                 else:
                     a = DocAdjunto.objects.create(user=user_,
