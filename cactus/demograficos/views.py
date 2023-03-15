@@ -121,11 +121,12 @@ class ImageDoc(generics.CreateAPIView):
                 tipocomprobante = TipoComprobante.objects.get(
                     id=tipo_comprobante)
                 if settings.USE_S3:
-                    url = upload_s3_docs(tipocomprobante, imagen, username)
+                    url = upload_s3_docs(
+                        str(tipo_comprobante), imagen, username)
                     a = DocAdjunto.objects.create(
                         user=user_,
                         tipo=doctipo,
-                        imagen=url,
+                        imagen=imagen,
                         tipo_comprobante=tipocomprobante)
                 else:
                     a = DocAdjunto.objects.create(
@@ -144,7 +145,7 @@ class ImageDoc(generics.CreateAPIView):
                     url = upload_s3ine(imagen, username, str(tipo))
                     a = DocAdjunto.objects.create(user=user_,
                                                   tipo=doctipo,
-                                                  imagen=url)
+                                                  imagen=imagen)
                 else:
                     a = DocAdjunto.objects.create(user=user_,
                                                   tipo=doctipo,
