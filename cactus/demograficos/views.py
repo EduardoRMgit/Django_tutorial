@@ -147,7 +147,7 @@ class ImageDoc(generics.CreateAPIView):
                     url = "{}{}".format(
                           'http://127.0.0.1:8000/media/', a.imagen)
                 if settings.SITE not in "local":
-                    url = a.imagen
+                    url = a.imagen_url
             else:
                 if settings.USE_S3:
                     url, nombre_archivo = upload_s3ine(imagen, username,
