@@ -10,9 +10,37 @@ import boto3
 from django.conf import settings
 import os
 
+import logging
+
+
+db_logger = logging.getLogger('db')
+
+
+def get_file_url(archivo, file_path):
+    from cactus.settings import AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY
+
+    client = boto3.client(
+        's3',
+        config=boto3.session.Config(signature_version='s3v4'),
+        aws_acces_key_id=AWS_ACCESS_KEY_ID,
+        aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
+        region_name="us-east-2")
+    client.upload_fileobj(archivo,
+                          settings.AWS_STORAGE_BUCKET_NAME,
+                          file_path)
+    file_url = client.generate_presigned_url(
+        'get_object',
+        Params={
+            'Bucket': settings.AWS_STORAGE_BUCKET_NAME,
+            'Key': file_path
+        },
+        ExpiresIn=1440,
+        HttpMethod=None)
+    return file_url
+
 
 def upload_s3_docs(tipocomprobante, archivo, user):
-    from cactus.settings import AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY
+
     if tipocomprobante == '1':
         nombre_archivo = f"comprobante_cfe_{user}"
         directory = 'cfe'
@@ -21,23 +49,7 @@ def upload_s3_docs(tipocomprobante, archivo, user):
             nombre_archivo
         )
         file_path = os.path.join('docs/docs/comprobantes', file_path)
-        client = boto3.client(
-            's3',
-            config=boto3.session.Config(signature_version='s3v4'),
-            aws_acces_key_id=AWS_ACCESS_KEY_ID,
-            aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
-            region_name="us-east-2")
-        client.upload_fileobj(archivo,
-            settings.AWS_STORAGE_BUCKET_NAME,
-            file_path)
-        file_url = client.generate_presigned_url(
-            'get_object',
-            Params={
-                'Bucket': settings.AWS_STORAGE_BUCKET_NAME,
-                'Key': file_path
-            },
-            ExpiresIn=1440,
-            HttpMethod=None)
+        file_url = get_file_url(archivo, file_path)
     elif tipocomprobante == '2':
         nombre_archivo = f"comprobante_telmex_{user}"
         directory = 'telmex'
@@ -46,23 +58,7 @@ def upload_s3_docs(tipocomprobante, archivo, user):
             nombre_archivo
         )
         file_path = os.path.join('docs/docs/comprobantes', file_path)
-        client = boto3.client(
-            's3',
-            config=boto3.session.Config(signature_version='s3v4'),
-            aws_acces_key_id=AWS_ACCESS_KEY_ID,
-            aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
-            region_name="us-east-2")
-        client.upload_fileobj(archivo,
-            settings.AWS_STORAGE_BUCKET_NAME,
-            file_path)
-        file_url = client.generate_presigned_url(
-            'get_object',
-            Params={
-                'Bucket': settings.AWS_STORAGE_BUCKET_NAME,
-                'Key': file_path
-            },
-            ExpiresIn=1440,
-            HttpMethod=None)
+        file_url = get_file_url(archivo, file_path)
     elif tipocomprobante == '3':
         nombre_archivo = f"comprobante_izzi_{user}"
         directory = 'izzi'
@@ -71,23 +67,7 @@ def upload_s3_docs(tipocomprobante, archivo, user):
             nombre_archivo
         )
         file_path = os.path.join('docs/docs/comprobantes', file_path)
-        client = boto3.client(
-            's3',
-            config=boto3.session.Config(signature_version='s3v4'),
-            aws_acces_key_id=AWS_ACCESS_KEY_ID,
-            aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
-            region_name="us-east-2")
-        client.upload_fileobj(archivo,
-            settings.AWS_STORAGE_BUCKET_NAME,
-            file_path)
-        file_url = client.generate_presigned_url(
-            'get_object',
-            Params={
-                'Bucket': settings.AWS_STORAGE_BUCKET_NAME,
-                'Key': file_path
-            },
-            ExpiresIn=1440,
-            HttpMethod=None)
+        file_url = get_file_url(archivo, file_path)
     elif tipocomprobante == '4':
         nombre_archivo = f"comprobante_totalplay_{user}"
         directory = 'totalplay'
@@ -96,28 +76,12 @@ def upload_s3_docs(tipocomprobante, archivo, user):
             nombre_archivo
         )
         file_path = os.path.join('docs/docs/comprobantes', file_path)
-        client = boto3.client(
-            's3',
-            config=boto3.session.Config(signature_version='s3v4'),
-            aws_acces_key_id=AWS_ACCESS_KEY_ID,
-            aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
-            region_name="us-east-2")
-        client.upload_fileobj(archivo,
-            settings.AWS_STORAGE_BUCKET_NAME,
-            file_path)
-        file_url = client.generate_presigned_url(
-            'get_object',
-            Params={
-                'Bucket': settings.AWS_STORAGE_BUCKET_NAME,
-                'Key': file_path
-            },
-            ExpiresIn=1440,
-            HttpMethod=None)
+        file_url = get_file_url(archivo, file_path)
     return file_url
 
 
 def upload_s3ine(archivo, user, tipo):
-    from cactus.settings import AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY
+
     if tipo == "1":
         nombre_archivo = f"ine_frontal_{user}"
         directory = 'ine'
@@ -126,23 +90,7 @@ def upload_s3ine(archivo, user, tipo):
             nombre_archivo
         )
         file_path = os.path.join('docs/docs/', file_path)
-        client = boto3.client(
-            's3',
-            config=boto3.session.Config(signature_version='s3v4'),
-            aws_acces_key_id=AWS_ACCESS_KEY_ID,
-            aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
-            region_name="us-east-2")
-        client.upload_fileobj(archivo,
-            settings.AWS_STORAGE_BUCKET_NAME,
-            file_path)
-        file_url = client.generate_presigned_url(
-            'get_object',
-            Params={
-                'Bucket': settings.AWS_STORAGE_BUCKET_NAME,
-                'Key': file_path
-            },
-            ExpiresIn=1440,
-            HttpMethod=None)
+        file_url = get_file_url(archivo, file_path)
     elif tipo == "2":
         nombre_archivo = f"ine_reverso_{user}"
         directory = 'ineReverso'
@@ -151,23 +99,7 @@ def upload_s3ine(archivo, user, tipo):
             nombre_archivo
         )
         file_path = os.path.join('docs/docs/', file_path)
-        client = boto3.client(
-            's3',
-            config=boto3.session.Config(signature_version='s3v4'),
-            aws_acces_key_id=AWS_ACCESS_KEY_ID,
-            aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
-            region_name="us-east-2")
-        client.upload_fileobj(archivo,
-            settings.AWS_STORAGE_BUCKET_NAME,
-            file_path)
-        file_url = client.generate_presigned_url(
-            'get_object',
-            Params={
-                'Bucket': settings.AWS_STORAGE_BUCKET_NAME,
-                'Key': file_path
-            },
-            ExpiresIn=1440,
-            HttpMethod=None)
+        file_url = get_file_url(archivo, file_path)
     return file_url
 
 
@@ -181,6 +113,7 @@ class ImageDoc(generics.CreateAPIView):
         user_ = User.objects.get(id=user)
         username = user_.username
         doctipo = DocAdjuntoTipo.objects.get(id=tipo)
+        url = ""
         try:
             if request.data['tipo_comprobante'] != '':
                 tipo_comprobante = request.data['tipo_comprobante']
@@ -221,8 +154,9 @@ class ImageDoc(generics.CreateAPIView):
                 if settings.SITE not in "local":
                     url = a.imagen
                 id = a.id
-        except Exception as e:
-            print(e)
+        except Exception as ex:
+            msg = f"[ImageDoc POST] Error al subir image a bucket: {ex}"
+            db_logger.warning(msg)
         return Response({
             'id': id,
             'user': request.data['user'],
