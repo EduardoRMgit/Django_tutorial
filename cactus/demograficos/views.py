@@ -126,14 +126,15 @@ class ImageDoc(generics.CreateAPIView):
                     a = DocAdjunto.objects.create(
                         user=user_,
                         tipo=doctipo,
-                        tipo_comprobante=tipocomprobante)
-                    a.imagen.save(imagen.name, imagen.file)
-                    a.save()
+                        tipo_comprobante=tipocomprobante,
+                        imagen=imagen.name,
+                        imagen_url=url)
                 else:
                     a = DocAdjunto.objects.create(
                         user=user_,
                         tipo=doctipo,
                         imagen=imagen,
+                        imagen_url=url,
                         tipo_comprobante=tipocomprobante)
                 id = a.id
                 if settings.SITE == "local":
@@ -145,13 +146,14 @@ class ImageDoc(generics.CreateAPIView):
                 if settings.USE_S3:
                     url = upload_s3ine(imagen, username, str(tipo))
                     a = DocAdjunto.objects.create(user=user_,
-                                                  tipo=doctipo)
-                    a.imagen.save(imagen.name, imagen.file)
-                    a.save()
+                                                  tipo=doctipo,
+                                                  imagen=imagen.name,
+                                                  imagen_url=url)
                 else:
                     a = DocAdjunto.objects.create(user=user_,
                                                   tipo=doctipo,
-                                                  imagen=imagen)
+                                                  imagen=imagen,
+                                                  imagen_url=url)
                 if settings.SITE == "local":
                     url = "{}{}".format(
                         'http://127.0.0.1:8000/media/', a.imagen)
