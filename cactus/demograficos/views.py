@@ -126,7 +126,7 @@ class ImageDoc(generics.CreateAPIView):
                     a = DocAdjunto.objects.create(
                         user=user_,
                         tipo=doctipo,
-                        imagen=imagen,
+                        imagen=imagen.file,
                         tipo_comprobante=tipocomprobante)
                 else:
                     a = DocAdjunto.objects.create(
@@ -145,7 +145,7 @@ class ImageDoc(generics.CreateAPIView):
                     url = upload_s3ine(imagen, username, str(tipo))
                     a = DocAdjunto.objects.create(user=user_,
                                                   tipo=doctipo,
-                                                  imagen=imagen)
+                                                  imagen=imagen.file)
                 else:
                     a = DocAdjunto.objects.create(user=user_,
                                                   tipo=doctipo,
