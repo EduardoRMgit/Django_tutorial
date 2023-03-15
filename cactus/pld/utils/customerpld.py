@@ -123,7 +123,7 @@ def create_pld_customer(user):
                 correo_electronico=user.email,
                 actua_cuenta_propia=1,
                 mensaje=content_customer['response_api']['message'],
-                no_cliente=cuser.Uprofile.cuentaClabe[10:17],
+                no_cliente=user.Uprofile.cuentaClabe[10:17],
                 riesgo=content_customer[
                     'response_api']['customer_info']['riesgo'],
                 user=user,
