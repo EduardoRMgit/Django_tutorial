@@ -164,8 +164,8 @@ class ImageDoc(generics.CreateAPIView):
                 if settings.SITE == "local":
                     url = "{}{}".format(
                         'http://127.0.0.1:8000/media/', a.imagen)
-                if settings.SITE not in "local":
-                    url = a.imagen
+                if settings.SITE not in ["local"]:
+                    url = a.imagen_url
                 id = a.id
         except Exception as ex:
             msg = f"[ImageDoc POST] Error al subir image a bucket: {ex}"
