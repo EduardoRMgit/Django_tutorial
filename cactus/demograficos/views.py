@@ -114,6 +114,7 @@ class ImageDoc(generics.CreateAPIView):
         username = user_.username
         doctipo = DocAdjuntoTipo.objects.get(id=tipo)
         url = ""
+        id = 0
         try:
             if request.data['tipo_comprobante'] != '':
                 tipo_comprobante = request.data['tipo_comprobante']
@@ -140,7 +141,7 @@ class ImageDoc(generics.CreateAPIView):
                     url = a.imagen
             else:
                 if settings.USE_S3:
-                    url = upload_s3ine(imagen, username, doctipo)
+                    url = upload_s3ine(imagen, username, str(tipo))
                     a = DocAdjunto.objects.create(user=user_,
                                                   tipo=doctipo,
                                                   imagen=url)
@@ -157,6 +158,12 @@ class ImageDoc(generics.CreateAPIView):
         except Exception as ex:
             msg = f"[ImageDoc POST] Error al subir image a bucket: {ex}"
             db_logger.warning(msg)
+            return Response(
+                {
+                    'error': "No fue posible crear el documento"
+                },
+                status=status.HTTP_200_OK)
+
         return Response({
             'id': id,
             'user': request.data['user'],
