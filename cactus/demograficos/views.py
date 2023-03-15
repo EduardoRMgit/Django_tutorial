@@ -24,7 +24,7 @@ def get_file_url(archivo, file_path):
         config=boto3.session.Config(signature_version='s3v4'),
         aws_access_key_id=AWS_ACCESS_KEY_ID,
         aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
-        region_name="us-east-2")
+        region_name="us-east-1")
     client.upload_fileobj(archivo,
                           settings.AWS_STORAGE_BUCKET_NAME,
                           file_path)
@@ -42,40 +42,44 @@ def get_file_url(archivo, file_path):
 def upload_s3_docs(tipocomprobante, archivo, user):
 
     if tipocomprobante == '1':
-        nombre_archivo = f"comprobante_cfe_{user}"
-        directory = 'cfe'
-        file_path = os.path.join(
-            directory,
-            nombre_archivo
-        )
-        file_path = os.path.join('docs/docs/comprobantes', file_path)
+        nombre_archivo = f"comprobante_cfe_{user}{archivo.name}"
+        # directory = 'cfe'
+        # file_path = os.path.join(
+        #     directory,
+        #     nombre_archivo
+        # )
+        # file_path = os.path.join('docs', file_path)
+        file_path = os.path.join('docs/', nombre_archivo)
         file_url = get_file_url(archivo, file_path)
     elif tipocomprobante == '2':
-        nombre_archivo = f"comprobante_telmex_{user}"
-        directory = 'telmex'
-        file_path = os.path.join(
-            directory,
-            nombre_archivo
-        )
-        file_path = os.path.join('docs/docs/comprobantes', file_path)
+        nombre_archivo = f"comprobante_telmex_{user}{archivo.name}"
+        # directory = 'telmex'
+        # file_path = os.path.join(
+        #     directory,
+        #     nombre_archivo
+        # )
+        # file_path = os.path.join('docs', file_path)
+        file_path = os.path.join('docs/', nombre_archivo)
         file_url = get_file_url(archivo, file_path)
     elif tipocomprobante == '3':
-        nombre_archivo = f"comprobante_izzi_{user}"
-        directory = 'izzi'
-        file_path = os.path.join(
-            directory,
-            nombre_archivo
-        )
-        file_path = os.path.join('docs/docs/comprobantes', file_path)
+        nombre_archivo = f"comprobante_izzi_{user}{archivo.name}"
+        # directory = 'izzi'
+        # file_path = os.path.join(
+        #     directory,
+        #     nombre_archivo
+        # )
+        # file_path = os.path.join('docs', file_path)
+        file_path = os.path.join('docs/', nombre_archivo)
         file_url = get_file_url(archivo, file_path)
     elif tipocomprobante == '4':
-        nombre_archivo = f"comprobante_totalplay_{user}"
-        directory = 'totalplay'
-        file_path = os.path.join(
-            directory,
-            nombre_archivo
-        )
-        file_path = os.path.join('docs/docs/comprobantes', file_path)
+        nombre_archivo = f"comprobante_totalplay_{user}{archivo.name}"
+        # directory = 'totalplay'
+        # file_path = os.path.join(
+        #     directory,
+        #     nombre_archivo
+        # )
+        # file_path = os.path.join('docs', file_path)
+        file_path = os.path.join('docs/', nombre_archivo)
         file_url = get_file_url(archivo, file_path)
     return file_url
 
@@ -83,22 +87,24 @@ def upload_s3_docs(tipocomprobante, archivo, user):
 def upload_s3ine(archivo, user, tipo):
 
     if tipo == "1":
-        nombre_archivo = f"ine_frontal_{user}"
-        directory = 'ine'
-        file_path = os.path.join(
-            directory,
-            nombre_archivo
-        )
-        file_path = os.path.join('docs/docs/', file_path)
+        nombre_archivo = f"ine_frontal_{user}{archivo.name}"
+        # directory = 'ine'
+        # file_path = os.path.join(
+        #     directory,
+        #     nombre_archivo
+        # )
+        # file_path = os.path.join('docs/', file_path)
+        file_path = os.path.join('docs/', nombre_archivo)
         file_url = get_file_url(archivo, file_path)
     elif tipo == "2":
-        nombre_archivo = f"ine_reverso_{user}"
-        directory = 'ineReverso'
-        file_path = os.path.join(
-            directory,
-            nombre_archivo
-        )
-        file_path = os.path.join('docs/docs/', file_path)
+        nombre_archivo = f"ine_reverso_{user}{archivo.name}"
+        # directory = 'ineReverso'
+        # file_path = os.path.join(
+        #     directory,
+        #     nombre_archivo
+        # )
+        # file_path = os.path.join('docs/', file_path)
+        file_path = os.path.join('docs/', nombre_archivo)
         file_url = get_file_url(archivo, file_path)
     return file_url
 
