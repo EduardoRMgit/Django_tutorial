@@ -32,7 +32,8 @@ def get_file_url(archivo, file_path):
         'get_object',
         Params={
             'Bucket': settings.AWS_STORAGE_BUCKET_NAME,
-            'Key': file_path
+            'Key': file_path,
+            'ContentType': 'image/jpeg'
         },
         ExpiresIn=1440,
         HttpMethod=None)
