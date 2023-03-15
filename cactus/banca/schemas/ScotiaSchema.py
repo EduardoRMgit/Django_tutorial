@@ -40,7 +40,7 @@ def upload_s3(nombre_archivo, archivo):
     client = boto3.client(
         's3',
         config=boto3.session.Config(signature_version='s3v4'),
-        aws_access_key_id=AWS_ACCESS_KEY_ID,
+        aws_acces_key_id=AWS_ACCESS_KEY_ID,
         aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
         region_name="us-east-2")
     client.upload_fileobj(archivo, "scotia-reportes", file_path)
@@ -86,6 +86,7 @@ class Query(graphene.ObjectType):
     {scotiaretiro{urlComprobante}, scotiadeposito{urlComprobante}}
     }
     """
+
     def resolve_url_comprobante(self, info, **kwargs):
         id = kwargs.get("id_transaccion")
         deposito = ScotiaDeposito.objects.filter(transaccion=id)
