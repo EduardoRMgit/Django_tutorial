@@ -267,9 +267,12 @@ LOGGING = {
 # S3
 
 if (USE_S3):
+    if SITE == 'prod':
+        AWS_STORAGE_BUCKET_NAME = 'inguz-prod'
+    else:
+        AWS_STORAGE_BUCKET_NAME = 'phototest420'
     AWS_ACCESS_KEY_ID = env.str('AWS_KEY_ID', "")
     AWS_SECRET_ACCESS_KEY = env.str('AWS_SECRET_ID', "")
-    AWS_STORAGE_BUCKET_NAME = 'phototest420'
     AWS_S3_REGION_NAME = 'us-east-1'
     AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
     AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
