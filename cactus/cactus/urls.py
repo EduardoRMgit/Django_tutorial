@@ -33,7 +33,6 @@ if SITE in [
         AdminSiteOTPRequiredMixin
     )
 
-
     class AdminSiteOTPRequiredMixinRedirSetup(AdminSiteOTPRequired):
         def login(self, request, extra_context=None):
             redirect_to = request.POST.get(
