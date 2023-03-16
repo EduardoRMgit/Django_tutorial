@@ -19,43 +19,45 @@ from banca.views.transactionView import my_image
 import notifications.urls
 from servicios.views import web_chat
 
-from two_factor.urls import urlpatterns as tf_urls
-from two_factor.admin import AdminSiteOTPRequired, AdminSiteOTPRequiredMixin
+from cactus.settings import SITE
 
 
-class AdminSiteOTPRequiredMixinRedirSetup(AdminSiteOTPRequired):
-    def login(self, request, extra_context=None):
-        redirect_to = request.POST.get(
-            REDIRECT_FIELD_NAME, request.GET.get(REDIRECT_FIELD_NAME)
-        )
-        # Para los usuarios que aún no han verificado
-        # el  AdminSiteOTPRequired.has_permission
-        # fallará. Por lo tanto, use la verificación
-        # estándar de administrador has_permission check:
-        # (is_active and is_staff) y luego verifique la verificación.
-        # Vaya al índice si aprueban, de lo contrario,
-        # haga que configuren el dispositivo OTP.
-        if request.method == "GET" and super(
-            AdminSiteOTPRequiredMixin, self
-        ).has_permission(request):
-            # Ya iniciado sesión y verificado por OTP
-            if request.user.is_verified():
-                # El usuario tiene permiso
-                index_path = reverse("admin:index", current_app=self.name)
-            else:
-                # El usuario tiene permiso pero no se establece OTP:
-                index_path = reverse("two_factor:setup", current_app=self.name)
-            return HttpResponseRedirect(index_path)
-
-        if not redirect_to or not url_has_allowed_host_and_scheme(
-            url=redirect_to, allowed_hosts=[request.get_host()]
-        ):
-            redirect_to = resolve_url(settings.LOGIN_REDIRECT_URL)
-
-        return redirect_to_login(redirect_to)
-
-
-admin.site.__class__ = AdminSiteOTPRequiredMixinRedirSetup
+if SITE in [
+    "stage",
+    "test",
+    "prod"
+]:
+    from two_factor.urls import urlpatterns as tf_urls
+    from two_factor.admin import AdminSiteOTPRequired, AdminSiteOTPRequiredMixin
+    class AdminSiteOTPRequiredMixinRedirSetup(AdminSiteOTPRequired):
+        def login(self, request, extra_context=None):
+            redirect_to = request.POST.get(
+                REDIRECT_FIELD_NAME, request.GET.get(REDIRECT_FIELD_NAME)
+            )
+            # Para los usuarios que aún no han verificado
+            # el  AdminSiteOTPRequired.has_permission
+            # fallará. Por lo tanto, use la verificación
+            # estándar de administrador has_permission check:
+            # (is_active and is_staff) y luego verifique la verificación.
+            # Vaya al índice si aprueban, de lo contrario,
+            # haga que configuren el dispositivo OTP.
+            if request.method == "GET" and super(
+                AdminSiteOTPRequiredMixin, self
+            ).has_permission(request):
+                # Ya iniciado sesión y verificado por OTP
+                if request.user.is_verified():
+                    # El usuario tiene permiso
+                    index_path = reverse("admin:index", current_app=self.name)
+                else:
+                    # El usuario tiene permiso pero no se establece OTP:
+                    index_path = reverse("two_factor:setup", current_app=self.name)
+                return HttpResponseRedirect(index_path)
+            if not redirect_to or not url_has_allowed_host_and_scheme(
+                url=redirect_to, allowed_hosts=[request.get_host()]
+            ):
+                redirect_to = resolve_url(settings.LOGIN_REDIRECT_URL)
+            return redirect_to_login(redirect_to)
+    admin.site.__class__ = AdminSiteOTPRequiredMixinRedirSetup
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -71,8 +73,14 @@ urlpatterns = [
     path("chat/", web_chat),
     path('', include('demograficos.urls')),
     path('', include('dapp.urls')),
-    path('', include(tf_urls, "two_factor")),
 ]
+
+if SITE in [
+    "stage",
+    "test",
+    "prod"
+]:
+    urlpatterns.append(path('', include(tf_urls, "two_factor")),)
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -94,6 +94,12 @@ INSTALLED_APPS = [
     'crecimiento.apps.CrecimientoConfig',
 ]
 
+if SITE == "local":
+    INSTALLED_APPS.remove('django_otp')
+    INSTALLED_APPS.remove('django_otp.plugins.otp_static')
+    INSTALLED_APPS.remove('django_otp.plugins.otp_totp')
+    INSTALLED_APPS.remove('two_factor')
+
 if (PROD):
     DATABASES = {
         'default': {
@@ -133,6 +139,9 @@ MIDDLEWARE = [
     'django_auto_logout.middleware.auto_logout',
     'axes.middleware.AxesMiddleware',
 ]
+
+if SITE == 'local':
+    MIDDLEWARE.remove('django_otp.middleware.OTPMiddleware')
 
 CORS_ORIGIN_ALLOW_ALL = False
 CORS_ALLOW_CREDENTIALS = True
@@ -191,9 +200,14 @@ AUTHENTICATION_BACKENDS = [
     'cactus.customAuthBackend.EmailBackend',
 ]
 
-TWO_FACTOR_FORCE_OTP_ADMIN = True
-LOGIN_URL = 'two_factor:login'
-LOGIN_REDIRECTION_URL = '/admin'
+if SITE in [
+    "stage",
+    "test",
+    "prod"
+]:
+    TWO_FACTOR_FORCE_OTP_ADMIN = True
+    LOGIN_URL = 'two_factor:login'
+    LOGIN_REDIRECTION_URL = '/admin'
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
