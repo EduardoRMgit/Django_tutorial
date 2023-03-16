@@ -1,0 +1,1 @@
+from .alertaView import AlertasPLDView
