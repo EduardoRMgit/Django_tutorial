@@ -28,7 +28,12 @@ if SITE in [
     "prod"
 ]:
     from two_factor.urls import urlpatterns as tf_urls
-    from two_factor.admin import AdminSiteOTPRequired, AdminSiteOTPRequiredMixin
+    from two_factor.admin import (
+        AdminSiteOTPRequired,
+        AdminSiteOTPRequiredMixin
+    )
+
+
     class AdminSiteOTPRequiredMixinRedirSetup(AdminSiteOTPRequired):
         def login(self, request, extra_context=None):
             redirect_to = request.POST.get(
@@ -50,7 +55,9 @@ if SITE in [
                     index_path = reverse("admin:index", current_app=self.name)
                 else:
                     # El usuario tiene permiso pero no se establece OTP:
-                    index_path = reverse("two_factor:setup", current_app=self.name)
+                    index_path = reverse(
+                        "two_factor:setup", current_app=self.name
+                    )
                 return HttpResponseRedirect(index_path)
             if not redirect_to or not url_has_allowed_host_and_scheme(
                 url=redirect_to, allowed_hosts=[request.get_host()]
