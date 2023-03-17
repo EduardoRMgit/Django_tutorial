@@ -25,7 +25,7 @@ def comprobar_curp(request):
             db_logger.info(msg_logg)
         if not curp_valido:
             msg_logg = "[Servicio Zaki] {}.".format(
-                        f"CURP {curp}  No valido")
+                        f"CURP {curp_}  No valido")
             db_logger.error(msg_logg)
 
         dicc['curp_valido'] = curp_valido
