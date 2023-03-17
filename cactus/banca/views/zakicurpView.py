@@ -1,11 +1,11 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from banca.utils.zaki_comprobacion import ZakiComprobar
+from cactus.banca.utils.compruebacurp import comprobar_curp
 
 
 @api_view(['POST'])
-def ZakiView(request):
+def ZakiCurpView(request):
 
     if request.method == 'POST':
-        valida = ZakiComprobar(request.data)
+        valida = comprobar_curp(request.data)
     return Response(valida)
