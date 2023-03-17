@@ -11,14 +11,15 @@ def ZakiComprobar(request):
         curp = request['curp']
         username = request['username']
         valida_curp = request['valida_curp']
-        user = User.objects.filter(is_active=True, username=username).count()
+        user = User.objects.filter(is_active=True, username=username)
+        usert_exist = user.count()
         if valida_curp:
             if curp == user.Uprofile.curp:
                 curp_valido = True
                 msg_logg = "[Servicio Zaki] {}.".format(
                     f"CURP {curp} Valido")
                 db_logger.info(msg_logg)
-        if user:
+        if usert_exist:
             user_valido = True
             msg_logg = "[Servicio Zaki] {}.".format(
                 f"Username {username} Valido")
