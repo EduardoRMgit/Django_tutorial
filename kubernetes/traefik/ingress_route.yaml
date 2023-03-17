@@ -81,76 +81,76 @@ spec:
   tls:
     certResolver: default
 ---
-apiVersion: traefik.containo.us/v1alpha1
-kind: IngressRoute
-metadata:
-  name: inguzstageweb
-spec:
-  entryPoints:
-    - web
-  routes:
-  - match: Host(`staging.inguz.site`)
-    kind: Rule
-    services:
-    - name: cactus-stage
-      port: 80
-    middlewares:
-    - name: redirectscheme
+# apiVersion: traefik.containo.us/v1alpha1
+# kind: IngressRoute
+# metadata:
+#   name: inguzstageweb
+# spec:
+#   entryPoints:
+#     - web
+#   routes:
+#   - match: Host(`staging.inguz.site`)
+#     kind: Rule
+#     services:
+#     - name: cactus-stage
+#       port: 80
+#     middlewares:
+#     - name: redirectscheme
 
----
-apiVersion: traefik.containo.us/v1alpha1
-kind: IngressRoute
-metadata:
-  name: inguzstagewebsecure
-spec:
-  entryPoints:
-    - websecure
-  routes:
-  - match: Host(`staging.inguz.site`)
-    kind: Rule
-    services:
-    - name: cactus-stage
-      port: 80
-    middlewares:
-    # - name: doc-auth
-  tls:
-    certResolver: default
+# ---
+# apiVersion: traefik.containo.us/v1alpha1
+# kind: IngressRoute
+# metadata:
+#   name: inguzstagewebsecure
+# spec:
+#   entryPoints:
+#     - websecure
+#   routes:
+#   - match: Host(`staging.inguz.site`)
+#     kind: Rule
+#     services:
+#     - name: cactus-stage
+#       port: 80
+#     middlewares:
+#     # - name: doc-auth
+#   tls:
+#     certResolver: default
 
----
-apiVersion: traefik.containo.us/v1alpha1
-kind: IngressRoute
-metadata:
-  name: inguztestweb
-spec:
-  entryPoints:
-    - web
-  routes:
-  - match: Host(`test.inguz.site`)
-    kind: Rule
-    services:
-    - name: cactus-test
-      port: 80
-    middlewares:
-    - name: redirectscheme
+# ---
+# apiVersion: traefik.containo.us/v1alpha1
+# kind: IngressRoute
+# metadata:
+#   name: inguztestweb
+# spec:
+#   entryPoints:
+#     - web
+#   routes:
+#   - match: Host(`test.inguz.site`)
+#     kind: Rule
+#     services:
+#     - name: cactus-test
+#       port: 80
+#     middlewares:
+#     - name: redirectscheme
 
----
-apiVersion: traefik.containo.us/v1alpha1
-kind: IngressRoute
-metadata:
-  name: inguztestwebsecure
-spec:
-  entryPoints:
-    - websecure
-  routes:
-  - match: Host(`test.inguz.site`)
-    kind: Rule
-    services:
-    - name: cactus-test
-      port: 80
-    middlewares:
-    - name: doc-auth
-  tls:
-    certResolver: default
+# ---
+# apiVersion: traefik.containo.us/v1alpha1
+# kind: IngressRoute
+# metadata:
+#   name: inguztestwebsecure
+# spec:
+#   entryPoints:
+#     - websecure
+#   routes:
+#   - match: Host(`test.inguz.site`)
+#     kind: Rule
+#     services:
+#     - name: cactus-test
+#       port: 80
+#     middlewares:
+#     - name: doc-auth
+#   tls:
+#     certResolver: default
 ---
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute

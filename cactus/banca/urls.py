@@ -1,7 +1,7 @@
 from django.urls import path
 # from datetime import datetime
 from banca.views.transactionView import (TransactionList, TransactionDetail,
-                                         cuenta_pdf)
+                                         cuenta_pdf, comprobante_trans)
 from banca.views.zakiViews import ZakiCurpView, ZakiUsernameView
 from spei.views import StpNotificacionEstadoCuentaView
 
@@ -24,6 +24,7 @@ urlpatterns = [
     path('sendabono/', TransactionList.as_view()),
     path('estado/', TransactionDetail.as_view()),
     path('cuenta/', csrf_exempt(cuenta_pdf)),
+    path('comprobante_trans/<int:trans_id>/', csrf_exempt(comprobante_trans)),
     path('notificacionestadocuenta/',
          StpNotificacionEstadoCuentaView.as_view()),
     path('validacurp/', ZakiCurpView),
