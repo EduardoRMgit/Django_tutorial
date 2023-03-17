@@ -183,8 +183,7 @@ class UserProfileAdmin(ExportActionMixin, PasswordResetUserAdmin):
 
     def get_readonly_fields(self, request, obj=None):
         if not request.user.is_superuser:
-            return ['first_name', 'last_name', 'username', 'email',
-                    'is_superuser', 'is_active', 'is_staff']
+            return ['first_name', 'last_name', 'username', 'email']
 
         return []
 
