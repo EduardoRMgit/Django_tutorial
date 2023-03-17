@@ -34,9 +34,8 @@ def comprobar_curp(request):
     except Exception as ex:
         msg = f"[Servicio Zaki]:{ex}"
         db_logger.error(msg)
-
-
-<< << << < HEAD
+        dicc['error'] = "bad request"
+    return dicc
 
 
 def comprobar_username(request):
@@ -62,5 +61,4 @@ def comprobar_username(request):
     msg = f"[Zaki comprobar_username()] Respuesta: {res}"
     db_logger.info(msg)
 
-    dicc['error'] = "bad request"
-    return dicc
+    return res
