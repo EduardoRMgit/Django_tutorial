@@ -6,6 +6,7 @@ db_logger = logging.getLogger('db')
 
 def comprobar_curp(request):
     curp_valido = False
+    dicc = {}
     try:
         curp_ = request['curp']
         username = request['username']
@@ -27,10 +28,10 @@ def comprobar_curp(request):
                         f"CURP {curp}  No valido")
             db_logger.error(msg_logg)
 
-        dicc = {}
         dicc['curp_valido'] = curp_valido
-        return dicc
 
     except Exception as ex:
         msg = f"[Servicio Zaki]:{ex}"
         db_logger.error(msg)
+        dicc['error'] = "bad request"
+    return dicc
