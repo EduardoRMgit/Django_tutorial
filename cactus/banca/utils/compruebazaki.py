@@ -9,7 +9,7 @@ def comprobar_curp(request):
     try:
         curp_ = request['curp']
         username = request['username']
-        curp = User.objects.get(
+        curp = User.objects.filter(
             is_active=True,
             username=username,
             Uprofile__curp=curp_).count()
