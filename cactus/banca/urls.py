@@ -2,7 +2,7 @@ from django.urls import path
 # from datetime import datetime
 from banca.views.transactionView import (TransactionList, TransactionDetail,
                                          cuenta_pdf)
-from banca.views.zakicurpView import ZakiCurpView
+from banca.views.zakiViews import ZakiCurpView
 from spei.views import StpNotificacionEstadoCuentaView
 
 from django.views.decorators.csrf import csrf_exempt

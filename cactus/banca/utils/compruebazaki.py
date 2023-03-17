@@ -1,5 +1,5 @@
 import logging
-from demograficos.models import UserProfile
+from django.contrib.auth.models import User
 
 db_logger = logging.getLogger('db')
 
@@ -8,7 +8,11 @@ def comprobar_curp(request):
     curp_valido = False
     try:
         curp_ = request['curp']
-        curp = UserProfile.objects.get(is_active=True, curp=curp_).count()
+        username = request['username']
+        curp = User.objects.get(
+            is_active=True,
+            username=username,
+            Uprofile__curp=curp_).count()
         if curp:
             curp_valido = True
             msg_logg = "[Servicio Zaki] {}.".format(
