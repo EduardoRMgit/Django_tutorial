@@ -1,6 +1,6 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from cactus.banca.utils.compruebacurp import comprobar_curp
+from banca.utils.compruebacurp import comprobar_curp
 
 
 @api_view(['POST'])
