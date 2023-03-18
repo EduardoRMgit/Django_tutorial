@@ -19,6 +19,7 @@ from django.http import (JsonResponse,
                          HttpResponse,
                          HttpResponseBadRequest,
                          HttpResponseNotAllowed,)
+from rest_framework.response import Response
 #  FileResponse
 
 from django.template.loader import render_to_string
@@ -521,17 +522,14 @@ class CustomRenderer(renderers.BaseRenderer):
 
 @api_view(['GET'])
 def comprobante_trans(request, trans_id):
-
-    # req = request.data
-    # trans_id = req.get("trans_id", "")
-    # trans_id = request.GET["trans_id"]
+    # try:
+        # req = request.data
+        # trans_id = req.get("trans_id", "")
+        # trans_id = request.GET["trans_id"]
     user = request.user
     trans = None
     trans = Transaccion.objects.get(pk=trans_id)
     # print(trans)
-    print("rielrielriel")
-    print(trans.tipoTrans)
-
     comp = CompTrans(trans)
 
     comp_file = comp.trans()
@@ -545,7 +543,6 @@ def comprobante_trans(request, trans_id):
             'fileUrl': file_url,
         })
     else:
-        print("sadfsafasdfsadfadsf")
         # json = {"error": "Debug estado cuenta" +
         #         " not implented yet, set USE_S3 in .env to 1"}
         # json_response = JsonResponse(json, status=400)
@@ -553,6 +550,9 @@ def comprobante_trans(request, trans_id):
         return HttpResponse(comp_file, content_type="image/jpg")
 
     return json_response
+    # except Exception as ex:
+    #     print(ex)
+    #     return Response("No existe")
 
 
 def my_image(request):

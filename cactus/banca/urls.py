@@ -3,6 +3,7 @@ from django.urls import path
 from banca.views.transactionView import (TransactionList, TransactionDetail,
                                          cuenta_pdf, comprobante_trans)
 from banca.views.zakiViews import ZakiCurpView, ZakiUsernameView
+                                         
 from spei.views import StpNotificacionEstadoCuentaView
 
 from django.views.decorators.csrf import csrf_exempt
