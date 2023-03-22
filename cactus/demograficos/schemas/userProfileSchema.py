@@ -70,7 +70,6 @@ from axes.models import AccessAttempt
 from pld.utils.customerpld import create_pld_customer
 
 from demograficos.utils.registermail import RegistrarMail
-from demograficos.utils.correo import mandar_email
 
 db_logger = logging.getLogger("db")
 
@@ -2533,7 +2532,6 @@ class UpdateNip(graphene.Mutation):
                         UP.enrolamiento = True
                         create_pld_customer(user)
                         RegistrarMail(user)
-                        mandar_email(user.email, user.first_name)
                     else:
                         raise ValueError('nip no coincide con el temporal')
             elif (UP.statusNip == 'A'):
