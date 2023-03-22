@@ -26,6 +26,6 @@ def RegistrarMail(user):
     except ApiClientError as error:
         print("Error: {}".format(error.text))
         msg_mailchimp = (
-            f"[Create Customer] Error al crear customer en ubcubo"
-            f"para el usuario: {user}. Error: {error}")
+            f"[Error mailchimp] Error al suscribir al usuario"
+            f"con el email: {user.email}. Error: {error}")
         db_logger.warning(msg_mailchimp)
