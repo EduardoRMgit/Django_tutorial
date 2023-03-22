@@ -4,6 +4,8 @@ from PIL import Image
 from banca.models import Comprobante, Transaccion
 from spei.models import StpTransaction
 from cactus.settings import MEDIA_ROOT
+from django.conf import settings
+import imutils
 
 
 class CompTrans(object):
@@ -12,17 +14,12 @@ class CompTrans(object):
         self._tipo = trans.tipoTrans
         codigo = self._tipo.codigo
         status = trans.statusTrans.nombre
-        print((status))
-        print(codigo)
         if status == "exito":
             codigo = codigo
         if status == "rechazada":
             codigo = int(codigo)
             codigo += 1
             codigo = str(codigo)
-        else:
-            pass
-        print(codigo, 'cooooooooodigo')
         self._tp = Comprobante.objects.get(codigo=codigo).template
         self._dir = os.path.abspath(os.path.join(MEDIA_ROOT, self._tp.name))
         self._tp = cv2.imread(self._dir)
@@ -36,13 +33,11 @@ class CompTrans(object):
         fecha = trans.fechaValor.strftime("%m/%d/%Y")
         hora = trans.fechaValor.strftime("%H:%M:%S")
         concepto = trans.concepto
-        print(trans.user.username, monto, fecha, hora, concepto)
 
         # instance = self._trans
 
         lista = [nombre, concepto, alias,
                  fecha, hora, monto, trans.claveRastreo]
-        
 
         img = cv2.imread(self._dir)
         coord = [
@@ -76,9 +71,13 @@ class CompTrans(object):
             )
 
         # ComprobanteUsuario.objects.create(transaccion=trans, img=img1)
-        avatar = os.path.abspath(os.path.join(
-            MEDIA_ROOT, avatar.avatar_img.name))
-        avatar = cv2.imread(avatar, -1)
+        if settings.SITE == "local":
+            avatar = os.path.abspath(os.path.join(
+                MEDIA_ROOT, avatar.avatar_img.name))
+            avatar = cv2.imread(avatar, -1)
+        elif settings.SITE not in "local":
+            avatar = avatar.avatar_img.name
+            avatar = imutils.url_to_image(avatar, -1)
         avatar = cv2.resize(avatar, (250, 250))
         x_offset = 180
         y_offset = 0
@@ -183,11 +182,28 @@ class CompTrans(object):
             ]
             for field in field_:
                 fields.append(field)
-            print(fields, 'a')
 
+        # img = imutils.url_to_image("https://i.pinimg.com/736x/87{}".format(
+        #         "/2b/46/872b463134db6ed9bb62c59dc2191a2e.jpg"))
         img = cv2.imread(self._dir)
+
         for field in fields:
             cv2.putText(img, *field)
+        otrosbancos = imutils.url_to_image(
+            "https://phototest420.s3.amazonaws.com/{}".format(
+                    "docs/stpstatics/OTROS_BANCOS.png"
+            ),
+            -1)
+        otrosbancos = cv2.resize(otrosbancos, (250, 250))
+        x_offset = 180
+        y_offset = 0
+        y1, y2 = y_offset, y_offset + otrosbancos.shape[0]
+        x1, x2 = x_offset, x_offset + otrosbancos.shape[1]
+        alpha_s = otrosbancos[:, :, 3] / 255.0
+        alpha_l = 1.0 - alpha_s
+        for c in range(0, 3):
+            img[y1:y2, x1:x2, c] = (alpha_s * otrosbancos[:, :, c] +
+                                    alpha_l * img[y1:y2, x1:x2, c])
         img_name = "comprobanteSTP.jpg"
         cv2.imwrite(img_name, img)
         comp_img = open(img_name, "rb")

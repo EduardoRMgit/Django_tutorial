@@ -19,7 +19,6 @@ from django.http import (JsonResponse,
                          HttpResponse,
                          HttpResponseBadRequest,
                          HttpResponseNotAllowed,)
-from rest_framework.response import Response
 #  FileResponse
 
 from django.template.loader import render_to_string
@@ -522,14 +521,20 @@ class CustomRenderer(renderers.BaseRenderer):
 
 @api_view(['GET'])
 def comprobante_trans(request, trans_id):
-    # try:
-        # req = request.data
-        # trans_id = req.get("trans_id", "")
-        # trans_id = request.GET["trans_id"]
     user = request.user
     trans = None
-    trans = Transaccion.objects.get(pk=trans_id)
-    # print(trans)
+    try:
+        trans = Transaccion.objects.get(pk=trans_id)
+        if trans.tipoTrans.tipo != 'E':
+            return Response({'message': 'Transaccion no genera comprobante'})
+        print(trans.statusTrans.nombre)
+        if trans.statusTrans.nombre != 'exito' \
+                and trans.statusTrans.nombre != 'rechazada':
+            return Response(
+                {'message': 'Transaccion aun no genera comprobante'})
+    except Exception:
+        return Response({'message': 'Transaccion no encontrada'})
+
     comp = CompTrans(trans)
 
     comp_file = comp.trans()
