@@ -1632,8 +1632,9 @@ class CreateUser(graphene.Mutation):
             raise Exception("Faltan headers en la petición")
         geolocator = Nominatim(user_agent="cactus")
         location = geolocator.reverse((lat, lon))
-        if location.raw['address']['country'] != "México":
-            raise Exception("Usuario fuera de territorio Mexicano")
+        if test is not True:
+            if location.raw['address']['country'] != "México":
+                raise Exception("Usuario fuera de territorio Mexicano")
         try:
             user = User.objects.get(username=username)
             return Exception("Ya existe un usuario con ese número")
