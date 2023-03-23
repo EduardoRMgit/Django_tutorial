@@ -57,6 +57,8 @@ class LoggingGraphQLView(GraphQLView):
         lon = request.headers.get("Location-Lon")
         current_location = UserLocation.objects.create(user=user,
                                                        date=timezone.now())
+        if lat is None and lon is None:
+            raise Exception("Not GeoLocation in request")
         if lat and lon:
             location = GeoLocation.objects.create(lat=lat, lon=lon)
             current_location.location = location

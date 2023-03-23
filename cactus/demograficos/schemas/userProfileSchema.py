@@ -26,6 +26,7 @@ from django.contrib.auth import authenticate
 from django.utils import timezone
 from spei.stpTools import randomString
 from django.conf import Settings
+from geopy.geocoders import Nominatim
 
 
 from demograficos.models.userProfile import (RespuestaSeguridad,
@@ -1629,6 +1630,10 @@ class CreateUser(graphene.Mutation):
         lon = info.context.headers.get("Location-Lon")
         if not (lat and lon and uuid) and not test:
             raise Exception("Faltan headers en la petición")
+        geolocator = Nominatim(user_agent="cactus")
+        location = geolocator.reverse((lat, lon))
+        if location.raw['address']['country'] != "México":
+            raise Exception("Usuario fuera de territorio Mexicano")
         try:
             user = User.objects.get(username=username)
             return Exception("Ya existe un usuario con ese número")
