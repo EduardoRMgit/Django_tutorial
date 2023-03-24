@@ -86,6 +86,7 @@ class Query(graphene.ObjectType):
     {scotiaretiro{urlComprobante}, scotiadeposito{urlComprobante}}
     }
     """
+
     def resolve_url_comprobante(self, info, **kwargs):
         id = kwargs.get("id_transaccion")
         deposito = ScotiaDeposito.objects.filter(transaccion=id)
@@ -346,7 +347,7 @@ class CreateRetiroScotia(graphene.Mutation):
         main_trans = Transaccion.objects.create(
             user=user,
             fechaValor=fecha,
-            monto=float(comision),
+            monto=float(float(monto) + comision),
             statusTrans=status,
             tipoTrans=tipo,
             concepto="Retiro Scotiabank",
@@ -490,7 +491,7 @@ class CreateScotiaDeposito(graphene.Mutation):
         main_trans = Transaccion.objects.create(
             user=ordenante,
             fechaValor=fecha,
-            monto=float(float(monto) + comision),
+            monto=float(monto),
             statusTrans=status,
             tipoTrans=tipo,
             concepto="Depósito Cliente",

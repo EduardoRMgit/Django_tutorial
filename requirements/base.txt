@@ -48,4 +48,12 @@ django-axes==5.39.0
 pycryptodome==3.15.0
 all-escapes==0.1
 django-import-export==3.0.2
+<<<<<<< HEAD
 mailchimp-marketing==3.0.80
+=======
+django-phonenumber-field==6.4.0
+django-two-factor-auth==1.14.0
+phonenumbers==8.13.0
+geographiclib==2.0
+geopy==2.3.0
+>>>>>>> 674308a04751888693171d5b6e14ff3624050675

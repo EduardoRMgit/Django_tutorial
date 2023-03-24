@@ -47,17 +47,16 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'staging.inguz.site',
                  '10.5.1.1', 'inguzmx.com', 'staging.inguz.online',
                  'test.inguz.online']
 
-RECAPTCHA_PUBLIC_KEY = '6Lc_Z2ojAAAAAIi_BPRSrrmkle33Yk9pf4JtWEsQ'
-RECAPTCHA_PRIVATE_KEY = '6Lc_Z2ojAAAAAKxXKQwxFosKmzM7SHxxuKn2w1zP'
-RECAPTCHA_REQUIRED_SCORE = 0.85
-
 # Application definition
 
 INSTALLED_APPS = [
+    'django_otp',
+	'django_otp.plugins.otp_static',
+	'django_otp.plugins.otp_totp',
+	'two_factor',
     'rest_framework.authtoken',
     'rest_framework',
     'corsheaders',
-    'multi_captcha_admin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -95,6 +94,12 @@ INSTALLED_APPS = [
     'crecimiento.apps.CrecimientoConfig',
 ]
 
+if SITE == "local":
+    INSTALLED_APPS.remove('django_otp')
+    INSTALLED_APPS.remove('django_otp.plugins.otp_static')
+    INSTALLED_APPS.remove('django_otp.plugins.otp_totp')
+    INSTALLED_APPS.remove('two_factor')
+
 if (PROD):
     DATABASES = {
         'default': {
@@ -128,11 +133,15 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django_otp.middleware.OTPMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django_auto_logout.middleware.auto_logout',
     'axes.middleware.AxesMiddleware',
 ]
+
+if SITE == 'local':
+    MIDDLEWARE.remove('django_otp.middleware.OTPMiddleware')
 
 CORS_ORIGIN_ALLOW_ALL = False
 CORS_ALLOW_CREDENTIALS = True
@@ -183,9 +192,6 @@ GRAPHENE = {
     ],
 }
 
-MULTI_CAPTCHA_ADMIN = {
-    'engine': 'recaptcha2',
-}
 
 AUTHENTICATION_BACKENDS = [
     'axes.backends.AxesStandaloneBackend',
@@ -194,6 +200,14 @@ AUTHENTICATION_BACKENDS = [
     'cactus.customAuthBackend.EmailBackend',
 ]
 
+if SITE in [
+    "stage",
+    "test",
+    "prod"
+]:
+    TWO_FACTOR_FORCE_OTP_ADMIN = True
+    LOGIN_URL = 'two_factor:login'
+    LOGIN_REDIRECTION_URL = '/admin'
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -267,9 +281,12 @@ LOGGING = {
 # S3
 
 if (USE_S3):
+    if SITE == 'prod':
+        AWS_STORAGE_BUCKET_NAME = 'inguz-prod'
+    else:
+        AWS_STORAGE_BUCKET_NAME = 'phototest420'
     AWS_ACCESS_KEY_ID = env.str('AWS_KEY_ID', "")
     AWS_SECRET_ACCESS_KEY = env.str('AWS_SECRET_ID', "")
-    AWS_STORAGE_BUCKET_NAME = 'phototest420'
     AWS_S3_REGION_NAME = 'us-east-1'
     AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
     AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
@@ -314,7 +331,6 @@ DAPP_SECRET = env.str('DAPP_SECRET',
 if SITE == "local":
     idle_time = 120
     AXES_FAILURE_LIMIT = 10
-    INSTALLED_APPS.remove('multi_captcha_admin')
 elif SITE == "stage":
     idle_time = 30
     AXES_FAILURE_LIMIT = 5
