@@ -1633,7 +1633,7 @@ class CreateUser(graphene.Mutation):
         geolocator = Nominatim(user_agent="cactus")
         location = geolocator.reverse((lat, lon))
         if test is not True:
-            if location.raw['address']['country'] != "México":
+            if location.raw['address']['country_code'] != "mx":
                 raise Exception("Usuario fuera de territorio Mexicano")
         try:
             user = User.objects.get(username=username)
