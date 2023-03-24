@@ -22,7 +22,6 @@ def RegistrarMail(user):
             f"[Create Customer]: {user}"
             f"response: {response}"
         )
-        print(response)
     except ApiClientError as error:
         print("Error: {}".format(error.text))
         msg_mailchimp = (
