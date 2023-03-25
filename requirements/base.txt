@@ -48,6 +48,7 @@ django-axes==5.39.0
 pycryptodome==3.15.0
 all-escapes==0.1
 django-import-export==3.0.2
+mailchimp-marketing==3.0.80
 django-phonenumber-field==6.4.0
 django-two-factor-auth==1.14.0
 phonenumbers==8.13.0

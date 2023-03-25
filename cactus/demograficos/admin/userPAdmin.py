@@ -25,6 +25,10 @@ from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.utils.translation import gettext_lazy as _
 from cactus.settings import SITE
 from import_export.admin import ExportActionMixin
+import logging
+
+
+db_logger = logging.getLogger('db')
 
 
 class RequiredForm(forms.ModelForm):
