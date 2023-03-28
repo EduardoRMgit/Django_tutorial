@@ -16,7 +16,6 @@ from django.shortcuts import render
 from django.utils import timezone
 from django.conf import settings
 from django.http import (JsonResponse,
-                         HttpResponse,
                          HttpResponseBadRequest,
                          HttpResponseNotAllowed,)
 #  FileResponse
@@ -25,7 +24,6 @@ from django.template.loader import render_to_string
 
 from spei.models import StpTransaction
 from banca.models import Transaccion, StatusTrans, SaldoReservado, TipoTransaccion   # noqa: E501
-from banca.utils.comprobantesPng import CompTrans
 from spei.stpTools import randomString
 from banca.serializers import DetailSerializer, EstadoSerializer
 from banca.utils.limiteTrans import LimiteTrans
@@ -517,47 +515,6 @@ class CustomRenderer(renderers.BaseRenderer):
 
     def render(self, data, media_type=None, renderer_context=None):
         return data
-
-
-@api_view(['GET'])
-def comprobante_trans(request, trans_id):
-    user = request.user
-    trans = None
-    try:
-        trans = Transaccion.objects.get(pk=trans_id)
-        if trans.tipoTrans.tipo != 'E':
-            return Response({'message': 'Transaccion no genera comprobante'})
-        print(trans.statusTrans.nombre)
-        if trans.statusTrans.nombre != 'exito' \
-                and trans.statusTrans.nombre != 'rechazada':
-            return Response(
-                {'message': 'Transaccion aun no genera comprobante'})
-    except Exception:
-        return Response({'message': 'Transaccion no encontrada'})
-
-    comp = CompTrans(trans)
-
-    comp_file = comp.trans()
-
-    print(type(comp_file))
-
-    if settings.USE_S3:
-        file_url = upload_s3(comp_file, user)
-        json_response = JsonResponse({
-            'message': 'OK',
-            'fileUrl': file_url,
-        })
-    else:
-        # json = {"error": "Debug estado cuenta" +
-        #         " not implented yet, set USE_S3 in .env to 1"}
-        # json_response = JsonResponse(json, status=400)
-
-        return HttpResponse(comp_file, content_type="image/jpg")
-
-    return json_response
-    # except Exception as ex:
-    #     print(ex)
-    #     return Response("No existe")
 
 
 def my_image(request):
