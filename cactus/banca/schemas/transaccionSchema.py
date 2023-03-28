@@ -783,7 +783,7 @@ class LiquidarCobro(graphene.Mutation):
         beneficiario.Uprofile.saldo_cuenta += round(float(importe), 2)
         beneficiario.Uprofile.save()
 
-        concepto = "Liquidación de cobro"
+        concepto = "Liquidacion de cobro"
         main_trans = Transaccion.objects.create(
             user=ordenante,
             fechaValor=fecha,
@@ -836,15 +836,16 @@ class UrlImagenComprobanteInter(graphene.Mutation):
             trans = Transaccion.objects.filter(pk=id)
             if trans.count() == 0:
                 raise Exception("Transacción inexistente.")
-
             trans = trans.last()
+            if trans.statusTrans.nombre != "exito" and \
+                    trans.statusTrans.nombre != "rechazada":
+                raise Exception("Transacción no genera Comprobante.")
             comp = CompTrans(trans)
             comp_file = comp.trans()
 
             if not settings.USE_S3:
                 return UrlImagenComprobanteInter(url=comp_file.name)
 
-            # file_url = upload_s3(comp_file, user)
             file_url = comp_file.name
             return UrlImagenComprobanteInter(url=file_url)
 
