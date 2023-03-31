@@ -79,8 +79,10 @@ class LoggingGraphQLView(GraphQLView):
             current_location.device = device
             current_location.save()
             if username is not None:
-                valid_device = LoggingGraphQLView.set_screen(uuid=device_id,
-                    username=username)
+                # valid_device = LoggingGraphQLView.set_screen(uuid=device_id,
+                #    username=username)
+                LoggingGraphQLView.set_screen(uuid=device_id,
+                                              username=username)
                 # if not valid_device and not self.query_ex(
                 #     query, uuid_exception
                 # ):
