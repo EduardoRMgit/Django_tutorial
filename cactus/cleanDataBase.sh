@@ -95,7 +95,6 @@ if [[ $LOADDATA == true ]] || [[ $PROD == false ]] ; then
   ./manage.py loaddata institutionbanjico.json
   # ./manage.py loaddata stptrans.json
   ./manage.py loaddata adminUtils.json
-  ./manage.py loaddata folio_stp.json
 
   # Contabilidad
   ./manage.py loaddata tipo_contable_cuenta.json

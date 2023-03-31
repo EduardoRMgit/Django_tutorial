@@ -26,6 +26,7 @@ from django.contrib.auth import authenticate
 from django.utils import timezone
 from spei.stpTools import randomString
 from django.conf import Settings
+from geopy.geocoders import Nominatim
 
 
 from demograficos.models.userProfile import (RespuestaSeguridad,
@@ -69,7 +70,7 @@ from axes.models import AccessAttempt
 
 from pld.utils.customerpld import create_pld_customer
 
-from demograficos.utils.correo import mandar_email
+from demograficos.utils.registermail import RegistrarMail
 
 db_logger = logging.getLogger("db")
 
@@ -1629,6 +1630,11 @@ class CreateUser(graphene.Mutation):
         lon = info.context.headers.get("Location-Lon")
         if not (lat and lon and uuid) and not test:
             raise Exception("Faltan headers en la petición")
+        geolocator = Nominatim(user_agent="cactus")
+        location = geolocator.reverse((lat, lon))
+        if test is not True:
+            if location.raw['address']['country_code'] != "mx":
+                raise Exception("Usuario fuera de territorio Mexicano")
         try:
             user = User.objects.get(username=username)
             return Exception("Ya existe un usuario con ese número")
@@ -2531,7 +2537,7 @@ class UpdateNip(graphene.Mutation):
                         UP.statusNip = 'A'
                         UP.enrolamiento = True
                         create_pld_customer(user)
-                        mandar_email(user.email, user.first_name)
+                        RegistrarMail(user)
                     else:
                         raise ValueError('nip no coincide con el temporal')
             elif (UP.statusNip == 'A'):
