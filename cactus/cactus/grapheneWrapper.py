@@ -64,7 +64,7 @@ class LoggingGraphQLView(GraphQLView):
             if last_location:
                 # print(last_location.date)
                 hours = (timezone.now() -
-                    last_location.date).total_seconds()
+                         last_location.date).total_seconds()
                 hours /= 3600
                 # if request.headers.get("delta"):
                 #     hours +=
@@ -79,12 +79,14 @@ class LoggingGraphQLView(GraphQLView):
             current_location.device = device
             current_location.save()
             if username is not None:
-                valid_device = LoggingGraphQLView.set_screen(uuid=device_id,
-                    username=username)
-                if not valid_device and not self.query_ex(
-                    query, uuid_exception
-                ):
-                    return HttpResponseForbidden("UUID incorrecto")
+                # valid_device = LoggingGraphQLView.set_screen(uuid=device_id,
+                #    username=username)
+                LoggingGraphQLView.set_screen(uuid=device_id,
+                                              username=username)
+                # if not valid_device and not self.query_ex(
+                #     query, uuid_exception
+                # ):
+                #     return HttpResponseForbidden("UUID incorrecto")
         if user.Uprofile.status != 'O' and not self.query_ex(
                 query, block_exception):
             return HttpResponseForbidden("action forbidden, user blocked")
