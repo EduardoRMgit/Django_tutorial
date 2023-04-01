@@ -96,24 +96,24 @@ class LoggingGraphQLView(GraphQLView):
     def set_screen(cls, uuid, username):
         try:
             user = User.objects.get(username=username)
-            device = user.udevices.get(activo=True)
-            if device.uuid != uuid:
-                print('setting screen to emergency for user {}'.format(
-                    username))
-                Validator.setComponentValidated(alias='dispositivo',
-                                                user=user,
-                                                valid=False,
-                                                motivo='Este dispositivo es \
-                                                diferente al que tenemos \
-                                                registrado')
-                return False
-            else:
-                Validator.setComponentValidated(alias='dispositivo',
-                                                user=user,
-                                                valid=True,
-                                                motivo='')
-                return True
-                # print('normal start for user {}'.format(username))
+            # device = user.udevices.get(activo=True)
+            # if device.uuid != uuid:
+            #     print('setting screen to emergency for user {}'.format(
+            #         username))
+            #     Validator.setComponentValidated(alias='dispositivo',
+            #                                     user=user,
+            #                                     valid=False,
+            #                                     motivo='Este dispositivo es \
+            #                                     diferente al que tenemos \
+            #                                     registrado')
+            #     return False
+            # else:
+            Validator.setComponentValidated(alias='dispositivo',
+                                            user=user,
+                                            valid=True,
+                                            motivo='')
+            return True
+            # print('normal start for user {}'.format(username))
         except Exception as e:
             msg = "[Inicio de sesión] No se pudo obtener device activo en \
                 Udevices.Error: {}.".format(e)
