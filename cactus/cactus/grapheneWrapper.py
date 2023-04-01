@@ -96,7 +96,7 @@ class LoggingGraphQLView(GraphQLView):
     def set_screen(cls, uuid, username):
         try:
             user = User.objects.get(username=username)
-            device = user.udevices.get(activo=True)
+            # device = user.udevices.get(activo=True)
             # if device.uuid != uuid:
             #     print('setting screen to emergency for user {}'.format(
             #         username))
