@@ -156,7 +156,7 @@ class UrlPdfLegal(graphene.Mutation):
                                     nombre=nombre, Pdf=pdf_file)
         # pdf_legal.Pdf = pdf_file
         # pdf_legal.save()
-        file_url = get_pdf_url(f'{user}_{now}_{nombre}.pdf', 'docs/pdfLegal')
+        file_url = get_pdf_url(pdf_file, 'docs/pdfLegal')
         return UrlPdfLegal(url=file_url)
 
 
