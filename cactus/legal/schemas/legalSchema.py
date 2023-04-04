@@ -152,11 +152,11 @@ class UrlPdfLegal(graphene.Mutation):
         # pdf_file = io.BytesIO(result)
         pdf_file = ContentFile(result, f'{user}_{now}_{nombre}.pdf')
         file_path = f'docs/pdfLegal/{user}_{now}_{nombre}.pdf'
-        PdfLegalUser.objects.create(user=user,
-                                    nombre=nombre, Pdf=pdf_file)
         # pdf_legal.Pdf = pdf_file
         # pdf_legal.save()
-        file_url = get_pdf_url(result, file_path)
+        file_url = get_pdf_url(pdf_file, file_path)
+        PdfLegalUser.objects.create(user=user,
+                                    nombre=nombre, url_pdf=file_url)
         return UrlPdfLegal(url=file_url)
 
 
