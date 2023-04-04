@@ -26,6 +26,8 @@ from django.utils.translation import gettext_lazy as _
 from cactus.settings import SITE
 from import_export.admin import ExportActionMixin
 from spei.deletecuentaSTP import delete_stp
+
+
 import logging
 
 
@@ -186,6 +188,12 @@ class UserProfileAdmin(ExportActionMixin, PasswordResetUserAdmin):
 
     list_per_page = 25
 
+    def get_readonly_fields(self, request, obj=None):
+        if not request.user.is_superuser:
+            return ['first_name', 'last_name', 'username', 'email']
+
+        return []
+
     def get_nombre(self, obj):
         return obj.Uprofile.get_nombre_completo()
     get_nombre.short_description = 'Nombre'
@@ -223,12 +231,6 @@ class UserProfileAdmin(ExportActionMixin, PasswordResetUserAdmin):
         if not obj:
             return list()
         return super(UserProfileAdmin, self).get_inline_instances(request, obj)
-
-    def get_queryset(self, request):
-        qs = super(UserProfileAdmin, self).get_queryset(request)
-        if not request.user.is_superuser:
-            return qs.filter(username=request.user.username)
-        return qs
 
     def registra_cuenta(self, request, usuarios):
 
