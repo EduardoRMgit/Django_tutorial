@@ -19,6 +19,7 @@ def get_pdf_url(archivo, file_path):
         Params={
             'Bucket': settings.AWS_STORAGE_BUCKET_NAME,
             'Key': file_path,
+            'ResponseContentType': 'application/pdf'
         },
         ExpiresIn=1440,
         HttpMethod=None)
