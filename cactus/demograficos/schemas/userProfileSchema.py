@@ -1630,9 +1630,9 @@ class CreateUser(graphene.Mutation):
         lon = info.context.headers.get("Location-Lon")
         if not (lat and lon and uuid) and not test:
             raise Exception("Faltan headers en la petición")
-        geolocator = Nominatim(user_agent="cactus")
-        location = geolocator.reverse((lat, lon))
         if test is not True:
+            geolocator = Nominatim(user_agent="cactus")
+            location = geolocator.reverse((lat, lon))
             if location.raw['address']['country_code'] != "mx":
                 raise Exception("Usuario fuera de territorio Mexicano")
         try:
