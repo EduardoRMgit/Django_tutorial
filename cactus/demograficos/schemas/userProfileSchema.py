@@ -26,7 +26,7 @@ from django.contrib.auth import authenticate
 from django.utils import timezone
 from spei.stpTools import randomString
 from django.conf import Settings
-from geopy.geocoders import Nominatim
+import reverse_geocoder as gr
 
 
 from demograficos.models.userProfile import (RespuestaSeguridad,
@@ -1632,9 +1632,19 @@ class CreateUser(graphene.Mutation):
         if not (lat and lon and uuid) and not test:
             raise Exception("Faltan headers en la petición")
         if test is not True:
-            geolocator = Nominatim(user_agent="cactus")
-            location = geolocator.reverse((lat, lon))
-            if location.raw['address']['country_code'] != "mx":
+            coordinates = (lat, lon)
+            try:
+                result = gr.search(coordinates)
+            except Exception as ex:
+                msg_georeverse = f"[Validate Geolocation] Error al validar " \
+                                 f"la localizacion usuario {username}. " \
+                                 f"Error: {ex}"
+                db_logger.warning(msg_georeverse)
+                raise Exception("No se logro la validacion", ex)
+            if result[0]['cc'] != "MX":
+                msg_validate = f"[Geolocation] Usuario {username} fuera de " \
+                               f"territorio Mexicano."
+                db_logger.warning(msg_validate)
                 raise Exception("Usuario fuera de territorio Mexicano")
         try:
             user = User.objects.get(username=username)
