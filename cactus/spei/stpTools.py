@@ -6,6 +6,8 @@ import string
 import logging
 import environ
 
+from datetime import datetime
+
 from OpenSSL import crypto
 
 from base64 import b64encode
@@ -160,10 +162,11 @@ def pago(data_pago):
 
     if (
         # False
-        timezone.now().time() >= time(18, 0)
-        or timezone.now().time() < time(7, 0)
+        datetime.now().time() >= time(18, 0)
+        or datetime.now().time() < time(7, 0)
     ):
-        horas = timezone.now() + timedelta(hours=12)
+
+        horas = datetime.now() + timedelta(hours=12)
 
         def es_feriado_2023():
             if horas.year == 2023:
@@ -177,21 +180,22 @@ def pago(data_pago):
                     horas.month == 12 and horas.day == 12: "Ma",
                     horas.month == 12 and horas.day == 25: "L"}[True]
 
-        inhabil = es_feriado_2023()
+        # inhabil = es_feriado_2023()
 
         if horas.isoweekday() == 6:
-            if inhabil == 'L':
-                horas = horas + timedelta(hours=72)
-            else:
-                # Agregar casos para Martes y Jueves
-                horas = horas + timedelta(hours=48)
+            # if inhabil == 'L':
+            #     horas = horas + timedelta(hours=72)
+            # else:
+            #     # Agregar casos para Martes y Jueves
+            #     horas = horas + timedelta(hours=48)
+            horas = horas + timedelta(hours=48)
         elif horas.isoweekday() == 7:
-            if inhabil == 'L':
-                horas = horas + timedelta(hours=48)
-            else:
-                # Agregar casos para Martes y Jueves
-                horas = horas + timedelta(hours=24)
-
+            # if inhabil == 'L':
+            #     horas = horas + timedelta(hours=48)
+            # else:
+            #     # Agregar casos para Martes y Jueves
+            #     horas = horas + timedelta(hours=24)
+            horas = horas + timedelta(hours=24)
         # ----------------------------------------------
         # Sólo día festivo particular: semana santa
         if horas.month == 4 and horas.year == 2023:
@@ -203,9 +207,8 @@ def pago(data_pago):
 
         nueva_hora = horas.replace(hour=7, minute=0)
         fecha = nueva_hora.strftime('%Y%m%d')
-
     else:
-        fecha = timezone.now().strftime('%Y%m%d')
+        fecha = datetime.now().strftime('%Y%m%d')
 
     fechaOperacion = fecha
     db_logger.info(f"[STP pago()] fechaOperacion: {str(fecha)}")
