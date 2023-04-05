@@ -76,6 +76,7 @@ db_logger = logging.getLogger("db")
 
 # WRAPPERS
 
+
 class RespuestaType(DjangoObjectType):
     class Meta:
         model = RespuestaSeguridad
@@ -1747,8 +1748,8 @@ class ChangePassword(graphene.Mutation):
         if not user.is_anonymous:
             if user.check_password(old_password):
                 if user.check_password(new_password):
-                    raise Exception("La nueva contraseña no puede " \
-                        "ser igual a la anterior.")
+                    raise Exception("La nueva contraseña no puede "
+                                    "ser igual a la anterior.")
                 user.set_password(new_password)
                 user.save()
                 return ChangePassword(user=user)
@@ -2096,6 +2097,7 @@ class UpdateInfoPersonal(graphene.Mutation):
                 raise AssertionError("RFC no válido")
             u_profile.save()
             message = InfoValidator.setCheckpoint(user=user, concepto='IP')
+            u_profile.verificacion_curp = True
             if message == "curp validado":
                 u_profile.verificacion_curp = True
             u_profile.save()
@@ -2230,7 +2232,7 @@ class CreateBeneficiario(graphene.Mutation):
             try:
                 try:
                     bene, created = UserBeneficiario.objects.update_or_create(
-                        user = user,
+                        user=user,
                         defaults=defaults,
                     )
                 except UserBeneficiario.MultipleObjectsReturned:
