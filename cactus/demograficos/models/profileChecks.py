@@ -108,7 +108,7 @@ class InfoValidator(models.Model):
         dia = fNacimiento[2]
         nacimiento = "{}/{}/{}".format(dia, mes, año)
 
-        if settings.SITE == "prod":
+        if settings.SITE in ["prod", "stage"]:
             data, mensaje = check_renapo(curp)
         else:
             data = {
