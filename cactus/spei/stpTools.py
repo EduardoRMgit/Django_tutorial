@@ -160,16 +160,50 @@ def pago(data_pago):
 
     if (
         # False
-        timezone.now().time() >= time(17, 0)
+        timezone.now().time() >= time(18, 0)
         or timezone.now().time() < time(7, 0)
     ):
         horas = timezone.now() + timedelta(hours=12)
+
+        def es_feriado_2023():
+            if horas.year == 2023:
+                # Regresa el último value con key True
+                return {
+                    True: False,
+                    horas.month == 5 and horas.day == 1: "L",
+                    horas.month == 9 and horas.day == 16: "S",
+                    horas.month == 10 and horas.day == 2: "J",
+                    horas.month == 10 and horas.day == 20: "L",
+                    horas.month == 12 and horas.day == 12: "Ma",
+                    horas.month == 12 and horas.day == 25: "L"}[True]
+
+        inhabil = es_feriado_2023()
+
         if horas.isoweekday() == 6:
-            horas = horas + timedelta(hours=48)
+            if inhabil == 'L':
+                horas = horas + timedelta(hours=72)
+            else:
+                # Agregar casos para Martes y Jueves
+                horas = horas + timedelta(hours=48)
         elif horas.isoweekday() == 7:
-            horas = horas + timedelta(hours=24)
+            if inhabil == 'L':
+                horas = horas + timedelta(hours=48)
+            else:
+                # Agregar casos para Martes y Jueves
+                horas = horas + timedelta(hours=24)
+
+        # ----------------------------------------------
+        # Sólo día festivo particular: semana santa
+        if horas.month == 4 and horas.year == 2023:
+            if horas.day == 6:
+                horas = horas + timedelta(hours=96)
+            elif horas.day == 7:
+                horas = horas + timedelta(hours=72)
+        # ----------------------------------------------
+
         nueva_hora = horas.replace(hour=7, minute=0)
         fecha = nueva_hora.strftime('%Y%m%d')
+
     else:
         fecha = timezone.now().strftime('%Y%m%d')
 
