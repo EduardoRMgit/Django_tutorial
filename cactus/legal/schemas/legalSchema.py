@@ -1,4 +1,3 @@
-import io
 import calendar
 from datetime import datetime
 from weasyprint import HTML
@@ -18,7 +17,7 @@ from legal.models.pdfLegal import PdfLegal, PdfLegalUser
 from legal.utils.urlpdf import get_pdf_url
 
 from banca.views.transactionView import (build_html_cuenta,
-                                         upload_s3, parse_dates_cuenta)
+                                         parse_dates_cuenta)
 
 
 class PdfLegalType(DjangoObjectType):
@@ -253,10 +252,13 @@ class UrlEdoCuenta(graphene.Mutation):
                                  is_cuenta, cut_off_date, month)
 
         result = html.write_pdf()
-        file = io.BytesIO(result)
-
+        pdf_file = ContentFile(
+            result, f'cuenta_{timezone.now().strftime("%d_%s")}.pdf')
+        file_path = 'docs/estado_cuenta/{}/{}'.format(
+            user.username,
+            f'cuenta_{timezone.now().strftime("%d_%h_%Y_%H:%M")}.pdf')
         if settings.USE_S3:
-            file_url = upload_s3(file, user)
+            file_url = get_pdf_url(pdf_file, file_path)
             return UrlEdoCuenta(url=file_url)
         else:
             # Uncomment to generate PDF in local env
