@@ -102,7 +102,8 @@ class Telefono(models.Model):
         else:
             ssid = send_sms(self.country.name,
                             self.telefono,
-                            f"Tu codigo inguz es: {pin}, No comparta su codigo.")
+                            f"Tu codigo inguz es: {pin}, \
+                             No comparta su codigo.")
         PhoneVerification.objects.create(telefono=self,
                                          ssid=ssid,
                                          token=pin)
