@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+from datetime import timedelta
 
 
 class Respaldo(models.Model):
@@ -54,3 +55,11 @@ class Respaldo(models.Model):
 
     def __str__(self):
         return self.respaldo.username
+
+    def valida_vencido(self):
+        if (
+                timezone.now() - self.fecha_solicitud
+        ) > timedelta(days=7) and self.status == 'P':
+            self.status = 'V'
+            self.activo = False
+            self.save()

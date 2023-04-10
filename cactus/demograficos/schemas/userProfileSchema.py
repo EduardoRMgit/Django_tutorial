@@ -26,6 +26,7 @@ from django.contrib.auth import authenticate
 from django.utils import timezone
 from spei.stpTools import randomString
 from django.conf import Settings
+from geopy.geocoders import Nominatim
 
 
 from demograficos.models.userProfile import (RespuestaSeguridad,
@@ -69,9 +70,12 @@ from axes.models import AccessAttempt
 
 from pld.utils.customerpld import create_pld_customer
 
+from demograficos.utils.registermail import RegistrarMail
+
 db_logger = logging.getLogger("db")
 
 # WRAPPERS
+
 
 class RespuestaType(DjangoObjectType):
     class Meta:
@@ -982,6 +986,10 @@ class Query(graphene.ObjectType):
             )
             for respaldo in respaldos:
                 qs = qs.filter(filter).exclude(id=respaldo.contacto_id)
+                if respaldo.respaldo == user:
+                    u_clabe = respaldo.ordenante.Uprofile.cuentaClabe
+                    qs = qs.filter(filter).exclude(clabe=u_clabe)
+
         if nombre:
             filter = (
                 Q(nombre__icontains=nombre) |
@@ -1623,6 +1631,11 @@ class CreateUser(graphene.Mutation):
         lon = info.context.headers.get("Location-Lon")
         if not (lat and lon and uuid) and not test:
             raise Exception("Faltan headers en la petición")
+        if test is not True:
+            geolocator = Nominatim(user_agent="cactus")
+            location = geolocator.reverse((lat, lon))
+            if location.raw['address']['country_code'] != "mx":
+                raise Exception("Usuario fuera de territorio Mexicano")
         try:
             user = User.objects.get(username=username)
             return Exception("Ya existe un usuario con ese número")
@@ -1735,8 +1748,8 @@ class ChangePassword(graphene.Mutation):
         if not user.is_anonymous:
             if user.check_password(old_password):
                 if user.check_password(new_password):
-                    raise Exception("La nueva contraseña no puede " \
-                        "ser igual a la anterior.")
+                    raise Exception("La nueva contraseña no puede "
+                                    "ser igual a la anterior.")
                 user.set_password(new_password)
                 user.save()
                 return ChangePassword(user=user)
@@ -2084,6 +2097,7 @@ class UpdateInfoPersonal(graphene.Mutation):
                 raise AssertionError("RFC no válido")
             u_profile.save()
             message = InfoValidator.setCheckpoint(user=user, concepto='IP')
+            u_profile.verificacion_curp = True
             if message == "curp validado":
                 u_profile.verificacion_curp = True
             u_profile.save()
@@ -2218,7 +2232,7 @@ class CreateBeneficiario(graphene.Mutation):
             try:
                 try:
                     bene, created = UserBeneficiario.objects.update_or_create(
-                        user = user,
+                        user=user,
                         defaults=defaults,
                     )
                 except UserBeneficiario.MultipleObjectsReturned:
@@ -2525,6 +2539,7 @@ class UpdateNip(graphene.Mutation):
                         UP.statusNip = 'A'
                         UP.enrolamiento = True
                         create_pld_customer(user)
+                        RegistrarMail(user)
                     else:
                         raise ValueError('nip no coincide con el temporal')
             elif (UP.statusNip == 'A'):
@@ -2947,6 +2962,22 @@ class DeleteContacto(graphene.Mutation):
                         clabe=clabe).update(activo=False)
                     contacto = associated_user.Contactos_Usuario.filter(
                         clabe=clabe).last()
+                if contacto.es_inguz:
+                    try:
+                        contacto_user = User.objects.get(
+                            Uprofile__cuentaClabe=contacto.clabe)
+                        Respaldo.objects.filter(
+                            Q(
+                                ordenante=associated_user,
+                                respaldo=contacto_user
+                            ) |
+                            Q(
+                                ordenante=contacto_user,
+                                respaldo=associated_user
+                            )
+                        ).update(activo=False, status="D")
+                    except Exception:
+                        pass
             else:
                 raise AssertionError("NIP esta mal")
         return DeleteContacto(contacto=contacto,

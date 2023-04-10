@@ -47,8 +47,10 @@ django-auto-logout==0.5.0
 django-axes==5.39.0
 pycryptodome==3.15.0
 all-escapes==0.1
-<<<<<<< HEAD
-pytesseract==0.3.10
-=======
 django-import-export==3.0.2
->>>>>>> 285fabae750bbf1fb8071b7389a9e1d5bf77f7dd
+mailchimp-marketing==3.0.80
+django-phonenumber-field==6.4.0
+django-two-factor-auth==1.14.0
+phonenumbers==8.13.0
+geographiclib==2.0
+geopy==2.3.0

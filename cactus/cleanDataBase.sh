@@ -33,9 +33,6 @@ fi;
 
 if [[ $LOADDATA == true ]] || [[ $PROD == false ]] ; then
   #PLD
-  ./manage.py loaddata customer.json
-  ./manage.py loaddata contract.json
-  ./manage.py loaddata movement.json
   ./manage.py loaddata urls.json
   ./manage.py loaddata adminUtils.json
 
@@ -97,7 +94,6 @@ if [[ $LOADDATA == true ]] || [[ $PROD == false ]] ; then
   ./manage.py loaddata institutionbanjico.json
   # ./manage.py loaddata stptrans.json
   ./manage.py loaddata adminUtils.json
-  ./manage.py loaddata folio_stp.json
 
   # Contabilidad
   ./manage.py loaddata tipo_contable_cuenta.json

@@ -16,6 +16,7 @@ from spei.models import InstitutionBanjico
 from banca.schemas.transaccionSchema import TransaccionType
 from banca.models import (StatusTrans, TipoTransaccion,
                           Transaccion, SaldoReservado)
+from banca.utils.limiteTrans import LimiteTrans
 
 from scotiabank.utility.utcToLocal import utc_to_local
 from scotiabank.utility.LineaCaptura import genera_linea_de_captura
@@ -85,6 +86,7 @@ class Query(graphene.ObjectType):
     {scotiaretiro{urlComprobante}, scotiadeposito{urlComprobante}}
     }
     """
+
     def resolve_url_comprobante(self, info, **kwargs):
         id = kwargs.get("id_transaccion")
         deposito = ScotiaDeposito.objects.filter(transaccion=id)
@@ -314,6 +316,10 @@ class CreateRetiroScotia(graphene.Mutation):
                 'Únicamente montos positivos o válidos.')
         _valida(saldo_inicial_usuario - (monto + comision) < 0,
                 'Saldo insuficiente.')
+        _valida(
+            not LimiteTrans(user.id).ret_efectivo_dia(float(monto)),
+            'Límite transaccional superado'
+        )
 
         clave_ordenante = ""
         clabe = UserProfile.objects.get(user=user).cuentaClabe
@@ -341,7 +347,7 @@ class CreateRetiroScotia(graphene.Mutation):
         main_trans = Transaccion.objects.create(
             user=user,
             fechaValor=fecha,
-            monto=float(comision),
+            monto=float(float(monto) + comision),
             statusTrans=status,
             tipoTrans=tipo,
             concepto="Retiro Scotiabank",
@@ -456,6 +462,14 @@ class CreateScotiaDeposito(graphene.Mutation):
         validar(not ordenante.Uprofile.check_password(nip),
                 'El NIP es incorrecto.')
         validar(monto == 0 or monto is None, 'Ingrese un monto válido')
+        validar(
+            not LimiteTrans(ordenante.id).dep_efectivo_mes(float(monto)),
+            'Límite transaccional superado'
+        )
+        validar(
+            not LimiteTrans(ordenante.id).dep_efectivo_dia(float(monto)),
+            'Límite transaccional superado'
+        )
 
         hoy = timezone.now().date()
         comision = 18
@@ -477,7 +491,7 @@ class CreateScotiaDeposito(graphene.Mutation):
         main_trans = Transaccion.objects.create(
             user=ordenante,
             fechaValor=fecha,
-            monto=float(float(monto) + comision),
+            monto=float(monto),
             statusTrans=status,
             tipoTrans=tipo,
             concepto="Depósito Cliente",

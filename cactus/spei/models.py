@@ -1,15 +1,9 @@
-import json
-import requests
-
 from django.db import models
 from django.contrib.auth.models import User
-from django.dispatch import receiver
-from django.db.models.signals import post_save
 from django.utils import timezone
 
 from banca.models import Transaccion, ErroresTransaccion, SaldoReservado
 from demograficos.models import Contacto
-from pld.utils.listasNegras import listaNegra
 
 from .stpTools import pago as stpPago, registra_cuenta_persona_fisica
 
@@ -439,62 +433,6 @@ class StpTransaction(models.Model):
             self.transaccion.save()
             self.save()
         return resp[0]
-
-
-@receiver(post_save, sender=StpTransaction)
-def save_ListaNegra(sender, instance, **kwargs):
-    print("instance.nombreBeneficiario:", instance.nombreBeneficiario)
-    data = {
-        'id_entidad': 5500,
-        "nombre": instance.nombreBeneficiario,
-        "tipo_busqueda": "normal",
-        "tipo_persona": "FISICA"
-
-    }
-    resp = listaNegra(data)
-
-    instance.verifListaNegra = resp[1]
-
-    if not instance.verifListaNegra == 'O':
-        results = resp[0].get('results')[-1]
-        nombre = results.get('nombre')
-        apaterno = results.get('apaterno')
-        amaterno = results.get('amaterno')
-        instance.nombreBeneficiario = nombre + ' ' + apaterno + ' ' + amaterno
-    # TODO Definir cuando corremos esto y checar que se corra bien
-    if False:
-        mutation_trans = """mutation($username: String!, $abono: String!,
-            $concepto: String!, $ubicacion: String!, $referencia: String!,
-            $nombre: String!){
-                createTransaccionDde(username:$username, abono:$abono,
-                ubicacion:$ubicacion, concepto:$concepto,
-                referencia:$referencia, nombre:$nombre){
-                    ddeTransaccion{id, monto, referencia, ubicacion,
-                    user{username}}
-                    }}"""
-
-        variables_trans = {}
-        # variables_trans['username'] = instance.user.username
-        variables_trans['abono'] = instance.monto
-        variables_trans['referencia'] = instance.referenciaNumerica
-        variables_trans['clabe'] = instance.clabe
-        variables_trans['concepto'] = instance.concepto
-        variables_trans['nombre'] = instance.nombreBeneficiario
-        variables_trans['ubicacion'] = instance.ubicacion
-
-        vars_trans = json.dumps(variables_trans)
-        url = 'http://127.0.0.1:8001/graphql'
-        headers = {'Accept': 'application/json'}
-        data_trans = {"query": mutation_trans, "variables": vars_trans}
-
-        try:
-            requests.post(url, headers=headers, data=data_trans)
-        except Exception as e:
-            print(e)
-
-    post_save.disconnect(receiver=save_ListaNegra, sender=sender)
-    instance.save()
-    post_save.connect(receiver=save_ListaNegra, sender=sender)
 
 
 class FolioStp(models.Model):

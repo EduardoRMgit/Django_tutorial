@@ -92,7 +92,8 @@ class CreateInguzTransaccion(graphene.Mutation):
         if not LimiteTrans(ordenante.id).trans_mes(float(monto2F)):
             raise Exception("Límite transaccional superado")
 
-        if not LimiteTrans(user_contacto.id).saldo_max(float(monto2F)):
+        if not LimiteTrans(user_contacto.id).saldo_max(float(monto2F)) or \
+                not LimiteTrans(user_contacto.id).trans_mes(float(monto2F)):
             raise Exception("El contacto no puede recibir ese saldo")
 
         # Actualizamos saldo del usuario
@@ -145,7 +146,6 @@ class CreateInguzTransaccion(graphene.Mutation):
             cobro.transaccion = inguz_transaccion
             cobro.save()
 
-        print(f"transacción creada: {inguz_transaccion.__dict__}")
         msg = "[Inguz_Inguz] Transaccion exitosa del usuario: {} \
             con cuenta: {} \
             a la cuenta: {} \
@@ -221,7 +221,6 @@ class UrlImagenComprobanteCobro(graphene.Mutation):
             return UrlImagenComprobanteCobro(url=url)
 
 
-# 4
 class Mutation(graphene.ObjectType):
     create_inguz_transaccion = CreateInguzTransaccion.Field()
     url_imagen_comprobante_inguz = UrlImagenComprobanteInguz.Field()

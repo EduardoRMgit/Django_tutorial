@@ -51,8 +51,14 @@ class DocAdjunto(models.Model):
     """
 
     # La ruta es dinamica, se construye con la "ruta"
-    imagen = models.ImageField(blank=True,
+    imagen = models.ImageField(max_length=2048,
+                               blank=True,
                                null=True)
+    imagen_url = models.URLField(
+        max_length=2048,
+        null=True,
+        blank=True
+    )
     ruta = models.CharField(max_length=50, blank=True, null=True)
     tipo = models.ForeignKey(
         DocAdjuntoTipo,

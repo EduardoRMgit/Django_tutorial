@@ -8,6 +8,7 @@ from demograficos.models.direccion import (TipoDireccion,
                                            Country)
 from demograficos.models.telefono import Telefono
 from demograficos.models.profileChecks import InfoValidator, ComponentValidated
+from pld.utils.customerpld import update_pld_customer
 
 
 class TipoDireccionType(DjangoObjectType):
@@ -560,6 +561,7 @@ class CreateDireccion(graphene.Mutation):
             user=user,
             estado=estado,
             activo=True)
+        update_pld_customer(user, direccion)
         Direccion.objects.filter(
             activo=True, user=user).update(activo=False)
         direccion.activo = True

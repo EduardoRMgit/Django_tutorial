@@ -18,15 +18,20 @@ from demograficos.models import (UserProfile,
                                  Avatar,
                                  PerfilTransaccionalDeclarado)
 from banca.models import Transaccion
-from pld.models import (Customer,
-                        Contrato,
-                        Movimiento)
+from pld.models import (Customer)
 from .cambio_password import PasswordResetUserAdmin
 from django import forms
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.utils.translation import gettext_lazy as _
 from cactus.settings import SITE
 from import_export.admin import ExportActionMixin
+from spei.deletecuentaSTP import delete_stp
+
+
+import logging
+
+
+db_logger = logging.getLogger('db')
 
 
 class RequiredForm(forms.ModelForm):
@@ -94,20 +99,6 @@ class UserPLDCustomerInline(admin.StackedInline):
     fk_name = 'user'
 
 
-class UserPLDContratoInline(admin.StackedInline):
-    model = Contrato
-    can_delete = False
-    verbose_name_plural = 'Contrato (UBCUBO)'
-    fk_name = 'user'
-
-
-class UserPLDMovimientoInline(admin.TabularInline):
-    model = Movimiento
-    can_delete = False
-    verbose_name_plural = 'Movimiento (PLD)'
-    fk_name = 'user'
-
-
 class UserTransaccionInline(admin.TabularInline):
     model = Transaccion
     can_delete = False
@@ -161,8 +152,6 @@ class UserProfileAdmin(ExportActionMixin, PasswordResetUserAdmin):
         RespuestaInline,
         UserTelefonoInline,
         UserPLDCustomerInline,
-        UserPLDContratoInline,
-        UserPLDMovimientoInline,
         UserTransaccionInline,
         UserComportamientoDiarioInline,
         UserComportamientoMensualInline,
@@ -171,7 +160,7 @@ class UserProfileAdmin(ExportActionMixin, PasswordResetUserAdmin):
         BeneficiarioInLine,
         PerfilTransaccionalInLine
     )
-    actions = ['registra_cuenta']
+    actions = ['registra_cuenta', 'delete_stp_cuenta']
 
     list_filter = (
         'Uprofile__nivel_cuenta',
@@ -198,6 +187,12 @@ class UserProfileAdmin(ExportActionMixin, PasswordResetUserAdmin):
                     )
 
     list_per_page = 25
+
+    def get_readonly_fields(self, request, obj=None):
+        if not request.user.is_superuser:
+            return ['first_name', 'last_name', 'username', 'email']
+
+        return []
 
     def get_nombre(self, obj):
         return obj.Uprofile.get_nombre_completo()
@@ -237,12 +232,6 @@ class UserProfileAdmin(ExportActionMixin, PasswordResetUserAdmin):
             return list()
         return super(UserProfileAdmin, self).get_inline_instances(request, obj)
 
-    def get_queryset(self, request):
-        qs = super(UserProfileAdmin, self).get_queryset(request)
-        if not request.user.is_superuser:
-            return qs.filter(username=request.user.username)
-        return qs
-
     def registra_cuenta(self, request, usuarios):
 
         for u in usuarios:
@@ -251,6 +240,24 @@ class UserProfileAdmin(ExportActionMixin, PasswordResetUserAdmin):
             except Exception as ex:
                 print(ex)
 
+    def delete_stp_cuenta(self, request, usuarios):
+        for user in usuarios:
+            try:
+                id_, descripcion = delete_stp(user)
+                if id_ == 0:
+                    user.is_active = False
+                    user.save()
+                    msg_logg = "[STP delete cuenta] {}.".format(
+                            user.Uprofile.cuentaClabe)
+                    db_logger.info(msg_logg)
+                elif id_:
+                    msg = f"[ERROR STP delete cuenta] \
+                        descripcion: {descripcion}"
+                    db_logger.error(msg)
+            except Exception as ex:
+                msg = f"[ERROR accion STP delete cuenta] \
+                        descripcion: {ex}"
+                db_logger.error(msg)
         # if usuarios.count() != 1:
         #     print("Elegir sólo un usuario")
         #     return
@@ -297,8 +304,6 @@ class ClienteAdmin(UserProfileAdmin):
         RespuestaInline,
         UserTelefonoInline,
         UserPLDCustomerInline,
-        UserPLDContratoInline,
-        UserPLDMovimientoInline,
         UserTransaccionInline,
         UserComportamientoDiarioInline,
         UserComportamientoMensualInline,
@@ -306,107 +311,6 @@ class ClienteAdmin(UserProfileAdmin):
         DocAdjuntoInLine,
         BeneficiarioInLine,
     )
-
-# from demograficos.models import UserProfile, Telefono
-# from banca.models import Transaccion
-# from pld.models import (Customer,
-#                         CustomerD,
-#                         adminUtils,
-#                         Contrato,
-#                         ContratoD,
-#                         Movimiento)
-# from pld.utils.customer import llamada1
-# from pld.utils.contract import llamada2
-#
-#
-# def save_model(self, request, obj, form, change):
-#     super().save_model(request, obj, form, change)
-#     admin_Util = adminUtils.objects.get(id=1)
-#     aprobado = False
-#     stat = ""
-#     cod = ""
-#     bak = ""
-#     if admin_Util.activo:
-#         obj.tienePLD = True
-#         obj.save()
-#         tel = Telefono.objects.last()
-#         lastD = CustomerD.objects.last()
-#         last = Customer.objects.last()
-#         data = {'id_entidad': lastD.id_entidad,
-#                 'tipo': lastD.tipo,
-#                 'nombre': obj.first_name,
-#                 'actua_cuenta_propia': lastD.actua_cuenta_propia,
-#                 'rfc': obj.Uprofile.rfc,
-#                 'curp': obj.Uprofile.curp,
-#                 'apaterno': obj.last_name,
-#                 'amaterno': obj.Uprofile.apMaterno,
-#                 'telefono_fijo': tel.telefono
-#                 }
-#         print('NEL, NO ES COCA... ES HARINA\n')cuentaClabe
-#         [bak, cod, stat] = llamada1(data)
-#         last.id_back = bak
-#         last.status_code = stat
-#         last.mensaje = cod
-#         if stat == 200:
-#             aprobado = True
-#         Customer.objects.create(id_entidad=lastD.id_entidad,
-#                                 tipo=lastD.tipo,
-#                                 nombre=obj.first_name,
-#                                 actua_cuenta_propia=(
-#                                     lastD.actua_cuenta_propia),
-#                                 rfc=obj.Uprofile.rfc,
-#                                 curp=obj.Uprofile.curp,
-#                                 apaterno=obj.last_name,
-#                                 amaterno=obj.Uprofile.apMaterno,
-#                                 telefono_fijo=tel.telefono,
-#                                 status_code=stat,
-#                                 mensaje=cod,
-#                                 id_back=bak,
-#                                 tienePLD=aprobado,
-#                                 )
-#         self.message_user(request, "PLD:{}".format(cod))
-#         last.save()
-#         rnd = bak
-#         ultD = ContratoD.objects.last()
-#         ult = Contrato.objects.last()
-#         data = {'id_entidad': last.id_entidad,
-#                 'rfc': obj.Uprofile.rfc,
-#                 'curp': obj.Uprofile.curp,
-#                 'no_credito': rnd,
-#                 # 'no_credito': id.no_credito,
-#                 'unidad_credito': ultD.unidad_credito,
-#                 'tipo_moneda': ultD.tipo_moneda,
-#                 'T1': ultD.T1,
-#                 'T2': ultD.T2,
-#                 'T3': ultD.T3,
-#                 'instrumento_monetario':
-#                     ultD.instrumento_monetario,
-#                 'canales_distribucion': ultD.canales_distribucion,
-#                 'Estado': ultD.Estado
-#                 }
-#         print(data, '\nPINCHE CUMBION BIEN LOCO')
-#         [cod, stat] = llamada2(data)
-#         ult.status_code = stat
-#         ult.mensaje = cod
-#         Contrato.objects.create(id_entidad=ultD.id_entidad,
-#                                 rfc=obj.Uprofile.rfc,
-#                                 curp=obj.Uprofile.curp,
-#                                 no_credito=rnd,
-#                                 unidad_credito=ultD.unidad_credito,
-#                                 tipo_moneda=ultD.tipo_moneda,
-#                                 T1=ultD.T1,
-#                                 T2=ultD.T2,
-#                                 T3=ultD.T3,
-#                                 instrumento_monetario=(
-#                                     ultD.instrumento_monetario),
-#                                 canales_distribucion=(
-#                                     ultD.canales_distribucion),
-#                                 Estado=ultD.Estado,
-#                                 status_code=stat,
-#                                 mensaje=cod,
-#                                 )
-#         self.message_user(request, "PLD:{}".format(cod))
-#         ult.save()
 
 
 admin.site.unregister(User)

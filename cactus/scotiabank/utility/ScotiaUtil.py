@@ -1,5 +1,4 @@
 import io
-import environ
 
 from weasyprint import HTML
 
@@ -14,38 +13,15 @@ from spei.models import InstitutionBanjico
 from scotiabank.models import Archivo
 
 from scotiabank.utility.utcToLocal import utc_to_local
+from cactus.settings import cluster_secret
 
 import logging
 
 
-def get_envs(retiro):
-
-    env = environ.Env()
-    SBSECRET = env.str('SBRSECRET', '') if retiro else env.str('SBTSECRET', '')
-    try:
-        from kubernetes import client, config
-        from base64 import b64decode
-        try:
-            config.load_kube_config()
-        except Exception:
-            config.load_incluster_config()
-        v1 = client.CoreV1Api()
-        SCOTIA_KEYS = v1.read_namespaced_secret(SBSECRET, 'default')
-        NUMERO_CONVENIO = b64decode(
-            SCOTIA_KEYS.data['convenio']).decode('utf-8')
-        REFERENCIA_EMPRESA = b64decode(
-            SCOTIA_KEYS.data['referencia']).decode('utf-8')
-        CUENTA_CARGO = b64decode(
-            SCOTIA_KEYS.data['cuenta']).decode('utf-8')
-    except Exception:
-        NUMERO_CONVENIO = "12345"
-        REFERENCIA_EMPRESA = "1234"
-        CUENTA_CARGO = "12345678901"
-    return NUMERO_CONVENIO, REFERENCIA_EMPRESA, CUENTA_CARGO
-
-
 def GeneraRetiro(movimientos):
-
+    numero_convenio = cluster_secret('scotia-secret', 'convenior')
+    referencia_empresa = cluster_secret('scotia-secret', 'referencia')
+    cuenta_cargo = cluster_secret('scotia-secret', 'cuenta')
     db_logger = logging.getLogger("db")
     hoy = timezone.now()
     dias_delta = (hoy.day) != ((
@@ -62,8 +38,6 @@ def GeneraRetiro(movimientos):
         tipo_archivo="Retiro").count() + 1
     try:
         fecha_t = hoy.strftime("%Y%m%d")
-        numero_convenio, referencia_empresa, cuenta_cargo = get_envs(
-            retiro=True)
 
         name = "H2HJDF000000{}001{}{}.1001007FN100{}.txt".format(
             '{:0>5}'.format(referencia_empresa),
@@ -200,8 +174,10 @@ def GeneraRetiro(movimientos):
     return mensaje
 
 
-def GeneraTransferencia(movimientos):
-
+def GeneraTransferencia(movimientos, referencia_empresa, cuenta_cargo):
+    numero_convenio = cluster_secret('scotia-secret', 'conveniot')
+    referencia_empresa = cluster_secret('scotia-secret', 'referencia')
+    cuenta_cargo = cluster_secret('scotia-secret', 'cuenta')
     db_logger = logging.getLogger("db")
     hoy = timezone.now()
     dias_delta = (hoy.day) != ((
@@ -232,8 +208,6 @@ def GeneraTransferencia(movimientos):
     try:
         fecha_t = fecha_t.strftime("%Y%m%d")
         dias_vigencia = '001'
-        numero_convenio, referencia_empresa, cuenta_cargo = get_envs(
-            retiro=False)
 
         name = "H2HJDF000000{}001{}{}.1001007FN100{}.txt".format(
             '{:0>5}'.format(referencia_empresa),

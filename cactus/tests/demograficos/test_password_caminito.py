@@ -243,12 +243,7 @@ class TestPreguntaNipPassword(PasswordTestBase):
                     }
                 }
             }
-<<<<<<< HEAD
         self.assertEqual(res2.data['updateNip'], expected_res2['updateNip'])
-=======
-            
-        self.assertEqual(res2.data, expected_res2)
->>>>>>> 285fabae750bbf1fb8071b7389a9e1d5bf77f7dd
         print("   [assert OK] UpdateNip, done")
 
     # Caminit createUpdatePreguntaForUser + tokenAuthPregunta + recoverPassword
