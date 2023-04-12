@@ -2057,8 +2057,7 @@ class UpdateInfoPersonal(graphene.Mutation):
                 birth_date if birth_date else u_profile.fecha_nacimiento)
             u_profile.nacionalidad = (
                 nationality if nationality else u_profile.nacionalidad)
-            u_profile.ciudad_nacimiento = (
-                city if city else u_profile.ciudad_nacimiento)
+            u_profile.ciudad_nacimiento = city
             u_profile.numero_INE = (
                 numero_INE if numero_INE else u_profile.numero_INE)
             u_profile.ocupacion = (
