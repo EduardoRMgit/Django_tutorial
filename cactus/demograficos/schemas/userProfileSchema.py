@@ -3663,6 +3663,12 @@ class SetPerfilTransaccional(graphene.Mutation):
                 )
         except Exception:
             raise Exception("Error al crear perfil")
+        up = user.Uprofile
+        if up.ocr_ine_validado and up.ocr_comprobante_validado:
+            up.nivel_cuenta_id = 2
+            up.save()
+            user.user_perfil.status_perfil = 'Aprobado'
+            user.user_perfil.save()
         return SetPerfilTransaccional(perfil=perfil_declarado)
 
 class UpdateEmail(graphene.Mutation):

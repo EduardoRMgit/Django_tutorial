@@ -315,7 +315,8 @@ class UserProfile(AbstractBaseUser):
         blank=True,
         related_name='userProfile_codigo_de_confianza',
         null=True)
-    ocr_ok = models.BooleanField(default=False)
+    ocr_ine_validado = models.BooleanField(default=False)
+    ocr_comprobante_validado = models.BooleanField(default=False)
     cuenta_clabe_bloqueada = models.BooleanField(default=False)
 
     # campos codi
