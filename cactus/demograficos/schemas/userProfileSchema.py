@@ -27,6 +27,7 @@ from django.utils import timezone
 from spei.stpTools import randomString
 from django.conf import Settings
 import reverse_geocoder as gr
+from pyotp import TOTP
 
 
 from demograficos.models.userProfile import (RespuestaSeguridad,
@@ -298,6 +299,11 @@ class BlockDetails(graphene.ObjectType):
     status = graphene.String()
 
 
+class TokenDinamico(graphene.ObjectType):
+
+    token = graphene.String()
+
+
 class Query(graphene.ObjectType):
     """
         >>> Query (Pregunstas Secretas) Example:
@@ -506,6 +512,9 @@ class Query(graphene.ObjectType):
     all_origen_deposito = graphene.List(OrigenDepositoType,
                                         description="Query all objects from \
                                         model OrigenDeposito")
+    
+    token_dinamico = graphene.Field(TokenDinamico,
+                                    token=graphene.String(required=True))
 
     # Initiating resolvers for type all Queries
 
@@ -1545,6 +1554,17 @@ class Query(graphene.ObjectType):
 
     def resolve_all_origen_deposito(self, info, **kwargs):
         return OrigenDeposito.objects.all()
+    
+    def resolve_token_dinamico(self, info, **kwargs):
+        user = info.context.user
+        if not user.is_anonymous:
+            key = b'NRXXC5LFONSWC==='
+            token = TOTP(key, interval=20)
+            token = token.now()
+            print(type(token))
+            dicc = {}
+            dicc["token"] = token
+            return dicc
 
 
 class CreateUser(graphene.Mutation):

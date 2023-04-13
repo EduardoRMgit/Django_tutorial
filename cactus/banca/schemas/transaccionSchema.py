@@ -27,6 +27,7 @@ from spei.stpTools import gen_referencia_numerica
 from demograficos.models.userProfile import UserProfile
 from demograficos.models import Contacto
 from django.conf import settings
+from pyotp import TOTP
 
 
 URL_IMAGEN = settings.URL_IMAGEN
@@ -636,21 +637,23 @@ class CreateNotificacionCobro(graphene.Mutation):
         contacto_id = graphene.Int(required=True)
         importe = graphene.String(required=True)
         concepto = graphene.String(required=True)
-        nip = graphene.String(required=True)
+        token_d = graphene.String(required=True)
 
     @login_required
-    def mutate(self, info, token, contacto_id, importe, concepto, nip):
+    def mutate(self, info, token, contacto_id, importe, concepto, token_d):
         def _valida(expr, msg):
             if expr:
                 raise Exception(msg)
 
         user = info.context.user
+        key = b'NRXXC5LFONSWC==='
         contacto = Contacto.objects.filter(pk=contacto_id)
+        token = TOTP(key, interval=20)
 
         _valida(user.Uprofile.password is None,
                 'El usuario no ha establecido su NIP.')
-        _valida(not user.Uprofile.check_password(nip),
-                'El NIP es incorrecto.')
+        _valida(not token.verify(token_d),
+                'El token es incorrecto.')
         _valida(contacto.count() == 0,
                 'Contacto inexistente.')
         contacto = contacto.first()
