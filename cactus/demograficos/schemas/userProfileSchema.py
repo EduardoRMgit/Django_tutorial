@@ -26,7 +26,7 @@ from django.contrib.auth import authenticate
 from django.utils import timezone
 from spei.stpTools import randomString
 from django.conf import Settings
-from geopy.geocoders import Nominatim
+import reverse_geocoder as gr
 
 
 from demograficos.models.userProfile import (RespuestaSeguridad,
@@ -1632,9 +1632,23 @@ class CreateUser(graphene.Mutation):
         if not (lat and lon and uuid) and not test:
             raise Exception("Faltan headers en la petición")
         if test is not True:
-            geolocator = Nominatim(user_agent="cactus")
-            location = geolocator.reverse((lat, lon))
-            if location.raw['address']['country_code'] != "mx":
+            coordinates = (lat, lon)
+            try:
+                result = gr.search(coordinates)
+            except Exception as ex:
+                msg_georeverse = f"[Validate Geolocation] Error al validar " \
+                                 f"la localizacion usuario {username}. " \
+                                 f"Error: {ex}"
+                db_logger.warning(msg_georeverse)
+                raise Exception("No se logro la validación", ex)
+            try:
+                res = result[0]['cc']
+            except Exception as ex:
+                raise Exception("Error al validar ubicación del usuario")
+            if res != "MX":
+                msg_validate = f"[Geolocation] Usuario {username} fuera de " \
+                               f"territorio Mexicano."
+                db_logger.warning(msg_validate)
                 raise Exception("Usuario fuera de territorio Mexicano")
         try:
             user = User.objects.get(username=username)
@@ -2043,8 +2057,7 @@ class UpdateInfoPersonal(graphene.Mutation):
                 birth_date if birth_date else u_profile.fecha_nacimiento)
             u_profile.nacionalidad = (
                 nationality if nationality else u_profile.nacionalidad)
-            u_profile.ciudad_nacimiento = (
-                city if city else u_profile.ciudad_nacimiento)
+            u_profile.ciudad_nacimiento = city
             u_profile.numero_INE = (
                 numero_INE if numero_INE else u_profile.numero_INE)
             u_profile.ocupacion = (
@@ -2240,12 +2253,12 @@ class CreateBeneficiario(graphene.Mutation):
                     UserBeneficiario.objects.filter(
                         user=user).exclude(user=last).delete()
                     bene, created = UserBeneficiario.objects.update_or_create(
-                        user = user,
+                        user=user,
                         defaults=defaults,
                     )
             except Exception:
-                raise Exception("Error al crear el beneficiario, revisa los " \
-                    "datos ingresados.")
+                msg = "Error creando beneficiario, revisa los datos ingresados"
+                raise Exception(msg)
         return CreateBeneficiario(
             beneficiario=bene, profile_valid=None)
 
@@ -2403,8 +2416,8 @@ class TokenAuthPreguntaNip(graphene.Mutation):
         username = graphene.String()
 
     def mutate(self, info, pregunta_id, respuesta_secreta,
-        username=None, token=None
-    ):
+               username=None, token=None
+               ):
         pregunta = PreguntaSeguridad.objects.get(pk=pregunta_id)
         if username:
             user = User.objects.get(username=username)
@@ -2448,8 +2461,8 @@ class UnBlockAccount(graphene.Mutation):
         except Exception:
             user = False
         if not user or not user.check_password(password) or \
-            not user.Uprofile.check_password(nip):
-                raise Exception("Credenciales de acceso incorrectas")
+                not user.Uprofile.check_password(nip):
+            raise Exception("Credenciales de acceso incorrectas")
         up = user.Uprofile
         up.blocked_reason = up.NOT_BLOCKED
         up.status = up.OK
@@ -2479,8 +2492,8 @@ class RecoverPassword(graphene.Mutation):
                     activo=True)[0]
                 if pass_temporal.validate(pin):
                     if user.check_password(new_password):
-                        raise Exception("La nueva contraseña no puede " \
-                            "ser igual a la anterior.")
+                        raise Exception("La nueva contraseña no puede "
+                                        "ser igual a la anterior.")
                     user.set_password(new_password)
                     pass_temporal.activo = False
                     pass_temporal.save()
@@ -2648,11 +2661,11 @@ mutation{
             raise Exception(
                 "Ya tienes esta CLABE agregada en tus contactos")
         if Contacto.objects.filter(user=user,
-                            clabe=clabe,
-                            activo=True,
-                            bloqueado=True).count() > 0:
+                                   clabe=clabe,
+                                   activo=True,
+                                   bloqueado=True).count() > 0:
             raise Exception(
-                "Esta cuenta CLABE la tienes en un contacto bloqueado, " \
+                "Esta cuenta CLABE la tienes en un contacto bloqueado, "
                 "desbloquéalo desde el buscador con su alias.")
 
         if not user.is_anonymous:
@@ -3287,6 +3300,7 @@ class BlockAccount(graphene.Mutation):
             else:
                 raise AssertionError('invalid operation, Wrong Credentials')
 
+
 class BlockAccountEmergency(graphene.Mutation):
 
     details = graphene.Field(BlockDetails)
@@ -3325,13 +3339,13 @@ class BlockAccountEmergency(graphene.Mutation):
         else:
             date_blocked = user.Ufecha.bloqueo
         return BlockAccountEmergency(
-                details=BlockDetails(
-                    username=user.username,
-                    alias=up.get_nombre_completo(),
-                    clabe=up.cuentaClabe,
-                    time=date_blocked,
-                    status=status
-                )
+            details=BlockDetails(
+                username=user.username,
+                alias=up.get_nombre_completo(),
+                clabe=up.cuentaClabe,
+                time=date_blocked,
+                status=status
+            )
         )
 
 
