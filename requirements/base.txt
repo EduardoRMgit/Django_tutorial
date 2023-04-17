@@ -54,5 +54,3 @@ django-two-factor-auth==1.14.0
 phonenumbers==8.13.0
 reverse-geocoder==1.5.1
 geographiclib==2.0
-pytesseract==0.3.10
-opencv-python
