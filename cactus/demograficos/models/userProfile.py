@@ -296,7 +296,7 @@ class UserProfile(AbstractBaseUser):
     cuentaClabe = models.CharField(max_length=18, blank=True)
     ocupacion = models.CharField(max_length=30, blank=True)
     nacionalidad = models.CharField(max_length=30, blank=True)
-    ciudad_nacimiento = models.CharField(max_length=30, blank=True)
+    ciudad_nacimiento = models.CharField(max_length=30, blank=True, null=True)
     rfc = models.CharField(max_length=20, null=True, blank=True)
     con_seguro = models.BooleanField(default=False)
 
