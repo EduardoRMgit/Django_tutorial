@@ -27,7 +27,7 @@ from django.utils import timezone
 from spei.stpTools import randomString
 from django.conf import Settings
 import reverse_geocoder as gr
-from pyotp import TOTP
+from demograficos.utils.tokendinamico import tokenD
 
 
 from demograficos.models.userProfile import (RespuestaSeguridad,
@@ -1558,10 +1558,8 @@ class Query(graphene.ObjectType):
     def resolve_token_dinamico(self, info, **kwargs):
         user = info.context.user
         if not user.is_anonymous:
-            key = b'NRXXC5LFONSWC==='
-            token = TOTP(key, interval=20)
+            token = tokenD()
             token = token.now()
-            print(type(token))
             dicc = {}
             dicc["token"] = token
             return dicc
@@ -2197,7 +2195,7 @@ class CreateBeneficiario(graphene.Mutation):
 
     class Arguments:
         token = graphene.String(required=True)
-        nip = graphene.String(required=True)
+        token_d = graphene.String(required=True)
         name = graphene.String(required=True)
         apellidopat = graphene.String()
         apellidomat = graphene.String()
@@ -2216,7 +2214,7 @@ class CreateBeneficiario(graphene.Mutation):
     def mutate(self,
                info,
                token,
-               nip,
+               token_d,
                name,
                apellidopat,
                apellidomat,
@@ -2236,11 +2234,11 @@ class CreateBeneficiario(graphene.Mutation):
             def _valida(expr, msg):
                 if expr:
                     raise Exception(msg)
-
+            dinamico = tokenD()
             _valida(user.Uprofile.password is None,
                     'El usuario no ha establecido su NIP.')
-            _valida(not user.Uprofile.check_password(nip),
-                    'El NIP es incorrecto.')
+            _valida(not dinamico.verify(token_d),
+                    'El token dinamico es incorrecto.')
 
             if name is not None:
                 name = name.strip()

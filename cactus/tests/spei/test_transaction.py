@@ -3,6 +3,7 @@
 from ..auth_client import JWTAuthClientTestCase
 from graphql_jwt.shortcuts import get_token
 from django.core.management import call_command
+from demograficos.utils.tokendinamico import tokenD
 
 from spei.models import StpTransaction
 
@@ -23,7 +24,7 @@ class TransactionTestCase(TokenTestCase):
             mutation Transaction(
                 $token: String!,
                 $abono: String!,
-                $nip: String!,
+                $tokenD: String!,
                 $concepto: String!,
                 $contacto: Int!)
         {
@@ -31,18 +32,20 @@ class TransactionTestCase(TokenTestCase):
                   token: $token,
                   abono: $abono,
                   concepto: $concepto,
-                  nip: $nip,
+                  tokenD: $tokenD,
                   contacto: $contacto) {
                     stpTransaccion { stpId }
                     user { id }
                 }
         }
         """
+    # Se agrega token dinamico
+    dinamico = tokenD()
 
     variables = {
         'concepto':  "prueba",
         'abono': "0.01",
-        'nip': "123456",
+        'tokenD': dinamico.now(),
         'contacto': 1
     }
 
@@ -51,10 +54,7 @@ class TransactionTestCase(TokenTestCase):
             (instanciado en la clase padre)."""
 
         self.variables['token'] = self.token
-
-        # Establecemos nip
-        self.user.Uprofile.set_password("123456")
-
+        self.variables['tokenD'] = tokenD().now()
         # Establecemos el saldo
         self.user.Uprofile.saldo_cuenta = 0.01
         self.user.Uprofile.save()

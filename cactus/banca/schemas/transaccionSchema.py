@@ -26,8 +26,8 @@ from spei.stpTools import gen_referencia_numerica
 
 from demograficos.models.userProfile import UserProfile
 from demograficos.models import Contacto
+from demograficos.utils.tokendinamico import tokenD
 from django.conf import settings
-from pyotp import TOTP
 
 
 URL_IMAGEN = settings.URL_IMAGEN
@@ -510,28 +510,26 @@ class CreateTransferenciaEnviada(graphene.Mutation):
         contacto = graphene.Int(required=True)
         abono = graphene.String(required=True)
         concepto = graphene.String(required=True)
-        nip = graphene.String(required=True)
+        token_d = graphene.String(required=True)
     # 3
 
     @login_required
-    def mutate(self, info, token, contacto, abono, concepto, nip):
+    def mutate(self, info, token, contacto, abono, concepto, token_d):
 
         def _valida(expr, msg):
             if expr:
                 raise Exception(msg)
         abono = abono.strip()
         concepto = concepto.strip()
-        nip = nip.strip()
         user = info.context.user
         monto = float(abono)
         saldo_inicial_usuario = user.Uprofile.saldo_cuenta
+        dinamico = tokenD()
 
         _valida(UserProfile.objects.filter(user=user).count() == 0,
                 'Usuario sin perfil')
-        _valida(user.Uprofile.password is None,
-                'El usuario no ha establecido su NIP.')
-        _valida(not user.Uprofile.check_password(nip),
-                'El NIP es incorrecto.')
+        _valida(not dinamico.verify(token_d),
+                'El token dinamico es incorrecto.')
         _valida(monto <= 0,
                 'Únicamente montos positivos.')
         _valida(saldo_inicial_usuario - monto < 0,
@@ -646,14 +644,11 @@ class CreateNotificacionCobro(graphene.Mutation):
                 raise Exception(msg)
 
         user = info.context.user
-        key = b'NRXXC5LFONSWC==='
+        dinamico = tokenD()
         contacto = Contacto.objects.filter(pk=contacto_id)
-        token = TOTP(key, interval=20)
 
-        _valida(user.Uprofile.password is None,
-                'El usuario no ha establecido su NIP.')
-        _valida(not token.verify(token_d),
-                'El token es incorrecto.')
+        _valida(not dinamico.verify(token_d),
+                'El token dinamico es incorrecto.')
         _valida(contacto.count() == 0,
                 'Contacto inexistente.')
         contacto = contacto.first()
@@ -731,10 +726,10 @@ class LiquidarCobro(graphene.Mutation):
     class Arguments:
         token = graphene.String(required=True)
         cobro_id = graphene.Int(required=True)
-        nip = graphene.String(required=True)
+        token_d = graphene.String(required=True)
 
     @login_required
-    def mutate(self, info, token, nip, cobro_id):
+    def mutate(self, info, token, token_d, cobro_id):
         def _valida(expr, msg):
             if expr:
                 raise Exception(msg)
@@ -755,15 +750,14 @@ class LiquidarCobro(graphene.Mutation):
 
         beneficiario = cobro.usuario_solicitante
         ordenante = info.context.user
+        dinamico = tokenD()
         _valida(ordenante != cobro.usuario_deudor,
                 'Tu usuario no coincide con el del cobro')
 
         _valida(UserProfile.objects.filter(user=ordenante).count() == 0,
                 'Usuario sin perfil')
-        _valida(not ordenante.Uprofile.password,
-                "Usuario no ha establecido nip")
-        _valida(not ordenante.Uprofile.check_password(nip),
-                'Nip incorrecto')
+        _valida(not dinamico.verify(token_d),
+                'El token dinamico es incorrecto.')
         _valida(not es_cuenta_inguz(ordenante.Uprofile.cuentaClabe),
                 "Cuenta ordenante no es Inguz")
         _valida(not es_cuenta_inguz(beneficiario.Uprofile.cuentaClabe),

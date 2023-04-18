@@ -2,6 +2,7 @@ from graphql_jwt.testcases import JSONWebTokenTestCase
 from graphql_jwt.shortcuts import get_token
 from django.contrib.auth import get_user_model
 from django.core.management import call_command
+from demograficos.utils.tokendinamico import tokenD
 import json
 
 
@@ -19,9 +20,10 @@ class TestBeneficiario(JSONWebTokenTestCase):
         self.client.authenticate(self.user)
 
     def test_create_beneficiario(self):
+        dinamico = tokenD()
         mutation = '''
         mutation createBeneficiario($token:String!,
-                                    $nip: String!,
+                                    $tokenD: String!,
                                     $name:String!,
                                     $apellidopat:String!,
                                     $apellidomat:String,
@@ -37,7 +39,7 @@ class TestBeneficiario(JSONWebTokenTestCase):
                                     $fechaNacimiento: Date!){
                 createBeneficiario(
                   token: $token,
-                  nip: $nip,
+                  tokenD: $tokenD,
                   name: $name,
                   apellidomat: $apellidomat,
                   apellidopat: $apellidopat,
@@ -64,7 +66,7 @@ class TestBeneficiario(JSONWebTokenTestCase):
         self.user.Uprofile.save()
         variables = {
                     "token": self.token,
-                    "nip": "1234",
+                    "tokenD": dinamico.now(),
                     "name": "Aurora",
                     "apellidopat": "perez",
                     "apellidomat": "paz",
@@ -84,7 +86,6 @@ class TestBeneficiario(JSONWebTokenTestCase):
         }
 
         res = self.client.execute(mutation, variables)
-        print(res)
         my_dict = res.data['createBeneficiario']['beneficiario']
         my_dict_ = json.dumps(my_dict)
         print(my_dict_)

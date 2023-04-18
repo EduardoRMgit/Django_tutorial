@@ -27,6 +27,7 @@ from scotiabank.models import (ScotiaTransferencia,
                                DatosFijosPDF)
 
 from demograficos.models.userProfile import UserProfile
+from demograficos.utils.tokendinamico import tokenD
 
 
 def upload_s3(nombre_archivo, archivo):
@@ -174,7 +175,7 @@ class CreateTransferenciaScotia(graphene.Mutation):
         rfcCurpBeneficiario = graphene.String()
         clave_beneficiario = graphene.String(required=True)
         concepto = graphene.String(required=True)
-        nip = graphene.String()
+        token_d = graphene.String()
         ubicacion = graphene.String()
 
     @login_required
@@ -187,18 +188,19 @@ class CreateTransferenciaScotia(graphene.Mutation):
                clave_beneficiario,
                concepto,
                ubicacion,
-               nip,
+               token_d,
                tipoCuentaBeneficiario=None,
                rfcCurpBeneficiario=None):
         try:
             ordenante = info.context.user
         except Exception:
             raise Exception('Usuario inexistente')
+        dinamico = tokenD()
         if UserProfile.objects.filter(user=ordenante).count() == 0:
             raise Exception('Usuario sin perfil')
         if ordenante.Uprofile.password:
-            if not ordenante.Uprofile.check_password(nip):
-                raise Exception('Nip esta mal')
+            if not dinamico.verify(token_d):
+                raise Exception('token dinamico incorrecto')
         if monto == 0 or monto is None:
             raise Exception('Ingrese un monto válido')
         try:
@@ -283,7 +285,7 @@ class CreateRetiroScotia(graphene.Mutation):
     class Arguments:
         token = graphene.String(required=True)
         monto = graphene.Float(required=True)
-        nip = graphene.String()
+        token_d = graphene.String()
         ubicacion = graphene.String()
 
     @login_required
@@ -291,7 +293,7 @@ class CreateRetiroScotia(graphene.Mutation):
                token,
                monto,
                ubicacion,
-               nip):
+               token_d):
 
         def _valida(expr, msg):
             if expr:
@@ -305,13 +307,12 @@ class CreateRetiroScotia(graphene.Mutation):
         monto = round(float(monto), 2)
         comision = 24
         saldo_inicial_usuario = user.Uprofile.saldo_cuenta
+        dinamico = tokenD
 
         _valida(UserProfile.objects.filter(user=user).count() == 0,
                 'Usuario sin perfil')
-        _valida(user.Uprofile.password is None,
-                'El usuario no ha establecido su NIP.')
-        _valida(not user.Uprofile.check_password(nip),
-                'El NIP es incorrecto.')
+        _valida(not dinamico.verify(token_d),
+                'El token dinamico es incorrecto.')
         _valida(monto <= 0 or monto is None,
                 'Únicamente montos positivos o válidos.')
         _valida(saldo_inicial_usuario - (monto + comision) < 0,
@@ -438,7 +439,7 @@ class CreateScotiaDeposito(graphene.Mutation):
     class Arguments:
         token = graphene.String(required=True)
         monto = graphene.Float(required=True)
-        nip = graphene.String()
+        token_d = graphene.String()
         ubicacion = graphene.String()
 
     @login_required
@@ -446,7 +447,7 @@ class CreateScotiaDeposito(graphene.Mutation):
                info,
                token,
                monto,
-               nip,
+               token_d,
                ubicacion=None):
 
         def validar(expr, msg):
@@ -454,13 +455,12 @@ class CreateScotiaDeposito(graphene.Mutation):
                 raise Exception(msg)
 
         ordenante = info.context.user
+        dinamico = tokenD()
 
         validar(UserProfile.objects.filter(
             user=ordenante).count() == 0, 'Usuario sin perfil')
-        validar(ordenante.Uprofile.password is None,
-                'El usuario no ha establecido su NIP.')
-        validar(not ordenante.Uprofile.check_password(nip),
-                'El NIP es incorrecto.')
+        validar(not dinamico.verify(token_d),
+                'El token dinamico es incorrecto.')
         validar(monto == 0 or monto is None, 'Ingrese un monto válido')
         validar(
             not LimiteTrans(ordenante.id).dep_efectivo_mes(float(monto)),
