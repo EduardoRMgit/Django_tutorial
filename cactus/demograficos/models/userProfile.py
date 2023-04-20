@@ -103,9 +103,9 @@ def uProfilenuller(klass):
 class Avatar(models.Model):
 
     opciones_genero = (
-            ("M", "Mujer"),
-            ("H", "Hombre"),
-            ("O", "Otro")
+        ("M", "Mujer"),
+        ("H", "Hombre"),
+        ("O", "Otro")
     )
     genero = models.CharField(null=True,
                               blank=True,
@@ -269,9 +269,9 @@ class UserProfile(AbstractBaseUser):
     autorizado = models.BooleanField(default=False)
     country = CountryField(blank=True, null=True)
     pais_origen_otro = models.CharField(max_length=50,
-        blank=True,
-        null=True,
-        verbose_name='Pais de nacimiento')
+                                        blank=True,
+                                        null=True,
+                                        verbose_name='Pais de nacimiento')
     indiceDisponible = models.ForeignKey(
         IndiceDisponible,
         on_delete=models.SET_NULL,
@@ -463,6 +463,8 @@ class UserProfile(AbstractBaseUser):
                 folio = folio_stp.fol_dispatch()
                 cuenta_clabe = CuentaClabe(folio_stp.fol_dispatch())
 
+            msg = f"[curp (2) registra_cuenta() userProfile] ->{self.curp}<-"
+            db_logger.info(msg)
             cuenta = CuentaPersonaFisica.objects.create(
                 nombre=first_name,
                 apellido_paterno=last_name,

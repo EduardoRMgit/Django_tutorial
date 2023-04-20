@@ -74,8 +74,6 @@ from demograficos.utils.registermail import RegistrarMail
 
 db_logger = logging.getLogger("db")
 
-# WRAPPERS
-
 
 class RespuestaType(DjangoObjectType):
     class Meta:
@@ -506,8 +504,6 @@ class Query(graphene.ObjectType):
     all_origen_deposito = graphene.List(OrigenDepositoType,
                                         description="Query all objects from \
                                         model OrigenDeposito")
-
-    # Initiating resolvers for type all Queries
 
     def resolve_all_avatars(self, info, **kwargs):
         """``allAvatars (Query): Query all the objects from Avatar Model``
@@ -2062,6 +2058,8 @@ class UpdateInfoPersonal(graphene.Mutation):
                 numero_INE if numero_INE else u_profile.numero_INE)
             u_profile.ocupacion = (
                 occupation if occupation else u_profile.ocupacion)
+            msg = f"[curp (1) UpdateInfoPersonal userProfileSchema] ->{curp}<-"
+            db_logger.info(msg)
             u_profile.curp = curp if curp else u_profile.curp
             u_profile.pais_origen_otro = (
                 country if country else u_profile.pais_origen_otro)
@@ -2123,8 +2121,11 @@ class UpdateInfoPersonal(graphene.Mutation):
             print("first_name: ", user.first_name)
             print("last_name: ", user.last_name)
 
+            msg = f"[curp (1.5) UpdtInfoPersonal userProfileSchema] ->{curp}<-"
+            db_logger.info(msg)
+
             try:
-                if not u_profile.cuentaClabe:
+                if not u_profile.cuentaClabe and curp:
                     u_profile.registra_cuenta(user.first_name, user.last_name)
             except Exception as ex:
                 AssertionError('Error al registrar la cuenta clabe.',
@@ -2664,9 +2665,11 @@ mutation{
                                    clabe=clabe,
                                    activo=True,
                                    bloqueado=True).count() > 0:
-            raise Exception(
-                "Esta cuenta CLABE la tienes en un contacto bloqueado, "
+
+            msg = "{}{}".format(
+                "Esta cuenta CLABE la tienes en un contacto bloqueado, ",
                 "desbloquéalo desde el buscador con su alias.")
+            raise Exception(msg)
 
         if not user.is_anonymous:
             nombre = nombre.strip()
@@ -3372,13 +3375,12 @@ class UpdateDevice(graphene.Mutation):
 
     validacion = graphene.String()
 
-
     class Arguments:
         username = graphene.String(required=True)
         password = graphene.String(required=True)
         nip = graphene.String(required=True)
 
-    def mutate(self, info,username, password, nip):
+    def mutate(self, info, username, password, nip):
 
         e = "Usuario y/o contraseña incorrectos"
 
@@ -3394,8 +3396,11 @@ class UpdateDevice(graphene.Mutation):
             register_device(user=user)
             return UpdateDevice(validacion='Validado')
         except Exception as ex:
-            db_logger.error("No se pudo actualizar dispositivo del usuario" \
-            f"{user}. Error: {ex}")
+            msg = "{} {}. Error: {}".format(
+                "No se pudo actualizar dispositivo del usuario",
+                user,
+                ex)
+            db_logger.error(msg)
             raise Exception('No se pudo actualizar dispositivo')
 
 
@@ -3405,7 +3410,6 @@ class CancelacionCuenta(graphene.Mutation):
     folio = graphene.String()
     fecha = graphene.types.datetime.DateTime()
     url = graphene.String()
-
 
     class Arguments:
         token = graphene.String(required=True)
@@ -3517,113 +3521,6 @@ class UrlAvatar(graphene.Mutation):
         return UrlAvatar(url=avatar_url)
 
 
-class DeleteBluepixelUser(graphene.Mutation):
-    borrado = graphene.String()
-
-    class Arguments:
-        username = graphene.String(required=True)
-
-    def mutate(self, info, username):
-
-        msg = f"[DeleteBluepixelUser] Petición recibida. User: {username}"
-        db_logger.info(msg)
-
-        if settings.SITE not in ["stage", "local"]:
-            raise Exception("No está permitido el borrado en este ambiente")
-
-        bp_usernames = [
-            "5568161651",
-            "5567907071",
-            "5611670737",
-            "2871313291",
-            "2871628373",
-            "5586999540",
-            "2223644726",
-            "2212299619",
-            "5520783405",
-            "2871095852",
-            "2871218166",
-            "7714209743"
-        ]
-        if username not in bp_usernames:
-            msg_ex = f"No está permitido borrar al usuario {username}"
-            msg = "[DeleteBluepixelUser] " + msg_ex
-            db_logger.info(msg)
-            raise Exception(
-                f"Sólo tienes permitido borrar los siguientes: {bp_usernames}")
-
-        user = User.objects.filter(username=username)
-        if user.count() == 0:
-            msg_ex = f"No existe el usuario {username}"
-            msg = "[DeleteBluepixelUser] " + msg_ex
-            db_logger.info(msg)
-            raise Exception(msg_ex)
-
-        user = user.first()
-        user.delete()
-        msg = f"[DeleteBluepixelUser] Usuario {username} borrado"
-        db_logger.info(msg)
-
-        return DeleteBluepixelUser(borrado=f"Usuario {username} borrado")
-
-
-class UnblockBluePixelUser(graphene.Mutation):
-    desbloqueado = graphene.String()
-
-    class Arguments:
-        username = graphene.String(required=True)
-
-    def mutate(self, info, username):
-
-        msg = f"[UnblockBluePixelUser] Petición recibida. User: {username}"
-        db_logger.info(msg)
-
-        if settings.SITE not in ["stage", "local"]:
-            raise Exception("No está permitido el borrado en este ambiente")
-
-        bp_usernames = [
-            "5568161651",
-            "5567907071",
-            "5611670737",
-            "2871313291",
-            "2871628373",
-            "5586999540",
-            "2223644726",
-            "2212299619",
-            "5520783405",
-            "2871095852",
-            "2871218166",
-            "7714209743"
-        ]
-        if username not in bp_usernames:
-            msg_ex = f"No está permitido borrar al usuario {username}"
-            msg = "[UnblockBluePixelUser] " + msg_ex
-            db_logger.info(msg)
-            raise Exception(
-                f"Sólo tienes permitido desbloquear los siguientes: \
-                {bp_usernames}")
-
-        user = User.objects.filter(username=username)
-        if user.count() == 0:
-            msg_ex = f"No existe el usuario {username}"
-            msg = "[UnblockBluePixelUser] " + msg_ex
-            db_logger.info(msg)
-            raise Exception(msg_ex)
-        user_ = User.objects.get(username=username)
-        up = user_.Uprofile
-        up.login_attempts = 0
-        up.blocked_reason = "K"
-        up.status = "O"
-        up.save()
-        user_.save()
-        AccessAttempt.objects.filter(username=username).delete()
-        msg = f"[UnblockBluePixelUser] Usuario {username} desbloqueado"
-        db_logger.info(msg)
-
-        return UnblockBluePixelUser(
-            desbloqueado=f"Usuario {username} desbloqueado")
-
-
 class SetPerfilTransaccional(graphene.Mutation):
 
     perfil = graphene.Field(PerfilTransaccionalDeclaradoType)
@@ -3637,8 +3534,8 @@ class SetPerfilTransaccional(graphene.Mutation):
 
     @login_required
     def mutate(self, info, token, transferencias_id, operaciones_id,
-        uso_id, origen_id
-    ):
+               uso_id, origen_id
+               ):
         user = info.context.user
         transferencias = TransferenciasMensuales.objects.get(
             pk=transferencias_id)
@@ -3660,10 +3557,11 @@ class SetPerfilTransaccional(graphene.Mutation):
             perfil_declarado, created = pd.objects.update_or_create(
                 user=user,
                 defaults=defaults
-                )
+            )
         except Exception:
             raise Exception("Error al crear perfil")
         return SetPerfilTransaccional(perfil=perfil_declarado)
+
 
 class UpdateEmail(graphene.Mutation):
 
@@ -3737,8 +3635,6 @@ class Mutation(graphene.ObjectType):
     block_contacto = BlockContacto.Field()
     buscador_usuario_inguz = BuscadorUsuarioInguz.Field()
     unblock_contacto = UnBlockContacto.Field()
-    delete_bluepixel_user = DeleteBluepixelUser.Field()
-    unblock_bluepixel_user = UnblockBluePixelUser.Field()
     set_perfil_transaccional = SetPerfilTransaccional.Field()
     block_account_emergency = BlockAccountEmergency.Field()
     update_email = UpdateEmail.Field()

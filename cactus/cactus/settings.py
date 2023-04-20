@@ -324,9 +324,8 @@ AXES_ONLY_ADMIN_SITE = True
 
 AXES_COOLOFF_TIME = timedelta(minutes=10)
 
-DAPP_KEY = env.str('DAPP_KEY', "f2338337-61ee-4eb6-8ea3-7c10b002d3f9")
-DAPP_SECRET = env.str('DAPP_SECRET',
-                      "0f8d831dddfac45b0ae56e0cadb92a293f39adbd5d957519cbbca22e37ab2173")
+DAPP_KEY = env.str('DAPP_KEY', "dapp_key")
+DAPP_SECRET = env.str('DAPP_SECRET', "dapp_secret")
 
 if SITE == "local":
     idle_time = 120
@@ -355,6 +354,7 @@ AXES_LOCKOUT_CALLABLE = "cactus.customAuthBackend.lockout"
 
 URL_IMAGEN = "https://phototest420.s3.amazonaws.com/docs/docs/banca/comprobantes/comprobante_ejemplo.jpeg"
 
+
 def cluster_secret(key, value):
     try:
         from kubernetes import client, config
@@ -369,6 +369,7 @@ def cluster_secret(key, value):
         env = environ.Env()
         secret = env.str(value, 'a')
     return secret
+
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
