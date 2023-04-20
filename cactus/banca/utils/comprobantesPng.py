@@ -27,7 +27,8 @@ class CompTrans(object):
             codigo = str(codigo)
         self._tp = Comprobante.objects.get(codigo=codigo).template
         if settings.SITE == "local":
-            self._dir = os.path.abspath(os.path.join(MEDIA_ROOT, self._tp.name))
+            self._dir = os.path.abspath(
+                os.path.join(MEDIA_ROOT, self._tp.name))
         elif settings.SITE not in "local":
             self._dir = self._tp.name
         self._tp = cv2.imread(self._dir)
