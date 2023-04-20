@@ -9,6 +9,7 @@ from .telefono import TipoTelefono, ProveedorTelefonico, Telefono
 from .userProfile import (StatusRegistro,
                           StatusCuenta,
                           IndiceDisponible,
+                          PasswordHistory,
                           UserProfile,
                           Cliente,
                           UserNotas,

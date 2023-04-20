@@ -27,10 +27,12 @@ from django.utils import timezone
 from spei.stpTools import randomString
 from django.conf import Settings
 import reverse_geocoder as gr
+from django.contrib.auth.hashers import make_password, check_password
 
 
 from demograficos.models.userProfile import (RespuestaSeguridad,
                                              PreguntaSeguridad,
+                                             PasswordHistory,
                                              UserProfile,
                                              StatusRegistro,
                                              StatusCuenta,
@@ -1674,6 +1676,10 @@ class CreateUser(graphene.Mutation):
                 username = username.strip()
                 user = User.objects.create(username=username)
                 user.set_password(password)
+                passwd = make_password(password)
+                PasswordHistory.objects.create(password=passwd,
+                                               user=user, 
+                                               activa=True)
                 user.is_active = True
                 user.save()
                 UP = UserProfile.objects.get(user=user)
@@ -1761,11 +1767,23 @@ class ChangePassword(graphene.Mutation):
         user = info.context.user
         if not user.is_anonymous:
             if user.check_password(old_password):
+                passwordh = PasswordHistory.objects.filter(user=user)
+                for password in passwordh:
+                    if check_password(new_password, password):
+                        raise Exception(("La nueva contraseña no puede "
+                                         "ser igual a las anteriores."))
                 if user.check_password(new_password):
                     raise Exception("La nueva contraseña no puede "
                                     "ser igual a la anterior.")
                 user.set_password(new_password)
                 user.save()
+                change = passwordh.last()
+                change.activa = False
+                change.save()
+                PasswordHistory(
+                    password=new_password,
+                    user=user,
+                    activa=True)
                 return ChangePassword(user=user)
             raise AssertionError("Contraseña actual incorrecta")
 
