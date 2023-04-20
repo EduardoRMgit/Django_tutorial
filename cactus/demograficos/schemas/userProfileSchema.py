@@ -75,7 +75,6 @@ from demograficos.utils.registermail import RegistrarMail
 db_logger = logging.getLogger("db")
 
 
-
 class RespuestaType(DjangoObjectType):
     class Meta:
         model = RespuestaSeguridad
@@ -2666,8 +2665,9 @@ mutation{
                                    clabe=clabe,
                                    activo=True,
                                    bloqueado=True).count() > 0:
-            raise Exception(
-                "Esta cuenta CLABE la tienes en un contacto bloqueado, "
+
+            msg = "{}{}".format(
+                "Esta cuenta CLABE la tienes en un contacto bloqueado, ",
                 "desbloquéalo desde el buscador con su alias.")
             raise Exception(msg)
 
