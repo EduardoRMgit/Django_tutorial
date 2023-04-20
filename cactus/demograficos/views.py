@@ -6,8 +6,6 @@ from django.contrib.auth.models import User
 from demograficos.models import (DocAdjunto,
                                  DocAdjuntoTipo,
                                  TipoComprobante)
-from demograficos.utils.comprobantes import validacionComprobantes
-from demograficos.utils.ine import curp_validated
 
 import boto3
 from django.conf import settings
@@ -152,8 +150,6 @@ class ImageDoc(generics.CreateAPIView):
                           'http://127.0.0.1:8000/media/', a.imagen)
                 if settings.SITE not in "local":
                     url = a.imagen_url
-                mensaje = validacionComprobantes(
-                    str(tipo_comprobante), url, user_)
             else:
                 if settings.USE_S3:
                     url, nombre_archivo = upload_s3ine(imagen, username,
@@ -173,8 +169,6 @@ class ImageDoc(generics.CreateAPIView):
                 if settings.SITE not in ["local"]:
                     url = a.imagen_url
                 id = a.id
-                print(url)
-                mensaje = curp_validated(url, user_)
         except Exception as ex:
             msg = f"[ImageDoc POST] Error al subir image a bucket: {ex}"
             db_logger.warning(msg)
@@ -188,6 +182,5 @@ class ImageDoc(generics.CreateAPIView):
             'id': id,
             'user': request.data['user'],
             'tipo': request.data['tipo'],
-            'imagen': url,
-            'validacion': mensaje},
+            'imagen': url},
             status=status.HTTP_200_OK)
