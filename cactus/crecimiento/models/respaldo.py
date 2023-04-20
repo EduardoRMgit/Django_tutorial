@@ -59,7 +59,7 @@ class Respaldo(models.Model):
     def valida_vencido(self):
         if (
                 timezone.now() - self.fecha_solicitud
-        ) > timedelta(minutes=30) and self.status == 'P':
+        ) > timedelta(days=7) and self.status == 'P':
             self.status = 'V'
             self.activo = False
             self.save()

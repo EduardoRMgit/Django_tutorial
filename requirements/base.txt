@@ -53,6 +53,6 @@ mailchimp-marketing==3.0.80
 django-phonenumber-field==6.4.0
 django-two-factor-auth==1.14.0
 phonenumbers==8.13.0
+reverse-geocoder==1.5.1
 geographiclib==2.0
-geopy==2.3.0
 imutils==0.5.4

@@ -26,7 +26,7 @@ from django.contrib.auth import authenticate
 from django.utils import timezone
 from spei.stpTools import randomString
 from django.conf import Settings
-from geopy.geocoders import Nominatim
+import reverse_geocoder as gr
 
 
 from demograficos.models.userProfile import (RespuestaSeguridad,
@@ -73,6 +73,7 @@ from pld.utils.customerpld import create_pld_customer
 from demograficos.utils.registermail import RegistrarMail
 
 db_logger = logging.getLogger("db")
+
 
 
 class RespuestaType(DjangoObjectType):
@@ -1627,10 +1628,24 @@ class CreateUser(graphene.Mutation):
         lon = info.context.headers.get("Location-Lon")
         if not (lat and lon and uuid) and not test:
             raise Exception("Faltan headers en la petición")
-        geolocator = Nominatim(user_agent="cactus")
-        location = geolocator.reverse((lat, lon))
         if test is not True:
-            if location.raw['address']['country_code'] != "mx":
+            coordinates = (lat, lon)
+            try:
+                result = gr.search(coordinates)
+            except Exception as ex:
+                msg_georeverse = f"[Validate Geolocation] Error al validar " \
+                                 f"la localizacion usuario {username}. " \
+                                 f"Error: {ex}"
+                db_logger.warning(msg_georeverse)
+                raise Exception("No se logro la validación", ex)
+            try:
+                res = result[0]['cc']
+            except Exception as ex:
+                raise Exception("Error al validar ubicación del usuario")
+            if res != "MX":
+                msg_validate = f"[Geolocation] Usuario {username} fuera de " \
+                               f"territorio Mexicano."
+                db_logger.warning(msg_validate)
                 raise Exception("Usuario fuera de territorio Mexicano")
         try:
             user = User.objects.get(username=username)
@@ -2039,8 +2054,7 @@ class UpdateInfoPersonal(graphene.Mutation):
                 birth_date if birth_date else u_profile.fecha_nacimiento)
             u_profile.nacionalidad = (
                 nationality if nationality else u_profile.nacionalidad)
-            u_profile.ciudad_nacimiento = (
-                city if city else u_profile.ciudad_nacimiento)
+            u_profile.ciudad_nacimiento = city
             u_profile.numero_INE = (
                 numero_INE if numero_INE else u_profile.numero_INE)
             u_profile.ocupacion = (
@@ -2095,6 +2109,7 @@ class UpdateInfoPersonal(graphene.Mutation):
                 raise AssertionError("RFC no válido")
             u_profile.save()
             message = InfoValidator.setCheckpoint(user=user, concepto='IP')
+            u_profile.verificacion_curp = True
             if message == "curp validado":
                 u_profile.verificacion_curp = True
             u_profile.save()
@@ -2244,8 +2259,8 @@ class CreateBeneficiario(graphene.Mutation):
                         defaults=defaults,
                     )
             except Exception:
-                raise Exception("Error al crear el beneficiario, revisa los "
-                                "datos ingresados.")
+                msg = "Error creando beneficiario, revisa los datos ingresados"
+                raise Exception(msg)
         return CreateBeneficiario(
             beneficiario=bene, profile_valid=None)
 
@@ -2651,8 +2666,8 @@ mutation{
                                    clabe=clabe,
                                    activo=True,
                                    bloqueado=True).count() > 0:
-            msg = "{}{}".format(
-                "Esta cuenta CLABE la tienes en un contacto bloqueado, ",
+            raise Exception(
+                "Esta cuenta CLABE la tienes en un contacto bloqueado, "
                 "desbloquéalo desde el buscador con su alias.")
             raise Exception(msg)
 
@@ -3245,10 +3260,10 @@ class ReceiveOCR(graphene.Mutation):
             #                                     False, 'OCR')
             # InfoValidator.setComponentValidated('direccion', user,
             #                                     False, 'OCR')
-            uprof.ocr_ok = False
+            uprof.ocr_ine_validado = False
 
         if validacion > 0.85:
-            uprof.ocr_ok = True
+            uprof.ocr_ine_validado = True
 
         uprof.save()
 

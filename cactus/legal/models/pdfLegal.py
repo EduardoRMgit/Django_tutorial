@@ -30,6 +30,7 @@ class PdfLegalUser(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     nombre = models.ForeignKey(PdfLegal, on_delete=models.DO_NOTHING)
     Pdf = models.FileField(upload_to='docs/pdfLegal', blank=True, null=True)
+    url_pdf = models.URLField(max_length=2056, blank=True, null=True)
     fecha = models.DateTimeField(auto_now=True)
     validado = models.BooleanField(default=False)
 
