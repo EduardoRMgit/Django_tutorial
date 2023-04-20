@@ -26,7 +26,10 @@ class CompTrans(object):
             codigo += 1
             codigo = str(codigo)
         self._tp = Comprobante.objects.get(codigo=codigo).template
-        self._dir = os.path.abspath(os.path.join(MEDIA_ROOT, self._tp.name))
+        if settings.SITE == "local":
+            self._dir = os.path.abspath(os.path.join(MEDIA_ROOT, self._tp.name))
+        elif settings.SITE not in "local":
+            self._dir = self._tp.name
         self._tp = cv2.imread(self._dir)
 
     def inguz(self, show=False):
