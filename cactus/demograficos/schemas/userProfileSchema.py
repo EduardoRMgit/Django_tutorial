@@ -3257,10 +3257,10 @@ class ReceiveOCR(graphene.Mutation):
             #                                     False, 'OCR')
             # InfoValidator.setComponentValidated('direccion', user,
             #                                     False, 'OCR')
-            uprof.ocr_ok = False
+            uprof.ocr_ine_validado = False
 
         if validacion > 0.85:
-            uprof.ocr_ok = True
+            uprof.ocr_ine_validado = True
 
         uprof.save()
 
