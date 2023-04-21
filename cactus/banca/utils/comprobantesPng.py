@@ -40,7 +40,6 @@ class CompTrans(object):
 
     def inguz(self, show=False):
         trans = self._trans
-        nombre = trans.user.Uprofile.get_nombre_completo()
         alias = f"@{trans.user.Uprofile.alias}"
         avatar = trans.user.Uprofile.avatar
         monto = str(round(float(trans.monto), 2))
@@ -59,13 +58,12 @@ class CompTrans(object):
             avatar = imutils.url_to_image(avatar, -1)
             img = imutils.url_to_image(self._dir)
         fields = [
-            [nombre,    (210, 350), 2, 0.9, (0, 0, 0), 1, 16],
             [concepto,  (118, 700), 2, 0.9, (0, 0, 0), 1, 16],
             [cuenta,   (378,  490), 2, 0.9, (0, 0, 0), 1, 16],
             [fecha,     (118, 600), 2, 0.9, (0, 0, 0), 1, 16],
             [hora,      (350, 600), 2, 0.9, (0, 0, 0), 1, 16],
             [monto,     (118, 490), 2, 1.0, (0, 0, 0), 2, 16],
-            [alias,     (220, 380), 2, 1.0, (0, 0, 0), 2, 16],
+            [alias,     (190, 380), 2, 1.3, (0, 0, 0), 2, 16],
 
         ]
         if self._status == 'exito':
@@ -99,7 +97,6 @@ class CompTrans(object):
     def cobro(self):
         trans_ = self.trans_
         trans = self._trans
-        nombre = trans_.usuario_solicitante.Uprofile.get_nombre_completo()
         alias = f"@{trans_.usuario_solicitante.Uprofile.alias}"
         status = self._status
         avatar = trans_.usuario_solicitante.Uprofile.avatar
@@ -118,14 +115,13 @@ class CompTrans(object):
             avatar = imutils.url_to_image(avatar, -1)
             img = imutils.url_to_image(self._dir)
         fields = [
-            [nombre,    (210, 350), 2, 0.9, (0, 0, 0), 1, 16],
             [concepto,  (118, 700), 2, 0.9, (0, 0, 0), 1, 16],
             [status,    (360, 490), 2, 0.9, (0, 0, 0), 1, 16],
             [trans.claveRastreo,  (118, 800), 2, 0.9, (0, 0, 0), 1, 16],
             [fecha,     (118, 600), 2, 0.9, (0, 0, 0), 1, 16],
             [hora,      (350, 600), 2, 0.9, (0, 0, 0), 1, 16],
             [monto,     (118, 490), 2, 1.0, (0, 0, 0), 2, 16],
-            [alias,     (220, 380), 2, 1.0, (0, 0, 0), 2, 16],
+            [alias,     (190, 380), 2, 1.3, (0, 0, 0), 2, 16],
         ]
 
         for field in fields:
@@ -150,7 +146,6 @@ class CompTrans(object):
 
     def stp(self):
         trans = self._trans
-        nombre = trans.user.Uprofile.get_nombre_completo()
         importe = "${:,.2f}".format(round(float(trans.monto), 2))
         fecha = trans.fechaValor.strftime("%m/%d/%Y")
         hora = trans.fechaValor.strftime("%H:%M:%S")
@@ -161,7 +156,6 @@ class CompTrans(object):
             transaccion=trans).referenciaNumerica
 
         fields = [
-            [nombre,   (112,  386), 2, 0.9, (0, 0, 0), 1, 16],
             [importe,  (112,  490), 2, 1.0, (0, 0, 0), 2, 16],
             [cuenta,   (378,  490), 2, 0.9, (0, 0, 0), 1, 16],
             [fecha,    (112,  590), 2, 0.9, (0, 0, 0), 1, 16],
