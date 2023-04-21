@@ -62,7 +62,7 @@ class UserTests(DemograficosTestBase):
         '''
         variables = {
             'username': '5513125668',
-            'password': '123456',
+            'password': 'Qwerty$1346',
         }
         res = self.client.execute(mutation, variables)
         expected_res = {
