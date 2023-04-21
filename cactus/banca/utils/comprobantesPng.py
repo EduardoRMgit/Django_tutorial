@@ -2,9 +2,11 @@ import os
 import cv2
 from banca.models import Comprobante
 from spei.models import StpTransaction
-from cactus.settings import MEDIA_ROOT
 from django.conf import settings
 import imutils
+
+if settings.SITE == "local":
+    from cactus.settings import MEDIA_ROOT
 
 
 class CompTrans(object):
