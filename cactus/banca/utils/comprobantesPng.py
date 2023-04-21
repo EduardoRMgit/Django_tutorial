@@ -5,6 +5,9 @@ from spei.models import StpTransaction
 from django.conf import settings
 import imutils
 
+if settings.SITE == "local":
+    from cactus.settings import MEDIA_ROOT
+
 
 class CompTrans(object):
     def __init__(self, trans):
@@ -26,7 +29,6 @@ class CompTrans(object):
             codigo = str(codigo)
         self._tp = Comprobante.objects.get(codigo=codigo).template
         if settings.SITE == "local":
-            from cactus.settings import MEDIA_ROOT
             self._dir = os.path.abspath(
                 os.path.join(MEDIA_ROOT, self._tp.name))
             self._tp = cv2.imread(self._dir)
