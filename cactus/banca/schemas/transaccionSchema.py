@@ -843,13 +843,12 @@ class UrlImagenComprobanteInter(graphene.Mutation):
                     trans.statusTrans.nombre != "rechazada":
                 raise Exception("Transacción no genera Comprobante.")
             comp = CompTrans(trans)
-            comp_file = comp.trans()
+            url = comp.trans()
 
             if not settings.USE_S3:
-                return UrlImagenComprobanteInter(url=comp_file.url)
+                return UrlImagenComprobanteInter(url=url)
 
-            file_url = comp_file.url
-            return UrlImagenComprobanteInter(url=file_url)
+            return UrlImagenComprobanteInter(url=url)
 
 
 class Mutation(graphene.ObjectType):
