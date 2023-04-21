@@ -519,12 +519,14 @@ class PasswordHistory(models.Model):
     user = models.ForeignKey(User,
                              on_delete=models.SET_NULL,
                              null=True,
-                             blank=True)
-    passwords = models.CharField(max_length=1056, blank=True, null=True)
-    activa = models.BooleanField(blank=True, null=True)
+                             blank=True,
+                             related_name="passwords")
+    password = models.CharField(max_length=1056, blank=True, null=True)
+    activa = models.BooleanField(default=False)
+    fecha_cambio = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
-        return str(self.passwords)
+        return str(self.password) + ' ' + str(self.fecha_cambio)
 
 
 # First, define the Manager subclass.

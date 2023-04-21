@@ -16,7 +16,8 @@ from demograficos.models import (UserProfile,
                                  UserBeneficiario,
                                  UserDevice,
                                  Avatar,
-                                 PerfilTransaccionalDeclarado)
+                                 PerfilTransaccionalDeclarado,
+                                 PasswordHistory)
 from banca.models import Transaccion
 from pld.models import (Customer)
 from .cambio_password import PasswordResetUserAdmin
@@ -248,7 +249,7 @@ class UserProfileAdmin(ExportActionMixin, PasswordResetUserAdmin):
                     user.is_active = False
                     user.save()
                     msg_logg = "[STP delete cuenta] {}.".format(
-                            user.Uprofile.cuentaClabe)
+                        user.Uprofile.cuentaClabe)
                     db_logger.info(msg_logg)
                 elif id_:
                     msg = f"[ERROR STP delete cuenta] \
@@ -323,3 +324,4 @@ admin.site.register(EntidadFed)
 admin.site.register(UserDevice)
 admin.site.register(Avatar)
 # admin.site.register(Administradore, AdministradoreAdmin)
+admin.site.register(PasswordHistory)

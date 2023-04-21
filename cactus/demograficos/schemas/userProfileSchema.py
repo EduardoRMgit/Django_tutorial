@@ -1672,9 +1672,9 @@ class CreateUser(graphene.Mutation):
                 username = username.strip()
                 user = User.objects.create(username=username)
                 user.set_password(password)
-                passwd = make_password(password)
+                passwd = user.password
                 PasswordHistory.objects.create(password=passwd,
-                                               user=user, 
+                                               user=user,
                                                activa=True)
                 user.is_active = True
                 user.save()
@@ -1763,23 +1763,31 @@ class ChangePassword(graphene.Mutation):
         user = info.context.user
         if not user.is_anonymous:
             if user.check_password(old_password):
-                passwordh = PasswordHistory.objects.filter(user=user)
-                for password in passwordh:
-                    if check_password(new_password, password):
-                        raise Exception(("La nueva contraseña no puede "
-                                         "ser igual a las anteriores."))
                 if user.check_password(new_password):
                     raise Exception("La nueva contraseña no puede "
                                     "ser igual a la anterior.")
+
+                passwordh = user.passwords.all()
+                if passwordh.count() >= 5:
+                    passwordh = passwordh[
+                        passwordh.count()-5:passwordh.count()]
+                for password in passwordh:
+                    if check_password(new_password, password.password):
+                        raise Exception(("La nueva contraseña no puede "
+                                         "ser igual a las anteriores."))
+
                 user.set_password(new_password)
                 user.save()
-                change = passwordh.last()
-                change.activa = False
-                change.save()
-                PasswordHistory(
-                    password=new_password,
+                if len(passwordh) > 0:
+                    change = passwordh[len(passwordh)-1]
+                    change.activa = False
+                    change.save()
+
+                PasswordHistory.objects.create(
+                    password=user.password,
                     user=user,
                     activa=True)
+
                 return ChangePassword(user=user)
             raise AssertionError("Contraseña actual incorrecta")
 
@@ -2513,10 +2521,29 @@ class RecoverPassword(graphene.Mutation):
                     if user.check_password(new_password):
                         raise Exception("La nueva contraseña no puede "
                                         "ser igual a la anterior.")
+
+                    passwordh = user.passwords.all()
+                    if passwordh.count() >= 5:
+                        passwordh = passwordh[
+                            passwordh.count()-5:passwordh.count()]
+                    for password in passwordh:
+                        if check_password(new_password, password.password):
+                            raise Exception(("La nueva contraseña no puede "
+                                             "ser igual a las anteriores."))
+
                     user.set_password(new_password)
                     pass_temporal.activo = False
                     pass_temporal.save()
                     user.save()
+                    if len(passwordh) > 0:
+                        change = passwordh[len(passwordh)-1]
+                        change.activa = False
+                        change.save()
+                    PasswordHistory.objects.create(
+                        password=user.password,
+                        user=user,
+                        activa=True)
+
                     return RecoverPassword(details='password recuperado')
                 else:
                     return RecoverPassword(details='pin invalido')
