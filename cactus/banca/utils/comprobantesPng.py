@@ -2,7 +2,6 @@ import os
 import cv2
 from banca.models import Comprobante
 from spei.models import StpTransaction
-from cactus.settings import MEDIA_ROOT
 from django.conf import settings
 import imutils
 
@@ -27,6 +26,7 @@ class CompTrans(object):
             codigo = str(codigo)
         self._tp = Comprobante.objects.get(codigo=codigo).template
         if settings.SITE == "local":
+            from cactus.settings import MEDIA_ROOT
             self._dir = os.path.abspath(
                 os.path.join(MEDIA_ROOT, self._tp.name))
             self._tp = cv2.imread(self._dir)
