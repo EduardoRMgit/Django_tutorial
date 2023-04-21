@@ -1671,6 +1671,10 @@ class CreateUser(graphene.Mutation):
                     except CodigoConfianza.DoesNotExist:
                         raise ValueError("Codigo de referencia invalido")
                 username = username.strip()
+                valida = password_validation(password)
+                if not valida:
+                    raise Exception("Contraseña invalida, no cumple con "
+                                    "las normas de construcción")
                 user = User.objects.create(username=username)
                 user.set_password(password)
                 passwd = user.password
