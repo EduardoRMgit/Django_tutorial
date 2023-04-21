@@ -207,6 +207,7 @@ def GeneraTransferencia(movimientos, referencia_empresa, cuenta_cargo):
         fecha_t = datetime(1999, 12, 31)
     try:
         fecha_t = fecha_t.strftime("%Y%m%d")
+
         dias_vigencia = '001'
 
         name = "H2HJDF000000{}001{}{}.1001007FN100{}.txt".format(
