@@ -178,15 +178,15 @@ class UrlImagenComprobanteInguz(graphene.Mutation):
         user = info.context.user
         if not user.is_anonymous:
             transaccion = InguzTransaction.objects.get(id=id)
-            if not transaccion.statusTrans:
+            if not transaccion.transaccion:
                 raise Exception("Transaccion no genera comprobante")
-            if transaccion.statusTrans != "liquidado" and \
-                    transaccion.statusTrans != "devuelto":
+            if transaccion.transaccion.statusTrans != "exito" and \
+                    transaccion.transaccion.statusTrans != "rechazada":
                 raise Exception("Transaccion no genera comprobante")
             comprobante = CompTrans(transaccion.transaccion)
             comprobante = comprobante.trans()
-            transaccion.comprobante_img = comprobante.name
-            transaccion.url_comprobante = comprobante.name
+            transaccion.comprobante_img = comprobante.url
+            transaccion.url_comprobante = comprobante.url
             transaccion.save()
             url = transaccion.url_comprobante
             return UrlImagenComprobanteInguz(url)
@@ -216,7 +216,7 @@ class UrlImagenComprobanteCobro(graphene.Mutation):
             if transaccion.status == "L":
                 comprobante = CompTrans(transaccion)
                 comprobante = comprobante.trans()
-                url = comprobante.name
+                url = comprobante.url
             else:
                 raise Exception(
                     "Ingrese un tipo válido ('notificacion' "
