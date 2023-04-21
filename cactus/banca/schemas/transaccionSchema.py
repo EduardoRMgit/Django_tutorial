@@ -846,9 +846,9 @@ class UrlImagenComprobanteInter(graphene.Mutation):
             comp_file = comp.trans()
 
             if not settings.USE_S3:
-                return UrlImagenComprobanteInter(url=comp_file.name)
+                return UrlImagenComprobanteInter(url=comp_file.url)
 
-            file_url = comp_file.name
+            file_url = comp_file.url
             return UrlImagenComprobanteInter(url=file_url)
 
 
