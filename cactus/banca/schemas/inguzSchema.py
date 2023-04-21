@@ -180,8 +180,8 @@ class UrlImagenComprobanteInguz(graphene.Mutation):
             transaccion = InguzTransaction.objects.get(id=id)
             if not transaccion.transaccion:
                 raise Exception("Transaccion no genera comprobante")
-            if transaccion.transaccion.statusTrans != "exito" and \
-                    transaccion.transaccion.statusTrans != "rechazada":
+            if transaccion.transaccion.statusTrans.nombre != "exito" and \
+                    transaccion.transaccion.statusTrans.nombre != "rechazada":
                 raise Exception("Transaccion no genera comprobante")
             comprobante = CompTrans(transaccion.transaccion)
             comprobante = comprobante.trans()
