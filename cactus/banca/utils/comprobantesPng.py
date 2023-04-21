@@ -42,7 +42,7 @@ class CompTrans(object):
         trans = self._trans
         alias = f"@{trans.user.Uprofile.alias}"
         avatar = trans.user.Uprofile.avatar
-        monto = str(round(float(trans.monto), 2))
+        monto = "${:.2f}".format(round(float(trans.monto), 2))
         cuenta = f"*{trans.user.Uprofile.cuentaClabe[13:-1]}"
         fecha = trans.fechaValor.strftime("%m/%d/%Y")
         hora = trans.fechaValor.strftime("%H:%M:%S")
@@ -50,7 +50,7 @@ class CompTrans(object):
 
         if settings.SITE == "local":
             avatar = os.path.abspath(os.path.join(
-                MEDIA_ROOT, avatar.avatar_img.url))
+                MEDIA_ROOT, avatar.avatar_img.name))
             avatar = cv2.imread(avatar, -1)
             img = cv2.imread(self._dir)
         elif settings.SITE not in "local":
@@ -63,7 +63,7 @@ class CompTrans(object):
             [fecha,     (118, 600), 2, 0.9, (0, 0, 0), 1, 16],
             [hora,      (350, 600), 2, 0.9, (0, 0, 0), 1, 16],
             [monto,     (118, 490), 2, 1.0, (0, 0, 0), 2, 16],
-            [alias,     (190, 380), 2, 1.3, (0, 0, 0), 2, 16],
+            [alias,     (190, 340), 2, 0.8, (0, 0, 0), 1, 16],
 
         ]
         if self._status == 'exito':
@@ -100,14 +100,14 @@ class CompTrans(object):
         alias = f"@{trans_.usuario_solicitante.Uprofile.alias}"
         status = self._status
         avatar = trans_.usuario_solicitante.Uprofile.avatar
-        monto = str(round(float(trans.monto), 2))
+        monto = "${:.2f}".format(round(float(trans.monto), 2))
         fecha = trans.fechaValor.strftime("%m/%d/%Y")
         hora = trans.fechaValor.strftime("%H:%M:%S")
         concepto = trans.concepto
 
         if settings.SITE == "local":
             avatar = os.path.abspath(os.path.join(
-                MEDIA_ROOT, avatar.avatar_img.url))
+                MEDIA_ROOT, avatar.avatar_img.name))
             avatar = cv2.imread(avatar, -1)
             img = cv2.imread(self._dir)
         elif settings.SITE not in "local":
@@ -120,8 +120,8 @@ class CompTrans(object):
             [trans.claveRastreo,  (118, 800), 2, 0.9, (0, 0, 0), 1, 16],
             [fecha,     (118, 600), 2, 0.9, (0, 0, 0), 1, 16],
             [hora,      (350, 600), 2, 0.9, (0, 0, 0), 1, 16],
-            [monto,     (118, 490), 2, 1.0, (0, 0, 0), 2, 16],
-            [alias,     (190, 380), 2, 1.3, (0, 0, 0), 2, 16],
+            [monto,     (118, 490), 2, 1.0, (0, 0, 0), 1, 16],
+            [alias,     (158, 340), 2, 0.8, (0, 0, 0), 1, 16],
         ]
 
         for field in fields:
