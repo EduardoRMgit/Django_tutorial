@@ -73,6 +73,7 @@ from axes.models import AccessAttempt
 from pld.utils.customerpld import create_pld_customer
 
 from demograficos.utils.registermail import RegistrarMail
+from demograficos.utils.validatepassword import password_validation
 
 db_logger = logging.getLogger("db")
 
@@ -1670,6 +1671,10 @@ class CreateUser(graphene.Mutation):
                     except CodigoConfianza.DoesNotExist:
                         raise ValueError("Codigo de referencia invalido")
                 username = username.strip()
+                valida = password_validation(password)
+                if not valida:
+                    raise Exception("Contraseña invalida, no cumple con "
+                                    "las normas de construcción")
                 user = User.objects.create(username=username)
                 user.set_password(password)
                 passwd = user.password
@@ -1775,7 +1780,10 @@ class ChangePassword(graphene.Mutation):
                     if check_password(new_password, password.password):
                         raise Exception(("La nueva contraseña no puede "
                                          "ser igual a las anteriores."))
-
+                valida = password_validation(new_password)
+                if not valida:
+                    raise Exception("Contraseña invalida, no cumple con "
+                                    "las normas de construccion.")
                 user.set_password(new_password)
                 user.save()
                 if len(passwordh) > 0:
