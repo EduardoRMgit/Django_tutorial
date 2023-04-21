@@ -18,7 +18,6 @@ class CompTrans(object):
             pass
         self._trans = trans
         self._tipo = self._trans.tipoTrans
-        print(self._tipo)
         self._codigo = self._tipo.codigo
         self._status = self._trans.statusTrans.nombre
         if self._status == "exito":
@@ -33,7 +32,7 @@ class CompTrans(object):
                 os.path.join(MEDIA_ROOT, self._tp.name))
             self._tp = cv2.imread(self._dir)
         elif settings.SITE not in "local":
-            self._dir = self._tp.name
+            self._dir = self._tp.url
             self._tp = imutils.url_to_image(self._dir)
 
     def inguz(self, show=False):
@@ -49,11 +48,11 @@ class CompTrans(object):
 
         if settings.SITE == "local":
             avatar = os.path.abspath(os.path.join(
-                MEDIA_ROOT, avatar.avatar_img.name))
+                MEDIA_ROOT, avatar.avatar_img.url))
             avatar = cv2.imread(avatar, -1)
             img = cv2.imread(self._dir)
         elif settings.SITE not in "local":
-            avatar = avatar.avatar_img.name
+            avatar = avatar.avatar_img.url
             avatar = imutils.url_to_image(avatar, -1)
             img = imutils.url_to_image(self._dir)
         fields = [
@@ -106,11 +105,11 @@ class CompTrans(object):
 
         if settings.SITE == "local":
             avatar = os.path.abspath(os.path.join(
-                MEDIA_ROOT, avatar.avatar_img.name))
+                MEDIA_ROOT, avatar.avatar_img.url))
             avatar = cv2.imread(avatar, -1)
             img = cv2.imread(self._dir)
         elif settings.SITE not in "local":
-            avatar = avatar.avatar_img.name
+            avatar = avatar.avatar_img.url
             avatar = imutils.url_to_image(avatar, -1)
             img = imutils.url_to_image(self._dir)
         fields = [

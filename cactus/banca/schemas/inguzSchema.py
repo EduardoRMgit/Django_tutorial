@@ -178,6 +178,11 @@ class UrlImagenComprobanteInguz(graphene.Mutation):
         user = info.context.user
         if not user.is_anonymous:
             transaccion = InguzTransaction.objects.get(id=id)
+            if not transaccion.statusTrans:
+                raise Exception("Transaccion no genera comprobante")
+            if transaccion.statusTrans != "liquidado" and \
+                    transaccion.statusTrans != "devuelto":
+                raise Exception("Transaccion no genera comprobante")
             comprobante = CompTrans(transaccion.transaccion)
             comprobante = comprobante.trans()
             transaccion.comprobante_img = comprobante.name
