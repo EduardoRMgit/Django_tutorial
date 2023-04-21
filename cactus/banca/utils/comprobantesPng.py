@@ -4,9 +4,12 @@ from banca.models import Comprobante
 from spei.models import StpTransaction
 from django.conf import settings
 import imutils
+from demograficos.views import get_file_url
+import time
 
 if settings.SITE == "local":
     from cactus.settings import MEDIA_ROOT
+time_stamp = time.time()
 
 
 class CompTrans(object):
@@ -85,11 +88,13 @@ class CompTrans(object):
             img[y1:y2, x1:x2, c] = (alpha_s * avatar[:, :, c] +
                                     alpha_l * img[y1:y2, x1:x2, c])
 
-        img_name = "comprobanteInguz.jpg"
+        img_name = f"{time_stamp}comprobanteInguz.jpg"
         cv2.imwrite(img_name, img)
         comp_img = open(img_name, "rb")
         os.remove(img_name)
-        return comp_img
+        path_file = 'docs/' + img_name
+        url = get_file_url(comp_img, path_file)
+        return url
 
     def cobro(self):
         trans_ = self.trans_
@@ -135,11 +140,13 @@ class CompTrans(object):
         for c in range(0, 3):
             img[y1:y2, x1:x2, c] = (alpha_s * avatar[:, :, c] +
                                     alpha_l * img[y1:y2, x1:x2, c])
-        img_name = "comprobanteInguz.jpg"
+        img_name = f"{time_stamp}comprobanteInguz.jpg"
         cv2.imwrite(img_name, img)
         comp_img = open(img_name, "rb")
         os.remove(img_name)
-        return comp_img
+        path_file = 'docs/' + img_name
+        url = get_file_url(comp_img, path_file)
+        return url
 
     def stp(self):
         trans = self._trans
@@ -190,11 +197,13 @@ class CompTrans(object):
         for c in range(0, 3):
             img[y1:y2, x1:x2, c] = (alpha_s * otrosbancos[:, :, c] +
                                     alpha_l * img[y1:y2, x1:x2, c])
-        img_name = "comprobanteSTP.jpg"
+        img_name = f"{time_stamp}comprobanteSTP.jpg"
         cv2.imwrite(img_name, img)
         comp_img = open(img_name, "rb")
         os.remove(img_name)
-        return comp_img
+        path_file = 'docs/' + img_name
+        url = get_file_url(comp_img, path_file)
+        return url
 
     def trans(self):
         if self._tipo.codigo == "18":

@@ -184,11 +184,7 @@ class UrlImagenComprobanteInguz(graphene.Mutation):
                     transaccion.transaccion.statusTrans.nombre != "rechazada":
                 raise Exception("Transaccion no genera comprobante")
             comprobante = CompTrans(transaccion.transaccion)
-            comprobante = comprobante.trans()
-            transaccion.comprobante_img = comprobante.url
-            transaccion.url_comprobante = comprobante.url
-            transaccion.save()
-            url = transaccion.url_comprobante
+            url = comprobante.trans()
             return UrlImagenComprobanteInguz(url)
 
 
@@ -215,8 +211,7 @@ class UrlImagenComprobanteCobro(graphene.Mutation):
                 )
             if transaccion.status == "L":
                 comprobante = CompTrans(transaccion)
-                comprobante = comprobante.trans()
-                url = comprobante.url
+                url = comprobante.trans()
             else:
                 raise Exception(
                     "Ingrese un tipo válido ('notificacion' "
