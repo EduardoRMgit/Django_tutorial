@@ -64,7 +64,7 @@ class LoggingGraphQLView(GraphQLView):
             if last_location:
                 # print(last_location.date)
                 hours = (timezone.now() -
-                    last_location.date).total_seconds()
+                         last_location.date).total_seconds()
                 hours /= 3600
                 # if request.headers.get("delta"):
                 #     hours +=
@@ -79,12 +79,14 @@ class LoggingGraphQLView(GraphQLView):
             current_location.device = device
             current_location.save()
             if username is not None:
-                valid_device = LoggingGraphQLView.set_screen(uuid=device_id,
-                    username=username)
-                if not valid_device and not self.query_ex(
-                    query, uuid_exception
-                ):
-                    return HttpResponseForbidden("UUID incorrecto")
+                # valid_device = LoggingGraphQLView.set_screen(uuid=device_id,
+                #    username=username)
+                LoggingGraphQLView.set_screen(uuid=device_id,
+                                              username=username)
+                # if not valid_device and not self.query_ex(
+                #     query, uuid_exception
+                # ):
+                #     return HttpResponseForbidden("UUID incorrecto")
         if user.Uprofile.status != 'O' and not self.query_ex(
                 query, block_exception):
             return HttpResponseForbidden("action forbidden, user blocked")
@@ -94,24 +96,24 @@ class LoggingGraphQLView(GraphQLView):
     def set_screen(cls, uuid, username):
         try:
             user = User.objects.get(username=username)
-            device = user.udevices.get(activo=True)
-            if device.uuid != uuid:
-                print('setting screen to emergency for user {}'.format(
-                    username))
-                Validator.setComponentValidated(alias='dispositivo',
-                                                user=user,
-                                                valid=False,
-                                                motivo='Este dispositivo es \
-                                                diferente al que tenemos \
-                                                registrado')
-                return False
-            else:
-                Validator.setComponentValidated(alias='dispositivo',
-                                                user=user,
-                                                valid=True,
-                                                motivo='')
-                return True
-                # print('normal start for user {}'.format(username))
+            # device = user.udevices.get(activo=True)
+            # if device.uuid != uuid:
+            #     print('setting screen to emergency for user {}'.format(
+            #         username))
+            #     Validator.setComponentValidated(alias='dispositivo',
+            #                                     user=user,
+            #                                     valid=False,
+            #                                     motivo='Este dispositivo es \
+            #                                     diferente al que tenemos \
+            #                                     registrado')
+            #     return False
+            # else:
+            Validator.setComponentValidated(alias='dispositivo',
+                                            user=user,
+                                            valid=True,
+                                            motivo='')
+            return True
+            # print('normal start for user {}'.format(username))
         except Exception as e:
             msg = "[Inicio de sesión] No se pudo obtener device activo en \
                 Udevices.Error: {}.".format(e)

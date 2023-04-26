@@ -1,0 +1,20 @@
+[
+    {
+      "model": "auth.user",
+      "pk": 65321,
+      "fields": {
+        "password": "pbkdf2_sha256$150000$kAxJoLNC92kH$qfKVgfQ+85GM0XjLTS+dpmZXz+aUwkXbnciR3erktPc=",
+        "last_login": "2019-08-01T21:37:20.718Z",
+        "is_superuser": true,
+        "username": "Iguano",
+        "first_name": "",
+        "last_name": "",
+        "email": "",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2019-07-29T23:24:59.403Z",
+        "groups": [],
+        "user_permissions": []
+      }
+    }
+]

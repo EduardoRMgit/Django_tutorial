@@ -93,7 +93,7 @@ class CreateUserTests(JWTAuthClientTestCase):
         '''
         variables = {
             'username': '5551029634',
-            'password': 'Qwerty123456',
+            'password': 'Qwerty$1346',
         }
 
         res = self.client.execute(mutation, variables)

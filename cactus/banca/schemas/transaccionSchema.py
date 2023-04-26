@@ -19,6 +19,7 @@ from banca.models.catalogos import TipoTransaccion
 from banca.models import NotificacionCobro, InguzTransaction, NivelCuenta
 from banca.utils.clabe import es_cuenta_inguz
 from banca.utils.limiteTrans import LimiteTrans
+from banca.utils.comprobantesPng import CompTrans
 
 from spei.models import StpTransaction
 from spei.stpTools import randomString
@@ -541,7 +542,7 @@ class CreateTransferenciaEnviada(graphene.Mutation):
         except Exception:
             raise Exception('Contacto inexistente.')
 
-        fecha = timezone.now().strftime('%Y-%m-%d %H:%M:%S')
+        fecha = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         nombre_usuario = user.get_full_name()
         monto_stp_trans = "{:.2f}".format(monto)
         reservado_stp_trans = round(monto, 2)
@@ -782,7 +783,7 @@ class LiquidarCobro(graphene.Mutation):
         beneficiario.Uprofile.saldo_cuenta += round(float(importe), 2)
         beneficiario.Uprofile.save()
 
-        concepto = "Liquidación de cobro"
+        concepto = "Liquidacion de cobro"
         main_trans = Transaccion.objects.create(
             user=ordenante,
             fechaValor=fecha,
@@ -832,14 +833,21 @@ class UrlImagenComprobanteInter(graphene.Mutation):
         user = info.context.user
         if not user.is_anonymous:
 
-            transaccion = StpTransaction.objects.filter(id=id)
-            if transaccion.count() == 0:
+            trans = Transaccion.objects.filter(pk=id)
+            if trans.count() == 0:
                 raise Exception("Transacción inexistente.")
-            transaccion = transaccion.first()
-            transaccion.comprobante_img = URL_IMAGEN
-            transaccion.url_comprobante = URL_IMAGEN
-            transaccion.save()
-            url = transaccion.url_comprobante
+            trans = trans.last()
+            if not trans.statusTrans:
+                raise Exception("Transacción no genera Comprobante.")
+            if trans.statusTrans.nombre != "exito" and \
+                    trans.statusTrans.nombre != "rechazada":
+                raise Exception("Transacción no genera Comprobante.")
+            comp = CompTrans(trans)
+            url = comp.trans()
+
+            if not settings.USE_S3:
+                return UrlImagenComprobanteInter(url=url)
+
             return UrlImagenComprobanteInter(url=url)
 
 

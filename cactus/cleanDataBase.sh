@@ -45,22 +45,22 @@ if [[ $LOADDATA == true ]] || [[ $PROD == false ]] ; then
   ./manage.py loaddata statusCuenta.json
   ./manage.py loaddata indiceDisponible.json
   ./manage.py loaddata docAdjuntoTipo.json
-  ./manage.py loaddata docAdjunto.json
+  # ./manage.py loaddata docAdjunto.json
   # ./manage.py loaddata userProfile.json
   # ./manage.py loaddata userNotas.json
   ./manage.py loaddata institucion.json
   ./manage.py loaddata tipoTelefono.json
   ./manage.py loaddata proveedorTelefonico.json
-  ./manage.py loaddata telefono.json
+  # ./manage.py loaddata telefono.json
   ./manage.py loaddata statusTarjeta.json
-  ./manage.py loaddata tarjeta.json
+  # ./manage.py loaddata tarjeta.json
   ./manage.py loaddata tipoDireccion.json
   ./manage.py loaddata entidadFed.json
-  ./manage.py loaddata direccion.json
+  # ./manage.py loaddata direccion.json
   ./manage.py loaddata preguntas_secretas.json
   ./manage.py loaddata component.json
-  ./manage.py loaddata ssid.json
-  ./manage.py loaddata contactos.json
+  # ./manage.py loaddata ssid.json
+  # ./manage.py loaddata contactos.json
   ./manage.py loaddata adminUtils.json
   ./manage.py loaddata countries.json
   ./manage.py loaddata parentesco.json
@@ -69,6 +69,7 @@ if [[ $LOADDATA == true ]] || [[ $PROD == false ]] ; then
   ./manage.py loaddata operacionesmensuales.json
   ./manage.py loaddata origendeposito.json
   ./manage.py loaddata usocuenta.json
+  ./manage.py loaddata iguanofixture.json
 
   # BANCA
   # Catalogos
@@ -94,7 +95,6 @@ if [[ $LOADDATA == true ]] || [[ $PROD == false ]] ; then
   ./manage.py loaddata institutionbanjico.json
   # ./manage.py loaddata stptrans.json
   ./manage.py loaddata adminUtils.json
-  ./manage.py loaddata folio_stp.json
 
   # Contabilidad
   ./manage.py loaddata tipo_contable_cuenta.json

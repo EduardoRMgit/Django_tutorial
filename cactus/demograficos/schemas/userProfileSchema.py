@@ -26,10 +26,13 @@ from django.contrib.auth import authenticate
 from django.utils import timezone
 from spei.stpTools import randomString
 from django.conf import Settings
+import reverse_geocoder as gr
+from django.contrib.auth.hashers import make_password, check_password
 
 
 from demograficos.models.userProfile import (RespuestaSeguridad,
                                              PreguntaSeguridad,
+                                             PasswordHistory,
                                              UserProfile,
                                              StatusRegistro,
                                              StatusCuenta,
@@ -71,11 +74,11 @@ from axes.models import AccessAttempt
 
 from pld.utils.customerpld import create_pld_customer
 
-from demograficos.utils.correo import mandar_email
+from demograficos.utils.registermail import RegistrarMail
+from demograficos.utils.validatepassword import password_validation
 
 db_logger = logging.getLogger("db")
 
-# WRAPPERS
 
 
 class RespuestaType(DjangoObjectType):
@@ -507,8 +510,6 @@ class Query(graphene.ObjectType):
     all_origen_deposito = graphene.List(OrigenDepositoType,
                                         description="Query all objects from \
                                         model OrigenDeposito")
-
-    # Initiating resolvers for type all Queries
 
     def resolve_all_avatars(self, info, **kwargs):
         """``allAvatars (Query): Query all the objects from Avatar Model``
@@ -1632,6 +1633,25 @@ class CreateUser(graphene.Mutation):
         lon = info.context.headers.get("Location-Lon")
         if not (lat and lon and uuid) and not test:
             raise Exception("Faltan headers en la petición")
+        if test is not True:
+            coordinates = (lat, lon)
+            try:
+                result = gr.search(coordinates)
+            except Exception as ex:
+                msg_georeverse = f"[Validate Geolocation] Error al validar " \
+                                 f"la localizacion usuario {username}. " \
+                                 f"Error: {ex}"
+                db_logger.warning(msg_georeverse)
+                raise Exception("No se logro la validación", ex)
+            try:
+                res = result[0]['cc']
+            except Exception as ex:
+                raise Exception("Error al validar ubicación del usuario")
+            if res != "MX":
+                msg_validate = f"[Geolocation] Usuario {username} fuera de " \
+                               f"territorio Mexicano."
+                db_logger.warning(msg_validate)
+                raise Exception("Usuario fuera de territorio Mexicano")
         try:
             user = User.objects.get(username=username)
             return Exception("Ya existe un usuario con ese número")
@@ -1654,8 +1674,16 @@ class CreateUser(graphene.Mutation):
                     except CodigoConfianza.DoesNotExist:
                         raise ValueError("Codigo de referencia invalido")
                 username = username.strip()
+                valida = password_validation(password)
+                if not valida:
+                    raise Exception("Contraseña invalida, no cumple con "
+                                    "las normas de construcción")
                 user = User.objects.create(username=username)
                 user.set_password(password)
+                passwd = user.password
+                PasswordHistory.objects.create(password=passwd,
+                                               user=user,
+                                               activa=True)
                 user.is_active = True
                 user.save()
                 UP = UserProfile.objects.get(user=user)
@@ -1746,8 +1774,31 @@ class ChangePassword(graphene.Mutation):
                 if user.check_password(new_password):
                     raise Exception("La nueva contraseña no puede "
                                     "ser igual a la anterior.")
+
+                passwordh = user.passwords.all()
+                if passwordh.count() >= 5:
+                    passwordh = passwordh[
+                        passwordh.count()-5:passwordh.count()]
+                for password in passwordh:
+                    if check_password(new_password, password.password):
+                        raise Exception(("La nueva contraseña no puede "
+                                         "ser igual a las anteriores."))
+                valida = password_validation(new_password)
+                if not valida:
+                    raise Exception("Contraseña invalida, no cumple con "
+                                    "las normas de construccion.")
                 user.set_password(new_password)
                 user.save()
+                if len(passwordh) > 0:
+                    change = passwordh[len(passwordh)-1]
+                    change.activa = False
+                    change.save()
+
+                PasswordHistory.objects.create(
+                    password=user.password,
+                    user=user,
+                    activa=True)
+
                 return ChangePassword(user=user)
             raise AssertionError("Contraseña actual incorrecta")
 
@@ -2039,12 +2090,13 @@ class UpdateInfoPersonal(graphene.Mutation):
                 birth_date if birth_date else u_profile.fecha_nacimiento)
             u_profile.nacionalidad = (
                 nationality if nationality else u_profile.nacionalidad)
-            u_profile.ciudad_nacimiento = (
-                city if city else u_profile.ciudad_nacimiento)
+            u_profile.ciudad_nacimiento = city
             u_profile.numero_INE = (
                 numero_INE if numero_INE else u_profile.numero_INE)
             u_profile.ocupacion = (
                 occupation if occupation else u_profile.ocupacion)
+            msg = f"[curp (1) UpdateInfoPersonal userProfileSchema] ->{curp}<-"
+            db_logger.info(msg)
             u_profile.curp = curp if curp else u_profile.curp
             u_profile.pais_origen_otro = (
                 country if country else u_profile.pais_origen_otro)
@@ -2093,6 +2145,7 @@ class UpdateInfoPersonal(graphene.Mutation):
                 raise AssertionError("RFC no válido")
             u_profile.save()
             message = InfoValidator.setCheckpoint(user=user, concepto='IP')
+            u_profile.verificacion_curp = True
             if message == "curp validado":
                 u_profile.verificacion_curp = True
             u_profile.save()
@@ -2121,8 +2174,11 @@ class UpdateInfoPersonal(graphene.Mutation):
             print("first_name: ", user.first_name)
             print("last_name: ", user.last_name)
 
+            msg = f"[curp (1.5) UpdtInfoPersonal userProfileSchema] ->{curp}<-"
+            db_logger.info(msg)
+
             try:
-                if not u_profile.cuentaClabe:
+                if not u_profile.cuentaClabe and curp:
                     u_profile.registra_cuenta(user.first_name, user.last_name)
             except Exception as ex:
                 AssertionError('Error al registrar la cuenta clabe.',
@@ -2255,8 +2311,9 @@ class CreateBeneficiario(graphene.Mutation):
                         defaults=defaults,
                     )
             except Exception:
-                raise Exception("Error al crear el beneficiario, revisa los "
-                                "datos ingresados.")
+
+                msg = "Error creando beneficiario, revisa los datos ingresados"
+                raise Exception(msg)
         return CreateBeneficiario(
             beneficiario=bene, profile_valid=None)
 
@@ -2492,10 +2549,28 @@ class RecoverPassword(graphene.Mutation):
                     if user.check_password(new_password):
                         raise Exception("La nueva contraseña no puede "
                                         "ser igual a la anterior.")
+
+                    passwordh = user.passwords.all()
+                    if passwordh.count() >= 5:
+                        passwordh = passwordh[
+                            passwordh.count()-5:passwordh.count()]
+                    for password in passwordh:
+                        if check_password(new_password, password.password):
+                            raise Exception(("La nueva contraseña no puede "
+                                             "ser igual a las anteriores."))
                     user.set_password(new_password)
                     pass_temporal.activo = False
                     pass_temporal.save()
                     user.save()
+                    if len(passwordh) > 0:
+                        change = passwordh[len(passwordh)-1]
+                        change.activa = False
+                        change.save()
+                    PasswordHistory.objects.create(
+                        password=user.password,
+                        user=user,
+                        activa=True)
+
                     return RecoverPassword(details='password recuperado')
                 else:
                     return RecoverPassword(details='pin invalido')
@@ -2550,7 +2625,7 @@ class UpdateNip(graphene.Mutation):
                         UP.statusNip = 'A'
                         UP.enrolamiento = True
                         create_pld_customer(user)
-                        mandar_email(user.email, user.first_name)
+                        RegistrarMail(user)
                     else:
                         raise ValueError('nip no coincide con el temporal')
             elif (UP.statusNip == 'A'):
@@ -2662,9 +2737,10 @@ mutation{
                                    clabe=clabe,
                                    activo=True,
                                    bloqueado=True).count() > 0:
-            raise Exception(
-                "Esta cuenta CLABE la tienes en un contacto bloqueado, "
+            msg = "{}{}".format(
+                "Esta cuenta CLABE la tienes en un contacto bloqueado, ",
                 "desbloquéalo desde el buscador con su alias.")
+            raise Exception(msg)
 
         if not user.is_anonymous:
             nombre = nombre.strip()
@@ -3255,10 +3331,10 @@ class ReceiveOCR(graphene.Mutation):
             #                                     False, 'OCR')
             # InfoValidator.setComponentValidated('direccion', user,
             #                                     False, 'OCR')
-            uprof.ocr_ok = False
+            uprof.ocr_ine_validado = False
 
         if validacion > 0.85:
-            uprof.ocr_ok = True
+            uprof.ocr_ine_validado = True
 
         uprof.save()
 
@@ -3391,8 +3467,11 @@ class UpdateDevice(graphene.Mutation):
             register_device(user=user)
             return UpdateDevice(validacion='Validado')
         except Exception as ex:
-            db_logger.error("No se pudo actualizar dispositivo del usuario"
-                            f"{user}. Error: {ex}")
+            msg = "{} {}. Error: {}".format(
+                "No se pudo actualizar dispositivo del usuario",
+                user,
+                ex)
+            db_logger.error(msg)
             raise Exception('No se pudo actualizar dispositivo')
 
 
@@ -3513,113 +3592,6 @@ class UrlAvatar(graphene.Mutation):
         return UrlAvatar(url=avatar_url)
 
 
-class DeleteBluepixelUser(graphene.Mutation):
-    borrado = graphene.String()
-
-    class Arguments:
-        username = graphene.String(required=True)
-
-    def mutate(self, info, username):
-
-        msg = f"[DeleteBluepixelUser] Petición recibida. User: {username}"
-        db_logger.info(msg)
-
-        if settings.SITE not in ["stage", "local"]:
-            raise Exception("No está permitido el borrado en este ambiente")
-
-        bp_usernames = [
-            "5568161651",
-            "5567907071",
-            "5611670737",
-            "2871313291",
-            "2871628373",
-            "5586999540",
-            "2223644726",
-            "2212299619",
-            "5520783405",
-            "2871095852",
-            "2871218166",
-            "7714209743"
-        ]
-        if username not in bp_usernames:
-            msg_ex = f"No está permitido borrar al usuario {username}"
-            msg = "[DeleteBluepixelUser] " + msg_ex
-            db_logger.info(msg)
-            raise Exception(
-                f"Sólo tienes permitido borrar los siguientes: {bp_usernames}")
-
-        user = User.objects.filter(username=username)
-        if user.count() == 0:
-            msg_ex = f"No existe el usuario {username}"
-            msg = "[DeleteBluepixelUser] " + msg_ex
-            db_logger.info(msg)
-            raise Exception(msg_ex)
-
-        user = user.first()
-        user.delete()
-        msg = f"[DeleteBluepixelUser] Usuario {username} borrado"
-        db_logger.info(msg)
-
-        return DeleteBluepixelUser(borrado=f"Usuario {username} borrado")
-
-
-class UnblockBluePixelUser(graphene.Mutation):
-    desbloqueado = graphene.String()
-
-    class Arguments:
-        username = graphene.String(required=True)
-
-    def mutate(self, info, username):
-
-        msg = f"[UnblockBluePixelUser] Petición recibida. User: {username}"
-        db_logger.info(msg)
-
-        if settings.SITE not in ["stage", "local"]:
-            raise Exception("No está permitido el borrado en este ambiente")
-
-        bp_usernames = [
-            "5568161651",
-            "5567907071",
-            "5611670737",
-            "2871313291",
-            "2871628373",
-            "5586999540",
-            "2223644726",
-            "2212299619",
-            "5520783405",
-            "2871095852",
-            "2871218166",
-            "7714209743"
-        ]
-        if username not in bp_usernames:
-            msg_ex = f"No está permitido borrar al usuario {username}"
-            msg = "[UnblockBluePixelUser] " + msg_ex
-            db_logger.info(msg)
-            raise Exception(
-                f"Sólo tienes permitido desbloquear los siguientes: \
-                {bp_usernames}")
-
-        user = User.objects.filter(username=username)
-        if user.count() == 0:
-            msg_ex = f"No existe el usuario {username}"
-            msg = "[UnblockBluePixelUser] " + msg_ex
-            db_logger.info(msg)
-            raise Exception(msg_ex)
-        user_ = User.objects.get(username=username)
-        up = user_.Uprofile
-        up.login_attempts = 0
-        up.blocked_reason = "K"
-        up.status = "O"
-        up.save()
-        user_.save()
-        AccessAttempt.objects.filter(username=username).delete()
-        msg = f"[UnblockBluePixelUser] Usuario {username} desbloqueado"
-        db_logger.info(msg)
-
-        return UnblockBluePixelUser(
-            desbloqueado=f"Usuario {username} desbloqueado")
-
-
 class SetPerfilTransaccional(graphene.Mutation):
 
     perfil = graphene.Field(PerfilTransaccionalDeclaradoType)
@@ -3734,8 +3706,6 @@ class Mutation(graphene.ObjectType):
     block_contacto = BlockContacto.Field()
     buscador_usuario_inguz = BuscadorUsuarioInguz.Field()
     unblock_contacto = UnBlockContacto.Field()
-    delete_bluepixel_user = DeleteBluepixelUser.Field()
-    unblock_bluepixel_user = UnblockBluePixelUser.Field()
     set_perfil_transaccional = SetPerfilTransaccional.Field()
     block_account_emergency = BlockAccountEmergency.Field()
     update_email = UpdateEmail.Field()
