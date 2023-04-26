@@ -1,35 +1,266 @@
 [
-    {"model": "demograficos.entidadfed", "pk": 1, "fields": {"entidad": "CDMX"}},
-    {"model": "demograficos.entidadfed", "pk": 2, "fields": {"entidad": "Aguascalientes"}},
-    {"model": "demograficos.entidadfed", "pk": 3, "fields": {"entidad": "Baja California"}},
-    {"model": "demograficos.entidadfed", "pk": 4, "fields": {"entidad": "Baja California Sur"}},
-    {"model": "demograficos.entidadfed", "pk": 5, "fields": {"entidad": "Campeche"}},
-    {"model": "demograficos.entidadfed", "pk": 6, "fields": {"entidad": "Coahuila"}},
-    {"model": "demograficos.entidadfed", "pk": 7, "fields": {"entidad": "Colima"}},
-    {"model": "demograficos.entidadfed", "pk": 8, "fields": {"entidad": "Chiapas"}},
-    {"model": "demograficos.entidadfed", "pk": 9, "fields": {"entidad": "Chihuahua"}},
-    {"model": "demograficos.entidadfed", "pk": 10, "fields": {"entidad": "Durango"}},
-    {"model": "demograficos.entidadfed", "pk": 11, "fields": {"entidad": "Guanajuato"}},
-    {"model": "demograficos.entidadfed", "pk": 12, "fields": {"entidad": "Guerrero"}},
-    {"model": "demograficos.entidadfed", "pk": 13, "fields": {"entidad": "Hidalgo"}},
-    {"model": "demograficos.entidadfed", "pk": 14, "fields": {"entidad": "Jalisco"}},
-    {"model": "demograficos.entidadfed", "pk": 15, "fields": {"entidad": "México"}},
-    {"model": "demograficos.entidadfed", "pk": 16, "fields": {"entidad": "Michoacán"}},
-    {"model": "demograficos.entidadfed", "pk": 17, "fields": {"entidad": "Morelos"}},
-    {"model": "demograficos.entidadfed", "pk": 18, "fields": {"entidad": "Nayarit"}},
-    {"model": "demograficos.entidadfed", "pk": 19, "fields": {"entidad": "Nuevo León"}},
-    {"model": "demograficos.entidadfed", "pk": 20, "fields": {"entidad": "Oaxaca"}},
-    {"model": "demograficos.entidadfed", "pk": 21, "fields": {"entidad": "Puebla"}},
-    {"model": "demograficos.entidadfed", "pk": 22, "fields": {"entidad": "Querétaro"}},
-    {"model": "demograficos.entidadfed", "pk": 23, "fields": {"entidad": "Quintana Roo"}},
-    {"model": "demograficos.entidadfed", "pk": 24, "fields": {"entidad": "San Luis Potosí"}},
-    {"model": "demograficos.entidadfed", "pk": 25, "fields": {"entidad": "Sinaloa"}},
-    {"model": "demograficos.entidadfed", "pk": 26, "fields": {"entidad": "Sonora"}},
-    {"model": "demograficos.entidadfed", "pk": 27, "fields": {"entidad": "Tabasco"}},
-    {"model": "demograficos.entidadfed", "pk": 28, "fields": {"entidad": "Tamaulipas"}},
-    {"model": "demograficos.entidadfed", "pk": 29, "fields": {"entidad": "Tlaxcala"}},
-    {"model": "demograficos.entidadfed", "pk": 30, "fields": {"entidad": "Veracruz"}},
-    {"model": "demograficos.entidadfed", "pk": 31, "fields": {"entidad": "Yucatán"}},
-    {"model": "demograficos.entidadfed", "pk": 32, "fields": {"entidad": "Zacatecas"}},
-    {"model": "demograficos.entidadfed", "pk": 33, "fields": {"entidad": "Otro"}}
+    {
+        "model": "demograficos.entidadfed",
+        "pk": 1,
+        "fields": {
+            "entidad": "CDMX",
+	    "clave": "DF"
+        }
+    },
+    {
+        "model": "demograficos.entidadfed",
+        "pk": 2,
+        "fields": {
+            "entidad": "Aguascalientes",
+	    "clave": "AS"
+        }
+    },
+    {
+        "model": "demograficos.entidadfed",
+        "pk": 3,
+        "fields": {
+            "entidad": "Baja California",
+	    "clave": "BC"
+        }
+    },
+    {
+        "model": "demograficos.entidadfed",
+        "pk": 4,
+        "fields": {
+            "entidad": "Baja California Sur",
+	    "clave": "BS"
+        }
+    },
+    {
+        "model": "demograficos.entidadfed",
+        "pk": 5,
+        "fields": {
+            "entidad": "Campeche",
+	    "clave": "CC"
+        }
+    },
+    {
+        "model": "demograficos.entidadfed",
+        "pk": 6,
+        "fields": {
+            "entidad": "Coahuila",
+	    "clave": "CL"
+        }
+    },
+    {
+        "model": "demograficos.entidadfed",
+        "pk": 7,
+        "fields": {
+            "entidad": "Colima",
+	    "clave": "CM"
+        }
+    },
+    {
+        "model": "demograficos.entidadfed",
+        "pk": 8,
+        "fields": {
+            "entidad": "Chiapas",
+	    "clave": "CS"
+        }
+    },
+    {
+        "model": "demograficos.entidadfed",
+        "pk": 9,
+        "fields": {
+            "entidad": "Chihuahua",
+	    "clave": "CH"
+        }
+    },
+    {
+        "model": "demograficos.entidadfed",
+        "pk": 10,
+        "fields": {
+            "entidad": "Durango",
+	    "clave": "DG"
+        }
+    },
+    {
+        "model": "demograficos.entidadfed",
+        "pk": 11,
+        "fields": {
+            "entidad": "Guanajuato",
+	    "clave": "GT"
+        }
+    },
+    {
+        "model": "demograficos.entidadfed",
+        "pk": 12,
+        "fields": {
+            "entidad": "Guerrero",
+	    "clave": "GR"
+        }
+    },
+    {
+        "model": "demograficos.entidadfed",
+        "pk": 13,
+        "fields": {
+            "entidad": "Hidalgo",
+	    "clave": "HG"
+        }
+    },
+    {
+        "model": "demograficos.entidadfed",
+        "pk": 14,
+        "fields": {
+            "entidad": "Jalisco",
+	    "clave": "JC"
+        }
+    },
+    {
+        "model": "demograficos.entidadfed",
+        "pk": 15,
+        "fields": {
+            "entidad": "M\u00e9xico",
+	    "clave": "MC"
+        }
+    },
+    {
+        "model": "demograficos.entidadfed",
+        "pk": 16,
+        "fields": {
+            "entidad": "Michoac\u00e1n",
+	    "clave": "MN"
+        }
+    },
+    {
+        "model": "demograficos.entidadfed",
+        "pk": 17,
+        "fields": {
+            "entidad": "Morelos",
+	    "clave": "MS"
+        }
+    },
+    {
+        "model": "demograficos.entidadfed",
+        "pk": 18,
+        "fields": {
+            "entidad": "Nayarit",
+	    "clave": "NT"
+        }
+    },
+    {
+        "model": "demograficos.entidadfed",
+        "pk": 19,
+        "fields": {
+            "entidad": "Nuevo Le\u00f3n",
+	    "clave": "NL"
+        }
+    },
+    {
+        "model": "demograficos.entidadfed",
+        "pk": 20,
+        "fields": {
+            "entidad": "Oaxaca",
+	    "clave": "OC"
+        }
+    },
+    {
+        "model": "demograficos.entidadfed",
+        "pk": 21,
+        "fields": {
+            "entidad": "Puebla",
+	    "clave": "PL"
+        }
+    },
+    {
+        "model": "demograficos.entidadfed",
+        "pk": 22,
+        "fields": {
+            "entidad": "Quer\u00e9taro",
+	    "clave": "QT"
+        }
+    },
+    {
+        "model": "demograficos.entidadfed",
+        "pk": 23,
+        "fields": {
+            "entidad": "Quintana Roo",
+	    "clave": "QR"
+        }
+    },
+    {
+        "model": "demograficos.entidadfed",
+        "pk": 24,
+        "fields": {
+            "entidad": "San Luis Potos\u00ed",
+	    "clave": "SP"
+        }
+    },
+    {
+        "model": "demograficos.entidadfed",
+        "pk": 25,
+        "fields": {
+            "entidad": "Sinaloa",
+	    "clave": "SL"
+        }
+    },
+    {
+        "model": "demograficos.entidadfed",
+        "pk": 26,
+        "fields": {
+            "entidad": "Sonora",
+	    "clave": "SR"
+        }
+    },
+    {
+        "model": "demograficos.entidadfed",
+        "pk": 27,
+        "fields": {
+            "entidad": "Tabasco",
+	    "clave": "TC"
+        }
+    },
+    {
+        "model": "demograficos.entidadfed",
+        "pk": 28,
+        "fields": {
+            "entidad": "Tamaulipas",
+	    "clave": "TS"
+        }
+    },
+    {
+        "model": "demograficos.entidadfed",
+        "pk": 29,
+        "fields": {
+            "entidad": "Tlaxcala",
+	    "clave": "TL"
+        }
+    },
+    {
+        "model": "demograficos.entidadfed",
+        "pk": 30,
+        "fields": {
+            "entidad": "Veracruz",
+	    "clave": "VZ"
+        }
+    },
+    {
+        "model": "demograficos.entidadfed",
+        "pk": 31,
+        "fields": {
+            "entidad": "Yucat\u00e1n",
+	    "clave": "YN"
+        }
+    },
+    {
+        "model": "demograficos.entidadfed",
+        "pk": 32,
+        "fields": {
+            "entidad": "Zacatecas",
+	    "clave": "ZS"
+        }
+    },
+    {
+        "model": "demograficos.entidadfed",
+        "pk": 33,
+        "fields": {
+            "entidad": "Otro",
+	    "clave": "NE"
+        }
+    }
 ]
