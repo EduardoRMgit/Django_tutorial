@@ -72,7 +72,7 @@ class TestInfopersonal(JSONWebTokenTestCase):
                      "lastName_M": "ApellidoMTest",
                      "gender": "trans",
                      "nationality": "Mexicano",
-                     "city": "Neza",
+                     "city": "HG",
                      "occupation": "tester",
                      # "rfc": "VAQD970909H96",
                      # "curp": "VAQD970909HDFLJN03",
@@ -85,15 +85,15 @@ class TestInfopersonal(JSONWebTokenTestCase):
                     "firstName": "TestName",
                     "lastName": "ApellidoPTest",
                     "Uprofile": {
-                      "alias": "TestName17",
-                      "apMaterno": "ApellidoMTest",
-                      "sexo": "trans",
-                      "nacionalidad": "Mexicano",
-                      "ciudadNacimiento": "Neza",
-                      "ocupacion": "tester",
-                      # "curp": "VAQD970909HDFLJN03",
-                      # "rfc": "VAQD970909H96",
-                      # "fechaNacimiento": "1999-08-13",
+                        "alias": "TestName17",
+                        "apMaterno": "ApellidoMTest",
+                        "sexo": "trans",
+                        "nacionalidad": "Mexicano",
+                        "ciudadNacimiento": "HG",
+                        "ocupacion": "tester",
+                        # "curp": "VAQD970909HDFLJN03",
+                        # "rfc": "VAQD970909H96",
+                        # "fechaNacimiento": "1999-08-13",
                     }
                 }
             }

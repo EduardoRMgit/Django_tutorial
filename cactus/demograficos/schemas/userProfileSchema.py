@@ -80,7 +80,6 @@ from demograficos.utils.validatepassword import password_validation
 db_logger = logging.getLogger("db")
 
 
-
 class RespuestaType(DjangoObjectType):
     class Meta:
         model = RespuestaSeguridad
@@ -2158,18 +2157,16 @@ class UpdateInfoPersonal(graphene.Mutation):
             if not u_profile.ciudad_nacimiento:
                 raise AssertionError('Entidad federativa no recibida')
 
-            entidad_fed = EntidadFed.objetcts.filter(
+            entidad_fed = EntidadFed.objects.filter(
                 clave=u_profile.ciudad_nacimiento)
-            if entidad_fed.count() == 0:
-                raise AssertionError('Entidad federativa no encontrada')
-            entidad_fed = entidad_fed.last()
-            clave_entidad_fed = entidad_fed.clave
 
-            # Validamos
-            _curp = u_profile.curp
-            clave_entidad_curp = _curp[11:13]
-            if str(clave_entidad_curp) != str(clave_entidad_fed):
-                raise AssertionError('Entidad de nacimiento inválida')
+            if u_profile.ciudad_nacimiento and entidad_fed.count() > 0:
+                clave_entidad_fed = entidad_fed.clave
+
+                _curp = u_profile.curp
+                clave_entidad_curp = _curp[11:13]
+                if str(clave_entidad_curp) != str(clave_entidad_fed):
+                    raise AssertionError('Entidad de nacimiento inválida')
 
             print("first_name: ", user.first_name)
             print("last_name: ", user.last_name)
