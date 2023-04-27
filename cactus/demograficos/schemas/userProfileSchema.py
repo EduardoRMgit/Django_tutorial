@@ -2156,7 +2156,7 @@ class UpdateInfoPersonal(graphene.Mutation):
                 raise AssertionError('no se ha podido establecer checkpoint',
                                      e)
 
-            if u_profile.ciudad_nacimiento:
+            if u_profile.ciudad_nacimiento and u_profile.verificacion_curp:
                 entidad_fed = EntidadFed.objects.filter(
                     id=city)
                 if entidad_fed.count() > 0:

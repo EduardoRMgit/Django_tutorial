@@ -14,6 +14,7 @@ class TestInfopersonal(JSONWebTokenTestCase):
         call_command('loaddata', 'nivelCuenta', verbosity=0)
         call_command('loaddata', 'usertesting', verbosity=0)
         call_command('loaddata', 'statusRegistro', verbosity=0)
+        call_command('loaddata', 'entidad_federativa', verbosity=0)
         Avatar.objects.create(
             avatar_img=ImageFile(open("Zygoovertical-01.jpg", "rb")),
             name="test",
@@ -21,9 +22,15 @@ class TestInfopersonal(JSONWebTokenTestCase):
         )
 
         self.user = get_user_model().objects.get(username='test')
+
         self.token = get_token(self.user)
 
     def test_updateInfoPersonal(self):
+
+        # No hay validación en RENAPO entonces establecemos CURP
+        self.user.Uprofile.curp = "VAQD970909HASLJN03"
+        self.user.Uprofile.save()
+
         mutation = '''
         mutation UpdateInfoPersonal($token:String!,
                                     $name:String!,
@@ -72,10 +79,10 @@ class TestInfopersonal(JSONWebTokenTestCase):
                      "lastName_M": "ApellidoMTest",
                      "gender": "trans",
                      "nationality": "Mexicano",
-                     "city": "HG",
+                     "city": "2",
                      "occupation": "tester",
                      # "rfc": "VAQD970909H96",
-                     # "curp": "VAQD970909HDFLJN03",
+                     # "curp": "VAQD970909HASLJN03",
                      # "birthDate": "1999-08-13"
                      }
         res = self.client.execute(mutation, variables)
@@ -89,9 +96,9 @@ class TestInfopersonal(JSONWebTokenTestCase):
                         "apMaterno": "ApellidoMTest",
                         "sexo": "trans",
                         "nacionalidad": "Mexicano",
-                        "ciudadNacimiento": "HG",
+                        "ciudadNacimiento": "2",
                         "ocupacion": "tester",
-                        # "curp": "VAQD970909HDFLJN03",
+                        # "curp": "VAQD970909HASLJN03",
                         # "rfc": "VAQD970909H96",
                         # "fechaNacimiento": "1999-08-13",
                     }
