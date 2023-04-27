@@ -20,7 +20,7 @@ class DemograficosTestBase(JSONWebTokenTestCase):
         load_min_test()
         NivelCuenta.objects.create(nivel=1)
         call_command('loaddata', 'nivelCuenta', verbosity=0)
-        call_command('loaddata', 'entidadFed', verbosity=0)
+        call_command('loaddata', 'entidad_federativa', verbosity=0)
         call_command('loaddata', 'tipoDireccion', verbosity=0)
         call_command('loaddata', 'direccion', verbosity=0)
         call_command('loaddata', 'component', verbosity=0)
@@ -37,8 +37,8 @@ class DemograficosTestBase(JSONWebTokenTestCase):
         self._pass = "12345678"
         request = HttpRequest()
         authenticate(request,
-            username=self.user,
-            password=self._pass)
+                     username=self.user,
+                     password=self._pass)
         self.token = get_token(self.user)
         print('authenticating')
         print(schema.__dict__)

@@ -55,7 +55,7 @@ if [[ $LOADDATA == true ]] || [[ $PROD == false ]] ; then
   ./manage.py loaddata statusTarjeta.json
   # ./manage.py loaddata tarjeta.json
   ./manage.py loaddata tipoDireccion.json
-  ./manage.py loaddata entidadFed.json
+  ./manage.py loaddata entidad_federativa.json
   # ./manage.py loaddata direccion.json
   ./manage.py loaddata preguntas_secretas.json
   ./manage.py loaddata component.json
