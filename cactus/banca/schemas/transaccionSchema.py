@@ -30,9 +30,6 @@ from demograficos.models import Contacto
 from django.conf import settings
 
 
-URL_IMAGEN = settings.URL_IMAGEN
-
-
 class UserType(DjangoObjectType):
     class Meta:
         model = get_user_model()

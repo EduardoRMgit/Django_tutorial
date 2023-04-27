@@ -13,12 +13,8 @@ from banca.models import (InguzTransaction, StatusTrans, TipoTransaccion,
 from demograficos.models.userProfile import UserProfile
 from demograficos.models import Contacto
 from spei.stpTools import randomString
-from django.conf import settings
 from banca.utils.limiteTrans import LimiteTrans
 from banca.utils.comprobantesPng import CompTrans
-
-
-URL_IMAGEN = settings.URL_IMAGEN
 
 
 class InguzType(DjangoObjectType):

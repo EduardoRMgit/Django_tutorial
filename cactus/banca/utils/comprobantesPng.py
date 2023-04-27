@@ -172,15 +172,17 @@ class CompTrans(object):
 
         if settings.SITE == "local":
             img = cv2.imread(self._dir)
+            otrosbancos = os.path.abspath(
+                os.path.join(MEDIA_ROOT, "OTROS_BANCOS.png"))
+            otrosbancos = cv2.imread(otrosbancos)
         elif settings.SITE not in "local":
+            url = settings.AWS_S3_CUSTOM_DOMAIN
+            otrosbancos = imutils.url_to_image(
+                "https://{}/docs/stpstatics/OTROS_BANCOS.png".format(url))
             img = imutils.url_to_image(self._dir)
         for field in fields:
             cv2.putText(img, *field)
-        otrosbancos = imutils.url_to_image(
-            "https://phototest420.s3.amazonaws.com/{}".format(
-                    "docs/stpstatics/OTROS_BANCOS.png"
-            ),
-            -1)
+
         otrosbancos = cv2.resize(otrosbancos, (250, 250))
         x_offset = 180
         y_offset = 0

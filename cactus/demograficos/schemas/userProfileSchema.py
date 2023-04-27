@@ -3494,7 +3494,7 @@ class CancelacionCuenta(graphene.Mutation):
         user.is_active = False
         user.save()
         folio = randomString()
-        url = settings.URL_IMAGEN
+        url = "No hay comprobante disponible"
         fecha = timezone.now()
         # Pendiente de crear movimiento no transaccional
         return CancelacionCuenta(
