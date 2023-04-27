@@ -33,3 +33,4 @@ from .perfildeclarado import (TransferenciasMensuales,
                               OrigenDeposito,
                               PerfilTransaccionalDeclarado,
                               )
+from .tokenDinamico import TokenDinamico

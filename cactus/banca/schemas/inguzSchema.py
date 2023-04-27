@@ -52,7 +52,7 @@ class CreateInguzTransaccion(graphene.Mutation):
             ordenante = info.context.user
         except Exception:
             raise Exception('Usuario inexistente')
-        dinamico = tokenD
+        dinamico = tokenD()
         if not es_cuenta_inguz(ordenante.Uprofile.cuentaClabe):
             raise Exception("Cuenta ordenante no es Inguz")
         if UserProfile.objects.filter(user=ordenante).count() == 0:
