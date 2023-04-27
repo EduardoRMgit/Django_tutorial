@@ -2089,7 +2089,8 @@ class UpdateInfoPersonal(graphene.Mutation):
                 birth_date if birth_date else u_profile.fecha_nacimiento)
             u_profile.nacionalidad = (
                 nationality if nationality else u_profile.nacionalidad)
-            u_profile.ciudad_nacimiento = city
+            u_prof_cd_nac = u_profile.ciudad_nacimiento
+            u_profile.ciudad_nacimiento = city if city else u_prof_cd_nac
             u_profile.numero_INE = (
                 numero_INE if numero_INE else u_profile.numero_INE)
             u_profile.ocupacion = (
@@ -2154,22 +2155,19 @@ class UpdateInfoPersonal(graphene.Mutation):
             except Exception as e:
                 raise AssertionError('no se ha podido establecer checkpoint',
                                      e)
-            if not u_profile.ciudad_nacimiento:
-                raise AssertionError('Entidad federativa no recibida')
 
-            entidad_fed = EntidadFed.objects.filter(
-                clave=u_profile.ciudad_nacimiento)
-
-            if u_profile.ciudad_nacimiento and entidad_fed.count() > 0:
-                clave_entidad_fed = entidad_fed.clave
-
-                _curp = u_profile.curp
-                clave_entidad_curp = _curp[11:13]
-                if str(clave_entidad_curp) != str(clave_entidad_fed):
-                    raise AssertionError('Entidad de nacimiento inválida')
-
-            print("first_name: ", user.first_name)
-            print("last_name: ", user.last_name)
+            if u_profile.ciudad_nacimiento:
+                entidad_fed = EntidadFed.objects.filter(
+                    id=city)
+                if entidad_fed.count() > 0:
+                    entidad_fed = entidad_fed.last()
+                    clave_entidad_fed = entidad_fed.clave
+                    _curp = u_profile.curp
+                    clave_entidad_curp = _curp[11:13]
+                    if str(clave_entidad_curp) != str(clave_entidad_fed):
+                        raise AssertionError('Entidad de nacimiento inválida')
+                    u_profile.ciudad_nacimiento = entidad_fed.entidad
+                    u_profile.save()
 
             msg = f"[curp (1.5) UpdtInfoPersonal userProfileSchema] ->{curp}<-"
             db_logger.info(msg)
