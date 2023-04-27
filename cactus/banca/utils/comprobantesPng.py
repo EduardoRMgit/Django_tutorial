@@ -37,6 +37,7 @@ class CompTrans(object):
         elif settings.SITE not in "local":
             self._dir = self._tp.url
             self._tp = imutils.url_to_image(self._dir)
+            self._urlc = "/docs/docs/plantillas/"
 
     def inguz(self, show=False):
         trans = self._trans
@@ -56,7 +57,15 @@ class CompTrans(object):
         elif settings.SITE not in "local":
             avatar = avatar.avatar_img.url
             avatar = imutils.url_to_image(avatar, -1)
-            img = imutils.url_to_image(self._dir)
+            url = settings.AWS_STATIC_PHOTOTEST
+            if self._status == 'exito':
+                img = imutils.url_to_image(
+                    "https://{}{}TICKET_ENVIO_EXITOSO__1.png".format(
+                        url, self._urlc))
+            else:
+                img = imutils.url_to_image(
+                    "https://{}{}TICKET_ENVIO_NO_REALIZADO__1.png".format(
+                        url, self._urlc))
         fields = [
             [concepto,  (118, 700), 2, 0.9, (0, 0, 0), 1, 16],
             [cuenta,   (378,  490), 2, 0.9, (0, 0, 0), 1, 16],
@@ -113,7 +122,10 @@ class CompTrans(object):
         elif settings.SITE not in "local":
             avatar = avatar.avatar_img.url
             avatar = imutils.url_to_image(avatar, -1)
-            img = imutils.url_to_image(self._dir)
+            url = settings.AWS_STATIC_PHOTOTEST
+            img = imutils.url_to_image(
+                "https://{}{}TICKET_DE_COBRO_RECIBIDO_PAGADA__1.png".format(
+                    url, self._urlc))
         fields = [
             [concepto,  (118, 700), 2, 0.9, (0, 0, 0), 1, 16],
             [status,    (360, 490), 2, 0.9, (0, 0, 0), 1, 16],
@@ -176,10 +188,17 @@ class CompTrans(object):
                 os.path.join(MEDIA_ROOT, "OTROS_BANCOS.png"))
             otrosbancos = cv2.imread(otrosbancos)
         elif settings.SITE not in "local":
-            url = settings.AWS_S3_CUSTOM_DOMAIN
+            url = settings.AWS_STATIC_PHOTOTEST
             otrosbancos = imutils.url_to_image(
                 "https://{}/docs/stpstatics/OTROS_BANCOS.png".format(url))
-            img = imutils.url_to_image(self._dir)
+            if self._status == 'exito':
+                img = imutils.url_to_image(
+                    "https://{}{}TICKET_TRANSFERENCIA_EXITOSA__1.png".format(
+                        url, self._urlc))
+            else:
+                img = imutils.url_to_image(
+                    "https://{}{}TICKET_TRANSFERENCIA_NO_REALIZADA__1.png".format( # noqa
+                        url, self._urlc))
         for field in fields:
             cv2.putText(img, *field)
 
