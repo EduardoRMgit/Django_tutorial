@@ -45,7 +45,7 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'staging.inguz.site',
                  'staging.zygoo.mx', 'test.zygoo.mx',
                  'inguz.site', 'zygoo.mx', '10.195.1.207',
                  '10.5.1.1', 'inguzmx.com', 'staging.inguz.online',
-                 'test.inguz.online']
+                 'test.inguz.online', 'staging001wi8ev.inguz.online']
 
 RECAPTCHA_PUBLIC_KEY = '6Lc_Z2ojAAAAAIi_BPRSrrmkle33Yk9pf4JtWEsQ'
 RECAPTCHA_PRIVATE_KEY = '6Lc_Z2ojAAAAAKxXKQwxFosKmzM7SHxxuKn2w1zP'
@@ -342,6 +342,7 @@ AXES_LOCKOUT_CALLABLE = "cactus.customAuthBackend.lockout"
 
 URL_IMAGEN = "https://phototest420.s3.amazonaws.com/docs/docs/banca/comprobantes/comprobante_ejemplo.jpeg"
 
+
 def cluster_secret(key, value):
     try:
         from kubernetes import client, config
@@ -356,6 +357,7 @@ def cluster_secret(key, value):
         env = environ.Env()
         secret = env.str(value, 'a')
     return secret
+
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
