@@ -45,7 +45,7 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'staging.inguz.site',
                  'staging.zygoo.mx', 'test.zygoo.mx',
                  'inguz.site', 'zygoo.mx', '10.195.1.207',
                  '10.5.1.1', 'inguzmx.com', 'staging.inguz.online',
-                 'test.inguz.online']
+                 'test.inguz.online', 'staging001wi8ev.inguz.online']
 
 # Application definition
 
@@ -351,6 +351,7 @@ AUTO_LOGOUT = {
 PREFIJO_CUENTA_INGUZ = "6461802180"
 
 AXES_LOCKOUT_CALLABLE = "cactus.customAuthBackend.lockout"
+
 
 
 
