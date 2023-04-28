@@ -37,8 +37,6 @@ class CompTrans(object):
                 os.path.join(MEDIA_ROOT, self._tp.name))
             self._tp = cv2.imread(self._dir)
         elif settings.SITE not in "local":
-            self._dir = self._tp.url
-            self._tp = imutils.url_to_image(self._dir)
             self._urlc = "/docs/docs/plantillas/"
 
     def inguz(self, show=False):
@@ -59,7 +57,6 @@ class CompTrans(object):
         elif settings.SITE not in "local":
             avatar = avatar.avatar_img.url
             avatar = imutils.url_to_image(avatar, -1)
-            url = settings.AWS_STATIC_PHOTOTEST
             img = imutils.url_to_image(self._dir)
 
         fields = [
@@ -118,7 +115,6 @@ class CompTrans(object):
         elif settings.SITE not in "local":
             avatar = avatar.avatar_img.url
             avatar = imutils.url_to_image(avatar, -1)
-            url = settings.AWS_STATIC_PHOTOTEST
             img = imutils.url_to_image(self._dir)
         fields = [
             [concepto,  (118, 700), 2, 0.9, (0, 0, 0), 1, 16],
