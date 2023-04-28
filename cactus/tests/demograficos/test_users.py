@@ -39,7 +39,7 @@ class UsersTestCase(TestCase):
             mutation{
                 createUser(
                     username: "5551029634",
-                    password: "Qwerty123456"
+                    password: "Qwerty$1346"
                     test: true
                 ){
                     user{
@@ -102,7 +102,7 @@ class UsersTestCase(TestCase):
             mutation{
                 createUser(
                     username: "5551029635",
-                    password: "Qwerty123456"
+                    password: "Qwerty$1346"
                     test: true
                 ){
                     user{

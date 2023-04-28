@@ -73,7 +73,7 @@ class TestNewUserReferencia(JSONWebTokenTestCase):
         }
         '''
         variables = {'username': 'testname',
-                     'password': 'testpass',
+                     'password': 'Qwerty$1346',
                      'codigoReferencia': '1234567890123456'}
         res = self.client.execute(mutation, variables)
         expected_res = {
@@ -112,7 +112,7 @@ class TestNewUserReferencia(JSONWebTokenTestCase):
         }
         '''
         variables = {'username': 'testname03',
-                     'password': 'testpass03',
+                     'password': 'Qwerty$1346',
                      'codigoReferencia': '1234567890'}
         res = self.client.execute(mutation, variables)
         self.assertEqual(res.errors[0].message,
@@ -175,7 +175,7 @@ class TestNewUserReferencia(JSONWebTokenTestCase):
         }
         '''
         variables = {'username': 'Aldo',
-                     'password': 'x3',
+                     'password': 'Qwerty$1346',
                      'codigoReferencia': '1234567890123456'}
         res = self.client.execute(mutation, variables)
         expected_res = {

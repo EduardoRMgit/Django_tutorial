@@ -103,9 +103,9 @@ def uProfilenuller(klass):
 class Avatar(models.Model):
 
     opciones_genero = (
-            ("M", "Mujer"),
-            ("H", "Hombre"),
-            ("O", "Otro")
+        ("M", "Mujer"),
+        ("H", "Hombre"),
+        ("O", "Otro")
     )
     genero = models.CharField(null=True,
                               blank=True,
@@ -269,9 +269,9 @@ class UserProfile(AbstractBaseUser):
     autorizado = models.BooleanField(default=False)
     country = CountryField(blank=True, null=True)
     pais_origen_otro = models.CharField(max_length=50,
-        blank=True,
-        null=True,
-        verbose_name='Pais de nacimiento')
+                                        blank=True,
+                                        null=True,
+                                        verbose_name='Pais de nacimiento')
     indiceDisponible = models.ForeignKey(
         IndiceDisponible,
         on_delete=models.SET_NULL,
@@ -296,7 +296,7 @@ class UserProfile(AbstractBaseUser):
     cuentaClabe = models.CharField(max_length=18, blank=True)
     ocupacion = models.CharField(max_length=30, blank=True)
     nacionalidad = models.CharField(max_length=30, blank=True)
-    ciudad_nacimiento = models.CharField(max_length=30, blank=True)
+    ciudad_nacimiento = models.CharField(max_length=30, blank=True, null=True)
     rfc = models.CharField(max_length=20, null=True, blank=True)
     con_seguro = models.BooleanField(default=False)
 
@@ -463,6 +463,8 @@ class UserProfile(AbstractBaseUser):
                 folio = folio_stp.fol_dispatch()
                 cuenta_clabe = CuentaClabe(folio_stp.fol_dispatch())
 
+            msg = f"[curp (2) registra_cuenta() userProfile] ->{self.curp}<-"
+            db_logger.info(msg)
             cuenta = CuentaPersonaFisica.objects.create(
                 nombre=first_name,
                 apellido_paterno=last_name,
@@ -510,6 +512,21 @@ class UserProfile(AbstractBaseUser):
 def create_user_UserProfile(sender, instance, created, **kwargs):
     if created:
         UserProfile.objects.create(user=instance)
+
+
+# Historial de contraseñas
+class PasswordHistory(models.Model):
+    user = models.ForeignKey(User,
+                             on_delete=models.SET_NULL,
+                             null=True,
+                             blank=True,
+                             related_name="passwords")
+    password = models.CharField(max_length=1056, blank=True, null=True)
+    activa = models.BooleanField(default=False)
+    fecha_cambio = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return str(self.password) + ' ' + str(self.fecha_cambio)
 
 
 # First, define the Manager subclass.

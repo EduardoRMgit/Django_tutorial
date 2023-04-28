@@ -396,7 +396,7 @@ class TestPreguntaNipPassword(PasswordTestBase):
         '''
         variables4 = {'token': new_token,
                       'oldPassword': "holasholas",
-                      'newPassword': "chaochao"}
+                      'newPassword': "Chao952!"}
         res4 = self.client.execute(mutation4, variables4)
         expected_res4 = {
                 "changePassword": {
