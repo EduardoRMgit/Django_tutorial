@@ -2,9 +2,92 @@
   "model": "banca.comisionestp",
   "pk": 1,
   "fields": {
-    "stp": 4.0,
-    "ivaSTP": 0.64,
-    "cliente": 6.0,
-    "ivaCliente": 0.96
+    "stp": 4.5,
+    "ivaSTP": 0.72,
+    "cliente": 1.9828,
+    "ivaCliente": 0.3172,
+    "rangotransacciones": "1-1000"
   }
-}]
+},{
+  "model": "banca.comisionestp",
+  "pk": 2,
+  "fields": {
+    "stp": 4.3,
+    "ivaSTP": 0.6880,
+    "cliente": 2.1828,
+    "ivaCliente": 0.3492,
+    "rangotransacciones": "1001-2000"
+  }
+},
+{
+  "model": "banca.comisionestp",
+  "pk": 3,
+  "fields": {
+    "stp": 4.1,
+    "ivaSTP": 0.6560,
+    "cliente": 2.3828,
+    "ivaCliente": 0.3812,
+    "rangotransacciones": "2001-3000"
+  }
+},{
+  "model": "banca.comisionestp",
+  "pk": 4,
+  "fields": {
+    "stp": 3.9,
+    "ivaSTP": 0.6240,
+    "cliente": 2.5828,
+    "ivaCliente": 0.4132,
+    "rangotransacciones": "3001-4000"
+  }
+},{
+  "model": "banca.comisionestp",
+  "pk": 5,
+  "fields": {
+    "stp": 3.7,
+    "ivaSTP": 0.5920,
+    "cliente": 2.7828,
+    "ivaCliente": 0.4452,
+    "rangotransacciones": "4001-5000"
+  }
+},{
+  "model": "banca.comisionestp",
+  "pk": 6,
+  "fields": {
+    "stp": 3.5,
+    "ivaSTP": 0.56,
+    "cliente": 2.9828,
+    "ivaCliente": 0.4772,
+    "rangotransacciones": "5001-10000"
+  }
+},{
+  "model": "banca.comisionestp",
+  "pk": 7,
+  "fields": {
+    "stp": 3.1,
+    "ivaSTP": 0.4960,
+    "cliente": 3.3828,
+    "ivaCliente": 0.5412,
+    "rangotransacciones": "10001-20000"
+  }
+},{
+  "model": "banca.comisionestp",
+  "pk": 8,
+  "fields": {
+    "stp": 2.8,
+    "ivaSTP": 0.4480,
+    "cliente": 3.6828,
+    "ivaCliente": 0.5892,
+    "rangotransacciones": "20001-50000"
+  }
+},{
+  "model": "banca.comisionestp",
+  "pk": 9,
+  "fields": {
+    "stp": 2.5,
+    "ivaSTP": 0.4,
+    "cliente": 3.9828,
+    "ivaCliente": 0.6372,
+    "rangotransacciones": "50000-9999999999"
+  }
+}
+]

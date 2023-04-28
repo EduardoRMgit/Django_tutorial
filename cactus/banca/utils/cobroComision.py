@@ -17,7 +17,9 @@ def comisionSTP(instance):
         )
     valida_primera = transacciones.count()
     if valida_primera > 1:
-        comision = ComisioneSTP.objects.last()
+        comisiones = ComisioneSTP.objects.all()
+        for comision in comisiones:
+            (comision.rangotransacciones).split("-")
         monto = monto \
             + comision.ivaCliente \
             + comision.ivaSTP + comision.cliente + comision.stp
