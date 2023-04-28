@@ -48,5 +48,5 @@ def lockout(request, credentials, *args, **kwargs):
     return JsonResponse(
         {
             "codigo": -1001,
-            "mensaje": "Cuenta bloqueada por exceso de intentos."},
+            "mensaje": "Contraseña y/o usuario incorrectos."},
         status=403)
