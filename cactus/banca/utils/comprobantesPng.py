@@ -4,12 +4,14 @@ from banca.models import Comprobante
 from spei.models import StpTransaction
 from django.conf import settings
 import imutils
-from demograficos.views import get_file_url
+from banca.utils.url_preassigned import get_file_preassigned
 import time
 
 if settings.SITE == "local":
     from cactus.settings import MEDIA_ROOT
 time_stamp = time.time()
+region = "us-east-2"
+content = "image/jpeg"
 
 
 class CompTrans(object):
@@ -58,14 +60,8 @@ class CompTrans(object):
             avatar = avatar.avatar_img.url
             avatar = imutils.url_to_image(avatar, -1)
             url = settings.AWS_STATIC_PHOTOTEST
-            if self._status == 'exito':
-                img = imutils.url_to_image(
-                    "https://{}{}TICKET_ENVIO_EXITOSO__1.png".format(
-                        url, self._urlc))
-            else:
-                img = imutils.url_to_image(
-                    "https://{}{}TICKET_ENVIO_NO_REALIZADO__1.png".format(
-                        url, self._urlc))
+            img = imutils.url_to_image(self._dir)
+
         fields = [
             [concepto,  (118, 700), 2, 0.9, (0, 0, 0), 1, 16],
             [cuenta,   (378,  490), 2, 0.9, (0, 0, 0), 1, 16],
@@ -100,7 +96,7 @@ class CompTrans(object):
         comp_img = open(img_name, "rb")
         os.remove(img_name)
         path_file = 'docs/' + img_name
-        url = get_file_url(comp_img, path_file)
+        url = get_file_preassigned(comp_img, path_file, region, content)
         return url
 
     def cobro(self):
@@ -123,9 +119,7 @@ class CompTrans(object):
             avatar = avatar.avatar_img.url
             avatar = imutils.url_to_image(avatar, -1)
             url = settings.AWS_STATIC_PHOTOTEST
-            img = imutils.url_to_image(
-                "https://{}{}TICKET_DE_COBRO_RECIBIDO_PAGADA__1.png".format(
-                    url, self._urlc))
+            img = imutils.url_to_image(self._dir)
         fields = [
             [concepto,  (118, 700), 2, 0.9, (0, 0, 0), 1, 16],
             [status,    (360, 490), 2, 0.9, (0, 0, 0), 1, 16],
@@ -153,7 +147,7 @@ class CompTrans(object):
         comp_img = open(img_name, "rb")
         os.remove(img_name)
         path_file = 'docs/' + img_name
-        url = get_file_url(comp_img, path_file)
+        url = get_file_preassigned(comp_img, path_file, region, content)
         return url
 
     def stp(self):
@@ -190,15 +184,8 @@ class CompTrans(object):
         elif settings.SITE not in "local":
             url = settings.AWS_STATIC_PHOTOTEST
             otrosbancos = imutils.url_to_image(
-                "https://{}/docs/stpstatics/OTROS_BANCOS.png".format(url))
-            if self._status == 'exito':
-                img = imutils.url_to_image(
-                    "https://{}{}TICKET_TRANSFERENCIA_EXITOSA__1.png".format(
-                        url, self._urlc))
-            else:
-                img = imutils.url_to_image(
-                    "https://{}{}TICKET_TRANSFERENCIA_NO_REALIZADA__1.png".format( # noqa
-                        url, self._urlc))
+                "https://{}/docs/stpstatics/OTROS_BANCOS.png".format(url), -1)
+            img = imutils.url_to_image(self._dir)
         for field in fields:
             cv2.putText(img, *field)
 
@@ -217,7 +204,7 @@ class CompTrans(object):
         comp_img = open(img_name, "rb")
         os.remove(img_name)
         path_file = 'docs/' + img_name
-        url = get_file_url(comp_img, path_file)
+        url = get_file_preassigned(comp_img, path_file, region, content)
         return url
 
     def trans(self):
