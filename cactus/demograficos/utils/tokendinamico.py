@@ -7,9 +7,10 @@ from django.utils import timezone
 def tokenD(user):
     token = random.randint(1000000000, 9999999999)
     tokenv = TokenDinamico.objects.filter(token=token).count()
-    if tokenv:
+    while tokenv > 0:
         token = random.randint(1000000000, 9999999999)
-    TokenDinamico.objects.create(user, token=token)
+        tokenv = TokenDinamico.objects.filter(token=token).count()
+    TokenDinamico.objects.create(user=user.Uprofile, token=token)
     return token
 
 

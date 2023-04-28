@@ -25,10 +25,10 @@ from crecimiento.models import Respaldo
 from django.contrib.auth import authenticate
 from django.utils import timezone
 from spei.stpTools import randomString
-from django.conf import Settings
+
 import reverse_geocoder as gr
 from demograficos.utils.tokendinamico import tokenD
-from django.contrib.auth.hashers import make_password, check_password
+from django.contrib.auth.hashers import check_password
 
 
 from demograficos.models.userProfile import (RespuestaSeguridad,
@@ -1559,8 +1559,7 @@ class Query(graphene.ObjectType):
     def resolve_token_dinamico(self, info, **kwargs):
         user = info.context.user
         if not user.is_anonymous:
-            token = tokenD()
-            token = token.now()
+            token = tokenD(user)
             dicc = {}
             dicc["token"] = token
             return dicc
