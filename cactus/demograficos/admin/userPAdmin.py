@@ -27,6 +27,7 @@ from django.utils.translation import gettext_lazy as _
 from cactus.settings import SITE
 from import_export.admin import ExportActionMixin
 from spei.deletecuentaSTP import delete_stp
+from demograficos.utils.deletecustomer import pld_customer_delete
 
 
 import logging
@@ -161,7 +162,7 @@ class UserProfileAdmin(ExportActionMixin, PasswordResetUserAdmin):
         BeneficiarioInLine,
         PerfilTransaccionalInLine
     )
-    actions = ['registra_cuenta', 'delete_stp_cuenta']
+    actions = ['registra_cuenta', 'delete_stp_cuenta', 'delete_pld_customer']
 
     list_filter = (
         'Uprofile__nivel_cuenta',
@@ -291,6 +292,17 @@ class UserProfileAdmin(ExportActionMixin, PasswordResetUserAdmin):
         # up.fecha_nacimiento = fecha_naciemiento
         # up.save()
         # u.save()
+
+
+    def delete_pld_customer(self, request, users):
+
+        for user in users:
+            try:
+                delete = pld_customer_delete(user.Uprofile.curp)
+            except Exception as ex:
+                msg = f"[ERROR action ubcubo delete customer] " \
+                      f"descripcion: {ex}"
+                db_logger.error(msg)
 
 
 class ClienteAdmin(UserProfileAdmin):
