@@ -1,5 +1,4 @@
-from pld.models import (Customer,
-                        UrlsPLD)
+from pld.models import UrlsPLD
 import json
 import requests
 import logging
@@ -8,10 +7,12 @@ from cactus.settings import SITE
 
 db_logger = logging.getLogger('db')
 
+
 def pld_customer_delete(curp):
 
     if SITE == 'local':
-        pass
+        url_customer = UrlsPLD.objects.get(nombre="delete_sandbox").urls
+        url_auth = UrlsPLD.objects.get(nombre="generateToken_sandbox").urls
     elif SITE == 'prod':
         url_customer = UrlsPLD.objects.get(nombre="delete").urls
         url_auth = UrlsPLD.objects.get(nombre="generateToken").urls
@@ -72,3 +73,4 @@ def pld_customer_delete(curp):
     except Exception as ex:
         msg_pld = f"[Delete Customer] Error al eliminar customer en ubcubo " \
                   f"para el usuario con curp {curp}. Error: {ex}"
+        db_logger.warning(msg_pld)

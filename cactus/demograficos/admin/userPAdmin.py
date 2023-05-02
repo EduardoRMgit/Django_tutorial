@@ -293,12 +293,11 @@ class UserProfileAdmin(ExportActionMixin, PasswordResetUserAdmin):
         # up.save()
         # u.save()
 
-
     def delete_pld_customer(self, request, users):
 
         for user in users:
             try:
-                delete = pld_customer_delete(user.Uprofile.curp)
+                pld_customer_delete(user.Uprofile.curp)
             except Exception as ex:
                 msg = f"[ERROR action ubcubo delete customer] " \
                       f"descripcion: {ex}"
