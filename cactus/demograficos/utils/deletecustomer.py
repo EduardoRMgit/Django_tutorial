@@ -11,8 +11,7 @@ db_logger = logging.getLogger('db')
 def pld_customer_delete(curp):
 
     if SITE == 'local':
-        url_customer = UrlsPLD.objects.get(nombre="delete_sandbox").urls
-        url_auth = UrlsPLD.objects.get(nombre="generateToken_sandbox").urls
+        pass
     elif SITE == 'prod':
         url_customer = UrlsPLD.objects.get(nombre="delete").urls
         url_auth = UrlsPLD.objects.get(nombre="generateToken").urls
