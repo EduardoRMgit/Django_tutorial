@@ -12,17 +12,20 @@ def comisionSTP(instance):
             tipoTrans__medio="T",
             fechaValor__year=today.year,
             fechaValor__month=today.month,
-            fechaValor__day=today.day,
             statusTrans__nombre__in=["exito"]
         )
     valida_primera = transacciones.count()
     if valida_primera > 1:
         comisiones = ComisioneSTP.objects.all()
         for comision in comisiones:
-            (comision.rangotransacciones).split("-")
-        monto = monto \
-            + comision.ivaCliente \
-            + comision.ivaSTP + comision.cliente + comision.stp
+            rango = (comision.rangotransacciones).split("-")
+            if valida_primera >= int(
+                    rango[0]) and valida_primera <= int(rango[1]):
+                ivacliente = comision.ivaCliente
+                ivastp = comision.ivaSTP
+                cliente = comision.cliente
+                stp = comision.stp
+        monto = ivacliente + ivastp + cliente + stp
         return monto
     else:
         return monto

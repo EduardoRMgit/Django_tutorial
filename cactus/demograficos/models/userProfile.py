@@ -339,7 +339,6 @@ class UserProfile(AbstractBaseUser):
         blank=True
     )
     enrolamiento = models.BooleanField(default=False)
-    numero_transaccion = models.IntegerField(blank=True, null=True)
 
     class Meta():
         verbose_name_plural = 'Perfil del usuario'
