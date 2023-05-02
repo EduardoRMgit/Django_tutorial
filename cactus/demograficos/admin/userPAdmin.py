@@ -16,7 +16,8 @@ from demograficos.models import (UserProfile,
                                  UserBeneficiario,
                                  UserDevice,
                                  Avatar,
-                                 PerfilTransaccionalDeclarado)
+                                 PerfilTransaccionalDeclarado,
+                                 PasswordHistory)
 from banca.models import Transaccion
 from pld.models import (Customer)
 from .cambio_password import PasswordResetUserAdmin
@@ -25,6 +26,9 @@ from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.utils.translation import gettext_lazy as _
 from cactus.settings import SITE
 from import_export.admin import ExportActionMixin
+from spei.deletecuentaSTP import delete_stp
+
+
 import logging
 
 
@@ -157,7 +161,7 @@ class UserProfileAdmin(ExportActionMixin, PasswordResetUserAdmin):
         BeneficiarioInLine,
         PerfilTransaccionalInLine
     )
-    actions = ['registra_cuenta']
+    actions = ['registra_cuenta', 'delete_stp_cuenta']
 
     list_filter = (
         'Uprofile__nivel_cuenta',
@@ -237,6 +241,24 @@ class UserProfileAdmin(ExportActionMixin, PasswordResetUserAdmin):
             except Exception as ex:
                 print(ex)
 
+    def delete_stp_cuenta(self, request, usuarios):
+        for user in usuarios:
+            try:
+                id_, descripcion = delete_stp(user)
+                if id_ == 0:
+                    user.is_active = False
+                    user.save()
+                    msg_logg = "[STP delete cuenta] {}.".format(
+                        user.Uprofile.cuentaClabe)
+                    db_logger.info(msg_logg)
+                elif id_:
+                    msg = f"[ERROR STP delete cuenta] \
+                        descripcion: {descripcion}"
+                    db_logger.error(msg)
+            except Exception as ex:
+                msg = f"[ERROR accion STP delete cuenta] \
+                        descripcion: {ex}"
+                db_logger.error(msg)
         # if usuarios.count() != 1:
         #     print("Elegir sólo un usuario")
         #     return
@@ -302,3 +324,4 @@ admin.site.register(EntidadFed)
 admin.site.register(UserDevice)
 admin.site.register(Avatar)
 # admin.site.register(Administradore, AdministradoreAdmin)
+admin.site.register(PasswordHistory)

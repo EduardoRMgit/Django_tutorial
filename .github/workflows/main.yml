@@ -108,7 +108,7 @@ jobs:
             echo "IN TEST"
             export SUFFIX=test
             export DB_NAME=brattdev
-            export DB=cactus-test-db.c4csey4k0tc5.us-east-2.rds.amazonaws.com
+            export DB=cactus-prod-db.c4csey4k0tc5.us-east-2.rds.amazonaws.com
             export DEBUG=true
             export STPSECRET=stpsecrettest
           fi;

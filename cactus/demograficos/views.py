@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from demograficos.models import (DocAdjunto,
                                  DocAdjuntoTipo,
                                  TipoComprobante)
+
 import boto3
 from django.conf import settings
 import os
@@ -164,7 +165,7 @@ class ImageDoc(generics.CreateAPIView):
                                                   imagen_url=url)
                 if settings.SITE == "local":
                     url = "{}{}".format(
-                        'http://127.0.0.1:8000/media/', a.imagen)
+                        'http://127.0.0.1:8000/', a.imagen.url)
                 if settings.SITE not in ["local"]:
                     url = a.imagen_url
                 id = a.id

@@ -18,4 +18,5 @@ from .regulacion import ValidacionRegulatoria
 from .mediosDisponibles import MediosDisponibles
 from .udis import ValorUdis
 from .cobro import NotificacionCobro
+from .comprobantes import Comprobante
 # from .productos import Productos, PaisesDisponibles, CarProducto

@@ -13,11 +13,8 @@ from banca.models import (InguzTransaction, StatusTrans, TipoTransaccion,
 from demograficos.models.userProfile import UserProfile
 from demograficos.models import Contacto
 from spei.stpTools import randomString
-from django.conf import settings
 from banca.utils.limiteTrans import LimiteTrans
-
-
-URL_IMAGEN = settings.URL_IMAGEN
+from banca.utils.comprobantesPng import CompTrans
 
 
 class InguzType(DjangoObjectType):
@@ -177,11 +174,14 @@ class UrlImagenComprobanteInguz(graphene.Mutation):
         user = info.context.user
         if not user.is_anonymous:
             transaccion = InguzTransaction.objects.get(id=id)
-            transaccion.comprobante_img = URL_IMAGEN
-            transaccion.url_comprobante = URL_IMAGEN
-            transaccion.save()
-            url = transaccion.url_comprobante
-            return UrlImagenComprobanteInguz(url=url)
+            if not transaccion.transaccion.statusTrans:
+                raise Exception("Transaccion no genera comprobante")
+            if transaccion.transaccion.statusTrans.nombre != "exito" and \
+                    transaccion.transaccion.statusTrans.nombre != "rechazada":
+                raise Exception("Transaccion no genera comprobante")
+            comprobante = CompTrans(transaccion.transaccion)
+            url = comprobante.trans()
+            return UrlImagenComprobanteInguz(url)
 
 
 class UrlImagenComprobanteCobro(graphene.Mutation):
@@ -191,28 +191,23 @@ class UrlImagenComprobanteCobro(graphene.Mutation):
     class Arguments:
         token = graphene.String(required=True)
         id = graphene.Int(required=True)
-        tipo_comprobante = graphene.String()
+        tipo_comprobante = graphene.String(required=False)
 
     @login_required
-    def mutate(self, info, token, id, tipo_comprobante):
+    def mutate(self, info, token, id, tipo_comprobante=None):
         user = info.context.user
         if not user.is_anonymous:
-            if tipo_comprobante == "notificacion":
-                try:
-                    transaccion = NotificacionCobro.objects.get(
-                        id=id)
-                    url = URL_IMAGEN
-                except Exception:
-                    raise Exception("id de cobro no válido")
-            elif tipo_comprobante == "pago":
-                try:
-                    transaccion = NotificacionCobro.objects.get(id=id)
-                except Exception:
-                    raise Exception("id de cobro no válido")
-                if transaccion.status == "L":
-                    url = URL_IMAGEN
-                else:
-                    raise Exception("Cobro no liquidado")
+            try:
+                transaccion = NotificacionCobro.objects.get(id=id)
+            except Exception:
+                raise Exception("id de cobro no válido")
+            if transaccion.status != "L":
+                raise Exception(
+                    "Cobro sin comprobante disponible."
+                )
+            if transaccion.status == "L":
+                comprobante = CompTrans(transaccion)
+                url = comprobante.trans()
             else:
                 raise Exception(
                     "Ingrese un tipo válido ('notificacion' "
