@@ -25,7 +25,7 @@ def comisionSTP(instance):
                 ivastp = comision.ivaSTP
                 cliente = comision.cliente
                 stp = comision.stp
-        monto = ivacliente + ivastp + cliente + stp
+        monto = monto + ivacliente + ivastp + cliente + stp
         return monto
     else:
         return monto
