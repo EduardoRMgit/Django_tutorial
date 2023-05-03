@@ -70,6 +70,7 @@ if [[ $LOADDATA == true ]] || [[ $PROD == false ]] ; then
   ./manage.py loaddata origendeposito.json
   ./manage.py loaddata usocuenta.json
   ./manage.py loaddata iguanofixture.json
+  ./manage.py loaddata alias_invalido.py
 
   # BANCA
   # Catalogos
