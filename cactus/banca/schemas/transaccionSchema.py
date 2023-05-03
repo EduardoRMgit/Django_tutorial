@@ -16,7 +16,8 @@ from banca.models.transaccion import (Transaccion,
                                       TipoAnual,
                                       SaldoReservado)
 from banca.models.catalogos import TipoTransaccion
-from banca.models import NotificacionCobro, InguzTransaction, NivelCuenta
+from banca.models import (NotificacionCobro, InguzTransaction, NivelCuenta,
+                          ComisioneSTP)
 from banca.utils.clabe import es_cuenta_inguz
 from banca.utils.limiteTrans import LimiteTrans
 from banca.utils.comprobantesPng import CompTrans
@@ -559,7 +560,7 @@ class CreateTransferenciaEnviada(graphene.Mutation):
         rfc_beneficiario = None
         if not LimiteTrans(user.id).trans_mes(float(monto_stp_trans)):
             raise Exception("Límite transaccional superado")
-
+        comision = ComisioneSTP.objects.last()
         main_trans = Transaccion.objects.create(
             user=user,
             fechaValor=fecha,
@@ -567,7 +568,8 @@ class CreateTransferenciaEnviada(graphene.Mutation):
             statusTrans=status,
             tipoTrans=tipo,
             concepto=concepto,
-            claveRastreo=clave_rastreo
+            claveRastreo=clave_rastreo,
+            comision=comision
         )
 
         stp_reservado = SaldoReservado.objects.create(

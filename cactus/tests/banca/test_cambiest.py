@@ -12,6 +12,7 @@ from django.utils import timezone
 class Testcambioestado(APITestCase):
     def setUp(self):
         load_min_test()
+        call_command('loaddata', 'comisionstp', verbosity=0)
         call_command('loaddata', 'urls', verbosity=0)
         call_command('loaddata', 'contactos', verbosity=0)
         call_command('loaddata', 'stptrans', verbosity=0)
@@ -33,7 +34,7 @@ class Testcambioestado(APITestCase):
         sr = SaldoReservado.objects.create(
             status_saldo="reservado",
             fecha_reservado=timezone.now(),
-            saldo_reservado="0.01",
+            saldo_reservado=0.01,
         )
 
         # Se pudo haber obtenido in stpId negativo o inválido
