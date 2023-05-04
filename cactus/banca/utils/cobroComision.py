@@ -31,14 +31,13 @@ def comisionSTP(instance):
                 rango = (comision.rangotransacciones).split("-")
                 if valida_total >= int(
                         rango[0]) and valida_total <= int(rango[1]):
-                    instance.comision = ComisioneSTP.objects.get(
+                    comision = ComisioneSTP.objects.get(
                         id=comision.id)
-                    instance.save()
                     ivacliente = comision.ivaCliente
                     ivastp = comision.ivaSTP
                     cliente = comision.cliente
                     stp = comision.stp
         monto = monto + ivacliente + ivastp + cliente + stp
-        return monto
+        return monto, comision
     else:
-        return monto
+        return monto, None

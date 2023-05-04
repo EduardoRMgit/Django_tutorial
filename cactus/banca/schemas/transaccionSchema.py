@@ -570,8 +570,12 @@ class CreateTransferenciaEnviada(graphene.Mutation):
             claveRastreo=clave_rastreo,
             comision=comision
         )
-        comision = round(comisionSTP(main_trans), 2)
+        comision, comision_m = comisionSTP(main_trans)
+        comision = round(comision, 2)
         reservado_stp_trans = comision
+        if comision_m:
+            main_trans.comision = comision_m
+            main_trans.comision.save()
 
         stp_reservado = SaldoReservado.objects.create(
             tipoTrans=tipo,
