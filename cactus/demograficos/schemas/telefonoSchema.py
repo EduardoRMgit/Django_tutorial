@@ -606,7 +606,7 @@ class SendSmsPin(graphene.Mutation):
             except Exception as ex:
                 raise Exception('numero de telefono no existe ' + str(ex))
             if user.is_active is False:
-                raise Exception("Cuenta cancelada y/o cancelada")
+                raise Exception("Cuenta cancelada y/o bloqueada")
             tel.send_token()
             return SendSms(resp=True)
 
