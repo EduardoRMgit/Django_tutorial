@@ -9,9 +9,12 @@ import time
 
 if settings.SITE == "local":
     from cactus.settings import MEDIA_ROOT
-time_stamp = time.time()
-region = "us-east-2"
+elif settings.SITE == "prod":
+    region = "us-east-2"
+elif settings.SITE not in "prod":
+    region = "us-east-1"
 content = "image/jpeg"
+time_stamp = time.time()
 
 
 class CompTrans(object):
