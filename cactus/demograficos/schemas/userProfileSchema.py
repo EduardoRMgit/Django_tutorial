@@ -2108,10 +2108,11 @@ class UpdateInfoPersonal(graphene.Mutation):
                 country if country else u_profile.pais_origen_otro)
             alias = alias if alias else u_profile.alias
             if alias and alias != u_profile.alias:
+                if not _es_alias_valido(alias):
+                    raise AssertionError("Alias no permitido")
+
                 if UserProfile.objects.filter(alias__iexact=alias).count() == 0:
                     u_profile.alias = alias if alias else u_profile.alias
-                elif not _es_alias_valido(alias):
-                    raise AssertionError("Alias no permitido")
                 else:
                     msg_alias = "{}{}".format(
                         "Este alias ya fue tomado por otro cliente, ",
