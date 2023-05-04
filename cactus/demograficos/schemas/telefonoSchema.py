@@ -577,6 +577,9 @@ class SendSmsPin(graphene.Mutation):
     def mutate(self, info, telefono, registro_nuevo=False):
         if registro_nuevo:
             if User.objects.filter(username=telefono).count() > 0:
+                u = User.objects.get(username=telefono)
+                if u.is_active is False:
+                    raise Exception("Cuenta en proceso de cancelación")
                 raise Exception("Telefono ya registrado en una cuenta Inguz")
             Telefono.objects.filter(
                 telefono=telefono,
@@ -606,7 +609,7 @@ class SendSmsPin(graphene.Mutation):
             except Exception as ex:
                 raise Exception('numero de telefono no existe ' + str(ex))
             if user.is_active is False:
-                raise Exception("Cuenta cancelada y/o cancelada")
+                raise Exception("Cuenta cancelada y/o bloqueada")
             tel.send_token()
             return SendSms(resp=True)
 
