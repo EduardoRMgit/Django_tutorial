@@ -45,7 +45,7 @@ class CompTrans(object):
         avatar = trans.user.Uprofile.avatar
         monto = "${:.2f}".format(round(float(trans.monto), 2))
         cuenta = f"*{trans.user.Uprofile.cuentaClabe[13:-1]}"
-        fecha = trans.fechaValor.strftime("%m/%d/%Y")
+        fecha = trans.fechaValor.strftime("%d/%m/%Y")
         hora = trans.fechaValor.strftime("%H:%M:%S")
         concepto = trans.concepto
 
@@ -103,7 +103,7 @@ class CompTrans(object):
         status = self._status
         avatar = trans_.usuario_solicitante.Uprofile.avatar
         monto = "${:.2f}".format(round(float(trans.monto), 2))
-        fecha = trans.fechaValor.strftime("%m/%d/%Y")
+        fecha = trans.fechaValor.strftime("%d/%m/%Y")
         hora = trans.fechaValor.strftime("%H:%M:%S")
         concepto = trans.concepto
 
@@ -149,7 +149,7 @@ class CompTrans(object):
     def stp(self):
         trans = self._trans
         importe = "${:,.2f}".format(round(float(trans.monto), 2))
-        fecha = trans.fechaValor.strftime("%m/%d/%Y")
+        fecha = trans.fechaValor.strftime("%d/%m/%Y")
         hora = trans.fechaValor.strftime("%H:%M:%S")
         concepto = trans.concepto
         cuenta = f"*{trans.user.Uprofile.cuentaClabe[13:-1]}"

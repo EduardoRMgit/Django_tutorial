@@ -1,7 +1,6 @@
 import graphene
 import logging
 
-from django.utils import timezone
 
 from graphene_django.types import DjangoObjectType
 from graphql_jwt.decorators import login_required
@@ -15,6 +14,7 @@ from demograficos.models import Contacto
 from spei.stpTools import randomString
 from banca.utils.limiteTrans import LimiteTrans
 from banca.utils.comprobantesPng import CompTrans
+from datetime import datetime
 
 
 class InguzType(DjangoObjectType):
@@ -79,7 +79,7 @@ class CreateInguzTransaccion(graphene.Mutation):
                 enrolamiento=True).user
         except Exception:
             raise Exception("La cuenta destino está fuera de servicio")
-        fecha = timezone.now()
+        fecha = datetime.now()
         claveR = randomString()
         monto2F = "{:.2f}".format(round(float(abono), 2))
         status = StatusTrans.objects.get(nombre="exito")

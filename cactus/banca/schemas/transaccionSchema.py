@@ -2,7 +2,6 @@ import graphene
 
 from datetime import datetime
 
-from django.utils import timezone
 from django.contrib.auth import get_user_model
 
 from graphene_django.types import DjangoObjectType
@@ -764,7 +763,7 @@ class LiquidarCobro(graphene.Mutation):
         _valida(not es_cuenta_inguz(beneficiario.Uprofile.cuentaClabe),
                 "Cuenta beneficiario no es Inguz")
 
-        fecha = timezone.now()
+        fecha = datetime.now()
         claveR = randomString()
         importe = cobro.importe
         monto2F = "{:.2f}".format(round(float(importe), 2))
