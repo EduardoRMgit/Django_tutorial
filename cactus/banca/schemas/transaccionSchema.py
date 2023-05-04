@@ -29,6 +29,7 @@ from spei.stpTools import gen_referencia_numerica
 from demograficos.models.userProfile import UserProfile
 from demograficos.models import Contacto
 from django.conf import settings
+from banca.utils.cobroComision import comisionSTP
 
 
 class UserType(DjangoObjectType):
@@ -539,11 +540,9 @@ class CreateTransferenciaEnviada(graphene.Mutation):
             contacto = Contacto.objects.get(pk=contacto)
         except Exception:
             raise Exception('Contacto inexistente.')
-
         fecha = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         nombre_usuario = user.get_full_name()
         monto_stp_trans = "{:.2f}".format(monto)
-        reservado_stp_trans = round(monto, 2)
         banco = contacto.banco
         clabe = contacto.clabe
         concepto = concepto.split(' - ')[-1]  # ???
@@ -571,6 +570,8 @@ class CreateTransferenciaEnviada(graphene.Mutation):
             claveRastreo=clave_rastreo,
             comision=comision
         )
+        comision = round(comisionSTP(main_trans), 2)
+        reservado_stp_trans = comision
 
         stp_reservado = SaldoReservado.objects.create(
             tipoTrans=tipo,
