@@ -83,6 +83,7 @@ if [[ $LOADDATA == true ]] || [[ $PROD == false ]] ; then
   ./manage.py loaddata cami.json
   ./manage.py loaddata errorestransaccion.json
   ./manage.py loaddata codigoconfianza.json
+  ./manage.py loaddata comisionstp.json
 
   # Transaccion
   # ./manage.py loaddata transaccion.json
