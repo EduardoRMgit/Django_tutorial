@@ -9,9 +9,10 @@ import time
 
 if settings.SITE == "local":
     from cactus.settings import MEDIA_ROOT
-    region = "us-east-1"
-elif settings.SITE not in "local":
+elif settings.SITE == "prod":
     region = "us-east-2"
+elif settings.SITE not in "prod":
+    region = "us-east-1"
 content = "image/jpeg"
 time_stamp = time.time()
 
