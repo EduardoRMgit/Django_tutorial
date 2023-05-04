@@ -577,6 +577,9 @@ class SendSmsPin(graphene.Mutation):
     def mutate(self, info, telefono, registro_nuevo=False):
         if registro_nuevo:
             if User.objects.filter(username=telefono).count() > 0:
+                u = User.objects.get(username=telefono)
+                if u.is_active is False:
+                    raise Exception("Cuenta en proceso de cancelación")
                 raise Exception("Telefono ya registrado en una cuenta Inguz")
             Telefono.objects.filter(
                 telefono=telefono,
