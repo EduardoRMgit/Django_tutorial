@@ -33,7 +33,7 @@ def comisionSTP(instance):
                         rango[0]) and valida_total <= int(rango[1]):
                     instance.comision = ComisioneSTP.objects.get(
                         id=comision.id)
-                    instance.save()
+                    instance.comision.save()
                     ivacliente = comision.ivaCliente
                     ivastp = comision.ivaSTP
                     cliente = comision.cliente
