@@ -2062,6 +2062,8 @@ class UpdateInfoPersonal(graphene.Mutation):
         avatarId=None,
     ):
         def _es_alias_valido(_alias):
+            if " " in _alias:
+                return False
             lista_negra_alias = AliasInvalido.objects.filter(
                 substring_invalida__iexact=_alias)
             return lista_negra_alias.count() == 0
