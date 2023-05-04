@@ -46,7 +46,8 @@ from demograficos.models.userProfile import (RespuestaSeguridad,
                                              INE_Reg_Attempt,
                                              RestorePassword,
                                              Parentesco,
-                                             Avatar)
+                                             Avatar,
+                                             AliasInvalido)
 from demograficos.models.telefono import Telefono
 from demograficos.models.contactos import Contacto
 from demograficos.models.profileChecks import (ComponentValidated,
@@ -2060,6 +2061,11 @@ class UpdateInfoPersonal(graphene.Mutation):
         correo=None,
         avatarId=None,
     ):
+        def _es_alias_valido(_alias):
+            lista_negra_alias = AliasInvalido.objects.filter(
+                substring_invalida__iexact=_alias)
+            return lista_negra_alias.count() == 0
+
         if name is not None:
             name = name.strip()
         if alias is not None:
@@ -2104,10 +2110,15 @@ class UpdateInfoPersonal(graphene.Mutation):
             if alias and alias != u_profile.alias:
                 if UserProfile.objects.filter(alias__iexact=alias).count() == 0:
                     u_profile.alias = alias if alias else u_profile.alias
+                elif not _es_alias_valido(alias):
+                    raise AssertionError("Alias no permitido")
                 else:
-                    raise AssertionError(
-                        "Este alias ya fue tomado por otro cliente, "
+                    msg_alias = "{}{}".format(
+                        "Este alias ya fue tomado por otro cliente, ",
                         "intenta algo diferente"
+                    )
+                    raise AssertionError(
+                        msg_alias
                     )
             elif alias and alias == u_profile.alias:
                 pass
