@@ -1,6 +1,6 @@
 [{
   "model": "banca.comisionestp",
-  "pk": 1,
+  "pk": 420,
   "fields": {
     "stp": 4.5,
     "ivaSTP": 0.72,
@@ -10,7 +10,7 @@
   }
 },{
   "model": "banca.comisionestp",
-  "pk": 2,
+  "pk": 421,
   "fields": {
     "stp": 4.3,
     "ivaSTP": 0.6880,
@@ -21,7 +21,7 @@
 },
 {
   "model": "banca.comisionestp",
-  "pk": 3,
+  "pk": 422,
   "fields": {
     "stp": 4.1,
     "ivaSTP": 0.6560,
@@ -31,7 +31,7 @@
   }
 },{
   "model": "banca.comisionestp",
-  "pk": 4,
+  "pk": 423,
   "fields": {
     "stp": 3.9,
     "ivaSTP": 0.6240,
@@ -41,7 +41,7 @@
   }
 },{
   "model": "banca.comisionestp",
-  "pk": 5,
+  "pk": 424,
   "fields": {
     "stp": 3.7,
     "ivaSTP": 0.5920,
@@ -51,7 +51,7 @@
   }
 },{
   "model": "banca.comisionestp",
-  "pk": 6,
+  "pk": 425,
   "fields": {
     "stp": 3.5,
     "ivaSTP": 0.56,
@@ -61,7 +61,7 @@
   }
 },{
   "model": "banca.comisionestp",
-  "pk": 7,
+  "pk": 426,
   "fields": {
     "stp": 3.1,
     "ivaSTP": 0.4960,
@@ -71,7 +71,7 @@
   }
 },{
   "model": "banca.comisionestp",
-  "pk": 8,
+  "pk": 427,
   "fields": {
     "stp": 2.8,
     "ivaSTP": 0.4480,
@@ -81,7 +81,7 @@
   }
 },{
   "model": "banca.comisionestp",
-  "pk": 9,
+  "pk": 428,
   "fields": {
     "stp": 2.5,
     "ivaSTP": 0.4,

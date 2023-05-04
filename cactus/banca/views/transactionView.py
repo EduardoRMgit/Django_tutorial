@@ -28,7 +28,6 @@ from spei.stpTools import randomString
 from banca.serializers import DetailSerializer, EstadoSerializer
 from banca.utils.limiteTrans import LimiteTrans
 from demograficos.models import UserProfile
-from banca.utils.cobroComision import comisionSTP
 
 
 trans_entrada = [1, 3, 8, 11, 12, 15, 19, 21]
@@ -105,9 +104,6 @@ def statusStp(estado, stpId):
             reservado = SaldoReservado.objects.get(
                 id=stpTrans.saldoReservado.id)
             status = StatusTrans.objects.get(nombre=estado)
-            if transaction.tipoTrans.tipo == 'E' and estado == "exito":
-                reservado.saldo_reservado = round(comisionSTP(transaction), 2)
-                reservado.save()
             if estado == "exito":
                 reservado.status_saldo = "aplicado"
                 reservado.fecha_aplicado_devuelto = timezone.now()
