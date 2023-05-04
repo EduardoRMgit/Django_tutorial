@@ -38,6 +38,7 @@ class CompTrans(object):
             self._tp = cv2.imread(self._dir)
         elif settings.SITE not in "local":
             self._urlc = "/docs/docs/plantillas/"
+            self._dir = self._tp.url
 
     def inguz(self, show=False):
         trans = self._trans
