@@ -88,14 +88,10 @@ class Transaccion(models.Model):
 @receiver(pre_save, sender=Transaccion)
 def succesful_transaction_notCreated(sender, instance, **kwargs):
     from contabilidad.balanza import balanza
-    from banca.utils.cobroComision import comisionSTP
-    if instance.tipoTrans.medio == 'T' and instance.tipoTrans.tipo == 'E':
-        instance.comision = ComisioneSTP.objects.last()
     exito = StatusTrans.objects.get(nombre="exito")
     if instance.id and instance.tipoTrans:
         anterior = Transaccion.objects.get(id=instance.id)
         if (not anterior.statusTrans == instance.statusTrans) and instance.statusTrans == exito:  # noqa: E501
-            instance.monto = round(comisionSTP(instance), 2)
             tipo_trans = int(instance.tipoTrans.codigo)
             create_pld_movement(instance)
             if tipo_trans in [1, 2, 3, 6, 18, 19]:
