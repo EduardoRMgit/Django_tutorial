@@ -2156,7 +2156,7 @@ class UpdateInfoPersonal(graphene.Mutation):
                 raise AssertionError("RFC no válido")
             u_profile.save()
             message = InfoValidator.setCheckpoint(user=user, concepto='IP')
-            u_profile.verificacion_curp = True
+
             if message == "curp validado":
                 u_profile.verificacion_curp = True
             u_profile.save()
