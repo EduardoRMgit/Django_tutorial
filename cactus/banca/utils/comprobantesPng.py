@@ -6,6 +6,7 @@ from django.conf import settings
 import imutils
 from banca.utils.url_preassigned import get_file_preassigned
 import time
+from datetime import timedelta
 
 if settings.SITE == "local":
     from cactus.settings import MEDIA_ROOT
@@ -49,8 +50,9 @@ class CompTrans(object):
         avatar = trans.user.Uprofile.avatar
         monto = "${:.2f}".format(round(float(trans.monto), 2))
         cuenta = f"*{trans.user.Uprofile.cuentaClabe[13:-1]}"
-        fecha = trans.fechaValor.strftime("%d/%m/%Y")
-        hora = trans.fechaValor.strftime("%H:%M:%S")
+        fechaValor = trans.fechaValor - timedelta(hours=6)
+        fecha = fechaValor.strftime("%d/%m/%Y")
+        hora = fechaValor.strftime("%H:%M:%S")
         concepto = trans.concepto
 
         if settings.SITE == "local":
@@ -107,8 +109,9 @@ class CompTrans(object):
         status = self._status
         avatar = trans_.usuario_solicitante.Uprofile.avatar
         monto = "${:.2f}".format(round(float(trans.monto), 2))
-        fecha = trans.fechaValor.strftime("%d/%m/%Y")
-        hora = trans.fechaValor.strftime("%H:%M:%S")
+        fechaValor = trans.fechaValor - timedelta(hours=6)
+        fecha = fechaValor.strftime("%d/%m/%Y")
+        hora = fechaValor.strftime("%H:%M:%S")
         concepto = trans.concepto
 
         if settings.SITE == "local":
@@ -153,8 +156,9 @@ class CompTrans(object):
     def stp(self):
         trans = self._trans
         importe = "${:,.2f}".format(round(float(trans.monto), 2))
-        fecha = trans.fechaValor.strftime("%d/%m/%Y")
-        hora = trans.fechaValor.strftime("%H:%M:%S")
+        fechaValor = trans.fechaValor - timedelta(hours=6)
+        fecha = fechaValor.strftime("%d/%m/%Y")
+        hora = fechaValor.strftime("%H:%M:%S")
         concepto = trans.concepto
         cuenta = f"*{trans.user.Uprofile.cuentaClabe[13:-1]}"
         rastreo = trans.claveRastreo
