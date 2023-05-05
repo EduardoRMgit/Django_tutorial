@@ -4,11 +4,17 @@ from banca.models import Comprobante
 from spei.models import StpTransaction
 from django.conf import settings
 import imutils
-from demograficos.views import get_file_url
+from banca.utils.url_preassigned import get_file_preassigned
 import time
+from datetime import timedelta
 
 if settings.SITE == "local":
     from cactus.settings import MEDIA_ROOT
+elif settings.SITE == "prod":
+    region = "us-east-2"
+elif settings.SITE not in "prod":
+    region = "us-east-1"
+content = "image/jpeg"
 time_stamp = time.time()
 
 
@@ -35,8 +41,8 @@ class CompTrans(object):
                 os.path.join(MEDIA_ROOT, self._tp.name))
             self._tp = cv2.imread(self._dir)
         elif settings.SITE not in "local":
+            self._urlc = "/docs/docs/plantillas/"
             self._dir = self._tp.url
-            self._tp = imutils.url_to_image(self._dir)
 
     def inguz(self, show=False):
         trans = self._trans
@@ -44,8 +50,9 @@ class CompTrans(object):
         avatar = trans.user.Uprofile.avatar
         monto = "${:.2f}".format(round(float(trans.monto), 2))
         cuenta = f"*{trans.user.Uprofile.cuentaClabe[13:-1]}"
-        fecha = trans.fechaValor.strftime("%m/%d/%Y")
-        hora = trans.fechaValor.strftime("%H:%M:%S")
+        fechaValor = trans.fechaValor - timedelta(hours=6)
+        fecha = fechaValor.strftime("%d/%m/%Y")
+        hora = fechaValor.strftime("%H:%M:%S")
         concepto = trans.concepto
 
         if settings.SITE == "local":
@@ -57,6 +64,7 @@ class CompTrans(object):
             avatar = avatar.avatar_img.url
             avatar = imutils.url_to_image(avatar, -1)
             img = imutils.url_to_image(self._dir)
+
         fields = [
             [concepto,  (118, 700), 2, 0.9, (0, 0, 0), 1, 16],
             [cuenta,   (378,  490), 2, 0.9, (0, 0, 0), 1, 16],
@@ -91,7 +99,7 @@ class CompTrans(object):
         comp_img = open(img_name, "rb")
         os.remove(img_name)
         path_file = 'docs/' + img_name
-        url = get_file_url(comp_img, path_file)
+        url = get_file_preassigned(comp_img, path_file, region, content)
         return url
 
     def cobro(self):
@@ -101,8 +109,9 @@ class CompTrans(object):
         status = self._status
         avatar = trans_.usuario_solicitante.Uprofile.avatar
         monto = "${:.2f}".format(round(float(trans.monto), 2))
-        fecha = trans.fechaValor.strftime("%m/%d/%Y")
-        hora = trans.fechaValor.strftime("%H:%M:%S")
+        fechaValor = trans.fechaValor - timedelta(hours=6)
+        fecha = fechaValor.strftime("%d/%m/%Y")
+        hora = fechaValor.strftime("%H:%M:%S")
         concepto = trans.concepto
 
         if settings.SITE == "local":
@@ -141,14 +150,15 @@ class CompTrans(object):
         comp_img = open(img_name, "rb")
         os.remove(img_name)
         path_file = 'docs/' + img_name
-        url = get_file_url(comp_img, path_file)
+        url = get_file_preassigned(comp_img, path_file, region, content)
         return url
 
     def stp(self):
         trans = self._trans
         importe = "${:,.2f}".format(round(float(trans.monto), 2))
-        fecha = trans.fechaValor.strftime("%m/%d/%Y")
-        hora = trans.fechaValor.strftime("%H:%M:%S")
+        fechaValor = trans.fechaValor - timedelta(hours=6)
+        fecha = fechaValor.strftime("%d/%m/%Y")
+        hora = fechaValor.strftime("%H:%M:%S")
         concepto = trans.concepto
         cuenta = f"*{trans.user.Uprofile.cuentaClabe[13:-1]}"
         rastreo = trans.claveRastreo
@@ -172,15 +182,17 @@ class CompTrans(object):
 
         if settings.SITE == "local":
             img = cv2.imread(self._dir)
+            otrosbancos = os.path.abspath(
+                os.path.join(MEDIA_ROOT, "OTROS_BANCOS.png"))
+            otrosbancos = cv2.imread(otrosbancos)
         elif settings.SITE not in "local":
+            url = settings.AWS_STATIC_PHOTOTEST
+            otrosbancos = imutils.url_to_image(
+                "https://{}/docs/stpstatics/OTROS_BANCOS.png".format(url), -1)
             img = imutils.url_to_image(self._dir)
         for field in fields:
             cv2.putText(img, *field)
-        otrosbancos = imutils.url_to_image(
-            "https://phototest420.s3.amazonaws.com/{}".format(
-                    "docs/stpstatics/OTROS_BANCOS.png"
-            ),
-            -1)
+
         otrosbancos = cv2.resize(otrosbancos, (250, 250))
         x_offset = 180
         y_offset = 0
@@ -196,7 +208,7 @@ class CompTrans(object):
         comp_img = open(img_name, "rb")
         os.remove(img_name)
         path_file = 'docs/' + img_name
-        url = get_file_url(comp_img, path_file)
+        url = get_file_preassigned(comp_img, path_file, region, content)
         return url
 
     def trans(self):

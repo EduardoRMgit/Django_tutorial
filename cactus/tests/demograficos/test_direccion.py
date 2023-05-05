@@ -10,7 +10,7 @@ class TestDireccion(JSONWebTokenTestCase):
 
     @classmethod
     def setUpTestData(cls):
-        call_command('loaddata', 'entidadFed', verbosity=0)
+        call_command('loaddata', 'entidad_federativa', verbosity=0)
         call_command('loaddata', 'tipoDireccion', verbosity=0)
         call_command('loaddata', 'nivelCuenta', verbosity=0)
         call_command('loaddata', 'usertesting', verbosity=0)
@@ -61,19 +61,20 @@ class TestDireccion(JSONWebTokenTestCase):
                      "estado": 1, "ciudad": "DF"}
         expected_res = {
             "setDireccion": {
-              "direccion": {
-                'calle': '5512345678',
-                'numInt': '101',
-                'numExt': '80',
-                'codPostal': '13670',
-                'ciudad': 'DF',
-                'delegMunicipio': "Tlalpan",
-                'entidadFed': {
-                  'entidad': 'CDMX'
+                "direccion": {
+                    'calle': '5512345678',
+                    'numInt': '101',
+                    'numExt': '80',
+                    'codPostal': '13670',
+                    'ciudad': 'DF',
+                    'delegMunicipio': "Tlalpan",
+                    'entidadFed': {
+                        'entidad': 'CDMX'
+                    }
                 }
-              }
             }
         }
+
         res = self.client.execute(mutation, variables)
         self.assertEqual(res.data, expected_res)
         print("    [assert OK] set direccion mutation")

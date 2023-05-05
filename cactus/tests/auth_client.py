@@ -13,7 +13,7 @@ class JWTAuthClientTestCase(JSONWebTokenTestCase):
     def setUp(self):
         load_min_test()
         call_command('loaddata', 'nivelCuenta', verbosity=0)
-        call_command('loaddata', 'entidadFed', verbosity=0)
+        call_command('loaddata', 'entidad_federativa', verbosity=0)
         call_command('loaddata', 'tipoDireccion', verbosity=0)
         call_command('loaddata', 'direccion', verbosity=0)
         call_command('loaddata', 'urls', verbosity=0)

@@ -59,7 +59,7 @@ class TestDireccion(JSONWebTokenTestCase):
 
     def setUp(self):
         call_command('loaddata', 'nivelCuenta', verbosity=0)
-        call_command('loaddata', 'entidadFed', verbosity=0)
+        call_command('loaddata', 'entidad_federativa', verbosity=0)
         call_command('loaddata', 'tipoDireccion', verbosity=0)
         call_command('loaddata', 'urls', verbosity=0)
         call_command('loaddata', 'usertesting', verbosity=0)
@@ -72,8 +72,8 @@ class TestDireccion(JSONWebTokenTestCase):
         self._pass = "12345678"
         request = HttpRequest()
         authenticate(request,
-            username=self.user,
-            password=self._pass)
+                     username=self.user,
+                     password=self._pass)
         self.token = get_token(self.user)
 
     def test_direccion(self):

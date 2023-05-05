@@ -46,7 +46,8 @@ from demograficos.models.userProfile import (RespuestaSeguridad,
                                              INE_Reg_Attempt,
                                              RestorePassword,
                                              Parentesco,
-                                             Avatar)
+                                             Avatar,
+                                             AliasInvalido)
 from demograficos.models.telefono import Telefono
 from demograficos.models.contactos import Contacto
 from demograficos.models.profileChecks import (ComponentValidated,
@@ -60,6 +61,8 @@ from demograficos.models.perfildeclarado import (TransferenciasMensuales,
                                                  UsoCuenta,
                                                  OrigenDeposito,
                                                  PerfilTransaccionalDeclarado,)
+
+from demograficos.models import EntidadFed
 
 from banca.models.entidades import CodigoConfianza
 from banca.utils.clabe import es_cuenta_inguz
@@ -2058,6 +2061,13 @@ class UpdateInfoPersonal(graphene.Mutation):
         correo=None,
         avatarId=None,
     ):
+        def _es_alias_valido(_alias):
+            if " " in _alias:
+                return False
+            lista_negra_alias = AliasInvalido.objects.filter(
+                substring_invalida__iexact=_alias)
+            return lista_negra_alias.count() == 0
+
         if name is not None:
             name = name.strip()
         if alias is not None:
@@ -2087,7 +2097,8 @@ class UpdateInfoPersonal(graphene.Mutation):
                 birth_date if birth_date else u_profile.fecha_nacimiento)
             u_profile.nacionalidad = (
                 nationality if nationality else u_profile.nacionalidad)
-            u_profile.ciudad_nacimiento = city
+            u_prof_cd_nac = u_profile.ciudad_nacimiento
+            u_profile.ciudad_nacimiento = city if city else u_prof_cd_nac
             u_profile.numero_INE = (
                 numero_INE if numero_INE else u_profile.numero_INE)
             u_profile.ocupacion = (
@@ -2099,12 +2110,18 @@ class UpdateInfoPersonal(graphene.Mutation):
                 country if country else u_profile.pais_origen_otro)
             alias = alias if alias else u_profile.alias
             if alias and alias != u_profile.alias:
+                if not _es_alias_valido(alias):
+                    raise AssertionError("Alias no permitido")
+
                 if UserProfile.objects.filter(alias__iexact=alias).count() == 0:
                     u_profile.alias = alias if alias else u_profile.alias
                 else:
-                    raise AssertionError(
-                        "Este alias ya fue tomado por otro cliente, "
+                    msg_alias = "{}{}".format(
+                        "Este alias ya fue tomado por otro cliente, ",
                         "intenta algo diferente"
+                    )
+                    raise AssertionError(
+                        msg_alias
                     )
             elif alias and alias == u_profile.alias:
                 pass
@@ -2142,7 +2159,7 @@ class UpdateInfoPersonal(graphene.Mutation):
                 raise AssertionError("RFC no válido")
             u_profile.save()
             message = InfoValidator.setCheckpoint(user=user, concepto='IP')
-            u_profile.verificacion_curp = True
+
             if message == "curp validado":
                 u_profile.verificacion_curp = True
             u_profile.save()
@@ -2152,8 +2169,19 @@ class UpdateInfoPersonal(graphene.Mutation):
             except Exception as e:
                 raise AssertionError('no se ha podido establecer checkpoint',
                                      e)
-            print("first_name: ", user.first_name)
-            print("last_name: ", user.last_name)
+
+            if u_profile.ciudad_nacimiento and u_profile.verificacion_curp:
+                entidad_fed = EntidadFed.objects.filter(
+                    id=city)
+                if entidad_fed.count() > 0:
+                    entidad_fed = entidad_fed.last()
+                    clave_entidad_fed = entidad_fed.clave
+                    _curp = u_profile.curp
+                    clave_entidad_curp = _curp[11:13]
+                    if str(clave_entidad_curp) != str(clave_entidad_fed):
+                        raise AssertionError('Entidad de nacimiento inválida')
+                    u_profile.ciudad_nacimiento = entidad_fed.entidad
+                    u_profile.save()
 
             msg = f"[curp (1.5) UpdtInfoPersonal userProfileSchema] ->{curp}<-"
             db_logger.info(msg)
@@ -2292,6 +2320,7 @@ class CreateBeneficiario(graphene.Mutation):
                         defaults=defaults,
                     )
             except Exception:
+
                 msg = "Error creando beneficiario, revisa los datos ingresados"
                 raise Exception(msg)
         return CreateBeneficiario(
@@ -2538,7 +2567,6 @@ class RecoverPassword(graphene.Mutation):
                         if check_password(new_password, password.password):
                             raise Exception(("La nueva contraseña no puede "
                                              "ser igual a las anteriores."))
-
                     user.set_password(new_password)
                     pass_temporal.activo = False
                     pass_temporal.save()
@@ -2718,7 +2746,6 @@ mutation{
                                    clabe=clabe,
                                    activo=True,
                                    bloqueado=True).count() > 0:
-
             msg = "{}{}".format(
                 "Esta cuenta CLABE la tienes en un contacto bloqueado, ",
                 "desbloquéalo desde el buscador con su alias.")
@@ -3481,7 +3508,7 @@ class CancelacionCuenta(graphene.Mutation):
         user.is_active = False
         user.save()
         folio = randomString()
-        url = settings.URL_IMAGEN
+        url = "No hay comprobante disponible"
         fecha = timezone.now()
         # Pendiente de crear movimiento no transaccional
         return CancelacionCuenta(
