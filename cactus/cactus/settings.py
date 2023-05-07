@@ -92,6 +92,7 @@ INSTALLED_APPS = [
     'renapo.apps.RenapoConfig',
     'dapp.apps.DappConfig',
     'crecimiento.apps.CrecimientoConfig',
+    'arcus.apps.ArcusConfig',
 ]
 
 if SITE == "local":
