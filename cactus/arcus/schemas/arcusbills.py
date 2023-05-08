@@ -15,12 +15,22 @@ class RecargasType(DjangoObjectType):
 
 
 class Query(object):
-    services_bills = graphene.List(ServicesType)
+    services_bills = graphene.List(ServicesType,
+                                   tipo=graphene.String(),
+                                   nombre=graphene.String())
     recargas_bills = graphene.List(RecargasType)
 
     @login_required
-    def resolve_services_bills(root, info, **kwargs):
-        return ServicesArcus.objects.all()
+    def resolve_services_bills(root, info, tipo=None, nombre=None, **kwargs):
+        all = ServicesArcus.objects.all()
+        if nombre:
+            try:
+                return all.filter(name=nombre)
+            except Exception:
+                raise Exception("Compañia no existe.")
+        if tipo:
+            return all.filter(biller_type=tipo)
+        return all
 
     @login_required
     def resolve_recargas_bills(root, info, **kwargs):

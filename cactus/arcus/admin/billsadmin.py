@@ -5,6 +5,9 @@ import requests
 import json
 from deep_translator import GoogleTranslator
 from django.conf import settings
+import logging
+
+db_logger = logging.getLogger('db')
 
 
 class BillsAdmin(admin.ModelAdmin):
@@ -53,17 +56,36 @@ class ServicesArcusAdmin(admin.ModelAdmin):
     def updateservices(self, request, servicios):
         headers = headers_arcus("/billers/utilities")
         url = f"{settings.ARCUS_DOMAIN}/billers/utilities"
-        servicios = (requests.get(url=url, headers=headers)).content.decode()
-        print(servicios)
-        servicios = (json.loads(servicios))["billers"]
-        gs = GoogleTranslator(source='en', target='es')
-        for servicio in servicios:
-            tipo = gs.translate(servicio["biller_type"])
-            valida = ServicesArcus.objects.filter(
-                id_bill=servicio["id"]).count()
-            if valida:
-                ServicesArcus.objects.filter(
-                    id_bill=servicio["id"]).update(
+        try:
+            servicios = (
+                requests.get(url=url, headers=headers)).content.decode()
+            servicios = (json.loads(servicios))["billers"]
+            gs = GoogleTranslator(source='en', target='es')
+            for servicio in servicios:
+                tipo = gs.translate(servicio["biller_type"])
+                valida = ServicesArcus.objects.filter(
+                    id_bill=servicio["id"]).count()
+                if valida:
+                    ServicesArcus.objects.filter(
+                        id_bill=servicio["id"]).update(
+                            id_bill=servicio["id"],
+                            name=servicio["name"],
+                            biller_type=tipo,
+                            bill_type=servicio["bill_type"],
+                            country=servicio["country"],
+                            currency=servicio["currency"],
+                            requires_name_on_account=servicio[
+                                "requires_name_on_account"],
+                            hours_to_fulfill=servicio["hours_to_fulfill"],
+                            account_number_digits=servicio[
+                                "account_number_digits"],
+                            mask=servicio["mask"],
+                            can_check_balance=servicio["can_check_balance"],
+                            supports_partial_payments=servicio[
+                                "supports_partial_payments"],
+                            has_xdata=servicio["has_xdata"])
+                else:
+                    ServicesArcus.objects.create(
                         id_bill=servicio["id"],
                         name=servicio["name"],
                         biller_type=tipo,
@@ -71,33 +93,23 @@ class ServicesArcusAdmin(admin.ModelAdmin):
                         country=servicio["country"],
                         currency=servicio["currency"],
                         requires_name_on_account=servicio[
-                            "requires_name_on_account"],
+                                "requires_name_on_account"],
                         hours_to_fulfill=servicio["hours_to_fulfill"],
                         account_number_digits=servicio[
-                            "account_number_digits"],
+                                "account_number_digits"],
                         mask=servicio["mask"],
                         can_check_balance=servicio["can_check_balance"],
                         supports_partial_payments=servicio[
                             "supports_partial_payments"],
                         has_xdata=servicio["has_xdata"])
-            else:
-                ServicesArcus.objects.create(
-                    id_bill=servicio["id"],
-                    name=servicio["name"],
-                    biller_type=tipo,
-                    bill_type=servicio["bill_type"],
-                    country=servicio["country"],
-                    currency=servicio["currency"],
-                    requires_name_on_account=servicio[
-                            "requires_name_on_account"],
-                    hours_to_fulfill=servicio["hours_to_fulfill"],
-                    account_number_digits=servicio[
-                            "account_number_digits"],
-                    mask=servicio["mask"],
-                    can_check_balance=servicio["can_check_balance"],
-                    supports_partial_payments=servicio[
-                        "supports_partial_payments"],
-                    has_xdata=servicio["has_xdata"])
+            msg_logg = "{}".format(
+                "[ARCUS REQUEST] (get) actualizacion exitosa")
+            db_logger.info(msg_logg)
+        except Exception as error:
+            msg = "[ARCUS REQUEST ERROR] get (ex:{}) (request:{})".format(
+                error,
+                servicios)
+            db_logger.error(msg)
 
 
 class RecargasArcusAdmin(admin.ModelAdmin):
@@ -128,19 +140,43 @@ class RecargasArcusAdmin(admin.ModelAdmin):
                     )
 
     def updaterecargas(self, request, servicios):
-        headers = headers_arcus("/billers/topups")
-        url = f"{settings.ARCUS_DOMAIN}/billers/topups"
-        recargas = (requests.get(url=url, headers=headers)).content.decode()
-        recargas = (json.loads(recargas))["billers"]
-        print(recargas)
-        gs = GoogleTranslator(source='en', target='es')
-        for recarga in recargas:
-            tipo = gs.translate(recarga["biller_type"])
-            valida = RecargasArcus.objects.filter(
-                id_recarga=recarga["id"]).count()
-            if valida:
-                RecargasArcus.objects.filter(
-                    id_recarga=recarga["id"]).update(
+        try:
+            headers = headers_arcus("/billers/topups")
+            url = f"{settings.ARCUS_DOMAIN}/billers/topups"
+            recargas = (
+                requests.get(url=url, headers=headers)).content.decode()
+            recargas = (json.loads(recargas))["billers"]
+            print(recargas)
+            gs = GoogleTranslator(source='en', target='es')
+            for recarga in recargas:
+                tipo = gs.translate(recarga["biller_type"])
+                valida = RecargasArcus.objects.filter(
+                    id_recarga=recarga["id"]).count()
+                if valida:
+                    RecargasArcus.objects.filter(
+                        id_recarga=recarga["id"]).update(
+                            id_recarga=recarga["id"],
+                            name=recarga["name"],
+                            biller_type=tipo,
+                            bill_type=recarga["bill_type"],
+                            country=recarga["country"],
+                            currency=recarga["currency"],
+                            requires_name_on_account=recarga[
+                                "requires_name_on_account"],
+                            hours_to_fulfill=recarga["hours_to_fulfill"],
+                            account_number_digits=recarga[
+                                "account_number_digits"],
+                            mask=recarga["mask"],
+                            can_check_balance=recarga["can_check_balance"],
+                            supports_partial_payments=recarga[
+                                "supports_partial_payments"],
+                            has_xdata=recarga["has_xdata"],
+                            available_topup_amounts=recarga[
+                                "available_topup_amounts"],
+                            topup_commission=recarga["topup_commission"]
+                            )
+                else:
+                    RecargasArcus.objects.create(
                         id_recarga=recarga["id"],
                         name=recarga["name"],
                         biller_type=tipo,
@@ -148,40 +184,26 @@ class RecargasArcusAdmin(admin.ModelAdmin):
                         country=recarga["country"],
                         currency=recarga["currency"],
                         requires_name_on_account=recarga[
-                            "requires_name_on_account"],
+                                "requires_name_on_account"],
                         hours_to_fulfill=recarga["hours_to_fulfill"],
                         account_number_digits=recarga[
-                            "account_number_digits"],
+                                "account_number_digits"],
                         mask=recarga["mask"],
                         can_check_balance=recarga["can_check_balance"],
                         supports_partial_payments=recarga[
                             "supports_partial_payments"],
                         has_xdata=recarga["has_xdata"],
                         available_topup_amounts=recarga[
-                            "available_topup_amounts"],
-                        topup_commission=recarga["topup_commission"]
-                        )
-            else:
-                RecargasArcus.objects.create(
-                    id_recarga=recarga["id"],
-                    name=recarga["name"],
-                    biller_type=tipo,
-                    bill_type=recarga["bill_type"],
-                    country=recarga["country"],
-                    currency=recarga["currency"],
-                    requires_name_on_account=recarga[
-                            "requires_name_on_account"],
-                    hours_to_fulfill=recarga["hours_to_fulfill"],
-                    account_number_digits=recarga[
-                            "account_number_digits"],
-                    mask=recarga["mask"],
-                    can_check_balance=recarga["can_check_balance"],
-                    supports_partial_payments=recarga[
-                        "supports_partial_payments"],
-                    has_xdata=recarga["has_xdata"],
-                    available_topup_amounts=recarga[
-                            "available_topup_amounts"],
-                    topup_commission=recarga["topup_commission"])
+                                "available_topup_amounts"],
+                        topup_commission=recarga["topup_commission"])
+            msg_logg = "{}".format(
+                "[ARCUS REQUEST] (get) actualizacion exitosa")
+            db_logger.info(msg_logg)
+        except Exception as error:
+            msg = "[ARCUS REQUEST ERROR] get (ex:{}) (request:{})".format(
+                error,
+                servicios)
+            db_logger.error(msg)
 
 
 admin.site.register(Bills, BillsAdmin)
