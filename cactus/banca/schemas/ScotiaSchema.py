@@ -27,7 +27,7 @@ from scotiabank.models import (ScotiaTransferencia,
                                DatosFijosPDF)
 
 from demograficos.models.userProfile import UserProfile
-from demograficos.utils.tokendinamico import tokenD
+from demograficos.utils.tokendinamico import validaToken
 
 
 def upload_s3(nombre_archivo, archivo):
@@ -195,11 +195,10 @@ class CreateTransferenciaScotia(graphene.Mutation):
             ordenante = info.context.user
         except Exception:
             raise Exception('Usuario inexistente')
-        dinamico = tokenD()
         if UserProfile.objects.filter(user=ordenante).count() == 0:
             raise Exception('Usuario sin perfil')
         if ordenante.Uprofile.password:
-            if not dinamico.verify(token_d):
+            if not validaToken(token_d):
                 raise Exception('token dinamico incorrecto')
         if monto == 0 or monto is None:
             raise Exception('Ingrese un monto válido')
@@ -307,11 +306,10 @@ class CreateRetiroScotia(graphene.Mutation):
         monto = round(float(monto), 2)
         comision = 24
         saldo_inicial_usuario = user.Uprofile.saldo_cuenta
-        dinamico = tokenD
 
         _valida(UserProfile.objects.filter(user=user).count() == 0,
                 'Usuario sin perfil')
-        _valida(not dinamico.verify(token_d),
+        _valida(not validaToken(token_d),
                 'El token dinamico es incorrecto.')
         _valida(monto <= 0 or monto is None,
                 'Únicamente montos positivos o válidos.')
@@ -455,11 +453,10 @@ class CreateScotiaDeposito(graphene.Mutation):
                 raise Exception(msg)
 
         ordenante = info.context.user
-        dinamico = tokenD()
 
         validar(UserProfile.objects.filter(
             user=ordenante).count() == 0, 'Usuario sin perfil')
-        validar(not dinamico.verify(token_d),
+        validar(not validaToken(token_d),
                 'El token dinamico es incorrecto.')
         validar(monto == 0 or monto is None, 'Ingrese un monto válido')
         validar(

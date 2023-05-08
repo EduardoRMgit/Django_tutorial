@@ -13,7 +13,7 @@ from demograficos.models.userProfile import UserProfile
 from demograficos.models import Contacto
 from spei.stpTools import randomString
 from banca.utils.limiteTrans import LimiteTrans
-from demograficos.utils.tokendinamico import tokenD
+from demograficos.utils.tokendinamico import validaToken
 from banca.utils.comprobantesPng import CompTrans
 from datetime import datetime
 
@@ -49,12 +49,11 @@ class CreateInguzTransaccion(graphene.Mutation):
             ordenante = info.context.user
         except Exception:
             raise Exception('Usuario inexistente')
-        dinamico = tokenD()
         if not es_cuenta_inguz(ordenante.Uprofile.cuentaClabe):
             raise Exception("Cuenta ordenante no es Inguz")
         if UserProfile.objects.filter(user=ordenante).count() == 0:
             raise Exception('Usuario sin perfil')
-        if not dinamico.verify(token_d):
+        if not validaToken(token_d):
             raise Exception('token dinamico incorrecto')
 
         try:
