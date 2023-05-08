@@ -19,7 +19,8 @@ from .userProfile import (StatusRegistro,
                           RespuestaSeguridad,
                           UserDevice,
                           Parentesco,
-                          Avatar
+                          Avatar,
+                          AliasInvalido
                           )
 from .comportamiento import (ComportamientoDiario, ComportamientoMensual)
 from .contactos import Contacto

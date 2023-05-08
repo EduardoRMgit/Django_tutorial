@@ -45,7 +45,7 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'staging.inguz.site',
                  'staging.zygoo.mx', 'test.zygoo.mx',
                  'inguz.site', 'zygoo.mx', '10.195.1.207',
                  '10.5.1.1', 'inguzmx.com', 'staging.inguz.online',
-                 'test.inguz.online']
+                 'test.inguz.online', 'staging001wi8ev.inguz.online']
 
 # Application definition
 
@@ -289,6 +289,7 @@ if (USE_S3):
     AWS_SECRET_ACCESS_KEY = env.str('AWS_SECRET_ID', "")
     AWS_S3_REGION_NAME = 'us-east-1'
     AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
+    AWS_STATIC_PHOTOTEST = 'phototest420.s3.amazonaws.com'
     AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
     AWS_DEFAULT_ACL = None
     # s3 static settings
@@ -351,6 +352,7 @@ AUTO_LOGOUT = {
 PREFIJO_CUENTA_INGUZ = "6461802180"
 
 AXES_LOCKOUT_CALLABLE = "cactus.customAuthBackend.lockout"
+
 
 
 

@@ -47,7 +47,8 @@ from demograficos.models.userProfile import (RespuestaSeguridad,
                                              INE_Reg_Attempt,
                                              RestorePassword,
                                              Parentesco,
-                                             Avatar)
+                                             Avatar,
+                                             AliasInvalido)
 from demograficos.models.telefono import Telefono
 from demograficos.models.contactos import Contacto
 from demograficos.models.profileChecks import (ComponentValidated,
@@ -2077,6 +2078,13 @@ class UpdateInfoPersonal(graphene.Mutation):
         correo=None,
         avatarId=None,
     ):
+        def _es_alias_valido(_alias):
+            if " " in _alias:
+                return False
+            lista_negra_alias = AliasInvalido.objects.filter(
+                substring_invalida__iexact=_alias)
+            return lista_negra_alias.count() == 0
+
         if name is not None:
             name = name.strip()
         if alias is not None:
@@ -2119,12 +2127,18 @@ class UpdateInfoPersonal(graphene.Mutation):
                 country if country else u_profile.pais_origen_otro)
             alias = alias if alias else u_profile.alias
             if alias and alias != u_profile.alias:
+                if not _es_alias_valido(alias):
+                    raise AssertionError("Alias no permitido")
+
                 if UserProfile.objects.filter(alias__iexact=alias).count() == 0:
                     u_profile.alias = alias if alias else u_profile.alias
                 else:
-                    raise AssertionError(
-                        "Este alias ya fue tomado por otro cliente, "
+                    msg_alias = "{}{}".format(
+                        "Este alias ya fue tomado por otro cliente, ",
                         "intenta algo diferente"
+                    )
+                    raise AssertionError(
+                        msg_alias
                     )
             elif alias and alias == u_profile.alias:
                 pass
@@ -2162,7 +2176,7 @@ class UpdateInfoPersonal(graphene.Mutation):
                 raise AssertionError("RFC no válido")
             u_profile.save()
             message = InfoValidator.setCheckpoint(user=user, concepto='IP')
-            u_profile.verificacion_curp = True
+
             if message == "curp validado":
                 u_profile.verificacion_curp = True
             u_profile.save()

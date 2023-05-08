@@ -1,9 +1,13 @@
 import os
 import requests
 import json
+import logging
 
 from base64 import b64encode
 from OpenSSL import crypto
+
+
+db_logger = logging.getLogger('db')
 
 
 def generateSignatureDeleteSTP(user):
@@ -35,6 +39,8 @@ def generateSignatureDeleteSTP(user):
     ).format(empresa="ZYGOO",
              cuenta=user.Uprofile.cuentaClabe,
              rfcCurp=user.Uprofile.curp)
+    db_logger.info(
+        f"[STP delete cuenta] Cadena original: {baseString}")
 
     stp_key_pwd = str.encode(STP_KEY_PWD)
     with open('llavePrivada.pem', 'r') as key:
@@ -65,6 +71,10 @@ def delete_stp(user):
             "size": 500,
             "cuenta": user.Uprofile.cuentaClabe,
             "rfcCurp": user.Uprofile.curp}
+
+    logger_msg = f"[STP delete cuenta] Request Data: {data}"
+    db_logger.info(logger_msg)
+
     cert = os.path.join(
         os.path.dirname(__file__),
         "stpmex-com-chain.pem")

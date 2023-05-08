@@ -24,6 +24,7 @@ block_exception = [
     'unBlock',
     'updateDevice',
     'blockAccountEmergency',
+    'recoverPassword',
 ]
 
 uuid_exception = [
@@ -87,7 +88,8 @@ class LoggingGraphQLView(GraphQLView):
                 #     query, uuid_exception
                 # ):
                 #     return HttpResponseForbidden("UUID incorrecto")
-        if user.Uprofile.status != 'O' and not self.query_ex(
+        if (user.Uprofile.status != 'O' and
+                user.Uprofile.blocked_reason != 'T') and not self.query_ex(
                 query, block_exception):
             return HttpResponseForbidden("action forbidden, user blocked")
         return super().dispatch(request, *args, **kwargs)

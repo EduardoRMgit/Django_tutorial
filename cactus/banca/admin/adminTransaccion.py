@@ -3,9 +3,8 @@ from banca.models.transaccion import (Transaccion,
                                       ValidacionSesion,
                                       ValidacionTransaccion,
                                       SaldoReservado)
-from banca.models import InguzTransaction
+from banca.models import InguzTransaction, ComisioneSTP
 from spei.models import StpTransaction
-from banca.models.comisionSTP import ComisioneSTP
 from pld.models.movements import Movimiento
 from banca.models.regulacion import ValidacionRegulatoria
 from banca.models.catalogos import ErroresTransaccion
@@ -30,13 +29,6 @@ class ValidacionTransaccionInline(admin.StackedInline):
     model = ValidacionTransaccion
     can_delete = False
     verbose_name_plural = 'Validacion Transaccion'
-    fk_name = 'transaccion'
-
-
-class ComisioneSTPInline(admin.StackedInline):
-    model = ComisioneSTP
-    can_delete = False
-    verbose_name_plural = 'Comision STP'
     fk_name = 'transaccion'
 
 
@@ -66,7 +58,6 @@ class TransaccionAdmin(admin.ModelAdmin):
         ValidacionSesionInline,
         ValidacionTransaccionInline,
         StpTransactionInline,
-        ComisioneSTPInline,
         MovimientoInline,
         ValidacionRegulatoriaInline,
         InguzInline,
@@ -94,6 +85,7 @@ class TransaccionAdmin(admin.ModelAdmin):
                     'statusTrans',
                     'errorRes',
                     'tipoTrans',
+                    'comision'
                     )
 
     list_per_page = 25
@@ -128,7 +120,12 @@ class SaldoReservadoAdmin(admin.ModelAdmin):
     )
 
 
+class ComisionAdmin(admin.ModelAdmin):
+    list_display = ["stp", "ivaSTP", "cliente", "ivaCliente"]
+
+
 admin.site.register(SaldoReservado, SaldoReservadoAdmin)
 admin.site.register(Transaccion, TransaccionAdmin)
+admin.site.register(ComisioneSTP, ComisionAdmin)
 
 admin.site.register(ErroresTransaccion, ErroresAdmin)

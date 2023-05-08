@@ -118,6 +118,7 @@ def statusStp(estado, stpId):
                 return 1
             elif estado == "devolucion":
                 reservado.status_saldo = "devuelto"
+                reservado.saldo_reservado = reservado.saldo_reservado - 7.52
                 reservado.fecha_aplicado_devuelto = timezone.now()
                 reservado.save()
 
