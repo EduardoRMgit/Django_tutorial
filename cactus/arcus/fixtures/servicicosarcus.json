@@ -1,0 +1,1910 @@
+[
+{
+  "model": "arcus.servicesarcus",
+  "pk": 35,
+  "fields": {
+    "name": "CFE",
+    "biller_type": "Electricity",
+    "bill_type": "account_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 24,
+    "account_number_digits": "12",
+    "mask": "999999999999",
+    "can_check_balance": true,
+    "supports_partial_payments": true,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 36,
+  "fields": {
+    "name": "Axtel [código de barras]",
+    "biller_type": "Landline",
+    "bill_type": "bar_code",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 24,
+    "account_number_digits": "26",
+    "mask": "99999999999999999999999999",
+    "can_check_balance": true,
+    "supports_partial_payments": true,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 37,
+  "fields": {
+    "name": "Telmex",
+    "biller_type": "Landline",
+    "bill_type": "phone_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 48,
+    "account_number_digits": "10",
+    "mask": "9999999999",
+    "can_check_balance": true,
+    "supports_partial_payments": true,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 38,
+  "fields": {
+    "name": "Plato [código de barras]",
+    "biller_type": "Satellite",
+    "bill_type": "bar_code",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 24,
+    "account_number_digits": "13..14",
+    "mask": "999999999999999",
+    "can_check_balance": true,
+    "supports_partial_payments": true,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 40,
+  "fields": {
+    "name": "Cielo",
+    "biller_type": "Satellite",
+    "bill_type": "account_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "12",
+    "mask": "999999999999",
+    "can_check_balance": true,
+    "supports_partial_payments": true,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 41,
+  "fields": {
+    "name": "Megacable [código de barras]",
+    "biller_type": "Cable",
+    "bill_type": "bar_code",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "26",
+    "mask": "99999999999999999999999999",
+    "can_check_balance": true,
+    "supports_partial_payments": true,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 42,
+  "fields": {
+    "name": "Maxcom [código de barras]",
+    "biller_type": "Cable",
+    "bill_type": "bar_code",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 24,
+    "account_number_digits": "10..20",
+    "mask": "99999999999999999999",
+    "can_check_balance": true,
+    "supports_partial_payments": false,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 43,
+  "fields": {
+    "name": "Gas Natural México [código de barras]",
+    "biller_type": "Gas",
+    "bill_type": "bar_code",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 24,
+    "account_number_digits": "28",
+    "mask": "9999999999999999999999999999",
+    "can_check_balance": true,
+    "supports_partial_payments": false,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 44,
+  "fields": {
+    "name": "Infonavit",
+    "biller_type": "Mortgage",
+    "bill_type": "account_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 24,
+    "account_number_digits": "10",
+    "mask": "9999999999",
+    "can_check_balance": false,
+    "supports_partial_payments": true,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 45,
+  "fields": {
+    "name": "Quién (Guadalajara) [Código de barras]",
+    "biller_type": "Water",
+    "bill_type": "bar_code",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 24,
+    "account_number_digits": "22",
+    "mask": "9999999999999999999999",
+    "can_check_balance": false,
+    "supports_partial_payments": true,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 91,
+  "fields": {
+    "name": "Ser",
+    "biller_type": "Satellite",
+    "bill_type": "account_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "12",
+    "mask": "999999999999",
+    "can_check_balance": true,
+    "supports_partial_payments": true,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 1821,
+  "fields": {
+    "name": "Megacable",
+    "biller_type": "Cable",
+    "bill_type": "account_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 48,
+    "account_number_digits": "10",
+    "mask": "9999999999",
+    "can_check_balance": true,
+    "supports_partial_payments": true,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 2631,
+  "fields": {
+    "name": "Telnor",
+    "biller_type": "Landline",
+    "bill_type": "bar_code",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 48,
+    "account_number_digits": "20",
+    "mask": "99999999999999999999",
+    "can_check_balance": true,
+    "supports_partial_payments": true,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 2901,
+  "fields": {
+    "name": "Iusacell",
+    "biller_type": "PostPaidCell",
+    "bill_type": "phone_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 24,
+    "account_number_digits": "10",
+    "mask": "9999999999",
+    "can_check_balance": true,
+    "supports_partial_payments": true,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 2931,
+  "fields": {
+    "name": "Telcelera",
+    "biller_type": "PostPaidCell",
+    "bill_type": "phone_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 72,
+    "account_number_digits": "10",
+    "mask": "(999) 999-9999",
+    "can_check_balance": true,
+    "supports_partial_payments": true,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 3162,
+  "fields": {
+    "name": "Agua de Salamanca-cmapas",
+    "biller_type": "Water",
+    "bill_type": "account_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 48,
+    "account_number_digits": "26",
+    "mask": "99999999999999999999999999",
+    "can_check_balance": false,
+    "supports_partial_payments": true,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 3172,
+  "fields": {
+    "name": "Agua de Quintana Roo-Aguakan",
+    "biller_type": "Water",
+    "bill_type": "bar_code",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 48,
+    "account_number_digits": "27",
+    "mask": "999999999999999999999999999",
+    "can_check_balance": false,
+    "supports_partial_payments": false,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 3192,
+  "fields": {
+    "name": "Agua de Mty-AyDM",
+    "biller_type": "Water",
+    "bill_type": "bar_code",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 48,
+    "account_number_digits": "32",
+    "mask": "99999999999999999999999999999999",
+    "can_check_balance": false,
+    "supports_partial_payments": true,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 3202,
+  "fields": {
+    "name": "JUMAPA - Agua de Celaya [Barcode]",
+    "biller_type": "Water",
+    "bill_type": "bar_code",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 48,
+    "account_number_digits": "30",
+    "mask": "999999999999999999999999999999",
+    "can_check_balance": true,
+    "supports_partial_payments": false,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 3212,
+  "fields": {
+    "name": "CFE [Llamada]",
+    "biller_type": "Electricity",
+    "bill_type": "account_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 48,
+    "account_number_digits": "12",
+    "mask": "999999999999",
+    "can_check_balance": true,
+    "supports_partial_payments": true,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 5985,
+  "fields": {
+    "name": "Movistar [código de barras]",
+    "biller_type": "PostPaidCell",
+    "bill_type": "bar_code",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "10..18",
+    "mask": "999999999999999999",
+    "can_check_balance": true,
+    "supports_partial_payments": true,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 6900,
+  "fields": {
+    "name": "Izzi",
+    "biller_type": "Cable",
+    "bill_type": "account_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "8..10",
+    "mask": "99999999?99",
+    "can_check_balance": true,
+    "supports_partial_payments": true,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 12493,
+  "fields": {
+    "name": "Juego total",
+    "biller_type": "Cable",
+    "bill_type": "account_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "10",
+    "mask": "9999999999",
+    "can_check_balance": true,
+    "supports_partial_payments": true,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 12495,
+  "fields": {
+    "name": "Avón",
+    "biller_type": "Media Subscription",
+    "bill_type": "account_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": null,
+    "account_number_digits": "20",
+    "mask": "XXXXXXXXXXXXXXXXXXXX",
+    "can_check_balance": false,
+    "supports_partial_payments": true,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 12500,
+  "fields": {
+    "name": "Gobierno de la Ciudad de Mexico",
+    "biller_type": "Government",
+    "bill_type": "bar_code",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 24,
+    "account_number_digits": "20..32",
+    "mask": "XXXXXXXXXXXXXXXXXXXX",
+    "can_check_balance": false,
+    "supports_partial_payments": false,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 12504,
+  "fields": {
+    "name": "Jafra",
+    "biller_type": "Media Subscription",
+    "bill_type": "account_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 24,
+    "account_number_digits": "",
+    "mask": "",
+    "can_check_balance": false,
+    "supports_partial_payments": true,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 12513,
+  "fields": {
+    "name": "Pase Urbano",
+    "biller_type": "Toll",
+    "bill_type": "account_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "12..13",
+    "mask": "999999999999?",
+    "can_check_balance": true,
+    "supports_partial_payments": true,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 12515,
+  "fields": {
+    "name": "Televia",
+    "biller_type": "Toll",
+    "bill_type": "account_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "11..12",
+    "mask": "99999999999?",
+    "can_check_balance": false,
+    "supports_partial_payments": true,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 12520,
+  "fields": {
+    "name": "Telmex [Barcode]",
+    "biller_type": "Landline",
+    "bill_type": "bar_code",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 48,
+    "account_number_digits": "20",
+    "mask": "99999999999999999999",
+    "can_check_balance": true,
+    "supports_partial_payments": true,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 12532,
+  "fields": {
+    "name": "AMD - Durango",
+    "biller_type": "Water",
+    "bill_type": "account_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "22",
+    "mask": "XXXXXXXXXXXXXXXXXXXXXX",
+    "can_check_balance": false,
+    "supports_partial_payments": false,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 12533,
+  "fields": {
+    "name": "INTERAPAS (San Luis Potosi)",
+    "biller_type": "Water",
+    "bill_type": "bar_code",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "23",
+    "mask": "99999999999999999999999",
+    "can_check_balance": false,
+    "supports_partial_payments": true,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 12534,
+  "fields": {
+    "name": "JMAS - Chihuahua [código de barras]",
+    "biller_type": "Water",
+    "bill_type": "bar_code",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "22..30",
+    "mask": "XXXXXXXXXXXXXXXXXXXXXX????????",
+    "can_check_balance": false,
+    "supports_partial_payments": true,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 12535,
+  "fields": {
+    "name": "Seapal (Puerto Vallarta) [Código de barras]",
+    "biller_type": "Water",
+    "bill_type": "bar_code",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "28",
+    "mask": "9999999999999999999999999999",
+    "can_check_balance": false,
+    "supports_partial_payments": true,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 12537,
+  "fields": {
+    "name": "Zacatecas [Barcode]",
+    "biller_type": "Government",
+    "bill_type": "bar_code",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "22",
+    "mask": null,
+    "can_check_balance": false,
+    "supports_partial_payments": true,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 12539,
+  "fields": {
+    "name": "Cablevision Saltillo",
+    "biller_type": "Cable",
+    "bill_type": "bar_code",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 24,
+    "account_number_digits": "25",
+    "mask": "99999999999999999999",
+    "can_check_balance": false,
+    "supports_partial_payments": true,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 12540,
+  "fields": {
+    "name": "Telnor",
+    "biller_type": "Landline",
+    "bill_type": "phone_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 24,
+    "account_number_digits": "10..20",
+    "mask": "9999999999",
+    "can_check_balance": true,
+    "supports_partial_payments": true,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 12549,
+  "fields": {
+    "name": "TotalPlay [código de barras]",
+    "biller_type": "Cable",
+    "bill_type": "bar_code",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 24,
+    "account_number_digits": "17",
+    "mask": "99999999999999999",
+    "can_check_balance": true,
+    "supports_partial_payments": true,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 12552,
+  "fields": {
+    "name": "Ilusion",
+    "biller_type": "Media Subscription",
+    "bill_type": "account_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "6..17",
+    "mask": "",
+    "can_check_balance": false,
+    "supports_partial_payments": true,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 12553,
+  "fields": {
+    "name": "L'El bel belcorp l'bel",
+    "biller_type": "Media Subscription",
+    "bill_type": "account_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "7",
+    "mask": "9999999",
+    "can_check_balance": true,
+    "supports_partial_payments": false,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 12556,
+  "fields": {
+    "name": "Yves Rocher",
+    "biller_type": "Media Subscription",
+    "bill_type": "account_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "15",
+    "mask": null,
+    "can_check_balance": false,
+    "supports_partial_payments": false,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 12557,
+  "fields": {
+    "name": "Naturaleza",
+    "biller_type": "Media Subscription",
+    "bill_type": "account_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "",
+    "mask": "",
+    "can_check_balance": false,
+    "supports_partial_payments": false,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 13613,
+  "fields": {
+    "name": "CFE [Código de barras]",
+    "biller_type": "Electricity",
+    "bill_type": "bar_code",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 24,
+    "account_number_digits": "30",
+    "mask": "999999999999999999999999999999",
+    "can_check_balance": true,
+    "supports_partial_payments": true,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 13614,
+  "fields": {
+    "name": "Gobierno del Estado de Mexico",
+    "biller_type": "Government",
+    "bill_type": "bar_code",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 24,
+    "account_number_digits": "7..27",
+    "mask": "XXXXXXXXXXXXXXX",
+    "can_check_balance": false,
+    "supports_partial_payments": false,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 13616,
+  "fields": {
+    "name": "JAPAY - JUNTA DE AGUA POTABLE Y ALCANTARILLADO DE YUCATAN",
+    "biller_type": "Water",
+    "bill_type": "bar_code",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 72,
+    "account_number_digits": "22..23",
+    "mask": "9999999999999999999999?9",
+    "can_check_balance": true,
+    "supports_partial_payments": false,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 13617,
+  "fields": {
+    "name": "Telmex",
+    "biller_type": "Landline",
+    "bill_type": "phone_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 48,
+    "account_number_digits": "10",
+    "mask": "9999999999",
+    "can_check_balance": true,
+    "supports_partial_payments": true,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 13620,
+  "fields": {
+    "name": "CEA - Comisión Estatal de Aguas Querétaro [BARCODE]",
+    "biller_type": "Water",
+    "bill_type": "bar_code",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 24,
+    "account_number_digits": "20..23",
+    "mask": "99999999999999999999999",
+    "can_check_balance": true,
+    "supports_partial_payments": true,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 13622,
+  "fields": {
+    "name": "CESPT - Comision Estatal de Servicios Publicos de Tijuana",
+    "biller_type": "Water",
+    "bill_type": "bar_code",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 24,
+    "account_number_digits": "29",
+    "mask": "99999999999999999999999999999",
+    "can_check_balance": false,
+    "supports_partial_payments": false,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 13623,
+  "fields": {
+    "name": "Telecomunicaciones azules",
+    "biller_type": "Satellite",
+    "bill_type": "account_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "12",
+    "mask": "999999999999",
+    "can_check_balance": true,
+    "supports_partial_payments": true,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 13625,
+  "fields": {
+    "name": "Gobierno de Jalisco",
+    "biller_type": "Government",
+    "bill_type": "bar_code",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 72,
+    "account_number_digits": "32",
+    "mask": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "can_check_balance": false,
+    "supports_partial_payments": false,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 13626,
+  "fields": {
+    "name": "Municipio de Queretaro",
+    "biller_type": "Government",
+    "bill_type": "bar_code",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 72,
+    "account_number_digits": "33",
+    "mask": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "can_check_balance": false,
+    "supports_partial_payments": false,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 13627,
+  "fields": {
+    "name": "Gobierno de Michoacan",
+    "biller_type": "Government",
+    "bill_type": "bar_code",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "20",
+    "mask": "XXXXXXXXXXXXXXXXXXXX",
+    "can_check_balance": false,
+    "supports_partial_payments": false,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 13628,
+  "fields": {
+    "name": "Gobierno de Guanajuato",
+    "biller_type": "Government",
+    "bill_type": "bar_code",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "4..27",
+    "mask": "XXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "can_check_balance": true,
+    "supports_partial_payments": false,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 13629,
+  "fields": {
+    "name": "Gobierno de Tlaxcala",
+    "biller_type": "Government",
+    "bill_type": "bar_code",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "20",
+    "mask": "XXXXXXXXXXXXXXXXXXXX",
+    "can_check_balance": true,
+    "supports_partial_payments": false,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 13630,
+  "fields": {
+    "name": "Gobierno de Coahuila",
+    "biller_type": "Government",
+    "bill_type": "bar_code",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "19",
+    "mask": "XXXXXXXXXXXXXXXXXXX",
+    "can_check_balance": true,
+    "supports_partial_payments": false,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 13631,
+  "fields": {
+    "name": "Gobierno de Hidalgo",
+    "biller_type": "Government",
+    "bill_type": "bar_code",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "20",
+    "mask": "XXXXXXXXXXXXXXXXXXXX",
+    "can_check_balance": true,
+    "supports_partial_payments": false,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 13633,
+  "fields": {
+    "name": "Agua de Puebla",
+    "biller_type": "Water",
+    "bill_type": "bar_code",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 48,
+    "account_number_digits": "20..30",
+    "mask": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "can_check_balance": true,
+    "supports_partial_payments": true,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 13646,
+  "fields": {
+    "name": "CESPE - Comisión Estatal de Servicios Públicos de Ensenada",
+    "biller_type": "Water",
+    "bill_type": "bar_code",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "8..30",
+    "mask": "999999999999999999999999999999",
+    "can_check_balance": true,
+    "supports_partial_payments": false,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 13649,
+  "fields": {
+    "name": "CESPE - Comisión Estatal de Servicios Públicos de Ensenada",
+    "biller_type": "Water",
+    "bill_type": "account_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "8",
+    "mask": "99999999",
+    "can_check_balance": true,
+    "supports_partial_payments": false,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 13650,
+  "fields": {
+    "name": "Agua Gomez Palacio, Durango - SIDEAPA",
+    "biller_type": "Water",
+    "bill_type": "bar_code",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 24,
+    "account_number_digits": "22",
+    "mask": "999 99999999 9999999999 9",
+    "can_check_balance": false,
+    "supports_partial_payments": false,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 13651,
+  "fields": {
+    "name": "Ayuntamiento Reynosa",
+    "biller_type": "Government",
+    "bill_type": "bar_code",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 24,
+    "account_number_digits": "29",
+    "mask": "99999999999999999999999999999",
+    "can_check_balance": true,
+    "supports_partial_payments": false,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 13682,
+  "fields": {
+    "name": "Instituto de la Vivienda de Nuevo León",
+    "biller_type": "Mortgage",
+    "bill_type": "bar_code",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 24,
+    "account_number_digits": "18",
+    "mask": "999999999999999999",
+    "can_check_balance": false,
+    "supports_partial_payments": false,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 13683,
+  "fields": {
+    "name": "Fomento Metropolitano de Monterrey - Fomerrey",
+    "biller_type": "Mortgage",
+    "bill_type": "bar_code",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 24,
+    "account_number_digits": "18",
+    "mask": "999999999999999999",
+    "can_check_balance": false,
+    "supports_partial_payments": false,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 13727,
+  "fields": {
+    "name": "Nettv",
+    "biller_type": "Satellite",
+    "bill_type": "bar_code",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 24,
+    "account_number_digits": "13..14",
+    "mask": "9999999999999?9",
+    "can_check_balance": true,
+    "supports_partial_payments": true,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 26029,
+  "fields": {
+    "name": "Agua de agua - Veolia",
+    "biller_type": "Water",
+    "bill_type": "bar_code",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 24,
+    "account_number_digits": "19",
+    "mask": "9999999999999999999",
+    "can_check_balance": true,
+    "supports_partial_payments": false,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 29835,
+  "fields": {
+    "name": "GOBIERNO DE QUERÉTARO",
+    "biller_type": "Government",
+    "bill_type": "bar_code",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 24,
+    "account_number_digits": "",
+    "mask": "",
+    "can_check_balance": true,
+    "supports_partial_payments": false,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 29837,
+  "fields": {
+    "name": "Agua de Mexicali",
+    "biller_type": "Water",
+    "bill_type": "bar_code",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 24,
+    "account_number_digits": "28",
+    "mask": null,
+    "can_check_balance": true,
+    "supports_partial_payments": false,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 29838,
+  "fields": {
+    "name": "Arcuspay",
+    "biller_type": "Deposits",
+    "bill_type": "account_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 24,
+    "account_number_digits": "30..32",
+    "mask": "",
+    "can_check_balance": false,
+    "supports_partial_payments": false,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 29839,
+  "fields": {
+    "name": "abrazos",
+    "biller_type": "Internet",
+    "bill_type": "account_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 24,
+    "account_number_digits": "8..24",
+    "mask": "99999999",
+    "can_check_balance": true,
+    "supports_partial_payments": false,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 40842,
+  "fields": {
+    "name": "Televia",
+    "biller_type": "Toll",
+    "bill_type": "account_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 24,
+    "account_number_digits": "11..12",
+    "mask": "99999999999?",
+    "can_check_balance": true,
+    "supports_partial_payments": false,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 40843,
+  "fields": {
+    "name": "AGUA DE SALTILLO",
+    "biller_type": "Water",
+    "bill_type": "bar_code",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "23..29",
+    "mask": null,
+    "can_check_balance": false,
+    "supports_partial_payments": true,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 40844,
+  "fields": {
+    "name": "Grupos Bill Pay",
+    "biller_type": "Deposits",
+    "bill_type": "account_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "1..32",
+    "mask": "",
+    "can_check_balance": false,
+    "supports_partial_payments": false,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 40845,
+  "fields": {
+    "name": "RAPPI MX Bill Pay",
+    "biller_type": "Deposits",
+    "bill_type": "account_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "1..32",
+    "mask": "",
+    "can_check_balance": false,
+    "supports_partial_payments": false,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 40858,
+  "fields": {
+    "name": "Pago de factura de yofio",
+    "biller_type": "Deposits",
+    "bill_type": "account_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "1..32",
+    "mask": "",
+    "can_check_balance": false,
+    "supports_partial_payments": false,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 40863,
+  "fields": {
+    "name": "Listobuy Bill Pay",
+    "biller_type": "Deposits",
+    "bill_type": "account_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "1..32",
+    "mask": "",
+    "can_check_balance": false,
+    "supports_partial_payments": false,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 51093,
+  "fields": {
+    "name": "Gas natural al noroeste",
+    "biller_type": "Gas",
+    "bill_type": "bar_code",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 24,
+    "account_number_digits": "32",
+    "mask": "999999999999999999999999999999",
+    "can_check_balance": false,
+    "supports_partial_payments": false,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 51095,
+  "fields": {
+    "name": "Estrella de la TV",
+    "biller_type": "Satellite",
+    "bill_type": "account_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "8..10",
+    "mask": "99999999",
+    "can_check_balance": true,
+    "supports_partial_payments": false,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 51096,
+  "fields": {
+    "name": "Petirrojo",
+    "biller_type": "Internet",
+    "bill_type": "account_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "10",
+    "mask": "",
+    "can_check_balance": true,
+    "supports_partial_payments": false,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 52300,
+  "fields": {
+    "name": "Depósitos de administración de Grupo",
+    "biller_type": "Deposits",
+    "bill_type": "account_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "1..32",
+    "mask": "",
+    "can_check_balance": false,
+    "supports_partial_payments": false,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 52301,
+  "fields": {
+    "name": "Depósitos de código de pago",
+    "biller_type": "Deposits",
+    "bill_type": "account_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "1..32",
+    "mask": "",
+    "can_check_balance": false,
+    "supports_partial_payments": false,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 52304,
+  "fields": {
+    "name": "Ecogas",
+    "biller_type": "Gas",
+    "bill_type": "account_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "",
+    "mask": "",
+    "can_check_balance": false,
+    "supports_partial_payments": false,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 52306,
+  "fields": {
+    "name": "Maxigas",
+    "biller_type": "Gas",
+    "bill_type": "account_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "",
+    "mask": "",
+    "can_check_balance": false,
+    "supports_partial_payments": false,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 52310,
+  "fields": {
+    "name": "Mueve_DF",
+    "biller_type": "Toll",
+    "bill_type": "",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "16",
+    "mask": "9999999999999999",
+    "can_check_balance": false,
+    "supports_partial_payments": false,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 54253,
+  "fields": {
+    "name": "Estable",
+    "biller_type": "Insurance",
+    "bill_type": "phone_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 24,
+    "account_number_digits": "10",
+    "mask": "9999999999",
+    "can_check_balance": false,
+    "supports_partial_payments": false,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 54295,
+  "fields": {
+    "name": "Depósitos pertenecientes",
+    "biller_type": "Deposits",
+    "bill_type": "account_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "1..32",
+    "mask": "",
+    "can_check_balance": false,
+    "supports_partial_payments": false,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 54299,
+  "fields": {
+    "name": "Centro de mvs",
+    "biller_type": "Satellite",
+    "bill_type": "bar_code",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 24,
+    "account_number_digits": "14",
+    "mask": "99999999999999",
+    "can_check_balance": true,
+    "supports_partial_payments": false,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 54301,
+  "fields": {
+    "name": "Depósitos de aplazo",
+    "biller_type": "Deposits",
+    "bill_type": "account_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "1..32",
+    "mask": "",
+    "can_check_balance": false,
+    "supports_partial_payments": false,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 54302,
+  "fields": {
+    "name": "Calidad",
+    "biller_type": "Insurance",
+    "bill_type": "account_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 24,
+    "account_number_digits": "20",
+    "mask": "99999999999999999999",
+    "can_check_balance": false,
+    "supports_partial_payments": false,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 54306,
+  "fields": {
+    "name": "Depósitos de lizzapp",
+    "biller_type": "Deposits",
+    "bill_type": "account_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "1..32",
+    "mask": "",
+    "can_check_balance": false,
+    "supports_partial_payments": false,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 54308,
+  "fields": {
+    "name": "Agua de Colima",
+    "biller_type": "Water",
+    "bill_type": "account_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "10",
+    "mask": "9999999999",
+    "can_check_balance": true,
+    "supports_partial_payments": false,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 54312,
+  "fields": {
+    "name": "Capama",
+    "biller_type": "Water",
+    "bill_type": "account_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "11",
+    "mask": "99999999999",
+    "can_check_balance": false,
+    "supports_partial_payments": false,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 54314,
+  "fields": {
+    "name": "Diferentes depósitos de tecnologías",
+    "biller_type": "Deposits",
+    "bill_type": "account_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "1..32",
+    "mask": "",
+    "can_check_balance": false,
+    "supports_partial_payments": false,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 54315,
+  "fields": {
+    "name": "Depósitos de clip",
+    "biller_type": "Deposits",
+    "bill_type": "account_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "1..32",
+    "mask": "",
+    "can_check_balance": false,
+    "supports_partial_payments": false,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 54318,
+  "fields": {
+    "name": "AGUA IRAPUATO - JAPAMI",
+    "biller_type": "Water",
+    "bill_type": "account_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "",
+    "mask": "",
+    "can_check_balance": false,
+    "supports_partial_payments": false,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 54319,
+  "fields": {
+    "name": "Agua a Torron - Simas",
+    "biller_type": "Water",
+    "bill_type": "account_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "",
+    "mask": "",
+    "can_check_balance": false,
+    "supports_partial_payments": false,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 54320,
+  "fields": {
+    "name": "Depósitos de yuno",
+    "biller_type": "Deposits",
+    "bill_type": "account_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "1..32",
+    "mask": null,
+    "can_check_balance": false,
+    "supports_partial_payments": false,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 54328,
+  "fields": {
+    "name": "Ausencia",
+    "biller_type": "Others",
+    "bill_type": "account_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 24,
+    "account_number_digits": "11",
+    "mask": "99999999999",
+    "can_check_balance": false,
+    "supports_partial_payments": false,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 54329,
+  "fields": {
+    "name": "Depósito claro",
+    "biller_type": "Deposits",
+    "bill_type": "account_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "1..32",
+    "mask": "",
+    "can_check_balance": false,
+    "supports_partial_payments": false,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 54330,
+  "fields": {
+    "name": "Gobierno del Estado de Chihuahua",
+    "biller_type": "Government",
+    "bill_type": "bar_code",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "24",
+    "mask": "999999999999999999999999",
+    "can_check_balance": true,
+    "supports_partial_payments": false,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 54331,
+  "fields": {
+    "name": "Seguros HDI",
+    "biller_type": "Insurance",
+    "bill_type": "bar_code",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "31..34",
+    "mask": null,
+    "can_check_balance": true,
+    "supports_partial_payments": false,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 54332,
+  "fields": {
+    "name": "Municipio de Zapopan",
+    "biller_type": "Government",
+    "bill_type": "bar_code",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "10..27",
+    "mask": null,
+    "can_check_balance": true,
+    "supports_partial_payments": false,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 54333,
+  "fields": {
+    "name": "Gobierno de Nayarit",
+    "biller_type": "Government",
+    "bill_type": "bar_code",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "27",
+    "mask": "999999999999999999999999999",
+    "can_check_balance": false,
+    "supports_partial_payments": false,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 54334,
+  "fields": {
+    "name": "Municipio de San Nicolas",
+    "biller_type": "Government",
+    "bill_type": "bar_code",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "7..10",
+    "mask": null,
+    "can_check_balance": true,
+    "supports_partial_payments": false,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 54335,
+  "fields": {
+    "name": "Gobierno de Aguascalientes",
+    "biller_type": "Government",
+    "bill_type": "bar_code",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "8..11",
+    "mask": null,
+    "can_check_balance": true,
+    "supports_partial_payments": false,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 54336,
+  "fields": {
+    "name": "Universidades",
+    "biller_type": "Other",
+    "bill_type": "bar_code",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "1..37",
+    "mask": null,
+    "can_check_balance": false,
+    "supports_partial_payments": false,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 54337,
+  "fields": {
+    "name": "Agua de Celaya",
+    "biller_type": "Water",
+    "bill_type": "bar_code",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "30",
+    "mask": "999999999999999999999999999999",
+    "can_check_balance": false,
+    "supports_partial_payments": false,
+    "has_xdata": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 54373,
+  "fields": {
+    "name": "Ike familiar",
+    "biller_type": "GiftCard\t",
+    "bill_type": "account_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": null,
+    "mask": null,
+    "can_check_balance": false,
+    "supports_partial_payments": false,
+    "has_xdata": false
+  }
+}
+]

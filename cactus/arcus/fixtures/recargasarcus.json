@@ -1,0 +1,870 @@
+[
+{
+  "model": "arcus.recargasarcus",
+  "pk": 13597,
+  "fields": {
+    "name": "TAEMOVISTAR",
+    "biller_type": "MXCell",
+    "bill_type": "phone_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "10",
+    "mask": "(999) 999-9999",
+    "can_check_balance": false,
+    "supports_partial_payments": false,
+    "has_xdata": false,
+    "available_topup_amounts": [
+      "10.00",
+      "20.00",
+      "30.00",
+      "40.00",
+      "50.00",
+      "60.00",
+      "70.00",
+      "100.00",
+      "120.00",
+      "150.00",
+      "200.00",
+      "250.00",
+      "300.00",
+      "400.00",
+      "500.00",
+      "80.00",
+      "140.00"
+    ],
+    "topup_commission": 7.5
+  }
+},
+{
+  "model": "arcus.recargasarcus",
+  "pk": 13599,
+  "fields": {
+    "name": "TAEIUSACELL",
+    "biller_type": "MXCell",
+    "bill_type": "phone_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "10",
+    "mask": "(999) 999-9999",
+    "can_check_balance": false,
+    "supports_partial_payments": false,
+    "has_xdata": false,
+    "available_topup_amounts": [
+      "100.00",
+      "1000.00",
+      "150.00",
+      "20.00",
+      "200.00",
+      "30.00",
+      "300.00",
+      "50.00",
+      "500.00",
+      "70.00",
+      "120.00",
+      "15.00",
+      "10.00"
+    ],
+    "topup_commission": 7.5
+  }
+},
+{
+  "model": "arcus.recargasarcus",
+  "pk": 13600,
+  "fields": {
+    "name": "TAEUNEFON",
+    "biller_type": "MXCell",
+    "bill_type": "phone_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "10",
+    "mask": "(999) 999-9999",
+    "can_check_balance": false,
+    "supports_partial_payments": false,
+    "has_xdata": false,
+    "available_topup_amounts": [
+      "20.00",
+      "30.00",
+      "50.00",
+      "100.00",
+      "150.00",
+      "200.00",
+      "300.00",
+      "500.00",
+      "1000.00",
+      "70.00",
+      "120.00",
+      "15.00",
+      "10.00"
+    ],
+    "topup_commission": 7.5
+  }
+},
+{
+  "model": "arcus.recargasarcus",
+  "pk": 13601,
+  "fields": {
+    "name": "TAEVIRGIN",
+    "biller_type": "MXCell",
+    "bill_type": "phone_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "10",
+    "mask": "(999) 999-9999",
+    "can_check_balance": false,
+    "supports_partial_payments": false,
+    "has_xdata": false,
+    "available_topup_amounts": [
+      "20.00",
+      "30.00",
+      "40.00",
+      "50.00",
+      "100.00",
+      "150.00",
+      "200.00",
+      "300.00",
+      "500.00"
+    ],
+    "topup_commission": 7.5
+  }
+},
+{
+  "model": "arcus.recargasarcus",
+  "pk": 13602,
+  "fields": {
+    "name": "AMIGO SL",
+    "biller_type": "MXCell",
+    "bill_type": "phone_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "10",
+    "mask": "(999) 999-9999",
+    "can_check_balance": false,
+    "supports_partial_payments": false,
+    "has_xdata": false,
+    "available_topup_amounts": [
+      "20.00",
+      "50.00",
+      "150.00",
+      "300.00",
+      "500.00",
+      "100.00",
+      "200.00",
+      "30.00",
+      "80.00",
+      "10.00"
+    ],
+    "topup_commission": 7.5
+  }
+},
+{
+  "model": "arcus.recargasarcus",
+  "pk": 13603,
+  "fields": {
+    "name": "TAETelcel",
+    "biller_type": "MXCell",
+    "bill_type": "phone_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "10",
+    "mask": "(999) 999-9999",
+    "can_check_balance": false,
+    "supports_partial_payments": false,
+    "has_xdata": false,
+    "available_topup_amounts": [
+      "10.00",
+      "20.00",
+      "30.00",
+      "50.00",
+      "100.00",
+      "150.00",
+      "200.00",
+      "300.00",
+      "500.00",
+      "80.00"
+    ],
+    "topup_commission": 7.5
+  }
+},
+{
+  "model": "arcus.recargasarcus",
+  "pk": 13615,
+  "fields": {
+    "name": "INTERNET AMIGO",
+    "biller_type": "MXCell",
+    "bill_type": "phone_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "10",
+    "mask": "(999) 999-9999",
+    "can_check_balance": false,
+    "supports_partial_payments": false,
+    "has_xdata": false,
+    "available_topup_amounts": [
+      "500.00",
+      "50.00",
+      "300.00",
+      "30.00",
+      "200.00",
+      "20.00",
+      "150.00",
+      "100.00",
+      "80.00",
+      "10.00",
+      "15.00"
+    ],
+    "topup_commission": 7.5
+  }
+},
+{
+  "model": "arcus.recargasarcus",
+  "pk": 13689,
+  "fields": {
+    "name": "MovistarInternet",
+    "biller_type": "MXCell",
+    "bill_type": "phone_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "10",
+    "mask": null,
+    "can_check_balance": false,
+    "supports_partial_payments": false,
+    "has_xdata": false,
+    "available_topup_amounts": [
+      "10.00",
+      "20.00",
+      "100.00",
+      "150.00",
+      "200.00"
+    ],
+    "topup_commission": 0.0
+  }
+},
+{
+  "model": "arcus.recargasarcus",
+  "pk": 29866,
+  "fields": {
+    "name": "Bait",
+    "biller_type": "MXCell",
+    "bill_type": "phone_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "10",
+    "mask": "9999999999",
+    "can_check_balance": false,
+    "supports_partial_payments": false,
+    "has_xdata": false,
+    "available_topup_amounts": [
+      "10.00",
+      "20.00",
+      "30.00",
+      "50.00",
+      "65.00",
+      "100.00",
+      "200.00",
+      "300.00",
+      "125.00"
+    ],
+    "topup_commission": 0.0
+  }
+},
+{
+  "model": "arcus.recargasarcus",
+  "pk": 29867,
+  "fields": {
+    "name": "FreedomPop",
+    "biller_type": "MXCell",
+    "bill_type": "phone_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "10",
+    "mask": "99999999",
+    "can_check_balance": false,
+    "supports_partial_payments": false,
+    "has_xdata": false,
+    "available_topup_amounts": [
+      "30.00",
+      "50.00",
+      "80.00",
+      "100.00",
+      "150.00",
+      "200.00"
+    ],
+    "topup_commission": 0.0
+  }
+},
+{
+  "model": "arcus.recargasarcus",
+  "pk": 52298,
+  "fields": {
+    "name": "Pillofon",
+    "biller_type": "MXCell",
+    "bill_type": "phone_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "10",
+    "mask": "9999999999",
+    "can_check_balance": false,
+    "supports_partial_payments": false,
+    "has_xdata": false,
+    "available_topup_amounts": [
+      "79.00",
+      "149.00",
+      "199.00",
+      "299.00",
+      "399.00",
+      "599.00"
+    ],
+    "topup_commission": 0.0
+  }
+},
+{
+  "model": "arcus.recargasarcus",
+  "pk": 54338,
+  "fields": {
+    "name": "Oui",
+    "biller_type": "MXCell",
+    "bill_type": "phone_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "10",
+    "mask": "9999999999",
+    "can_check_balance": false,
+    "supports_partial_payments": false,
+    "has_xdata": false,
+    "available_topup_amounts": [
+      "10.00",
+      "15.00",
+      "20.00",
+      "25.00",
+      "30.00",
+      "35.00",
+      "40.00",
+      "45.00",
+      "50.00",
+      "60.00",
+      "80.00",
+      "100.00",
+      "120.00",
+      "150.00",
+      "200.00",
+      "240.00",
+      "300.00",
+      "350.00"
+    ],
+    "topup_commission": 0.0
+  }
+},
+{
+  "model": "arcus.recargasarcus",
+  "pk": 54339,
+  "fields": {
+    "name": "Wimo",
+    "biller_type": "MXCell",
+    "bill_type": "phone_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "10",
+    "mask": "9999999999",
+    "can_check_balance": false,
+    "supports_partial_payments": false,
+    "has_xdata": false,
+    "available_topup_amounts": [
+      "35.00",
+      "65.00",
+      "125.00",
+      "130.00",
+      "190.00",
+      "250.00",
+      "375.00",
+      "625.00"
+    ],
+    "topup_commission": 0.0
+  }
+},
+{
+  "model": "arcus.recargasarcus",
+  "pk": 54340,
+  "fields": {
+    "name": "S mobile",
+    "biller_type": "MXCell",
+    "bill_type": "phone_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "10",
+    "mask": "9999999999",
+    "can_check_balance": false,
+    "supports_partial_payments": false,
+    "has_xdata": false,
+    "available_topup_amounts": [
+      "20.00",
+      "50.00",
+      "100.00",
+      "150.00",
+      "300.00",
+      "500.00"
+    ],
+    "topup_commission": 0.0
+  }
+},
+{
+  "model": "arcus.recargasarcus",
+  "pk": 54341,
+  "fields": {
+    "name": "Gugacom",
+    "biller_type": "MXCell",
+    "bill_type": "phone_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "10",
+    "mask": "9999999999",
+    "can_check_balance": false,
+    "supports_partial_payments": false,
+    "has_xdata": false,
+    "available_topup_amounts": [
+      "40.00",
+      "65.00",
+      "120.00",
+      "129.00",
+      "130.00",
+      "195.00",
+      "250.00",
+      "380.00",
+      "389.00",
+      "489.00",
+      "599.00",
+      "600.00"
+    ],
+    "topup_commission": 0.0
+  }
+},
+{
+  "model": "arcus.recargasarcus",
+  "pk": 54342,
+  "fields": {
+    "name": "Flashmobile",
+    "biller_type": "MXCell",
+    "bill_type": "phone_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "10",
+    "mask": "9999999999",
+    "can_check_balance": false,
+    "supports_partial_payments": false,
+    "has_xdata": false,
+    "available_topup_amounts": [
+      "10.00",
+      "20.00",
+      "30.00",
+      "40.00",
+      "50.00",
+      "60.00",
+      "70.00",
+      "80.00",
+      "100.00",
+      "120.00",
+      "150.00",
+      "200.00",
+      "250.00",
+      "300.00",
+      "500.00"
+    ],
+    "topup_commission": 0.0
+  }
+},
+{
+  "model": "arcus.recargasarcus",
+  "pk": 54343,
+  "fields": {
+    "name": "Netwey",
+    "biller_type": "MXCell",
+    "bill_type": "phone_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "10",
+    "mask": "9999999999",
+    "can_check_balance": false,
+    "supports_partial_payments": false,
+    "has_xdata": false,
+    "available_topup_amounts": [
+      "40.00",
+      "65.00",
+      "125.00",
+      "250.00"
+    ],
+    "topup_commission": 0.0
+  }
+},
+{
+  "model": "arcus.recargasarcus",
+  "pk": 54344,
+  "fields": {
+    "name": "Weex",
+    "biller_type": "MXCell",
+    "bill_type": "phone_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "10",
+    "mask": "9999999999",
+    "can_check_balance": false,
+    "supports_partial_payments": false,
+    "has_xdata": false,
+    "available_topup_amounts": [
+      "10.00",
+      "20.00",
+      "30.00",
+      "40.00",
+      "50.00",
+      "60.00",
+      "70.00",
+      "80.00",
+      "100.00",
+      "120.00",
+      "150.00",
+      "200.00",
+      "250.00",
+      "300.00",
+      "400.00",
+      "500.00"
+    ],
+    "topup_commission": 0.0
+  }
+},
+{
+  "model": "arcus.recargasarcus",
+  "pk": 54345,
+  "fields": {
+    "name": "Soriana Móvil",
+    "biller_type": "MXCell",
+    "bill_type": "phone_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "10",
+    "mask": "9999999999",
+    "can_check_balance": false,
+    "supports_partial_payments": false,
+    "has_xdata": false,
+    "available_topup_amounts": [
+      "5.00",
+      "10.00",
+      "20.00",
+      "30.00",
+      "50.00",
+      "100.00",
+      "150.00",
+      "200.00",
+      "500.00"
+    ],
+    "topup_commission": 0.0
+  }
+},
+{
+  "model": "arcus.recargasarcus",
+  "pk": 54346,
+  "fields": {
+    "name": "Bait Casa",
+    "biller_type": "MXCell",
+    "bill_type": "phone_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "10",
+    "mask": "9999999999",
+    "can_check_balance": false,
+    "supports_partial_payments": false,
+    "has_xdata": false,
+    "available_topup_amounts": [
+      "89.00",
+      "329.00"
+    ],
+    "topup_commission": 0.0
+  }
+},
+{
+  "model": "arcus.recargasarcus",
+  "pk": 54347,
+  "fields": {
+    "name": "ComparTfon",
+    "biller_type": "MXCell",
+    "bill_type": "phone_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "10",
+    "mask": "9999999999",
+    "can_check_balance": false,
+    "supports_partial_payments": false,
+    "has_xdata": false,
+    "available_topup_amounts": [
+      "10.00",
+      "20.00",
+      "30.00",
+      "40.00",
+      "50.00",
+      "60.00",
+      "70.00",
+      "80.00",
+      "100.00",
+      "120.00",
+      "150.00",
+      "200.00",
+      "250.00"
+    ],
+    "topup_commission": 0.0
+  }
+},
+{
+  "model": "arcus.recargasarcus",
+  "pk": 54348,
+  "fields": {
+    "name": "Newww",
+    "biller_type": "MXCell",
+    "bill_type": "phone_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "10",
+    "mask": "9999999999",
+    "can_check_balance": false,
+    "supports_partial_payments": false,
+    "has_xdata": false,
+    "available_topup_amounts": [
+      "55.00",
+      "100.00",
+      "150.00",
+      "200.00",
+      "300.00",
+      "500.00"
+    ],
+    "topup_commission": 0.0
+  }
+},
+{
+  "model": "arcus.recargasarcus",
+  "pk": 54349,
+  "fields": {
+    "name": "Telecom Movil",
+    "biller_type": "MXCell",
+    "bill_type": "phone_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "10",
+    "mask": "9999999999",
+    "can_check_balance": false,
+    "supports_partial_payments": false,
+    "has_xdata": false,
+    "available_topup_amounts": [
+      "35.00",
+      "55.00",
+      "100.00",
+      "120.00",
+      "165.00",
+      "220.00",
+      "290.00"
+    ],
+    "topup_commission": 0.0
+  }
+},
+{
+  "model": "arcus.recargasarcus",
+  "pk": 54350,
+  "fields": {
+    "name": "Telecom MiFi",
+    "biller_type": "MXCell",
+    "bill_type": "phone_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "10",
+    "mask": "9999999999",
+    "can_check_balance": false,
+    "supports_partial_payments": false,
+    "has_xdata": false,
+    "available_topup_amounts": [
+      "115.00",
+      "195.00",
+      "330.00",
+      "400.00",
+      "500.00"
+    ],
+    "topup_commission": 0.0
+  }
+},
+{
+  "model": "arcus.recargasarcus",
+  "pk": 54351,
+  "fields": {
+    "name": "Telecom HBB",
+    "biller_type": "MXCell",
+    "bill_type": "phone_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "10",
+    "mask": "9999999999",
+    "can_check_balance": false,
+    "supports_partial_payments": false,
+    "has_xdata": false,
+    "available_topup_amounts": [
+      "30.00",
+      "55.00",
+      "89.00",
+      "109.00",
+      "319.00",
+      "369.00",
+      "420.00"
+    ],
+    "topup_commission": 0.0
+  }
+},
+{
+  "model": "arcus.recargasarcus",
+  "pk": 54352,
+  "fields": {
+    "name": "CFE-TEIT Individuales",
+    "biller_type": "MXCell",
+    "bill_type": "phone_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "10",
+    "mask": "9999999999",
+    "can_check_balance": false,
+    "supports_partial_payments": false,
+    "has_xdata": false,
+    "available_topup_amounts": [
+      "30.00",
+      "45.00",
+      "100.00",
+      "150.00",
+      "200.00",
+      "300.00"
+    ],
+    "topup_commission": 0.0
+  }
+},
+{
+  "model": "arcus.recargasarcus",
+  "pk": 54353,
+  "fields": {
+    "name": "CFE-TEIT Semestrales",
+    "biller_type": "MXCell",
+    "bill_type": "phone_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "10",
+    "mask": "9999999999",
+    "can_check_balance": false,
+    "supports_partial_payments": false,
+    "has_xdata": false,
+    "available_topup_amounts": [
+      "400.00",
+      "800.00",
+      "1200.00"
+    ],
+    "topup_commission": 0.0
+  }
+},
+{
+  "model": "arcus.recargasarcus",
+  "pk": 54354,
+  "fields": {
+    "name": "CFE-TEIT Anuales",
+    "biller_type": "MXCell",
+    "bill_type": "phone_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "10",
+    "mask": "9999999999",
+    "can_check_balance": false,
+    "supports_partial_payments": false,
+    "has_xdata": false,
+    "available_topup_amounts": [
+      "700.00",
+      "1400.00",
+      "2100.00"
+    ],
+    "topup_commission": 0.0
+  }
+},
+{
+  "model": "arcus.recargasarcus",
+  "pk": 54355,
+  "fields": {
+    "name": "Dalefon",
+    "biller_type": "MXCell",
+    "bill_type": "phone_number",
+    "country": "MX",
+    "currency": "MXN",
+    "requires_name_on_account": false,
+    "hours_to_fulfill": 0,
+    "account_number_digits": "10",
+    "mask": "9999999999",
+    "can_check_balance": false,
+    "supports_partial_payments": false,
+    "has_xdata": false,
+    "available_topup_amounts": [
+      "30.00",
+      "50.00",
+      "100.00",
+      "150.00",
+      "200.00",
+      "300.00",
+      "500.00",
+      "769.00",
+      "1469.00",
+      "2769.00"
+    ],
+    "topup_commission": 0.0
+  }
+}
+]

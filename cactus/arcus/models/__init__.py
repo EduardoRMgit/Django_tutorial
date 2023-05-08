@@ -1,4 +1,6 @@
-from arcus.models.billsarcus import Bills
+from arcus.models.billsarcus import (Bills,
+                                     ServicesArcus,
+                                     RecargasArcus)
 
 
-__all__ = ["Bills"]
+__all__ = ["Bills", "ServicesArcus", "RecargasArcus"]

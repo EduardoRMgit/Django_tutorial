@@ -354,6 +354,7 @@ PREFIJO_CUENTA_INGUZ = "6461802180"
 AXES_LOCKOUT_CALLABLE = "cactus.customAuthBackend.lockout"
 
 
+ARCUS_DOMAIN = 'https://api.staging.arcusapi.com'
 
 
 def cluster_secret(key, value):

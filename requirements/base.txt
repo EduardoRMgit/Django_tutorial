@@ -56,3 +56,4 @@ phonenumbers==8.13.0
 reverse-geocoder==1.5.1
 geographiclib==2.0
 imutils==0.5.4
+deep-translator==1.10.1

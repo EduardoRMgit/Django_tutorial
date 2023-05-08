@@ -106,6 +106,10 @@ if [[ $LOADDATA == true ]] || [[ $PROD == false ]] ; then
   ./manage.py loaddata catalogoCodigosTEF.json
   ./manage.py loaddata datosFijos.json
 
+  # ARCUS
+  ./manage.py loaddata recargascarcus.json
+  ./manage.py loaddata serviciosarcus.json
+
 fi;
 
 # CUSTOM SCRIPT
