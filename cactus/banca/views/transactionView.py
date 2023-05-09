@@ -225,7 +225,7 @@ class TransactionList(generics.CreateAPIView):
                     causaDevolucion=causa,
                     stpEstado=2,
                     rechazada=True,
-                    RechazadaMsj=causa
+                    rechazadaMsj=causa
                 )
                 msg_logg = "{} {}: {}".format(
                     "[STP sendabono] (post)",
