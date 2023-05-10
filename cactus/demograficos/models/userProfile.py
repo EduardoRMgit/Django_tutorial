@@ -340,6 +340,9 @@ class UserProfile(AbstractBaseUser):
         blank=True
     )
     enrolamiento = models.BooleanField(default=False)
+    contador_servicio_cliente = models.IntegerField(null=True,
+                                                    blank=True,
+                                                    default=0)
 
     class Meta():
         verbose_name_plural = 'Perfil del usuario'
