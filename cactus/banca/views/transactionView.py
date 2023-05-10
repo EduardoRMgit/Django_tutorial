@@ -118,6 +118,7 @@ def statusStp(estado, stpId):
                 return 1
             elif estado == "devolucion":
                 reservado.status_saldo = "devuelto"
+                reservado.saldo_reservado = reservado.saldo_reservado - 7.52
                 reservado.fecha_aplicado_devuelto = timezone.now()
                 reservado.save()
 
@@ -224,7 +225,7 @@ class TransactionList(generics.CreateAPIView):
                     causaDevolucion=causa,
                     stpEstado=2,
                     rechazada=True,
-                    RechazadaMsj=causa
+                    rechazadaMsj=causa
                 )
                 msg_logg = "{} {}: {}".format(
                     "[STP sendabono] (post)",

@@ -10,6 +10,7 @@ from pld.utils.movementspld import create_pld_movement
 
 from .catalogos import (ErroresTransaccion,
                         TipoTransaccion)
+from banca.models import ComisioneSTP
 
 
 class StatusTrans(models.Model):
@@ -72,6 +73,10 @@ class Transaccion(models.Model):
     )
     concepto = models.CharField(max_length=250, blank=True, null=True)
     claveRastreo = models.CharField(max_length=64, null=True)
+    comision = models.ForeignKey(ComisioneSTP,
+                                 on_delete=models.CASCADE,
+                                 blank=True,
+                                 null=True)
 
     class Meta():
         verbose_name_plural = 'Transacciones'
