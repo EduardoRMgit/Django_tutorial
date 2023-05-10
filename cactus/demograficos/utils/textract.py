@@ -1,20 +1,22 @@
+from django.conf import settings
+
 import boto3
 
 
 def textract_ine(img):
+    from cactus.settings import AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY
 
-    s3BucketName = "phototest420"
     client = boto3.client(
         'textract',
-        aws_access_key_id='AKIA5F5MJTKYM33K4YWS',
-        aws_secret_access_key='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',
+        aws_access_key_id=AWS_ACCESS_KEY_ID,
+        aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
         region_name='us-east-1'
     )
 
     response = client.detect_document_text(
         Document={
             'S3Object': {
-                'Bucket': 'phototest420',
+                'Bucket': settings.AWS_STORAGE_BUCKET_NAME,
                 'Name': img
             }
         }
@@ -28,6 +30,7 @@ def textract_ine(img):
 
 
 def validate_ine(extract):
+
     strings = [
         "INSTITUTO",
         "ELECTORAL",
@@ -62,18 +65,19 @@ def validate_ine(extract):
 
 
 def textract_ine_reverso(img):
-    s3BucketName = "phototest420"
+    from cactus.settings import AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY
+
     client = boto3.client(
         'textract',
-        aws_access_key_id='AKIA5F5MJTKYM33K4YWS',
-        aws_secret_access_key='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',
+        aws_access_key_id=AWS_ACCESS_KEY_ID,
+        aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
         region_name='us-east-1'
     )
 
     response = client.detect_document_text(
         Document={
             'S3Object': {
-                'Bucket': 'phototest420',
+                'Bucket': settings.AWS_STORAGE_BUCKET_NAME,
                 'Name': img
             }
         }
@@ -85,8 +89,6 @@ def textract_ine_reverso(img):
 
     textract_reverso = [string.replace("<", " ") if "<" in string else string
         for string in textract_reverso]
-    print(textract_reverso[-1])
-    print(textract_reverso[-2])
 
     return validate_ine_reverso(textract_reverso)
 
@@ -114,4 +116,30 @@ def validate_ine_reverso(extract_reverso):
     matched_count = len(matched_strings)
     total_count = len(strings)
     percentage = (matched_count / total_count) * 100
-    return extract_reverso
+    if percentage >= 60:
+        return True, extract_reverso
+
+
+def extract_comprobantes(img):
+    from cactus.settings import AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY
+
+    client = boto3.client(
+        'textract',
+        aws_access_key_id=AWS_ACCESS_KEY_ID,
+        aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
+        region_name="us-east-1"
+    )
+
+    response = client.detect_document_text(
+        Document={
+            'S3Object': {
+                'Bucket': settings.AWS_STORAGE_BUCKET_NAME,
+                'Name': img
+            }
+        }
+    )
+    textract = []
+    for item in response["Blocks"]:
+        if item["BlockType"] == "WORD":
+            textract.append(item["Text"])
+    return True, textract

@@ -6,11 +6,20 @@ from django.contrib.auth.models import User
 from demograficos.models import (DocAdjunto,
                                  DocAdjuntoTipo,
                                  TipoComprobante)
+from demograficos.utils.textract import (textract_ine,
+                                         textract_ine_reverso,
+                                         extract_comprobantes)
+from demograficos.utils.valid_documents import (validate_information,
+                                                validate_information_ine_back)
+from demograficos.utils.comprobantes import (validate_cfe,
+                                             validate_telmex,
+                                             validate_izzi,
+                                             validate_total)
 
 import boto3
 from django.conf import settings
 import os
-
+from datetime import datetime
 import logging
 
 
@@ -44,7 +53,8 @@ def get_file_url(archivo, file_path):
 def upload_s3_docs(tipocomprobante, archivo, user):
 
     if tipocomprobante == '1':
-        nombre_archivo = f"comprobante_cfe_{user}{archivo.name}"
+        fecha = datetime.now().strftime("%d-%m-%Y_%H:%m:%s")
+        nombre_archivo = f"comprobante_cfe_{user}_{fecha}.jpg"
         # directory = 'cfe'
         # file_path = os.path.join(
         #     directory,
@@ -54,7 +64,8 @@ def upload_s3_docs(tipocomprobante, archivo, user):
         file_path = os.path.join('docs/', nombre_archivo)
         file_url = get_file_url(archivo, file_path)
     elif tipocomprobante == '2':
-        nombre_archivo = f"comprobante_telmex_{user}{archivo.name}"
+        fecha = datetime.now().strftime("%d-%m-%Y_%H:%m:%s")
+        nombre_archivo = f"comprobante_telmex_{user}_{fecha}.jpg"
         # directory = 'telmex'
         # file_path = os.path.join(
         #     directory,
@@ -64,7 +75,8 @@ def upload_s3_docs(tipocomprobante, archivo, user):
         file_path = os.path.join('docs/', nombre_archivo)
         file_url = get_file_url(archivo, file_path)
     elif tipocomprobante == '3':
-        nombre_archivo = f"comprobante_izzi_{user}{archivo.name}"
+        fecha = datetime.now().strftime("%d-%m-%Y_%H:%m:%s")
+        nombre_archivo = f"comprobante_izzi_{user}_{fecha}.jpg"
         # directory = 'izzi'
         # file_path = os.path.join(
         #     directory,
@@ -74,7 +86,8 @@ def upload_s3_docs(tipocomprobante, archivo, user):
         file_path = os.path.join('docs/', nombre_archivo)
         file_url = get_file_url(archivo, file_path)
     elif tipocomprobante == '4':
-        nombre_archivo = f"comprobante_totalplay_{user}{archivo.name}"
+        fecha = datetime.now().strftime("%d-%m-%Y_%H:%m:%s")
+        nombre_archivo = f"comprobante_totalplay_{user}_{fecha}"
         # directory = 'totalplay'
         # file_path = os.path.join(
         #     directory,
@@ -83,13 +96,14 @@ def upload_s3_docs(tipocomprobante, archivo, user):
         # file_path = os.path.join('docs', file_path)
         file_path = os.path.join('docs/', nombre_archivo)
         file_url = get_file_url(archivo, file_path)
-    return file_url, nombre_archivo
+    return file_url, nombre_archivo, file_path
 
 
 def upload_s3ine(archivo, user, tipo):
 
     if tipo == "1":
-        nombre_archivo = f"ine_frontal_{user}{archivo.name}"
+        fecha = datetime.now().strftime("%d-%m-%Y_%H:%m:%s")
+        nombre_archivo = f"ine_frontal_{user}_{fecha}.jpg"
         # directory = 'ine'
         # file_path = os.path.join(
         #     directory,
@@ -99,7 +113,8 @@ def upload_s3ine(archivo, user, tipo):
         file_path = os.path.join('docs/', nombre_archivo)
         file_url = get_file_url(archivo, file_path)
     elif tipo == "2":
-        nombre_archivo = f"ine_reverso_{user}{archivo.name}"
+        fecha = datetime.now().strftime("%d-%m-%Y_%H:%m:%s")
+        nombre_archivo = f"ine_reverso_{user}_{fecha}.jpg"
         # directory = 'ineReverso'
         # file_path = os.path.join(
         #     directory,
@@ -108,7 +123,7 @@ def upload_s3ine(archivo, user, tipo):
         # file_path = os.path.join('docs/', file_path)
         file_path = os.path.join('docs/', nombre_archivo)
         file_url = get_file_url(archivo, file_path)
-    return file_url, nombre_archivo
+    return file_url, nombre_archivo, file_path
 
 
 class ImageDoc(generics.CreateAPIView):
@@ -129,14 +144,33 @@ class ImageDoc(generics.CreateAPIView):
                 tipocomprobante = TipoComprobante.objects.get(
                     id=tipo_comprobante)
                 if settings.USE_S3:
-                    url, nombre_archivo = upload_s3_docs(
+                    url, nombre_archivo, path = upload_s3_docs(
                         str(tipo_comprobante), imagen, username)
-                    a = DocAdjunto.objects.create(
-                        user=user_,
-                        tipo=doctipo,
-                        tipo_comprobante=tipocomprobante,
-                        imagen=nombre_archivo,
-                        imagen_url=url)
+                    valida, informacion = extract_comprobantes(path)
+                    if str(tipo_comprobante) == '1':
+                        validacion = validate_cfe(username, informacion)
+                        print(validacion)
+                    if str(tipo_comprobante) == '2':
+                        validacion = validate_telmex(username, informacion)
+                    if str(tipo_comprobante) == '3':
+                        validacion = validate_izzi(username, informacion)
+                    if str(tipo_comprobante) == '4':
+                        validacion = validate_total(username, informacion)
+                    if validacion:
+                        a = DocAdjunto.objects.create(
+                            user=user_,
+                            tipo=doctipo,
+                            tipo_comprobante=tipocomprobante,
+                            imagen=nombre_archivo,
+                            imagen_url=url,
+                            validado=True)
+                    else:
+                        a = DocAdjunto.objects.create(
+                            user=user_,
+                            tipo=doctipo,
+                            tipo_comprobante=tipocomprobante,
+                            imagen=nombre_archivo,
+                            imagen_url=url)
                 else:
                     a = DocAdjunto.objects.create(
                         user=user_,
@@ -152,12 +186,45 @@ class ImageDoc(generics.CreateAPIView):
                     url = a.imagen_url
             else:
                 if settings.USE_S3:
-                    url, nombre_archivo = upload_s3ine(imagen, username,
-                                                       str(tipo))
-                    a = DocAdjunto.objects.create(user=user_,
-                                                  tipo=doctipo,
-                                                  imagen=nombre_archivo,
-                                                  imagen_url=url)
+                    url, nombre_archivo, path = upload_s3ine(imagen, username,
+                                                            str(tipo))
+                    if str(tipo) == '1':
+                        valida, informacion = textract_ine(path)
+                        validacion, front = validate_information(
+                            username, informacion)
+                        if validacion:
+                            a = DocAdjunto.objects.create(
+                                user=user_,
+                                tipo=doctipo,
+                                imagen=nombre_archivo,
+                                imagen_url=url,
+                                validacion_frontal=front,
+                                validado=True)
+                        else:
+                            a = DocAdjunto.objects.create(
+                                user=user_,
+                                tipo=doctipo,
+                                imagen=nombre_archivo,
+                                imagen_url=url)
+                    if str(tipo) == '2':
+                        valida, informacion = textract_ine_reverso(path)
+                        validacion = validate_information_ine_back(username,
+                                                                   informacion
+                                                                   )
+                        if validacion:
+                            a = DocAdjunto.objects.create(
+                                user=user_,
+                                tipo=doctipo,
+                                imagen=nombre_archivo,
+                                imagen_url=url,
+                                validacion_frontal=front,
+                                validado=True)
+                        else:
+                            a = DocAdjunto.objects.create(
+                                user=user_,
+                                tipo=doctipo,
+                                imagen=nombre_archivo,
+                                imagen_url=url)
                 else:
                     a = DocAdjunto.objects.create(user=user_,
                                                   tipo=doctipo,
@@ -184,3 +251,4 @@ class ImageDoc(generics.CreateAPIView):
             'tipo': request.data['tipo'],
             'imagen': url},
             status=status.HTTP_200_OK)
+#

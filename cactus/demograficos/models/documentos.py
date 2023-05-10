@@ -84,6 +84,7 @@ class DocAdjunto(models.Model):
         es reverso", blank=True, null=True)
     fechaCreado = models.DateTimeField(auto_now_add=True, blank=True,
                                        null=True)
+    validacion_frontal = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return "{} de {}".format(self.tipo, self.user)
