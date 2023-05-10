@@ -1,9 +1,9 @@
 from django.contrib import admin
 from arcus.models import Bills, ServicesArcus, RecargasArcus
 from arcus.utils.autharcus import headers_arcus
+from arcus.utils.categorias import categorias
 import requests
 import json
-from deep_translator import GoogleTranslator
 from django.conf import settings
 import logging
 
@@ -60,9 +60,8 @@ class ServicesArcusAdmin(admin.ModelAdmin):
             servicios = (
                 requests.get(url=url, headers=headers)).content.decode()
             servicios = (json.loads(servicios))["billers"]
-            gs = GoogleTranslator(source='en', target='es')
             for servicio in servicios:
-                tipo = gs.translate(servicio["biller_type"])
+                tipo = categorias(servicio["biller_type"], servicio["name"])
                 valida = ServicesArcus.objects.filter(
                     id_bill=servicio["id"]).count()
                 if valida:
@@ -146,16 +145,20 @@ class RecargasArcusAdmin(admin.ModelAdmin):
             recargas = (
                 requests.get(url=url, headers=headers)).content.decode()
             recargas = (json.loads(recargas))["billers"]
-            gs = GoogleTranslator(source='en', target='es')
             for recarga in recargas:
-                tipo = gs.translate(recarga["biller_type"])
+                tipo = categorias(recarga["biller_type"], recarga["name"])
+                if len(tipo) == 2:
+                    name = tipo[1]
+                    tipo = tipo[0]
+                else:
+                    name = recarga["name"]
                 valida = RecargasArcus.objects.filter(
                     id_recarga=recarga["id"]).count()
                 if valida:
                     RecargasArcus.objects.filter(
                         id_recarga=recarga["id"]).update(
                             id_recarga=recarga["id"],
-                            name=recarga["name"],
+                            name=name,
                             biller_type=tipo,
                             bill_type=recarga["bill_type"],
                             country=recarga["country"],

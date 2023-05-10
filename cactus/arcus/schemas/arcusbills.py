@@ -33,10 +33,10 @@ class Query(object):
                                    offset=graphene.Int())
 
     @login_required
-    def resolve_services_bills(root, token,
+    def resolve_services_bills(self, info,
                                limit=None,
-                               offset=None, tipo=None, nombre=None):
-        all = ServicesArcus.objects.all()
+                               offset=None, tipo=None, nombre=None, **kwargs):
+        all = ServicesArcus.objects.all().exclude(biller_type="NO MOSTRAR")
         if nombre:
             try:
                 return all.filter(name=nombre)
@@ -51,9 +51,9 @@ class Query(object):
         return all
 
     @login_required
-    def resolve_recargas_bills(root, token,
-                               limit=None, offset=None):
-        all = RecargasArcus.objects.all()
+    def resolve_recargas_bills(self, info,
+                               limit=None, offset=None, **kwargs):
+        all = RecargasArcus.objects.all().exclude(biller_type="NO MOSTRAR")
         if offset:
             all = all[offset:]
         if limit:

@@ -3,8 +3,8 @@
   "model": "arcus.recargasarcus",
   "pk": 13597,
   "fields": {
-    "name": "TAEMOVISTAR",
-    "biller_type": "MXCell",
+    "name": "MOVISTAR",
+    "biller_type": "Tiempo Aire",
     "bill_type": "phone_number",
     "country": "MX",
     "currency": "MXN",
@@ -42,7 +42,7 @@
   "pk": 13599,
   "fields": {
     "name": "TAEIUSACELL",
-    "biller_type": "MXCell",
+    "biller_type": "NO MOSTRAR",
     "bill_type": "phone_number",
     "country": "MX",
     "currency": "MXN",
@@ -75,8 +75,8 @@
   "model": "arcus.recargasarcus",
   "pk": 13600,
   "fields": {
-    "name": "TAEUNEFON",
-    "biller_type": "MXCell",
+    "name": "UNEFON",
+    "biller_type": "Tiempo Aire",
     "bill_type": "phone_number",
     "country": "MX",
     "currency": "MXN",
@@ -109,8 +109,8 @@
   "model": "arcus.recargasarcus",
   "pk": 13601,
   "fields": {
-    "name": "TAEVIRGIN",
-    "biller_type": "MXCell",
+    "name": "VIRGIN",
+    "biller_type": "Tiempo Aire",
     "bill_type": "phone_number",
     "country": "MX",
     "currency": "MXN",
@@ -140,7 +140,7 @@
   "pk": 13602,
   "fields": {
     "name": "AMIGO SL",
-    "biller_type": "MXCell",
+    "biller_type": "Tiempo Aire",
     "bill_type": "phone_number",
     "country": "MX",
     "currency": "MXN",
@@ -170,8 +170,8 @@
   "model": "arcus.recargasarcus",
   "pk": 13603,
   "fields": {
-    "name": "TAETelcel",
-    "biller_type": "MXCell",
+    "name": "TELCEL",
+    "biller_type": "Tiempo Aire",
     "bill_type": "phone_number",
     "country": "MX",
     "currency": "MXN",
@@ -202,7 +202,7 @@
   "pk": 13615,
   "fields": {
     "name": "INTERNET AMIGO",
-    "biller_type": "MXCell",
+    "biller_type": "Tiempo Aire",
     "bill_type": "phone_number",
     "country": "MX",
     "currency": "MXN",
@@ -233,8 +233,8 @@
   "model": "arcus.recargasarcus",
   "pk": 13689,
   "fields": {
-    "name": "MovistarInternet",
-    "biller_type": "MXCell",
+    "name": "MOVISTAR INTERNET",
+    "biller_type": "Tiempo Aire",
     "bill_type": "phone_number",
     "country": "MX",
     "currency": "MXN",
@@ -259,8 +259,8 @@
   "model": "arcus.recargasarcus",
   "pk": 29866,
   "fields": {
-    "name": "Bait",
-    "biller_type": "MXCell",
+    "name": "BAIT",
+    "biller_type": "Tiempo Aire",
     "bill_type": "phone_number",
     "country": "MX",
     "currency": "MXN",
@@ -290,7 +290,7 @@
   "pk": 29867,
   "fields": {
     "name": "FreedomPop",
-    "biller_type": "MXCell",
+    "biller_type": "NO MOSTRAR",
     "bill_type": "phone_number",
     "country": "MX",
     "currency": "MXN",
@@ -317,7 +317,7 @@
   "pk": 52298,
   "fields": {
     "name": "Pillofon",
-    "biller_type": "MXCell",
+    "biller_type": "NO MOSTRAR",
     "bill_type": "phone_number",
     "country": "MX",
     "currency": "MXN",
@@ -344,7 +344,7 @@
   "pk": 54338,
   "fields": {
     "name": "Oui",
-    "biller_type": "MXCell",
+    "biller_type": "NO MOSTRAR",
     "bill_type": "phone_number",
     "country": "MX",
     "currency": "MXN",
@@ -383,7 +383,7 @@
   "pk": 54339,
   "fields": {
     "name": "Wimo",
-    "biller_type": "MXCell",
+    "biller_type": "NO MOSTRAR",
     "bill_type": "phone_number",
     "country": "MX",
     "currency": "MXN",
@@ -412,7 +412,7 @@
   "pk": 54340,
   "fields": {
     "name": "S mobile",
-    "biller_type": "MXCell",
+    "biller_type": "NO MOSTRAR",
     "bill_type": "phone_number",
     "country": "MX",
     "currency": "MXN",
@@ -439,7 +439,7 @@
   "pk": 54341,
   "fields": {
     "name": "Gugacom",
-    "biller_type": "MXCell",
+    "biller_type": "NO MOSTRAR",
     "bill_type": "phone_number",
     "country": "MX",
     "currency": "MXN",
@@ -472,7 +472,7 @@
   "pk": 54342,
   "fields": {
     "name": "Flashmobile",
-    "biller_type": "MXCell",
+    "biller_type": "NO MOSTRAR",
     "bill_type": "phone_number",
     "country": "MX",
     "currency": "MXN",
@@ -508,7 +508,7 @@
   "pk": 54343,
   "fields": {
     "name": "Netwey",
-    "biller_type": "MXCell",
+    "biller_type": "NO MOSTRAR",
     "bill_type": "phone_number",
     "country": "MX",
     "currency": "MXN",
@@ -533,7 +533,7 @@
   "pk": 54344,
   "fields": {
     "name": "Weex",
-    "biller_type": "MXCell",
+    "biller_type": "NO MOSTRAR",
     "bill_type": "phone_number",
     "country": "MX",
     "currency": "MXN",
@@ -570,7 +570,7 @@
   "pk": 54345,
   "fields": {
     "name": "Soriana Móvil",
-    "biller_type": "MXCell",
+    "biller_type": "NO MOSTRAR",
     "bill_type": "phone_number",
     "country": "MX",
     "currency": "MXN",
@@ -600,7 +600,7 @@
   "pk": 54346,
   "fields": {
     "name": "Bait Casa",
-    "biller_type": "MXCell",
+    "biller_type": "NO MOSTRAR",
     "bill_type": "phone_number",
     "country": "MX",
     "currency": "MXN",
@@ -623,7 +623,7 @@
   "pk": 54347,
   "fields": {
     "name": "ComparTfon",
-    "biller_type": "MXCell",
+    "biller_type": "NO MOSTRAR",
     "bill_type": "phone_number",
     "country": "MX",
     "currency": "MXN",
@@ -657,7 +657,7 @@
   "pk": 54348,
   "fields": {
     "name": "Newww",
-    "biller_type": "MXCell",
+    "biller_type": "NO MOSTRAR",
     "bill_type": "phone_number",
     "country": "MX",
     "currency": "MXN",
@@ -684,7 +684,7 @@
   "pk": 54349,
   "fields": {
     "name": "Telecom Movil",
-    "biller_type": "MXCell",
+    "biller_type": "NO MOSTRAR",
     "bill_type": "phone_number",
     "country": "MX",
     "currency": "MXN",
@@ -712,7 +712,7 @@
   "pk": 54350,
   "fields": {
     "name": "Telecom MiFi",
-    "biller_type": "MXCell",
+    "biller_type": "NO MOSTRAR",
     "bill_type": "phone_number",
     "country": "MX",
     "currency": "MXN",
@@ -738,7 +738,7 @@
   "pk": 54351,
   "fields": {
     "name": "Telecom HBB",
-    "biller_type": "MXCell",
+    "biller_type": "NO MOSTRAR",
     "bill_type": "phone_number",
     "country": "MX",
     "currency": "MXN",
@@ -766,7 +766,7 @@
   "pk": 54352,
   "fields": {
     "name": "CFE-TEIT Individuales",
-    "biller_type": "MXCell",
+    "biller_type": "NO MOSTRAR",
     "bill_type": "phone_number",
     "country": "MX",
     "currency": "MXN",
@@ -793,7 +793,7 @@
   "pk": 54353,
   "fields": {
     "name": "CFE-TEIT Semestrales",
-    "biller_type": "MXCell",
+    "biller_type": "NO MOSTRAR",
     "bill_type": "phone_number",
     "country": "MX",
     "currency": "MXN",
@@ -817,7 +817,7 @@
   "pk": 54354,
   "fields": {
     "name": "CFE-TEIT Anuales",
-    "biller_type": "MXCell",
+    "biller_type": "NO MOSTRAR",
     "bill_type": "phone_number",
     "country": "MX",
     "currency": "MXN",
@@ -841,7 +841,7 @@
   "pk": 54355,
   "fields": {
     "name": "Dalefon",
-    "biller_type": "MXCell",
+    "biller_type": "NO MOSTRAR",
     "bill_type": "phone_number",
     "country": "MX",
     "currency": "MXN",
