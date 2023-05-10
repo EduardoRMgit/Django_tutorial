@@ -18,7 +18,8 @@ from demograficos.models import (UserProfile,
                                  Avatar,
                                  PerfilTransaccionalDeclarado,
                                  PasswordHistory,
-                                 AliasInvalido)
+                                 AliasInvalido,
+                                 Proveedor)
 from banca.models import Transaccion
 from pld.models import (Customer)
 from .cambio_password import PasswordResetUserAdmin
@@ -146,6 +147,14 @@ class PerfilTransaccionalInLine(admin.TabularInline):
     extra = 0
 
 
+class ProveddorInLine(admin.TabularInline):
+    model = Proveedor
+    can_delete = True
+    verbose_name_plural = "Proveedor"
+    fk_name = "user"
+    extra = 0
+
+
 class UserProfileAdmin(ExportActionMixin, PasswordResetUserAdmin):
     inlines = (
         DireccionInLine,
@@ -160,7 +169,8 @@ class UserProfileAdmin(ExportActionMixin, PasswordResetUserAdmin):
         UserContactoInline,
         DocAdjuntoInLine,
         BeneficiarioInLine,
-        PerfilTransaccionalInLine
+        PerfilTransaccionalInLine,
+        ProveddorInLine
     )
     actions = ['registra_cuenta', 'delete_stp_cuenta']
 
