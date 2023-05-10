@@ -3,17 +3,14 @@ import hashlib
 import hmac
 import base64
 import pytz
-from cactus.settings import cluster_secret
-
-api_key = cluster_secret('arcus-credentials', 'apikey')
-secret = cluster_secret('arcus-credentials', 'secret')
+from django.conf import settings
 
 
 def headers_arcus(endpoint):
     date = datetime.now(tz=pytz.utc).astimezone(pytz.timezone('GMT'))
     date = date.strftime('%a, %d %b %Y %H:%M:%S GMT')
-    autorizacion = api_key
-    key = secret
+    autorizacion = settings.API_KEY_ARCUS
+    key = settings.SECRET_ARCUS
     content = "application/json"
     content_md5 = ""
     accept = "application/vnd.regalii.v3.mx+json"

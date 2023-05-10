@@ -146,7 +146,6 @@ class RecargasArcusAdmin(admin.ModelAdmin):
             recargas = (
                 requests.get(url=url, headers=headers)).content.decode()
             recargas = (json.loads(recargas))["billers"]
-            print(recargas)
             gs = GoogleTranslator(source='en', target='es')
             for recarga in recargas:
                 tipo = gs.translate(recarga["biller_type"])

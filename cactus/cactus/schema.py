@@ -109,8 +109,8 @@ class Query(transaccionSchema.Query,
             ScotiaSchema.Query,
             creacionSchema.Query,
             crecimientoSchema.Query,
-            graphene.ObjectType,
-            arcusbills.Query):
+            arcusbills.Query,
+            graphene.ObjectType):
     pass
 
 
@@ -128,6 +128,7 @@ class Mutation(transaccionSchema.Mutation,
                inguzSchema.Mutation,
                ScotiaSchema.Mutation,
                crecimientoSchema.Mutation,
+               arcusbills.Mutation,
                graphene.ObjectType):
     token_auth = ObtainToken.Field()
     verify_token = graphql_jwt.Verify.Field()
