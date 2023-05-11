@@ -339,6 +339,9 @@ class UserProfile(AbstractBaseUser):
         blank=True
     )
     enrolamiento = models.BooleanField(default=False)
+    contador_servicio_cliente = models.IntegerField(null=True,
+                                                    blank=True,
+                                                    default=0)
 
     class Meta():
         verbose_name_plural = 'Perfil del usuario'
@@ -799,3 +802,13 @@ class NipTemporal(models.Model):
 
     def __str__(self):
         return str(self.fecha)
+
+
+class AliasInvalido(models.Model):
+
+    substring_invalida = models.CharField(max_length=64,
+                                          blank=True,
+                                          null=True)
+
+    def __str__(self):
+        return str(self.substring_invalida)

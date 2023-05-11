@@ -1,8 +1,7 @@
 from demograficos.models.comportamiento import (ComportamientoDiario,
                                                 ComportamientoMensual)
 from .models.regulacion import ValidacionRegulatoria
-from .models.comisionSTP import ComisioneSTP
-from .models.catalogos import Comision, CAMI
+from .models.catalogos import CAMI
 from django.dispatch import receiver
 from django.db.models.signals import post_save
 from .models.transaccion import (Transaccion,
@@ -16,15 +15,6 @@ from graphql_jwt.utils import jwt_payload
 @receiver(post_save, sender=Transaccion)
 def create_panda(sender, instance, created, **kwargs):
     if created:
-        comisiones = Comision.objects.all()
-        ComisioneSTP.objects.create(
-            stp=comisiones[0].monto,
-            ivaSTP=comisiones[1].monto,
-            cliente=comisiones[2].monto,
-            ivaCliente=comisiones[3].monto,
-            transaccion=instance
-        )
-
         date = datetime.date.today()
         payload = jwt_payload(instance.user)
 

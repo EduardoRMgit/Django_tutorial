@@ -1,4 +1,5 @@
 from .nivelCuenta import NivelCuenta
+from .comisionSTP import (ComisioneSTP)
 from .transaccion import (StatusTrans,
                           TipoAnual,
                           Transaccion,
@@ -13,7 +14,6 @@ from .catalogos import (ErroresTransaccion,
                         TipoTransaccion,
                         Comision,
                         CAMI)
-from .comisionSTP import (ComisioneSTP)
 from .regulacion import ValidacionRegulatoria
 from .mediosDisponibles import MediosDisponibles
 from .udis import ValorUdis

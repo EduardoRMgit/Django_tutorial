@@ -15,7 +15,7 @@ django-jet
 google-api-python-client
 django-crispy-forms
 django-recaptcha2
-reportlab
+reportlab==3.6.13
 WeasyPrint==49
 google-api-python-client
 google-auth-httplib2

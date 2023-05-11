@@ -2,9 +2,8 @@ import graphene
 import graphql_jwt
 from servicios.schemas import productoSchema, GpoTRansaccionSchema
 from legal.schemas import legalSchema
-from banca.schemas import (
-                           transaccionSchema,
-                           inguzSchema, ScotiaSchema, creacionSchema)
+from banca.schemas import (transaccionSchema, inguzSchema, ScotiaSchema,
+                           creacionSchema, servicioClientes)
 from demograficos.schemas import (userProfileSchema,
                                   telefonoSchema,
                                   tarjetaSchema,
@@ -126,6 +125,7 @@ class Mutation(transaccionSchema.Mutation,
                inguzSchema.Mutation,
                ScotiaSchema.Mutation,
                crecimientoSchema.Mutation,
+               servicioClientes.Mutation,
                graphene.ObjectType):
     token_auth = ObtainToken.Field()
     verify_token = graphql_jwt.Verify.Field()
