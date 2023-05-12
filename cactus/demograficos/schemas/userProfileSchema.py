@@ -2042,6 +2042,7 @@ class UpdateInfoPersonal(graphene.Mutation):
         rfc = graphene.String()
         correo = graphene.String()
         avatarId = graphene.Int()
+        pep = graphene.Boolean()
 
     def mutate(
         self, info, token,
@@ -2060,6 +2061,7 @@ class UpdateInfoPersonal(graphene.Mutation):
         rfc=None,
         correo=None,
         avatarId=None,
+        pep=None
     ):
         def _es_alias_valido(_alias):
             if " " in _alias:
@@ -2182,6 +2184,12 @@ class UpdateInfoPersonal(graphene.Mutation):
                         raise AssertionError('Entidad de nacimiento inválida')
                     u_profile.ciudad_nacimiento = entidad_fed.entidad
                     u_profile.save()
+            if pep:
+                u_profile.pep = pep
+                user.is_active = False
+                u_profile.save()
+                user.save()
+                raise Exception("Usuario PEP")
 
             msg = f"[curp (1.5) UpdtInfoPersonal userProfileSchema] ->{curp}<-"
             db_logger.info(msg)
