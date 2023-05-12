@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from banca.models import Transaccion
 
 
 class Bills(models.Model):
@@ -16,6 +17,30 @@ class Bills(models.Model):
 
     def __str__(self):
         return self.user
+
+
+class TiempoAire(models.Model):
+    class Meta:
+        verbose_name_plural = "Tiempo aire"
+    transaccion = models.OneToOneField(Transaccion,
+                                       on_delete=models.CASCADE,
+                                       related_name="transaccion_recarga",
+                                       blank=True,
+                                       null=True)
+    id_transaccion = models.IntegerField(blank=True, null=True)
+    monto = models.FloatField(blank=True, null=True)
+    moneda = models.CharField(max_length=20, blank=True, null=True)
+    monto_usd = models.FloatField(blank=True, null=True)
+    comision = models.FloatField(blank=True, null=True)
+    total_usd = models.FloatField(blank=True, null=True)
+    fecha_creacion = models.DateTimeField(blank=True, null=True)
+    estatus = models.CharField(max_length=2056, blank=True, null=True)
+    id_externo = models.CharField(max_length=2056, blank=True, null=True)
+    descripcion = models.CharField(max_length=2056, blank=True, null=True)
+    numero_telefono = models.CharField(max_length=12, blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.transaccion} {self.id_transaccion}"
 
 
 class ServicesArcus(models.Model):

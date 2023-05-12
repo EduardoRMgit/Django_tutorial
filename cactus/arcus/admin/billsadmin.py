@@ -1,5 +1,5 @@
 from django.contrib import admin
-from arcus.models import Bills, ServicesArcus, RecargasArcus
+from arcus.models import Bills, ServicesArcus, RecargasArcus, TiempoAire
 from arcus.utils.autharcus import headers_arcus
 from arcus.utils.categorias import categorias
 import requests
@@ -208,6 +208,31 @@ class RecargasArcusAdmin(admin.ModelAdmin):
             db_logger.error(msg)
 
 
+class TiempoAireAdmin(admin.ModelAdmin):
+    search_fields = ('id',
+                     'id_transaccion',
+                     'transaccion',
+                     'monto')
+    list_filter = ('id',
+                   'id_transaccion',
+                   'transaccion',
+                   'monto')
+    list_display = ('id',
+                    'transaccion',
+                    'monto',
+                    'moneda',
+                    'monto_usd',
+                    'comision',
+                    'total_usd',
+                    'fecha_creacion',
+                    'estatus',
+                    'id_externo',
+                    'descripcion',
+                    'numero_telefono',
+                    )
+
+
 admin.site.register(Bills, BillsAdmin)
 admin.site.register(ServicesArcus, ServicesArcusAdmin)
 admin.site.register(RecargasArcus, RecargasArcusAdmin)
+admin.site.register(TiempoAire, TiempoAireAdmin)
