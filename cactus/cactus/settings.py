@@ -92,6 +92,7 @@ INSTALLED_APPS = [
     'renapo.apps.RenapoConfig',
     'dapp.apps.DappConfig',
     'crecimiento.apps.CrecimientoConfig',
+    'arcus.apps.ArcusConfig',
 ]
 
 if SITE == "local":
@@ -354,6 +355,7 @@ PREFIJO_CUENTA_INGUZ = "6461802180"
 AXES_LOCKOUT_CALLABLE = "cactus.customAuthBackend.lockout"
 
 
+ARCUS_DOMAIN = 'https://api.staging.arcusapi.com'
 
 
 def cluster_secret(key, value):
@@ -381,3 +383,5 @@ EMAIL_HOST_USER = cluster_secret('gmail-credentials', 'email')
 EMAIL_HOST_PASSWORD = cluster_secret('gmail-credentials', 'pwd')
 AUTH_PWD = cluster_secret('gmail-credentials', 'apwd')
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+API_KEY_ARCUS = cluster_secret('arcus-credentials', 'apikey')
+SECRET_ARCUS = cluster_secret('arcus-credentials', 'secret')
