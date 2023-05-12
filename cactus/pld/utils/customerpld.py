@@ -20,7 +20,7 @@ def create_pld_customer(user):
         url_customer = UrlsPLD.objects.get(nombre="customer_sandbox").urls
         url_auth = UrlsPLD.objects.get(nombre="generateToken_sandbox").urls
         url_activate_customer = UrlsPLD.objects.get(
-        nombre="activate_sandbox").urls
+            nombre="activate_sandbox").urls
     try:
         headers_auth = {
             'Accept': 'application/json',
