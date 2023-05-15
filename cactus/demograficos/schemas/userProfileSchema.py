@@ -1664,6 +1664,8 @@ class CreateUser(graphene.Mutation):
             except Exception:
                 raise Exception("El teléfono no ha sido validado")
             if password is not None:
+                if "INGUZ" in password or "inguz" in password:
+                    raise Exception("Contraseña no válida")
                 if codigo_referencia is None:
                     codigoconfianza = None
                 else:
@@ -1771,6 +1773,8 @@ class ChangePassword(graphene.Mutation):
         user = info.context.user
         if not user.is_anonymous:
             if user.check_password(old_password):
+                if "INGUZ" in new_password or "inguz" in new_password:
+                    raise Exception("Contraseña no válida")
                 if user.check_password(new_password):
                     raise Exception("La nueva contraseña no puede "
                                     "ser igual a la anterior.")
@@ -2067,6 +2071,8 @@ class UpdateInfoPersonal(graphene.Mutation):
     ):
         def _es_alias_valido(_alias):
             if " " in _alias:
+                return False
+            if "INGUZ" in alias or "inguz" in alias:
                 return False
             lista_negra_alias = AliasInvalido.objects.filter(
                 substring_invalida__iexact=_alias)
@@ -2569,6 +2575,8 @@ class RecoverPassword(graphene.Mutation):
                     user=user,
                     activo=True)[0]
                 if pass_temporal.validate(pin):
+                    if "INGUZ" in new_password or "inguz" in new_password:
+                        raise Exception("Contraseña no válida")
                     if user.check_password(new_password):
                         raise Exception("La nueva contraseña no puede "
                                         "ser igual a la anterior.")
