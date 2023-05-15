@@ -344,6 +344,9 @@ class UserProfile(AbstractBaseUser):
                                                     default=0)
     pep = models.BooleanField(null=True,
                               blank=True)
+    fuente_ingresos_alter = models.CharField(max_length=32,
+                                             null=True,
+                                             blank=True)
 
     class Meta():
         verbose_name_plural = 'Perfil del usuario'
