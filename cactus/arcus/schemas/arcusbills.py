@@ -9,6 +9,7 @@ import requests
 from django.conf import settings
 from spei.stpTools import randomString
 import json
+import uuid
 
 
 class ServicesType(DjangoObjectType):
@@ -155,11 +156,12 @@ class CreateBill(graphene.Mutation):
 
     class Arguments:
         token = graphene.String(required=True)
-        biller_id = graphene.String(required=True)
-        account_number = graphene.String(required=True)
+        company_sku = graphene.String(required=True)
+        account_number = graphene.String()
+        mount = graphene.Float()
 
     @login_required
-    def mutate(self, info, token, biller_id, account_number):
+    def mutate(self, info, token, company_sku, account_number):
         try:
             user = info.context.user
         except Exception:
@@ -171,15 +173,24 @@ class CreateBill(graphene.Mutation):
             raise Exception('Usuario sin perfil')
 
         try:
-            headers = headers_arcus("/bills")
-            url = f"{settings.ARCUS_DOMAIN}/bills"
+            headers = headers_arcus()
+            url = f"{settings.ARCUS_DOMAIN}/consult"
+            print(url)
+            print(headers)
             data = {}
-            data["biller_id"] = biller_id
-            data["account_number"] = account_number
+            data["company_sku"] = company_sku
+            data["service_number"] = account_number
+            data["client_id"] = "3"
+            # data["amount"] = amount
+            # data["currency"] = "MXN"
+            # data["external_id"] = str(uuid.uuid4())
+            # data["payment_method"] = "DC"
             response = requests.post(url=url, headers=headers, json=data)
         except Exception as error:
             raise Exception("Error en la peticion", error)
+        print(response)
         response = (json.loads(response.content.decode("utf-8")))
+        print(response)
         return CreateBill(type=response["type"],
                           id=response["id"],
                           biller_id=response["biller_id"],

@@ -30,77 +30,81 @@ class BillsAdmin(admin.ModelAdmin):
 
 class ServicesArcusAdmin(admin.ModelAdmin):
     actions = ["updateservices"]
-    search_fields = ('id_bill',
+    search_fields = ('sku_id',
                      'name',
                      'biller_type'
                      )
-    list_filter = ('id_bill',
+    list_filter = ('sku_id',
                    'name',
                    'biller_type'
                    )
-    list_display = ('id_bill',
+    list_display = ('sku_id',
                     'name',
                     'biller_type',
-                    'bill_type',
                     'country',
+                    'bill_types',
                     'currency',
-                    'requires_name_on_account',
-                    'hours_to_fulfill',
-                    'account_number_digits',
-                    'mask',
-                    'can_check_balance',
+                    'customer_fee',
+                    'customer_fee_type',
+                    'logo_url',
+                    'autopay',
+                    'tracking',
                     'supports_partial_payments',
-                    'has_xdata'
+                    'hours_to_fulfill',
+                    'allows_reversal'
                     )
 
     def updateservices(self, request, servicios):
-        headers = headers_arcus("/billers/utilities")
-        url = f"{settings.ARCUS_DOMAIN}/billers/utilities"
+        headers = headers_arcus()
+        url = f"{settings.ARCUS_DOMAIN}/merchants"
         try:
             servicios = (
                 requests.get(url=url, headers=headers)).content.decode()
-            servicios = (json.loads(servicios))["billers"]
+            servicios = (json.loads(servicios))["merchants"]
             for servicio in servicios:
                 tipo = categorias(servicio["biller_type"], servicio["name"])
                 valida = ServicesArcus.objects.filter(
-                    id_bill=servicio["id"]).count()
+                    sku_id=servicio["sku"]).count()
                 if valida:
                     ServicesArcus.objects.filter(
-                        id_bill=servicio["id"]).update(
-                            id_bill=servicio["id"],
+                        sku_id=servicio["sku"]).update(
+                            sku_id=servicio["sku"],
                             name=servicio["name"],
                             biller_type=tipo,
-                            bill_type=servicio["bill_type"],
+                            bill_types=servicio["bill_types"],
                             country=servicio["country"],
                             currency=servicio["currency"],
-                            requires_name_on_account=servicio[
-                                "requires_name_on_account"],
-                            hours_to_fulfill=servicio["hours_to_fulfill"],
-                            account_number_digits=servicio[
-                                "account_number_digits"],
-                            mask=servicio["mask"],
-                            can_check_balance=servicio["can_check_balance"],
+                            customer_fee=servicio[
+                                "customer_fee"],
+                            customer_fee_type=servicio[
+                                "customer_fee_type"],
+                            logo_url=servicio["logo_url"],
+                            autopay=servicio["autopay"],
+                            tracking=servicio["tracking"],
                             supports_partial_payments=servicio[
                                 "supports_partial_payments"],
-                            has_xdata=servicio["has_xdata"])
+                            hours_to_fulfill=servicio["hours_to_fulfill"],
+                            allows_reversal=servicio["allows_reversal"])
                 else:
                     ServicesArcus.objects.create(
-                        id_bill=servicio["id"],
+                        sku_id=servicio["sku"],
                         name=servicio["name"],
                         biller_type=tipo,
-                        bill_type=servicio["bill_type"],
+                        bill_types=servicio["bill_types"],
                         country=servicio["country"],
                         currency=servicio["currency"],
-                        requires_name_on_account=servicio[
-                                "requires_name_on_account"],
-                        hours_to_fulfill=servicio["hours_to_fulfill"],
-                        account_number_digits=servicio[
-                                "account_number_digits"],
-                        mask=servicio["mask"],
-                        can_check_balance=servicio["can_check_balance"],
+                        customer_fee=servicio[
+                            "customer_fee"],
+                        customer_fee_type=servicio[
+                            "customer_fee_type"],
+                        logo_url=servicio["logo_url"],
+                        autopay=servicio["autopay"],
+                        tracking=servicio["tracking"],
                         supports_partial_payments=servicio[
                             "supports_partial_payments"],
-                        has_xdata=servicio["has_xdata"])
+                        hours_to_fulfill=servicio["hours_to_fulfill"],
+                        allows_reversal=servicio["allows_reversal"])
+                    print("a")
             msg_logg = "{}".format(
                 "[ARCUS REQUEST] (get) actualizacion exitosa")
             db_logger.info(msg_logg)

@@ -46,35 +46,37 @@ class TiempoAire(models.Model):
 class ServicesArcus(models.Model):
     class Meta:
         verbose_name_plural = "Servicios Arcus"
-    id_bill = models.IntegerField(
-        primary_key=True)
+    sku_id = models.IntegerField(
+            primary_key=True)
     name = models.CharField(
         max_length=256, null=True, blank=True)
     biller_type = models.CharField(
         max_length=256, null=True, blank=True)
-    bill_type = models.CharField(
-        max_length=256, null=True, blank=True)
     country = models.CharField(
         max_length=256, null=True, blank=True)
+    bill_types = models.JSONField(
+        max_length=4096, null=True, blank=True)
     currency = models.CharField(
         max_length=256, null=True, blank=True)
-    requires_name_on_account = models.BooleanField(
+    customer_fee = models.FloatField(
         null=True, blank=True)
-    hours_to_fulfill = models.IntegerField(
+    customer_fee_type = models.CharField(
+        max_length=256, null=True, blank=True)
+    logo_url = models.URLField(
+        max_length=4096, null=True, blank=True)
+    autopay = models.BooleanField(
         null=True, blank=True)
-    account_number_digits = models.CharField(
-        max_length=256, null=True, blank=True)
-    mask = models.CharField(
-        max_length=256, null=True, blank=True)
-    can_check_balance = models.BooleanField(
+    tracking = models.BooleanField(
         null=True, blank=True)
     supports_partial_payments = models.BooleanField(
         null=True, blank=True)
-    has_xdata = models.BooleanField(
+    hours_to_fulfill = models.IntegerField(
+        null=True, blank=True)
+    allows_reversal = models.BooleanField(
         null=True, blank=True)
 
     def __str__(self):
-        return f"{self.id_bill}, {self.name}"
+        return f"{self.sku_id}, {self.name}"
 
 
 class RecargasArcus(models.Model):
