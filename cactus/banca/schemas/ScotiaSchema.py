@@ -472,16 +472,15 @@ class CreateScotiaDeposito(graphene.Mutation):
         )
 
         hoy = timezone.now().date()
-        comision = 18
 
         num_depo = ScotiaDeposito.objects.filter(
             ordenante=ordenante,
             fecha_limite=hoy,
-            importe_documento=(monto) + comision).count()
+            importe_documento=(monto)).count()
         referencia_cobranza = genera_linea_de_captura(
             ordenante.Uprofile.cuentaClabe,
             hoy,
-            float(float(monto) + comision),
+            float(float(monto)),
             num_depo + 1
         )
         fecha = utc_to_local(timezone.now()).strftime('%Y-%m-%d %H:%M:%S')
@@ -499,9 +498,9 @@ class CreateScotiaDeposito(graphene.Mutation):
         )
         scotia_deposito = ScotiaDeposito.objects.create(
             ordenante=ordenante,
-            importe_documento=Decimal(float(float(monto) + comision)),
+            importe_documento=Decimal(float(float(monto))),
             fecha_limite=hoy,
-            comision=Decimal(comision),
+            comision=0,
             referencia_cobranza=referencia_cobranza,
             fecha_inicial=hoy,
             ubicacion=ubicacion,
