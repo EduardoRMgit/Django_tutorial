@@ -2043,25 +2043,27 @@ class UpdateInfoPersonal(graphene.Mutation):
         correo = graphene.String()
         avatarId = graphene.Int()
         pep = graphene.Boolean()
+        fuente_ingresos_alter = graphene.String()
 
     def mutate(
         self, info, token,
-        alias=None,
-        name=None,
-        gender=None,
-        last_name_p=None,
-        last_name_m=None,
-        birth_date=None,
-        nationality=None,
-        country=None,
-        city=None,
-        numero_INE=None,
-        occupation=None,
-        curp=None,
-        rfc=None,
-        correo=None,
-        avatarId=None,
-        pep=None
+            alias=None,
+            name=None,
+            gender=None,
+            last_name_p=None,
+            last_name_m=None,
+            birth_date=None,
+            nationality=None,
+            country=None,
+            city=None,
+            numero_INE=None,
+            occupation=None,
+            curp=None,
+            rfc=None,
+            correo=None,
+            avatarId=None,
+            pep=None,
+            fuente_ingresos_alter=None
     ):
         def _es_alias_valido(_alias):
             if " " in _alias:
@@ -2162,6 +2164,9 @@ class UpdateInfoPersonal(graphene.Mutation):
             u_profile.save()
             message = InfoValidator.setCheckpoint(user=user, concepto='IP')
 
+            if fuente_ingresos_alter:
+                u_profile.fuente_ingresos_alter = fuente_ingresos_alter
+
             if message == "curp validado":
                 u_profile.verificacion_curp = True
             u_profile.save()
@@ -2184,6 +2189,7 @@ class UpdateInfoPersonal(graphene.Mutation):
                         raise AssertionError('Entidad de nacimiento inválida')
                     u_profile.ciudad_nacimiento = entidad_fed.entidad
                     u_profile.save()
+
             if pep:
                 u_profile.pep = pep
                 user.is_active = False
