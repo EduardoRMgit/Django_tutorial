@@ -19,15 +19,16 @@ class Bills(models.Model):
         return self.user
 
 
-class TiempoAire(models.Model):
+class PagosArcus(models.Model):
     class Meta:
-        verbose_name_plural = "Tiempo aire"
+        verbose_name_plural = "Pagos arcus"
     transaccion = models.OneToOneField(Transaccion,
                                        on_delete=models.CASCADE,
                                        related_name="transaccion_recarga",
                                        blank=True,
                                        null=True)
     id_transaccion = models.CharField(max_length=2056, blank=True, null=True)
+    tipo = models.CharField(max_length=256, blank=True, null=True)
     monto = models.FloatField(blank=True, null=True)
     moneda = models.CharField(max_length=20, blank=True, null=True)
     identificador = models.CharField(max_length=256, blank=True, null=True)

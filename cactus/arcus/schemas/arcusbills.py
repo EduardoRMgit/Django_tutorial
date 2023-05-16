@@ -1,7 +1,7 @@
 import graphene
 from graphql_jwt.decorators import login_required
 from graphene_django.types import DjangoObjectType
-from arcus.models import ServicesArcus, RecargasArcus, TiempoAire
+from arcus.models import ServicesArcus, RecargasArcus, PagosArcus
 from banca.models import Transaccion, StatusTrans, TipoTransaccion
 from demograficos.models import UserProfile
 from arcus.utils.autharcus import headers_arcus
@@ -22,9 +22,23 @@ class RecargasType(DjangoObjectType):
         model = RecargasArcus
 
 
-class TiempoAireType(DjangoObjectType):
+class PagosArcusType(DjangoObjectType):
     class Meta:
-        model = TiempoAire
+        model = PagosArcus
+
+
+class ConsultaBillType(graphene.ObjectType):
+    balance = graphene.Float()
+    company_sku = graphene.String()
+    service_number = graphene.String()
+    due_date = graphene.String()
+    currency = graphene.String()
+    periodicity = graphene.String()
+    max_payment_amount = graphene.Float()
+    next_payment_date = graphene.String()
+    customer_fee = graphene.Float()
+    customer_fee_type = graphene.String()
+    bill_total = graphene.Float()
 
 
 class Query(object):
@@ -39,6 +53,10 @@ class Query(object):
                                    token=graphene.String(required=True),
                                    limit=graphene.Int(),
                                    offset=graphene.Int())
+    consult_bill = graphene.Field(ConsultaBillType,
+                                  token=graphene.String(required=True),
+                                  empresa=graphene.String(required=True),
+                                  referencia=graphene.String(required=True))
 
     @login_required
     def resolve_services_bills(self, info,
@@ -70,15 +88,31 @@ class Query(object):
             all = all[:limit]
         return all
 
+    @login_required
+    def resolve_consult_bill(self, info, empresa, referencia, **kwargs):
+        uid = str(uuid.uuid4())
+        try:
+            headers = headers_arcus(uid)
+            url = f"{settings.ARCUS_DOMAIN}/consult"
+            data = {}
+            data["company_sku"] = empresa
+            data["service_number"] = referencia
+            response = requests.post(url=url, headers=headers, json=data)
+        except Exception as error:
+            raise Exception("Error en la peticion", error)
+        response = (json.loads(response.content.decode("utf-8")))
+        return response
 
-class RecargaPay(graphene.Mutation):
-    recarga = graphene.Field(TiempoAireType)
+
+class ArcusPay(graphene.Mutation):
+    pay = graphene.Field(PagosArcusType)
 
     class Arguments:
         token = graphene.String(required=True)
         company_sku = graphene.String(required=True)
         account_number = graphene.String(required=True)
-        monto = graphene.Int(required=True)
+        monto = graphene.Float(required=True)
+        tipo = graphene.String(required=True)
 
     @login_required
     def mutate(self, info, token, monto, company_sku, account_number):
@@ -91,14 +125,15 @@ class RecargaPay(graphene.Mutation):
         else:
             raise Exception("Saldo insuficiente")
         try:
-            headers = headers_arcus()
+            uid = str(uuid.uuid4())
+            headers = headers_arcus(uid)
             url = f"{settings.ARCUS_DOMAIN}/pay"
             data = {}
             data["company_sku"] = company_sku
             data["service_number"] = account_number
             data["amount"] = monto
             data["currency"] = "MXN"
-            data["external_id"] = str(uuid.uuid4())
+            data["external_id"] = "ec2a0bb7-deac-4c21-9ed1-042e3fe58475"
             data["payment_method"] = "DC"
             response = requests.post(url=url, headers=headers, json=data)
 
@@ -124,7 +159,8 @@ class RecargaPay(graphene.Mutation):
             concepto=concepto,
             claveRastreo=rastreo
         )
-        recarga = TiempoAire.objects.create(
+        pay = PagosArcus.objects.create(
+            tipo=tipo,
             transaccion=main_trans,
             id_transaccion=response["uid"],
             identificador=response["identifier"],
@@ -140,73 +176,8 @@ class RecargaPay(graphene.Mutation):
         if status.nombre == "exito" and saldo:
             user.Uprofile.saldo_cuenta -= round(float(monto), 2)
             user.Uprofile.save()
-        return RecargaPay(recarga=recarga)
-
-
-class CreateBill(graphene.Mutation):
-
-    type = graphene.String()
-    id = graphene.String()
-    biller_id = graphene.Int()
-    account_number = graphene.String()
-    name_on_account = graphene.String()
-    due_date = graphene.String()
-    balance = graphene.Float()
-    balance_currency = graphene.String()
-    balance_updated_at = graphene.String()
-    error_code = graphene.String()
-    error_message = graphene.String()
-    status = graphene.String()
-
-    class Arguments:
-        token = graphene.String(required=True)
-        company_sku = graphene.String(required=True)
-        account_number = graphene.String()
-        mount = graphene.Float()
-
-    @login_required
-    def mutate(self, info, token, company_sku, account_number):
-        try:
-            user = info.context.user
-        except Exception:
-            raise Exception('Usuario Inexistente')
-
-        try:
-            UserProfile.objects.filter(user=user)[0]
-        except Exception:
-            raise Exception('Usuario sin perfil')
-
-        try:
-            headers = headers_arcus()
-            url = f"{settings.ARCUS_DOMAIN}/consult"
-            data = {}
-            data["company_sku"] = company_sku
-            data["service_number"] = account_number
-            data["client_id"] = "3"
-            # data["amount"] = amount
-            # data["currency"] = "MXN"
-            # data["external_id"] = str(uuid.uuid4())
-            # data["payment_method"] = "DC"
-            response = requests.post(url=url, headers=headers, json=data)
-        except Exception as error:
-            raise Exception("Error en la peticion", error)
-        print(response)
-        response = (json.loads(response.content.decode("utf-8")))
-        print(response)
-        return CreateBill(type=response["type"],
-                          id=response["id"],
-                          biller_id=response["biller_id"],
-                          account_number=response["account_number"],
-                          name_on_account=response["name_on_account"],
-                          due_date=response["due_date"],
-                          balance=response["balance"],
-                          balance_currency=response["balance_currency"],
-                          balance_updated_at=response["balance_updated_at"],
-                          error_code=response["error_code"],
-                          error_message=response["error_message"],
-                          status=response["status"])
+        return ArcusPay(pay=pay)
 
 
 class Mutation(graphene.ObjectType):
-    create_bill = CreateBill.Field()
-    recarga_pay = RecargaPay.Field()
+    recarga_pay = PagosArcus.Field()
