@@ -34,9 +34,12 @@ class ProveedorSchema(graphene.Mutation):
             ocupacion,
             parentesco,
     ):
-        if curp is not None:
-            curp = curp.upper()
-            # Agregar validación
+
+        user = info.context.user
+        if user.is_anonymous:
+            raise AssertionError('usuario no identificado')
+
+        curp = curp.upper()
         if settings.SITE in ["prod"]:
             data, mensaje = check_renapo(curp)
             if not data:
@@ -64,13 +67,7 @@ class ProveedorSchema(graphene.Mutation):
             ap_pat_renapo = None
             ap_mat_renapo = None
             fechNac_renapo = None
-            entidad_fed = None
 
-        user = info.context.user
-        if user.is_anonymous:
-            raise AssertionError('usuario no identificado')
-        if not user.is_anonymous:
-            user.email = correo if correo else user.email
         proveedor = Proveedor.objects.create(
             user=user,
             nombre=nombre_renapo,
