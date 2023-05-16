@@ -40,6 +40,12 @@ class ProveedorSchema(graphene.Mutation):
             raise AssertionError('usuario no identificado')
 
         curp = curp.upper()
+        nombre_renapo = None
+        ap_pat_renapo = None
+        ap_mat_renapo = None
+        fechNac_renapo = None
+        entidad_fed = None
+
         if settings.SITE in ["prod"]:
             data, mensaje = check_renapo(curp)
             if not data:
@@ -61,12 +67,6 @@ class ProveedorSchema(graphene.Mutation):
                 mensaje = "{} Error: {} / mensaje: {}.".format(
                     "[CONSULTA CURP RENAPO proveedor]", ex, mensaje)
                 db_logger.error(mensaje)
-
-        else:
-            nombre_renapo = None
-            ap_pat_renapo = None
-            ap_mat_renapo = None
-            fechNac_renapo = None
 
         proveedor = Proveedor.objects.create(
             user=user,
