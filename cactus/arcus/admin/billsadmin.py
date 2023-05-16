@@ -104,7 +104,6 @@ class ServicesArcusAdmin(admin.ModelAdmin):
                             "supports_partial_payments"],
                         hours_to_fulfill=servicio["hours_to_fulfill"],
                         allows_reversal=servicio["allows_reversal"])
-                    print("a")
             msg_logg = "{}".format(
                 "[ARCUS REQUEST] (get) actualizacion exitosa")
             db_logger.info(msg_logg)
@@ -147,7 +146,6 @@ class RecargasArcusAdmin(admin.ModelAdmin):
             recargas = (
                 requests.get(url=url, headers=headers)).content.decode()
             recargas = (json.loads(recargas))["merchants"]
-            print(recargas)
             for recarga in recargas:
                 tipo = categorias(recarga["biller_type"], recarga["name"])
                 if len(tipo) == 2:

@@ -3,7 +3,6 @@ from graphql_jwt.decorators import login_required
 from graphene_django.types import DjangoObjectType
 from arcus.models import ServicesArcus, RecargasArcus, PagosArcus
 from banca.models import Transaccion, StatusTrans, TipoTransaccion
-from demograficos.models import UserProfile
 from arcus.utils.autharcus import headers_arcus
 from spei.stpTools import randomString
 import requests
