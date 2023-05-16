@@ -5,6 +5,7 @@ from arcus.models import ServicesArcus, RecargasArcus, TiempoAire
 from banca.models import Transaccion, StatusTrans, TipoTransaccion
 from demograficos.models import UserProfile
 from arcus.utils.autharcus import headers_arcus
+from spei.stpTools import randomString
 import requests
 from django.conf import settings
 import json
@@ -85,6 +86,10 @@ class RecargaPay(graphene.Mutation):
             user = info.context.user
         except Exception:
             raise Exception('Usuario Inexistente')
+        if float(monto) <= user.Uprofile.saldo_cuenta:
+            saldo = True
+        else:
+            raise Exception("Saldo insuficiente")
         try:
             headers = headers_arcus()
             url = f"{settings.ARCUS_DOMAIN}/pay"
@@ -100,19 +105,15 @@ class RecargaPay(graphene.Mutation):
         except Exception as error:
             raise Exception("Error en la peticion", error)
         response = (json.loads(response.content.decode("utf-8")))
-        print(response)
-        fecha = response["created_at"]
+        fecha = response["processed_at"]
+        hora = response["process_at_time"]
+        rastreo = randomString()
+        fecha = f"{fecha}T{hora}Z"
         if "Pago realizado exitosamente" in response["ticket_text"]:
             status = StatusTrans.objects.get(nombre="exito")
         else:
             status = StatusTrans.objects.get(nombre="rechazada")
         tipo = TipoTransaccion.objects.get(codigo=101)
-        if float(monto) <= user.Uprofile.saldo_cuenta and \
-                status.nombre == "exito":
-            user.Uprofile.saldo_cuenta -= round(float(monto), 2)
-            user.Uprofile.save()
-        else:
-            raise Exception("Saldo insuficiente")
         concepto = response["ticket_text"]
         main_trans = Transaccion.objects.create(
             user=user,
@@ -120,22 +121,25 @@ class RecargaPay(graphene.Mutation):
             monto=monto,
             statusTrans=status,
             tipoTrans=tipo,
-            concepto=concepto
+            concepto=concepto,
+            claveRastreo=rastreo
         )
         recarga = TiempoAire.objects.create(
             transaccion=main_trans,
-            id_transaccion=response["id"],
+            id_transaccion=response["uid"],
+            identificador=response["identifier"],
             monto=monto,
             moneda="MXN",
-            monto_usd=response["amount_usd"],
-            comision=response["transaction_fee"],
-            total_usd=response["total_usd"],
+            comision=response["customer_fee"],
             fecha_creacion=fecha,
             estatus=response["status"],
             id_externo=response["external_id"],
             descripcion=response["ticket_text"],
-            numero_telefono=response["account_number"]
+            numero_telefono=response["service_number"]
         )
+        if status.nombre == "exito" and saldo:
+            user.Uprofile.saldo_cuenta -= round(float(monto), 2)
+            user.Uprofile.save()
         return RecargaPay(recarga=recarga)
 
 
@@ -175,8 +179,6 @@ class CreateBill(graphene.Mutation):
         try:
             headers = headers_arcus()
             url = f"{settings.ARCUS_DOMAIN}/consult"
-            print(url)
-            print(headers)
             data = {}
             data["company_sku"] = company_sku
             data["service_number"] = account_number

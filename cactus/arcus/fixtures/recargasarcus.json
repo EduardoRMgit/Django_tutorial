@@ -1,870 +1,827 @@
 [
 {
   "model": "arcus.recargasarcus",
-  "pk": 13597,
+  "pk": 2,
   "fields": {
-    "name": "MOVISTAR",
-    "biller_type": "Tiempo Aire",
-    "bill_type": "phone_number",
-    "country": "MX",
-    "currency": "MXN",
-    "requires_name_on_account": false,
-    "hours_to_fulfill": 0,
-    "account_number_digits": "10",
-    "mask": "(999) 999-9999",
-    "can_check_balance": false,
-    "supports_partial_payments": false,
-    "has_xdata": false,
-    "available_topup_amounts": [
-      "10.00",
-      "20.00",
-      "30.00",
-      "40.00",
-      "50.00",
-      "60.00",
-      "70.00",
-      "100.00",
-      "120.00",
-      "150.00",
-      "200.00",
-      "250.00",
-      "300.00",
-      "400.00",
-      "500.00",
-      "80.00",
-      "140.00"
-    ],
-    "topup_commission": 7.5
-  }
-},
-{
-  "model": "arcus.recargasarcus",
-  "pk": 13599,
-  "fields": {
-    "name": "TAEIUSACELL",
-    "biller_type": "NO MOSTRAR",
-    "bill_type": "phone_number",
-    "country": "MX",
-    "currency": "MXN",
-    "requires_name_on_account": false,
-    "hours_to_fulfill": 0,
-    "account_number_digits": "10",
-    "mask": "(999) 999-9999",
-    "can_check_balance": false,
-    "supports_partial_payments": false,
-    "has_xdata": false,
-    "available_topup_amounts": [
-      "100.00",
-      "1000.00",
-      "150.00",
-      "20.00",
-      "200.00",
-      "30.00",
-      "300.00",
-      "50.00",
-      "500.00",
-      "70.00",
-      "120.00",
-      "15.00",
-      "10.00"
-    ],
-    "topup_commission": 7.5
-  }
-},
-{
-  "model": "arcus.recargasarcus",
-  "pk": 13600,
-  "fields": {
-    "name": "UNEFON",
-    "biller_type": "Tiempo Aire",
-    "bill_type": "phone_number",
-    "country": "MX",
-    "currency": "MXN",
-    "requires_name_on_account": false,
-    "hours_to_fulfill": 0,
-    "account_number_digits": "10",
-    "mask": "(999) 999-9999",
-    "can_check_balance": false,
-    "supports_partial_payments": false,
-    "has_xdata": false,
-    "available_topup_amounts": [
-      "20.00",
-      "30.00",
-      "50.00",
-      "100.00",
-      "150.00",
-      "200.00",
-      "300.00",
-      "500.00",
-      "1000.00",
-      "70.00",
-      "120.00",
-      "15.00",
-      "10.00"
-    ],
-    "topup_commission": 7.5
-  }
-},
-{
-  "model": "arcus.recargasarcus",
-  "pk": 13601,
-  "fields": {
-    "name": "VIRGIN",
-    "biller_type": "Tiempo Aire",
-    "bill_type": "phone_number",
-    "country": "MX",
-    "currency": "MXN",
-    "requires_name_on_account": false,
-    "hours_to_fulfill": 0,
-    "account_number_digits": "10",
-    "mask": "(999) 999-9999",
-    "can_check_balance": false,
-    "supports_partial_payments": false,
-    "has_xdata": false,
-    "available_topup_amounts": [
-      "20.00",
-      "30.00",
-      "40.00",
-      "50.00",
-      "100.00",
-      "150.00",
-      "200.00",
-      "300.00",
-      "500.00"
-    ],
-    "topup_commission": 7.5
-  }
-},
-{
-  "model": "arcus.recargasarcus",
-  "pk": 13602,
-  "fields": {
+    "sku_id": "4013602026",
     "name": "AMIGO SL",
     "biller_type": "Tiempo Aire",
     "bill_type": "phone_number",
     "country": "MX",
     "currency": "MXN",
-    "requires_name_on_account": false,
-    "hours_to_fulfill": 0,
-    "account_number_digits": "10",
+    "customer_fee": 0.0,
+    "customer_fee_type": "01",
+    "logo_url": "https://d1ipkd1k928rz.cloudfront.net/ftVJt3g1bFUjy45R96taJ7Pf",
     "mask": "(999) 999-9999",
-    "can_check_balance": false,
-    "supports_partial_payments": false,
-    "has_xdata": false,
-    "available_topup_amounts": [
-      "20.00",
-      "50.00",
-      "150.00",
-      "300.00",
-      "500.00",
-      "100.00",
-      "200.00",
-      "30.00",
-      "80.00",
-      "10.00"
+    "topup_amounts": [
+      {
+        "amount": 20.0,
+        "description": "Amigo sin Límite 20",
+        "details": ""
+      },
+      {
+        "amount": 50.0,
+        "description": "Paquete Amigo 50",
+        "details": ""
+      },
+      {
+        "amount": 150.0,
+        "description": "Paquete Amigo 150",
+        "details": ""
+      },
+      {
+        "amount": 300.0,
+        "description": "Paquete Amigo 300",
+        "details": ""
+      },
+      {
+        "amount": 500.0,
+        "description": "Paquete Amigo 500",
+        "details": ""
+      },
+      {
+        "amount": 100.0,
+        "description": "Paquete Amigo 100",
+        "details": ""
+      },
+      {
+        "amount": 200.0,
+        "description": "Paquete Amigo 200",
+        "details": ""
+      },
+      {
+        "amount": 30.0,
+        "description": "Amigo sin Límite 30",
+        "details": ""
+      },
+      {
+        "amount": 80.0,
+        "description": "Amigo sin Límite 80",
+        "details": ""
+      },
+      {
+        "amount": 10.0,
+        "description": "Amigo sin Límite 10",
+        "details": ""
+      }
     ],
-    "topup_commission": 7.5
+    "reference_lenght": "10",
+    "carrier": "Telcel"
   }
 },
 {
   "model": "arcus.recargasarcus",
-  "pk": 13603,
+  "pk": 3,
   "fields": {
-    "name": "TELCEL",
-    "biller_type": "Tiempo Aire",
-    "bill_type": "phone_number",
-    "country": "MX",
-    "currency": "MXN",
-    "requires_name_on_account": false,
-    "hours_to_fulfill": 0,
-    "account_number_digits": "10",
-    "mask": "(999) 999-9999",
-    "can_check_balance": false,
-    "supports_partial_payments": false,
-    "has_xdata": false,
-    "available_topup_amounts": [
-      "10.00",
-      "20.00",
-      "30.00",
-      "50.00",
-      "100.00",
-      "150.00",
-      "200.00",
-      "300.00",
-      "500.00",
-      "80.00"
-    ],
-    "topup_commission": 7.5
-  }
-},
-{
-  "model": "arcus.recargasarcus",
-  "pk": 13615,
-  "fields": {
-    "name": "INTERNET AMIGO",
-    "biller_type": "Tiempo Aire",
-    "bill_type": "phone_number",
-    "country": "MX",
-    "currency": "MXN",
-    "requires_name_on_account": false,
-    "hours_to_fulfill": 0,
-    "account_number_digits": "10",
-    "mask": "(999) 999-9999",
-    "can_check_balance": false,
-    "supports_partial_payments": false,
-    "has_xdata": false,
-    "available_topup_amounts": [
-      "500.00",
-      "50.00",
-      "300.00",
-      "30.00",
-      "200.00",
-      "20.00",
-      "150.00",
-      "100.00",
-      "80.00",
-      "10.00",
-      "15.00"
-    ],
-    "topup_commission": 7.5
-  }
-},
-{
-  "model": "arcus.recargasarcus",
-  "pk": 13689,
-  "fields": {
-    "name": "MOVISTAR INTERNET",
-    "biller_type": "Tiempo Aire",
-    "bill_type": "phone_number",
-    "country": "MX",
-    "currency": "MXN",
-    "requires_name_on_account": false,
-    "hours_to_fulfill": 0,
-    "account_number_digits": "10",
-    "mask": null,
-    "can_check_balance": false,
-    "supports_partial_payments": false,
-    "has_xdata": false,
-    "available_topup_amounts": [
-      "10.00",
-      "20.00",
-      "100.00",
-      "150.00",
-      "200.00"
-    ],
-    "topup_commission": 0.0
-  }
-},
-{
-  "model": "arcus.recargasarcus",
-  "pk": 29866,
-  "fields": {
+    "sku_id": "4029866029",
     "name": "BAIT",
     "biller_type": "Tiempo Aire",
     "bill_type": "phone_number",
     "country": "MX",
     "currency": "MXN",
-    "requires_name_on_account": false,
-    "hours_to_fulfill": 0,
-    "account_number_digits": "10",
+    "customer_fee": 0.0,
+    "customer_fee_type": "04",
+    "logo_url": "https://d1ipkd1k928rz.cloudfront.net/vFw6UbW1ZfSf5KmMaMhnYqUq",
     "mask": "9999999999",
-    "can_check_balance": false,
-    "supports_partial_payments": false,
-    "has_xdata": false,
-    "available_topup_amounts": [
-      "10.00",
-      "20.00",
-      "30.00",
-      "50.00",
-      "65.00",
-      "100.00",
-      "200.00",
-      "300.00",
-      "125.00"
+    "topup_amounts": [
+      {
+        "amount": 10.0,
+        "description": "1 día: 100mb, 200mb redes, Minutos y SMS a México, EE UU y Canadá incluidos a $10.00",
+        "details": "1 día: 100mb, 200mb redes, Minutos y SMS a México, EE UU y Canadá incluidos a $10.00"
+      },
+      {
+        "amount": 20.0,
+        "description": "3 días: 500mb, 500mb redes, Minutos y SMS a México, EE UU y Canadá incluidos a $20.00",
+        "details": "3 días: 500mb, 500mb redes, Minutos y SMS a México, EE UU y Canadá incluidos a $20.00"
+      },
+      {
+        "amount": 30.0,
+        "description": "3 días: 4000mb, Minutos y SMS a México, EE UU y Canadá incluidos a $30.00",
+        "details": "3 días: 4000mb, Minutos y SMS a México, EE UU y Canadá incluidos a $30.00"
+      },
+      {
+        "amount": 50.0,
+        "description": "7 días: 10000mb, Minutos y SMS a México, EE UU y Canadá incluidos a $50.00",
+        "details": "7 días: 10000mb, Minutos y SMS a México, EE UU y Canadá incluidos a $50.00"
+      },
+      {
+        "amount": 65.0,
+        "description": "10 días: 10000mb, 1000mb redes, Minutos y SMS a México, EE UU y Canadá incluidos a $65.00",
+        "details": "10 días: 10000mb, 1000mb redes, Minutos y SMS a México, EE UU y Canadá incluidos a $65.00"
+      },
+      {
+        "amount": 100.0,
+        "description": "15 días: 20000mb, Minutos y SMS a México, EE UU y Canadá incluidos a $100.00",
+        "details": "15 días: 20000mb, Minutos y SMS a México, EE UU y Canadá incluidos a $100.00"
+      },
+      {
+        "amount": 200.0,
+        "description": "30 días: ilimitado, Minutos y SMS a México, EE UU y Canadá incluidos a $200.00",
+        "details": "30 días: ilimitado, Minutos y SMS a México, EE UU y Canadá incluidos a $200.00"
+      },
+      {
+        "amount": 300.0,
+        "description": "30 días: ilimitado, Minutos y SMS a México, EE UU y Canadá incluidos, comparte internet a $300.00",
+        "details": "30 días: ilimitado, Minutos y SMS a México, EE UU y Canadá incluidos, comparte internet a $300.00"
+      },
+      {
+        "amount": 125.0,
+        "description": "20 días: 20000 MB, Minutos y SMS a México, EE UU y Canadá incluidos a $125.00",
+        "details": "20 días: 20000 MB, Minutos y SMS a México, EE UU y Canadá incluidos a $125.00"
+      }
     ],
-    "topup_commission": 0.0
+    "reference_lenght": "10",
+    "carrier": "Bait"
   }
 },
 {
   "model": "arcus.recargasarcus",
-  "pk": 29867,
+  "pk": 4,
   "fields": {
-    "name": "FreedomPop",
-    "biller_type": "NO MOSTRAR",
-    "bill_type": "phone_number",
-    "country": "MX",
-    "currency": "MXN",
-    "requires_name_on_account": false,
-    "hours_to_fulfill": 0,
-    "account_number_digits": "10",
-    "mask": "99999999",
-    "can_check_balance": false,
-    "supports_partial_payments": false,
-    "has_xdata": false,
-    "available_topup_amounts": [
-      "30.00",
-      "50.00",
-      "80.00",
-      "100.00",
-      "150.00",
-      "200.00"
-    ],
-    "topup_commission": 0.0
-  }
-},
-{
-  "model": "arcus.recargasarcus",
-  "pk": 52298,
-  "fields": {
-    "name": "Pillofon",
-    "biller_type": "NO MOSTRAR",
-    "bill_type": "phone_number",
-    "country": "MX",
-    "currency": "MXN",
-    "requires_name_on_account": false,
-    "hours_to_fulfill": 0,
-    "account_number_digits": "10",
-    "mask": "9999999999",
-    "can_check_balance": false,
-    "supports_partial_payments": false,
-    "has_xdata": false,
-    "available_topup_amounts": [
-      "79.00",
-      "149.00",
-      "199.00",
-      "299.00",
-      "399.00",
-      "599.00"
-    ],
-    "topup_commission": 0.0
-  }
-},
-{
-  "model": "arcus.recargasarcus",
-  "pk": 54338,
-  "fields": {
-    "name": "Oui",
-    "biller_type": "NO MOSTRAR",
-    "bill_type": "phone_number",
-    "country": "MX",
-    "currency": "MXN",
-    "requires_name_on_account": false,
-    "hours_to_fulfill": 0,
-    "account_number_digits": "10",
-    "mask": "9999999999",
-    "can_check_balance": false,
-    "supports_partial_payments": false,
-    "has_xdata": false,
-    "available_topup_amounts": [
-      "10.00",
-      "15.00",
-      "20.00",
-      "25.00",
-      "30.00",
-      "35.00",
-      "40.00",
-      "45.00",
-      "50.00",
-      "60.00",
-      "80.00",
-      "100.00",
-      "120.00",
-      "150.00",
-      "200.00",
-      "240.00",
-      "300.00",
-      "350.00"
-    ],
-    "topup_commission": 0.0
-  }
-},
-{
-  "model": "arcus.recargasarcus",
-  "pk": 54339,
-  "fields": {
+    "sku_id": null,
     "name": "Wimo",
     "biller_type": "NO MOSTRAR",
     "bill_type": "phone_number",
     "country": "MX",
     "currency": "MXN",
-    "requires_name_on_account": false,
-    "hours_to_fulfill": 0,
-    "account_number_digits": "10",
+    "customer_fee": 0.0,
+    "customer_fee_type": "04",
+    "logo_url": "",
     "mask": "9999999999",
-    "can_check_balance": false,
-    "supports_partial_payments": false,
-    "has_xdata": false,
-    "available_topup_amounts": [
-      "35.00",
-      "65.00",
-      "125.00",
-      "130.00",
-      "190.00",
-      "250.00",
-      "375.00",
-      "625.00"
+    "topup_amounts": [
+      {
+        "amount": 35.0,
+        "description": "3 días: 40000mb, 250minutos, 125sms, redes sociales, cobertura México, Canadá y EE UU a $35.00",
+        "details": "3 días: 40000mb, 250minutos, 125sms, redes sociales, cobertura México, Canadá y EE UU a $35.00"
+      },
+      {
+        "amount": 65.0,
+        "description": "7 días: 100000mb, 500minutos, 250sms, redes sociales, cobertura México, Canadá y EE UU a $65.00",
+        "details": "7 días: 100000mb, 500minutos, 250sms, redes sociales, cobertura México, Canadá y EE UU a $65.00"
+      },
+      {
+        "amount": 125.0,
+        "description": "15 días: 200000mb, 1000minutos, 500sms, redes sociales, cobertura México, Canadá y EE UUa $125.00",
+        "details": "15 días: 200000mb, 1000minutos, 500sms, redes sociales, cobertura México, Canadá y EE UUa $125.00"
+      },
+      {
+        "amount": 130.0,
+        "description": "30 días: 5000mb, 1500minutos, 500sms, redes sociales, cobertura México, Canadá y EE UUa $130.00",
+        "details": "30 días: 5000mb, 1500minutos, 500sms, redes sociales, cobertura México, Canadá y EE UUa $130.00"
+      },
+      {
+        "amount": 190.0,
+        "description": "30 días: 800000mb, 1500minutos, 1000sms, redes sociales, cobertura México, Canadá y EE UUa $190.00",
+        "details": "30 días: 800000mb, 1500minutos, 1000sms, redes sociales, cobertura México, Canadá y EE UUa $190.00"
+      },
+      {
+        "amount": 250.0,
+        "description": "30 días: 40000mb, 1500minutos, 1000sms, redes sociales, cobertura México, Canadá y EE UUa $250.00",
+        "details": "30 días: 40000mb, 1500minutos, 1000sms, redes sociales, cobertura México, Canadá y EE UUa $250.00"
+      },
+      {
+        "amount": 375.0,
+        "description": "30 días: 40000mb, 1500minutos, 1000sms, redes sociales, cobertura México, Canadá y EE UUa $375.00",
+        "details": "30 días: 40000mb, 1500minutos, 1000sms, redes sociales, cobertura México, Canadá y EE UUa $375.00"
+      },
+      {
+        "amount": 625.0,
+        "description": "30 días: 100000mb, 10000minutos, 10000sms, redes sociales, cobertura México, Canadá y EE UUa $625.00",
+        "details": "30 días: 100000mb, 10000minutos, 10000sms, redes sociales, cobertura México, Canadá y EE UUa $625.00"
+      }
     ],
-    "topup_commission": 0.0
+    "reference_lenght": "10",
+    "carrier": null
   }
 },
 {
   "model": "arcus.recargasarcus",
-  "pk": 54340,
+  "pk": 5,
   "fields": {
-    "name": "S mobile",
+    "sku_id": "4029867027",
+    "name": "FreedomPop",
     "biller_type": "NO MOSTRAR",
     "bill_type": "phone_number",
     "country": "MX",
     "currency": "MXN",
-    "requires_name_on_account": false,
-    "hours_to_fulfill": 0,
-    "account_number_digits": "10",
-    "mask": "9999999999",
-    "can_check_balance": false,
-    "supports_partial_payments": false,
-    "has_xdata": false,
-    "available_topup_amounts": [
-      "20.00",
-      "50.00",
-      "100.00",
-      "150.00",
-      "300.00",
-      "500.00"
+    "customer_fee": 0.0,
+    "customer_fee_type": "04",
+    "logo_url": "https://d1ipkd1k928rz.cloudfront.net/XNrKYi8pTeYayHEwVR1rfUzY",
+    "mask": "99999999",
+    "topup_amounts": [
+      {
+        "amount": 30.0,
+        "description": "Recarga FreedomPop 30",
+        "details": "Recarga FreedomPop 30"
+      },
+      {
+        "amount": 50.0,
+        "description": "Recarga FreedomPop 50",
+        "details": "Recarga FreedomPop 50"
+      },
+      {
+        "amount": 80.0,
+        "description": "Recarga FreedomPop 80",
+        "details": "Recarga FreedomPop 80"
+      },
+      {
+        "amount": 100.0,
+        "description": "Recarga FreedomPop 100",
+        "details": "Recarga FreedomPop 100"
+      },
+      {
+        "amount": 150.0,
+        "description": "Recarga FreedomPop 150",
+        "details": "Recarga FreedomPop 150"
+      },
+      {
+        "amount": 200.0,
+        "description": "Recarga FreedomPop 200",
+        "details": "Recarga FreedomPop 200"
+      }
     ],
-    "topup_commission": 0.0
+    "reference_lenght": "10",
+    "carrier": "FreedomPop"
   }
 },
 {
   "model": "arcus.recargasarcus",
-  "pk": 54341,
+  "pk": 6,
   "fields": {
-    "name": "Gugacom",
-    "biller_type": "NO MOSTRAR",
+    "sku_id": "4013615028",
+    "name": "INTERNET AMIGO",
+    "biller_type": "Tiempo Aire",
     "bill_type": "phone_number",
     "country": "MX",
     "currency": "MXN",
-    "requires_name_on_account": false,
-    "hours_to_fulfill": 0,
-    "account_number_digits": "10",
-    "mask": "9999999999",
-    "can_check_balance": false,
-    "supports_partial_payments": false,
-    "has_xdata": false,
-    "available_topup_amounts": [
-      "40.00",
-      "65.00",
-      "120.00",
-      "129.00",
-      "130.00",
-      "195.00",
-      "250.00",
-      "380.00",
-      "389.00",
-      "489.00",
-      "599.00",
-      "600.00"
+    "customer_fee": 0.0,
+    "customer_fee_type": "01",
+    "logo_url": "https://d1ipkd1k928rz.cloudfront.net/6hJybBdfCqyAdG3kxQQFs5aB",
+    "mask": "(999) 999-9999",
+    "topup_amounts": [
+      {
+        "amount": 500.0,
+        "description": "Internet 500",
+        "details": ""
+      },
+      {
+        "amount": 50.0,
+        "description": "Internet 50",
+        "details": ""
+      },
+      {
+        "amount": 300.0,
+        "description": "Internet 300",
+        "details": ""
+      },
+      {
+        "amount": 30.0,
+        "description": "Internet 30",
+        "details": ""
+      },
+      {
+        "amount": 200.0,
+        "description": "Internet 200",
+        "details": ""
+      },
+      {
+        "amount": 20.0,
+        "description": "Internet 20",
+        "details": ""
+      },
+      {
+        "amount": 150.0,
+        "description": "Internet 150",
+        "details": ""
+      },
+      {
+        "amount": 100.0,
+        "description": "Internet 100",
+        "details": ""
+      },
+      {
+        "amount": 80.0,
+        "description": "Internet 80",
+        "details": ""
+      },
+      {
+        "amount": 10.0,
+        "description": "Internet 10",
+        "details": ""
+      },
+      {
+        "amount": 15.0,
+        "description": "Internet 15",
+        "details": ""
+      }
     ],
-    "topup_commission": 0.0
+    "reference_lenght": "10",
+    "carrier": "Telcel"
   }
 },
 {
   "model": "arcus.recargasarcus",
-  "pk": 54342,
+  "pk": 7,
   "fields": {
-    "name": "Flashmobile",
-    "biller_type": "NO MOSTRAR",
+    "sku_id": "4013689023",
+    "name": "MOVISTAR INTERNET",
+    "biller_type": "Tiempo Aire",
     "bill_type": "phone_number",
     "country": "MX",
     "currency": "MXN",
-    "requires_name_on_account": false,
-    "hours_to_fulfill": 0,
-    "account_number_digits": "10",
-    "mask": "9999999999",
-    "can_check_balance": false,
-    "supports_partial_payments": false,
-    "has_xdata": false,
-    "available_topup_amounts": [
-      "10.00",
-      "20.00",
-      "30.00",
-      "40.00",
-      "50.00",
-      "60.00",
-      "70.00",
-      "80.00",
-      "100.00",
-      "120.00",
-      "150.00",
-      "200.00",
-      "250.00",
-      "300.00",
-      "500.00"
+    "customer_fee": 0.0,
+    "customer_fee_type": "04",
+    "logo_url": "https://d1ipkd1k928rz.cloudfront.net/hq9QPsjU4PC5u3L9kH24WTvC",
+    "mask": null,
+    "topup_amounts": [
+      {
+        "amount": 10.0,
+        "description": "Paquete Básico $10",
+        "details": "Paquete Básico $10"
+      },
+      {
+        "amount": 20.0,
+        "description": "Paquete Básico $20",
+        "details": "Paquete Básico $20"
+      },
+      {
+        "amount": 100.0,
+        "description": "Paquete Conectado $100",
+        "details": "Paquete Conectado $100"
+      },
+      {
+        "amount": 150.0,
+        "description": "Paquete Conectado $150",
+        "details": "Paquete Conectado $150"
+      },
+      {
+        "amount": 200.0,
+        "description": "Paquete Conectado $200",
+        "details": "Paquete Conectado $200"
+      }
     ],
-    "topup_commission": 0.0
+    "reference_lenght": "10",
+    "carrier": "Movistar"
   }
 },
 {
   "model": "arcus.recargasarcus",
-  "pk": 54343,
+  "pk": 8,
   "fields": {
-    "name": "Netwey",
+    "sku_id": "4052298025",
+    "name": "Pillofon",
     "biller_type": "NO MOSTRAR",
     "bill_type": "phone_number",
     "country": "MX",
     "currency": "MXN",
-    "requires_name_on_account": false,
-    "hours_to_fulfill": 0,
-    "account_number_digits": "10",
+    "customer_fee": 0.0,
+    "customer_fee_type": "04",
+    "logo_url": "",
     "mask": "9999999999",
-    "can_check_balance": false,
-    "supports_partial_payments": false,
-    "has_xdata": false,
-    "available_topup_amounts": [
-      "40.00",
-      "65.00",
-      "125.00",
-      "250.00"
+    "topup_amounts": [
+      {
+        "amount": 79.0,
+        "description": "a $79.00",
+        "details": "a $79.00"
+      },
+      {
+        "amount": 149.0,
+        "description": "a $149.00",
+        "details": "a $149.00"
+      },
+      {
+        "amount": 199.0,
+        "description": "a $199.00",
+        "details": "a $199.00"
+      },
+      {
+        "amount": 299.0,
+        "description": "a $299.00",
+        "details": "a $299.00"
+      },
+      {
+        "amount": 399.0,
+        "description": "a $399.00",
+        "details": "a $399.00"
+      },
+      {
+        "amount": 599.0,
+        "description": "a $599.00",
+        "details": "a $599.00"
+      }
     ],
-    "topup_commission": 0.0
+    "reference_lenght": "10",
+    "carrier": null
   }
 },
 {
   "model": "arcus.recargasarcus",
-  "pk": 54344,
+  "pk": 9,
   "fields": {
-    "name": "Weex",
+    "sku_id": "4013599024",
+    "name": "TAEIUSACELL",
     "biller_type": "NO MOSTRAR",
     "bill_type": "phone_number",
     "country": "MX",
     "currency": "MXN",
-    "requires_name_on_account": false,
-    "hours_to_fulfill": 0,
-    "account_number_digits": "10",
-    "mask": "9999999999",
-    "can_check_balance": false,
-    "supports_partial_payments": false,
-    "has_xdata": false,
-    "available_topup_amounts": [
-      "10.00",
-      "20.00",
-      "30.00",
-      "40.00",
-      "50.00",
-      "60.00",
-      "70.00",
-      "80.00",
-      "100.00",
-      "120.00",
-      "150.00",
-      "200.00",
-      "250.00",
-      "300.00",
-      "400.00",
-      "500.00"
+    "customer_fee": 0.0,
+    "customer_fee_type": "01",
+    "logo_url": "https://d1ipkd1k928rz.cloudfront.net/n2GxKKRvvY2zQhoHis8HHswp",
+    "mask": "(999) 999-9999",
+    "topup_amounts": [
+      {
+        "amount": 100.0,
+        "description": "Tiempo Aire Electrónico",
+        "details": ""
+      },
+      {
+        "amount": 1000.0,
+        "description": "Tiempo Aire Electrónico",
+        "details": ""
+      },
+      {
+        "amount": 150.0,
+        "description": "Tiempo Aire Electrónico",
+        "details": ""
+      },
+      {
+        "amount": 20.0,
+        "description": "Tiempo Aire Electrónico",
+        "details": ""
+      },
+      {
+        "amount": 200.0,
+        "description": "Tiempo Aire Electrónico",
+        "details": ""
+      },
+      {
+        "amount": 30.0,
+        "description": "Tiempo Aire Electrónico",
+        "details": ""
+      },
+      {
+        "amount": 300.0,
+        "description": "Tiempo Aire Electrónico",
+        "details": ""
+      },
+      {
+        "amount": 50.0,
+        "description": "Tiempo Aire Electrónico",
+        "details": ""
+      },
+      {
+        "amount": 500.0,
+        "description": "Tiempo Aire Electrónico",
+        "details": ""
+      },
+      {
+        "amount": 70.0,
+        "description": "Tiempo Aire Electrónico",
+        "details": ""
+      },
+      {
+        "amount": 120.0,
+        "description": "Tiempo Aire Electrónico",
+        "details": ""
+      },
+      {
+        "amount": 15.0,
+        "description": "Tiempo Aire Electrónico",
+        "details": ""
+      },
+      {
+        "amount": 10.0,
+        "description": "Tiempo Aire Electrónico",
+        "details": ""
+      }
     ],
-    "topup_commission": 0.0
+    "reference_lenght": "10",
+    "carrier": "AT&T"
   }
 },
 {
   "model": "arcus.recargasarcus",
-  "pk": 54345,
+  "pk": 10,
   "fields": {
-    "name": "Soriana Móvil",
-    "biller_type": "NO MOSTRAR",
+    "sku_id": "4013597028",
+    "name": "MOVISTAR",
+    "biller_type": "Tiempo Aire",
     "bill_type": "phone_number",
     "country": "MX",
     "currency": "MXN",
-    "requires_name_on_account": false,
-    "hours_to_fulfill": 0,
-    "account_number_digits": "10",
-    "mask": "9999999999",
-    "can_check_balance": false,
-    "supports_partial_payments": false,
-    "has_xdata": false,
-    "available_topup_amounts": [
-      "5.00",
-      "10.00",
-      "20.00",
-      "30.00",
-      "50.00",
-      "100.00",
-      "150.00",
-      "200.00",
-      "500.00"
+    "customer_fee": 0.0,
+    "customer_fee_type": "01",
+    "logo_url": "https://d1ipkd1k928rz.cloudfront.net/E4ak3M6rzJmbhDAGy4bGSRgA",
+    "mask": "(999) 999-9999",
+    "topup_amounts": [
+      {
+        "amount": 10.0,
+        "description": "Tiempo Aire Electrónico",
+        "details": "Dudas o aclaraciones *611 MAS INFORMACION https://www.movistar.com.mx"
+      },
+      {
+        "amount": 20.0,
+        "description": "Tiempo Aire Electrónico",
+        "details": "Dudas o aclaraciones *611 MAS INFORMACION https://www.movistar.com.mx"
+      },
+      {
+        "amount": 30.0,
+        "description": "Tiempo Aire Electrónico",
+        "details": "Dudas o aclaraciones *611 MAS INFORMACION https://www.movistar.com.mx"
+      },
+      {
+        "amount": 40.0,
+        "description": "Tiempo Aire Electrónico",
+        "details": "Dudas o aclaraciones *611 MAS INFORMACION https://www.movistar.com.mx"
+      },
+      {
+        "amount": 50.0,
+        "description": "Tiempo Aire Electrónico",
+        "details": "Dudas o aclaraciones *611 MAS INFORMACION https://www.movistar.com.mx"
+      },
+      {
+        "amount": 60.0,
+        "description": "Tiempo Aire Electrónico",
+        "details": "Dudas o aclaraciones *611 MAS INFORMACION https://www.movistar.com.mx"
+      },
+      {
+        "amount": 70.0,
+        "description": "Tiempo Aire Electrónico",
+        "details": "Dudas o aclaraciones *611 MAS INFORMACION https://www.movistar.com.mx"
+      },
+      {
+        "amount": 100.0,
+        "description": "Tiempo Aire Electrónico",
+        "details": "Tiempo Aire Electrónico"
+      },
+      {
+        "amount": 120.0,
+        "description": "Tiempo Aire Electrónico",
+        "details": "Dudas o aclaraciones *611 MAS INFORMACION https://www.movistar.com.mx"
+      },
+      {
+        "amount": 150.0,
+        "description": "Tiempo Aire Electrónico",
+        "details": "Dudas o aclaraciones *611 MAS INFORMACION https://www.movistar.com.mx"
+      },
+      {
+        "amount": 200.0,
+        "description": "Tiempo Aire Electrónico",
+        "details": "Dudas o aclaraciones *611 MAS INFORMACION https://www.movistar.com.mx"
+      },
+      {
+        "amount": 250.0,
+        "description": "Tiempo Aire Electrónico",
+        "details": "Dudas o aclaraciones *611 MAS INFORMACION https://www.movistar.com.mx"
+      },
+      {
+        "amount": 300.0,
+        "description": "Tiempo Aire Electrónico",
+        "details": "Dudas o aclaraciones *611 MAS INFORMACION https://www.movistar.com.mx"
+      },
+      {
+        "amount": 400.0,
+        "description": "Tiempo Aire Electrónico",
+        "details": "Dudas o aclaraciones *611 MAS INFORMACION https://www.movistar.com.mx"
+      },
+      {
+        "amount": 500.0,
+        "description": "Tiempo Aire Electrónico",
+        "details": "Dudas o aclaraciones *611 MAS INFORMACION https://www.movistar.com.mx"
+      },
+      {
+        "amount": 80.0,
+        "description": "Tiempo Aire Electrónico",
+        "details": "Dudas o aclaraciones *611 MAS INFORMACION https://www.movistar.com.mx"
+      },
+      {
+        "amount": 140.0,
+        "description": "Tiempo Aire Electrónico",
+        "details": "Dudas o aclaraciones *611 MAS INFORMACION https://www.movistar.com.mx"
+      }
     ],
-    "topup_commission": 0.0
+    "reference_lenght": "10",
+    "carrier": "Movistar"
   }
 },
 {
   "model": "arcus.recargasarcus",
-  "pk": 54346,
+  "pk": 11,
   "fields": {
-    "name": "Bait Casa",
-    "biller_type": "NO MOSTRAR",
+    "sku_id": "4013603024",
+    "name": "TELCEL",
+    "biller_type": "Tiempo Aire",
     "bill_type": "phone_number",
     "country": "MX",
     "currency": "MXN",
-    "requires_name_on_account": false,
-    "hours_to_fulfill": 0,
-    "account_number_digits": "10",
-    "mask": "9999999999",
-    "can_check_balance": false,
-    "supports_partial_payments": false,
-    "has_xdata": false,
-    "available_topup_amounts": [
-      "89.00",
-      "329.00"
+    "customer_fee": 0.0,
+    "customer_fee_type": "01",
+    "logo_url": "https://d1ipkd1k928rz.cloudfront.net/xow6WYAt4pHhsvxHbAdtR5Nm",
+    "mask": "(999) 999-9999",
+    "topup_amounts": [
+      {
+        "amount": 10.0,
+        "description": "Tiempo Aire Electrónico",
+        "details": ""
+      },
+      {
+        "amount": 20.0,
+        "description": "Tiempo Aire Electrónico",
+        "details": ""
+      },
+      {
+        "amount": 30.0,
+        "description": "Tiempo Aire Electrónico",
+        "details": ""
+      },
+      {
+        "amount": 50.0,
+        "description": "Tiempo Aire Electrónico",
+        "details": ""
+      },
+      {
+        "amount": 100.0,
+        "description": "Tiempo Aire Electrónico",
+        "details": ""
+      },
+      {
+        "amount": 150.0,
+        "description": "Tiempo Aire Electrónico",
+        "details": ""
+      },
+      {
+        "amount": 200.0,
+        "description": "Tiempo Aire Electrónico",
+        "details": ""
+      },
+      {
+        "amount": 300.0,
+        "description": "Tiempo Aire Electrónico",
+        "details": ""
+      },
+      {
+        "amount": 500.0,
+        "description": "Tiempo Aire Electrónico",
+        "details": ""
+      },
+      {
+        "amount": 80.0,
+        "description": "Tiempo Aire Electrónico",
+        "details": ""
+      }
     ],
-    "topup_commission": 0.0
+    "reference_lenght": "10",
+    "carrier": "Telcel"
   }
 },
 {
   "model": "arcus.recargasarcus",
-  "pk": 54347,
+  "pk": 12,
   "fields": {
-    "name": "ComparTfon",
-    "biller_type": "NO MOSTRAR",
+    "sku_id": "4013600020",
+    "name": "UNEFON",
+    "biller_type": "Tiempo Aire",
     "bill_type": "phone_number",
     "country": "MX",
     "currency": "MXN",
-    "requires_name_on_account": false,
-    "hours_to_fulfill": 0,
-    "account_number_digits": "10",
-    "mask": "9999999999",
-    "can_check_balance": false,
-    "supports_partial_payments": false,
-    "has_xdata": false,
-    "available_topup_amounts": [
-      "10.00",
-      "20.00",
-      "30.00",
-      "40.00",
-      "50.00",
-      "60.00",
-      "70.00",
-      "80.00",
-      "100.00",
-      "120.00",
-      "150.00",
-      "200.00",
-      "250.00"
+    "customer_fee": 0.0,
+    "customer_fee_type": "01",
+    "logo_url": "",
+    "mask": "(999) 999-9999",
+    "topup_amounts": [
+      {
+        "amount": 20.0,
+        "description": "Tiempo Aire Electrónico",
+        "details": ""
+      },
+      {
+        "amount": 30.0,
+        "description": "Tiempo Aire Electrónico",
+        "details": ""
+      },
+      {
+        "amount": 50.0,
+        "description": "Tiempo Aire Electrónico",
+        "details": ""
+      },
+      {
+        "amount": 100.0,
+        "description": "Tiempo Aire Electrónico",
+        "details": ""
+      },
+      {
+        "amount": 150.0,
+        "description": "Tiempo Aire Electrónico",
+        "details": ""
+      },
+      {
+        "amount": 200.0,
+        "description": "Tiempo Aire Electrónico",
+        "details": ""
+      },
+      {
+        "amount": 300.0,
+        "description": "Tiempo Aire Electrónico",
+        "details": ""
+      },
+      {
+        "amount": 500.0,
+        "description": "Tiempo Aire Electrónico",
+        "details": ""
+      },
+      {
+        "amount": 1000.0,
+        "description": "Tiempo Aire Electrónico",
+        "details": ""
+      },
+      {
+        "amount": 70.0,
+        "description": "Tiempo Aire Electrónico",
+        "details": ""
+      },
+      {
+        "amount": 120.0,
+        "description": "Tiempo Aire Electrónico",
+        "details": ""
+      },
+      {
+        "amount": 15.0,
+        "description": "Tiempo Aire Electrónico",
+        "details": ""
+      },
+      {
+        "amount": 10.0,
+        "description": "Tiempo Aire Electrónico",
+        "details": ""
+      }
     ],
-    "topup_commission": 0.0
+    "reference_lenght": "10",
+    "carrier": null
   }
 },
 {
   "model": "arcus.recargasarcus",
-  "pk": 54348,
+  "pk": 13,
   "fields": {
-    "name": "Newww",
-    "biller_type": "NO MOSTRAR",
+    "sku_id": "4013601028",
+    "name": "VIRGIN",
+    "biller_type": "Tiempo Aire",
     "bill_type": "phone_number",
     "country": "MX",
     "currency": "MXN",
-    "requires_name_on_account": false,
-    "hours_to_fulfill": 0,
-    "account_number_digits": "10",
-    "mask": "9999999999",
-    "can_check_balance": false,
-    "supports_partial_payments": false,
-    "has_xdata": false,
-    "available_topup_amounts": [
-      "55.00",
-      "100.00",
-      "150.00",
-      "200.00",
-      "300.00",
-      "500.00"
+    "customer_fee": 0.0,
+    "customer_fee_type": "01",
+    "logo_url": "https://d1ipkd1k928rz.cloudfront.net/iyrRR4PZjqGzvQ36nXqWyCLH",
+    "mask": "(999) 999-9999",
+    "topup_amounts": [
+      {
+        "amount": 20.0,
+        "description": "Tiempo Aire Electrónico",
+        "details": "Tiempo Aire Electrónico"
+      },
+      {
+        "amount": 30.0,
+        "description": "Tiempo Aire Electrónico",
+        "details": "Tiempo Aire Electrónico"
+      },
+      {
+        "amount": 40.0,
+        "description": "Tiempo Aire Electrónico",
+        "details": "Tiempo Aire Electrónico"
+      },
+      {
+        "amount": 50.0,
+        "description": "Tiempo Aire Electrónico",
+        "details": "Tiempo Aire Electrónico"
+      },
+      {
+        "amount": 100.0,
+        "description": "Tiempo Aire Electrónico",
+        "details": "Tiempo Aire Electrónico"
+      },
+      {
+        "amount": 150.0,
+        "description": "Tiempo Aire Electrónico",
+        "details": "Tiempo Aire Electrónico"
+      },
+      {
+        "amount": 200.0,
+        "description": "Tiempo Aire Electrónico",
+        "details": "Tiempo Aire Electrónico"
+      },
+      {
+        "amount": 300.0,
+        "description": "Tiempo Aire Electrónico",
+        "details": "Tiempo Aire Electrónico"
+      },
+      {
+        "amount": 500.0,
+        "description": "Tiempo Aire Electrónico",
+        "details": "Tiempo Aire Electrónico"
+      }
     ],
-    "topup_commission": 0.0
-  }
-},
-{
-  "model": "arcus.recargasarcus",
-  "pk": 54349,
-  "fields": {
-    "name": "Telecom Movil",
-    "biller_type": "NO MOSTRAR",
-    "bill_type": "phone_number",
-    "country": "MX",
-    "currency": "MXN",
-    "requires_name_on_account": false,
-    "hours_to_fulfill": 0,
-    "account_number_digits": "10",
-    "mask": "9999999999",
-    "can_check_balance": false,
-    "supports_partial_payments": false,
-    "has_xdata": false,
-    "available_topup_amounts": [
-      "35.00",
-      "55.00",
-      "100.00",
-      "120.00",
-      "165.00",
-      "220.00",
-      "290.00"
-    ],
-    "topup_commission": 0.0
-  }
-},
-{
-  "model": "arcus.recargasarcus",
-  "pk": 54350,
-  "fields": {
-    "name": "Telecom MiFi",
-    "biller_type": "NO MOSTRAR",
-    "bill_type": "phone_number",
-    "country": "MX",
-    "currency": "MXN",
-    "requires_name_on_account": false,
-    "hours_to_fulfill": 0,
-    "account_number_digits": "10",
-    "mask": "9999999999",
-    "can_check_balance": false,
-    "supports_partial_payments": false,
-    "has_xdata": false,
-    "available_topup_amounts": [
-      "115.00",
-      "195.00",
-      "330.00",
-      "400.00",
-      "500.00"
-    ],
-    "topup_commission": 0.0
-  }
-},
-{
-  "model": "arcus.recargasarcus",
-  "pk": 54351,
-  "fields": {
-    "name": "Telecom HBB",
-    "biller_type": "NO MOSTRAR",
-    "bill_type": "phone_number",
-    "country": "MX",
-    "currency": "MXN",
-    "requires_name_on_account": false,
-    "hours_to_fulfill": 0,
-    "account_number_digits": "10",
-    "mask": "9999999999",
-    "can_check_balance": false,
-    "supports_partial_payments": false,
-    "has_xdata": false,
-    "available_topup_amounts": [
-      "30.00",
-      "55.00",
-      "89.00",
-      "109.00",
-      "319.00",
-      "369.00",
-      "420.00"
-    ],
-    "topup_commission": 0.0
-  }
-},
-{
-  "model": "arcus.recargasarcus",
-  "pk": 54352,
-  "fields": {
-    "name": "CFE-TEIT Individuales",
-    "biller_type": "NO MOSTRAR",
-    "bill_type": "phone_number",
-    "country": "MX",
-    "currency": "MXN",
-    "requires_name_on_account": false,
-    "hours_to_fulfill": 0,
-    "account_number_digits": "10",
-    "mask": "9999999999",
-    "can_check_balance": false,
-    "supports_partial_payments": false,
-    "has_xdata": false,
-    "available_topup_amounts": [
-      "30.00",
-      "45.00",
-      "100.00",
-      "150.00",
-      "200.00",
-      "300.00"
-    ],
-    "topup_commission": 0.0
-  }
-},
-{
-  "model": "arcus.recargasarcus",
-  "pk": 54353,
-  "fields": {
-    "name": "CFE-TEIT Semestrales",
-    "biller_type": "NO MOSTRAR",
-    "bill_type": "phone_number",
-    "country": "MX",
-    "currency": "MXN",
-    "requires_name_on_account": false,
-    "hours_to_fulfill": 0,
-    "account_number_digits": "10",
-    "mask": "9999999999",
-    "can_check_balance": false,
-    "supports_partial_payments": false,
-    "has_xdata": false,
-    "available_topup_amounts": [
-      "400.00",
-      "800.00",
-      "1200.00"
-    ],
-    "topup_commission": 0.0
-  }
-},
-{
-  "model": "arcus.recargasarcus",
-  "pk": 54354,
-  "fields": {
-    "name": "CFE-TEIT Anuales",
-    "biller_type": "NO MOSTRAR",
-    "bill_type": "phone_number",
-    "country": "MX",
-    "currency": "MXN",
-    "requires_name_on_account": false,
-    "hours_to_fulfill": 0,
-    "account_number_digits": "10",
-    "mask": "9999999999",
-    "can_check_balance": false,
-    "supports_partial_payments": false,
-    "has_xdata": false,
-    "available_topup_amounts": [
-      "700.00",
-      "1400.00",
-      "2100.00"
-    ],
-    "topup_commission": 0.0
-  }
-},
-{
-  "model": "arcus.recargasarcus",
-  "pk": 54355,
-  "fields": {
-    "name": "Dalefon",
-    "biller_type": "NO MOSTRAR",
-    "bill_type": "phone_number",
-    "country": "MX",
-    "currency": "MXN",
-    "requires_name_on_account": false,
-    "hours_to_fulfill": 0,
-    "account_number_digits": "10",
-    "mask": "9999999999",
-    "can_check_balance": false,
-    "supports_partial_payments": false,
-    "has_xdata": false,
-    "available_topup_amounts": [
-      "30.00",
-      "50.00",
-      "100.00",
-      "150.00",
-      "200.00",
-      "300.00",
-      "500.00",
-      "769.00",
-      "1469.00",
-      "2769.00"
-    ],
-    "topup_commission": 0.0
+    "reference_lenght": "10",
+    "carrier": "Virgin Mobile"
   }
 }
 ]

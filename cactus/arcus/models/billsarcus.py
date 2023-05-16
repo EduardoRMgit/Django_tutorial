@@ -27,12 +27,11 @@ class TiempoAire(models.Model):
                                        related_name="transaccion_recarga",
                                        blank=True,
                                        null=True)
-    id_transaccion = models.IntegerField(blank=True, null=True)
+    id_transaccion = models.CharField(max_length=2056, blank=True, null=True)
     monto = models.FloatField(blank=True, null=True)
     moneda = models.CharField(max_length=20, blank=True, null=True)
-    monto_usd = models.FloatField(blank=True, null=True)
+    identificador = models.CharField(max_length=256, blank=True, null=True)
     comision = models.FloatField(blank=True, null=True)
-    total_usd = models.FloatField(blank=True, null=True)
     fecha_creacion = models.DateTimeField(blank=True, null=True)
     estatus = models.CharField(max_length=2056, blank=True, null=True)
     id_externo = models.CharField(max_length=2056, blank=True, null=True)
