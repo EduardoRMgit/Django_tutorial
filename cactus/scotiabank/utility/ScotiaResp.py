@@ -438,7 +438,7 @@ class ParserScotia:
                         nombre="exito")
                     tipo = TipoTransaccion.objects.get(codigo=3)
                     claveR = randomString()
-                    comision = 18
+                    comision = 0
                     main_trans = Transaccion.objects.create(
                         user=user_profile.user,
                         fechaValor=fecha,
