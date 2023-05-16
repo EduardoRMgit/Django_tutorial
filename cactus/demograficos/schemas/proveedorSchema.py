@@ -36,20 +36,15 @@ class ProveedorSchema(graphene.Mutation):
     ):
         if curp is not None:
             curp = curp.upper()
-            codigo_entidad = curp[11:13]
-            entidad_fed = EntidadFed.objects.filter(
-                    clave=codigo_entidad)
-            if entidad_fed.count() > 0:
-                entidad_fed = entidad_fed.last().entidad
             # Agregar validación
         if settings.SITE in ["prod"]:
             data, mensaje = check_renapo(curp)
         else:
             data = {
-                'nombre_renapo': "None",
-                'ap_pat_renapo': "None",
-                'ap_mat_renapo': "None",
-                'fechNac_renapo': "None"
+                'nombre_renapo': None,
+                'ap_pat_renapo': None,
+                'ap_mat_renapo': None,
+                'fechNac_renapo': None
             }
             mensaje = ""
         try:
@@ -58,6 +53,13 @@ class ProveedorSchema(graphene.Mutation):
                 ap_pat_renapo = normalize(data['ap_pat_renapo'])
                 ap_mat_renapo = normalize(data['ap_mat_renapo'])
                 fechNac_renapo = data['fechNac_renapo']
+                codigo_entidad = curp[11:13]
+                entidad_fed = EntidadFed.objects.filter(
+                        clave=codigo_entidad)
+                if entidad_fed.count() > 0:
+                    entidad_fed = entidad_fed.last().entidad
+            else:
+                raise Exception("Curp no valido")
         except Exception as ex:
             db_logger = logging.getLogger('db')
             mensaje = "[CONSULTA CURP RENAPO proveedor]  \
