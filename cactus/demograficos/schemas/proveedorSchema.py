@@ -4,6 +4,7 @@ from renapo.renapo_call import check_renapo
 from graphene_django.types import DjangoObjectType
 from django.conf import settings
 from demograficos.utils.stringNormalize import normalize
+from demograficos.models import EntidadFed
 import logging
 
 
@@ -35,6 +36,11 @@ class ProveedorSchema(graphene.Mutation):
     ):
         if curp is not None:
             curp = curp.upper()
+            codigo_entidad = curp[11:13]
+            entidad_fed = EntidadFed.objects.filter(
+                    clave=codigo_entidad)
+            if entidad_fed.count() > 0:
+                entidad_fed = entidad_fed.last().entidad
             # Agregar validación
         if settings.SITE in ["prod"]:
             data, mensaje = check_renapo(curp)
@@ -54,7 +60,8 @@ class ProveedorSchema(graphene.Mutation):
                 fechNac_renapo = data['fechNac_renapo']
         except Exception as ex:
             db_logger = logging.getLogger('db')
-            mensaje = "[CONSULTA CURP RENAPO] Falló la validación. Error: \
+            mensaje = "[CONSULTA CURP RENAPO proveedor]  \
+                Falló la validación. Error: \
                 {} / mensaje: {}.".format(ex, mensaje)
             db_logger.error(mensaje)
         user = info.context.user
@@ -69,9 +76,10 @@ class ProveedorSchema(graphene.Mutation):
             apellido_m=ap_mat_renapo,
             correo_electronico=correo,
             curp=curp,
-            entidad_nacimiento=fechNac_renapo,
+            entidad_nacimiento=entidad_fed,
             ocupacion=ocupacion,
-            parentesco=parentesco
+            parentesco=parentesco,
+            fecha_nacimiento=fechNac_renapo
         )
 
         return ProveedorSchema(proveedor=proveedor)
