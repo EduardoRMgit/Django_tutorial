@@ -500,7 +500,7 @@ class CreateScotiaDeposito(graphene.Mutation):
             ordenante=ordenante,
             importe_documento=Decimal(float(float(monto))),
             fecha_limite=hoy,
-            comision=0,
+            comision=Decimal(0),
             referencia_cobranza=referencia_cobranza,
             fecha_inicial=hoy,
             ubicacion=ubicacion,
