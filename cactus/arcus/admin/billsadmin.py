@@ -117,38 +117,37 @@ class ServicesArcusAdmin(admin.ModelAdmin):
 
 class RecargasArcusAdmin(admin.ModelAdmin):
     actions = ["updaterecargas"]
-    search_fields = ('id_recarga',
+    search_fields = ('sku_id',
                      'name',
                      'biller_type'
                      )
-    list_filter = ('id_recarga',
+    list_filter = ('sku_id',
                    'name',
                    'biller_type'
                    )
-    list_display = ('id_recarga',
+    list_display = ('sku_id',
                     'name',
                     'biller_type',
                     'bill_type',
                     'country',
                     'currency',
-                    'requires_name_on_account',
-                    'hours_to_fulfill',
-                    'account_number_digits',
+                    'customer_fee',
+                    'customer_fee_type',
+                    'logo_url',
                     'mask',
-                    'can_check_balance',
-                    'supports_partial_payments',
-                    'has_xdata',
-                    'available_topup_amounts',
-                    'topup_commission'
+                    'topup_amounts',
+                    'reference_lenght',
+                    'carrier'
                     )
 
     def updaterecargas(self, request, servicios):
         try:
-            headers = headers_arcus("/billers/topups")
-            url = f"{settings.ARCUS_DOMAIN}/billers/topups"
+            headers = headers_arcus()
+            url = f"{settings.ARCUS_DOMAIN}/merchants/topups"
             recargas = (
                 requests.get(url=url, headers=headers)).content.decode()
-            recargas = (json.loads(recargas))["billers"]
+            recargas = (json.loads(recargas))["merchants"]
+            print(recargas)
             for recarga in recargas:
                 tipo = categorias(recarga["biller_type"], recarga["name"])
                 if len(tipo) == 2:
@@ -157,51 +156,39 @@ class RecargasArcusAdmin(admin.ModelAdmin):
                 else:
                     name = recarga["name"]
                 valida = RecargasArcus.objects.filter(
-                    id_recarga=recarga["id"]).count()
+                    sku_id=recarga["sku"]).count()
                 if valida:
                     RecargasArcus.objects.filter(
-                        id_recarga=recarga["id"]).update(
-                            id_recarga=recarga["id"],
+                        sku_id=recarga["sku"]).update(
+                            sku_id=recarga["sku"],
                             name=name,
                             biller_type=tipo,
                             bill_type=recarga["bill_type"],
                             country=recarga["country"],
                             currency=recarga["currency"],
-                            requires_name_on_account=recarga[
-                                "requires_name_on_account"],
-                            hours_to_fulfill=recarga["hours_to_fulfill"],
-                            account_number_digits=recarga[
-                                "account_number_digits"],
+                            customer_fee=recarga["customer_fee"],
+                            customer_fee_type=recarga["customer_fee_type"],
+                            logo_url=recarga["logo_url"],
                             mask=recarga["mask"],
-                            can_check_balance=recarga["can_check_balance"],
-                            supports_partial_payments=recarga[
-                                "supports_partial_payments"],
-                            has_xdata=recarga["has_xdata"],
-                            available_topup_amounts=recarga[
-                                "available_topup_amounts"],
-                            topup_commission=recarga["topup_commission"]
+                            topup_amounts=recarga["topup_amounts"],
+                            reference_lenght=recarga["reference_length"],
+                            carrier=recarga["carrier"]
                             )
                 else:
                     RecargasArcus.objects.create(
-                        id_recarga=recarga["id"],
-                        name=recarga["name"],
+                        sku_id=recarga["sku"],
+                        name=name,
                         biller_type=tipo,
                         bill_type=recarga["bill_type"],
                         country=recarga["country"],
                         currency=recarga["currency"],
-                        requires_name_on_account=recarga[
-                                "requires_name_on_account"],
-                        hours_to_fulfill=recarga["hours_to_fulfill"],
-                        account_number_digits=recarga[
-                                "account_number_digits"],
+                        customer_fee=recarga["customer_fee"],
+                        customer_fee_type=recarga["customer_fee_type"],
+                        logo_url=recarga["logo_url"],
                         mask=recarga["mask"],
-                        can_check_balance=recarga["can_check_balance"],
-                        supports_partial_payments=recarga[
-                            "supports_partial_payments"],
-                        has_xdata=recarga["has_xdata"],
-                        available_topup_amounts=recarga[
-                                "available_topup_amounts"],
-                        topup_commission=recarga["topup_commission"])
+                        topup_amounts=recarga["topup_amounts"],
+                        reference_lenght=recarga["reference_length"],
+                        carrier=recarga["carrier"])
             msg_logg = "{}".format(
                 "[ARCUS REQUEST] (get) actualizacion exitosa")
             db_logger.info(msg_logg)

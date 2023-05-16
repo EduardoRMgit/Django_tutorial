@@ -46,8 +46,8 @@ class TiempoAire(models.Model):
 class ServicesArcus(models.Model):
     class Meta:
         verbose_name_plural = "Servicios Arcus"
-    sku_id = models.IntegerField(
-            primary_key=True)
+    sku_id = models.CharField(
+            max_length=256, null=True, blank=True)
     name = models.CharField(
         max_length=256, null=True, blank=True)
     biller_type = models.CharField(
@@ -82,28 +82,28 @@ class ServicesArcus(models.Model):
 class RecargasArcus(models.Model):
     class Meta:
         verbose_name_plural = "Recargas Arcus"
-    id_recarga = models.IntegerField(primary_key=True)
+    sku_id = models.CharField(
+        max_length=256, null=True, blank=True)
     name = models.CharField(max_length=256, null=True, blank=True)
     biller_type = models.CharField(max_length=256, null=True, blank=True)
     bill_type = models.CharField(max_length=256, null=True, blank=True)
     country = models.CharField(max_length=256, null=True, blank=True)
     currency = models.CharField(max_length=256, null=True, blank=True)
-    requires_name_on_account = models.BooleanField(
+    customer_fee = models.FloatField(
         null=True, blank=True)
-    hours_to_fulfill = models.IntegerField(
-        null=True, blank=True)
-    account_number_digits = models.CharField(
+    customer_fee_type = models.CharField(
         max_length=256, null=True, blank=True)
+    logo_url = models.URLField(
+        max_length=4096, null=True, blank=True)
     mask = models.CharField(max_length=256, null=True, blank=True)
-    can_check_balance = models.BooleanField(
+    topup_amounts = models.JSONField(
         null=True, blank=True)
-    supports_partial_payments = models.BooleanField(
+    reference_lenght = models.CharField(
+        max_length=256,
         null=True, blank=True)
-    has_xdata = models.BooleanField(
+    carrier = models.CharField(
+        max_length=256,
         null=True, blank=True)
-    available_topup_amounts = models.JSONField(
-        null=True, blank=True)
-    topup_commission = models.FloatField(null=True, blank=True)
 
     def __str__(self):
-        return f"{self.id_recarga}{self.name}"
+        return f"{self.sku_id}{self.name}"

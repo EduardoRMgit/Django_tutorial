@@ -7,7 +7,6 @@ from demograficos.models import UserProfile
 from arcus.utils.autharcus import headers_arcus
 import requests
 from django.conf import settings
-from spei.stpTools import randomString
 import json
 import uuid
 
@@ -76,31 +75,32 @@ class RecargaPay(graphene.Mutation):
 
     class Arguments:
         token = graphene.String(required=True)
-        biller_id = graphene.String(required=True)
+        company_sku = graphene.String(required=True)
         account_number = graphene.String(required=True)
         monto = graphene.Int(required=True)
 
     @login_required
-    def mutate(self, info, token, monto, biller_id, account_number):
+    def mutate(self, info, token, monto, company_sku, account_number):
         try:
             user = info.context.user
         except Exception:
             raise Exception('Usuario Inexistente')
         try:
-            headers = headers_arcus("/single/pay")
-            url = f"{settings.ARCUS_DOMAIN}/single/pay"
+            headers = headers_arcus()
+            url = f"{settings.ARCUS_DOMAIN}/pay"
             data = {}
-            data["biller_id"] = biller_id
-            data["account_number"] = account_number
+            data["company_sku"] = company_sku
+            data["service_number"] = account_number
             data["amount"] = monto
             data["currency"] = "MXN"
-            data["external_id"] = randomString()
-            data["pos_number"] = ""
+            data["external_id"] = str(uuid.uuid4())
+            data["payment_method"] = "DC"
             response = requests.post(url=url, headers=headers, json=data)
 
         except Exception as error:
             raise Exception("Error en la peticion", error)
         response = (json.loads(response.content.decode("utf-8")))
+        print(response)
         fecha = response["created_at"]
         if "Pago realizado exitosamente" in response["ticket_text"]:
             status = StatusTrans.objects.get(nombre="exito")
