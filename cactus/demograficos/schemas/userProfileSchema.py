@@ -6,6 +6,9 @@ import json
 import os
 
 from re import U
+from re import search as re_search
+from re import IGNORECASE as re_IGNORECASE
+
 from random import randint
 
 from graphene_django.types import DjangoObjectType
@@ -1664,7 +1667,8 @@ class CreateUser(graphene.Mutation):
             except Exception:
                 raise Exception("El teléfono no ha sido validado")
             if password is not None:
-                if "INGUZ" in password or "inguz" in password:
+                inguz_match = re_search("inguz", password, re_IGNORECASE)
+                if inguz_match:
                     raise Exception("Contraseña no válida")
                 if codigo_referencia is None:
                     codigoconfianza = None
@@ -1773,8 +1777,11 @@ class ChangePassword(graphene.Mutation):
         user = info.context.user
         if not user.is_anonymous:
             if user.check_password(old_password):
-                if "INGUZ" in new_password or "inguz" in new_password:
+
+                inguz_match = re_search("inguz", new_password, re_IGNORECASE)
+                if inguz_match:
                     raise Exception("Contraseña no válida")
+
                 if user.check_password(new_password):
                     raise Exception("La nueva contraseña no puede "
                                     "ser igual a la anterior.")
@@ -2070,9 +2077,8 @@ class UpdateInfoPersonal(graphene.Mutation):
             fuente_ingresos_alter=None
     ):
         def _es_alias_valido(_alias):
-            if " " in _alias:
-                return False
-            if "INGUZ" in alias or "inguz" in alias:
+            inguz_match = re_search("inguz", _alias, re_IGNORECASE)
+            if " " in _alias or inguz_match:
                 return False
             lista_negra_alias = AliasInvalido.objects.filter(
                 substring_invalida__iexact=_alias)
@@ -2575,7 +2581,9 @@ class RecoverPassword(graphene.Mutation):
                     user=user,
                     activo=True)[0]
                 if pass_temporal.validate(pin):
-                    if "INGUZ" in new_password or "inguz" in new_password:
+                    inguz_match = re_search(
+                        "inguz", new_password, re_IGNORECASE)
+                    if inguz_match:
                         raise Exception("Contraseña no válida")
                     if user.check_password(new_password):
                         raise Exception("La nueva contraseña no puede "
