@@ -46,5 +46,37 @@
     "nombre": "movements_sandbox",
     "urls": "https://gt-servicios.com/propld/5501/V1/movementsapi/movements"
   }
+},
+{
+  "model": "pld.UrlsPLD",
+  "pk": 7,
+  "fields": {
+    "nombre": "delete",
+    "urls": "https://gt-servicios.com/propld/5501/V1/customersapi/deleteCustomer"
+  }
+},
+{
+  "model": "pld.UrlsPLD",
+  "pk": 8,
+  "fields": {
+    "nombre": "delete_sandbox",
+    "urls": "https://gt-servicios.com/propld/5501/V1/customersapi/deleteCustomer"
+  }
+},
+{
+  "model": "pld.UrlsPLD",
+  "pk": 9,
+  "fields": {
+    "nombre": "activate",
+    "urls": "https://gt-servicios.com/propld/5501/V1/customersapi/activateCustomer"
+  }
+},
+{
+  "model": "pld.UrlsPLD",
+  "pk": 10,
+  "fields": {
+    "nombre": "activate_sandbox",
+    "urls": "https://gt-servicios.com/propld/5501/V1/customersapi/activateCustomer"
+  }
 }
 ]

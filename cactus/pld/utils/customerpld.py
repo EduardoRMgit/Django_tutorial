@@ -11,13 +11,16 @@ db_logger = logging.getLogger('db')
 
 def create_pld_customer(user):
     if SITE == 'local':
-        return
+        pass
     elif SITE == 'prod':
         url_customer = UrlsPLD.objects.get(nombre="customer").urls
         url_auth = UrlsPLD.objects.get(nombre="generateToken").urls
+        url_activate_customer = UrlsPLD.objects.get(nombre="activate").urls
     else:
         url_customer = UrlsPLD.objects.get(nombre="customer_sandbox").urls
         url_auth = UrlsPLD.objects.get(nombre="generateToken_sandbox").urls
+        url_activate_customer = UrlsPLD.objects.get(
+            nombre="activate_sandbox").urls
     try:
         headers_auth = {
             'Accept': 'application/json',
@@ -55,6 +58,7 @@ def create_pld_customer(user):
             'actividad': user.Uprofile.ocupacion,
             'clabe': user.Uprofile.cuentaClabe,
             'correo_electronico': user.email,
+            'no_cliente': user.Uprofile.cuentaClabe[10:17]
         }
 
         headers = {
@@ -77,6 +81,46 @@ def create_pld_customer(user):
         )
 
         if res2.status_code != 200:
+            if content_customer['response_api']['message'] == \
+                                'This custumer is concurrent delete':
+                body = {
+                    'usr': cluster_secret('ubcubo-credentials', 'user'),
+                    'pass': cluster_secret('ubcubo-credentials', 'password'),
+                    'customer': user.Uprofile.curp
+                }
+                res3 = requests.post(
+                    url=url_activate_customer,
+                    data=body,
+                    headers=headers
+                )
+
+                content_activate = json.loads(res3.content)
+                if content_activate['response_api']['message'] == \
+                                    'The customer has been reactivated':
+                    Customer.objects.create(
+                        id_entidad=cluster_secret(
+                            'ubcubo-credentials', 'entity'),
+                        tipo=1,
+                        apaterno=user.last_name,
+                        amaterno=user.Uprofile.apMaterno,
+                        nombre=user.first_name,
+                        genero=user.Uprofile.sexo,
+                        rfc=user.Uprofile.rfc,
+                        curp=user.Uprofile.curp,
+                        fecha_nacimiento=user.Uprofile.fecha_nacimiento,
+                        pais_nacimiento=user.Uprofile.nacionalidad,
+                        nacionalidad=user.Uprofile.nacionalidad,
+                        actividad=user.Uprofile.ocupacion,
+                        correo_electronico=user.email,
+                        actua_cuenta_propia=1,
+                        mensaje=content_activate['response_api']['message'],
+                        no_cliente=user.Uprofile.cuentaClabe[10:17],
+                        user=user,
+                        response=content_activate,
+                    )
+                db_logger.info(
+                    f"[Reactivate Customer]: Customer reactivado {user}"
+                )
             db_logger.warning(
                 f"[Create Customer]: Error en la respuesta {user}"
             )
@@ -96,8 +140,7 @@ def create_pld_customer(user):
                 correo_electronico=user.email,
                 actua_cuenta_propia=1,
                 mensaje=content_customer['response_api']['message'],
-                no_cliente=content_customer[
-                    'response_api']['customer_repet']['id'],
+                no_cliente=user.Uprofile.cuentaClabe[10:17],
                 riesgo=content_customer[
                     'response_api']['customer_repet']['riesgo'],
                 user=user,

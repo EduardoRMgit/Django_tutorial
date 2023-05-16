@@ -548,10 +548,10 @@ class CreateTelefono(graphene.Mutation):
                     if proveedor is not None:
                         try:
                             prov = ProveedorTelefonico.get(
-                                    proveedor__iexact=proveedor)
+                                proveedor__iexact=proveedor)
                         except Exception:
                             prov = ProveedorTelefonico.objects.create(
-                                    proveedor=proveedor)
+                                proveedor=proveedor)
                             if paisTel is not None:
                                 prov.country = paisTel
                                 prov.save()
@@ -575,6 +575,9 @@ class SendSmsPin(graphene.Mutation):
         registro_nuevo = graphene.Boolean()
 
     def mutate(self, info, telefono, registro_nuevo=False):
+        if telefono is not None and len(telefono) < 10:
+            raise Exception("Número telefónico no válido")
+
         if registro_nuevo:
             if User.objects.filter(username=telefono).count() > 0:
                 u = User.objects.get(username=telefono)
@@ -704,7 +707,7 @@ class UpdateTelefono(graphene.Mutation):
 
                 tel = Telefono.objects.get(telefono=nuevo_numero)
                 Telefono.objects.filter(user=user).exclude(
-                                            pk=tel.pk).update(activo=False)
+                    pk=tel.pk).update(activo=False)
                 if userTel:
                     tel.telefono = userTel
                 if extension:
@@ -714,12 +717,12 @@ class UpdateTelefono(graphene.Mutation):
                 if proveedor:
                     try:
                         tel.proveedor = ProveedorTelefonico.objects.get(
-                                                                pk=proveedor)
+                            pk=proveedor)
                         tel.proveedor.save()
                     except Exception.DoesNotExist:
                         raise Exception(
                             "proveedor con id {} , no existe".format(
-                                                                    proveedor))
+                                proveedor))
                 tel.save()
 
         except Exception as ex:
@@ -742,9 +745,12 @@ class ValidacionTelefono(graphene.Mutation):
     def mutate(self, info, pin, numero, test=False, register_device=True,
                enrolamiento=False):
 
+        if numero is not None and len(numero) < 10:
+            raise Exception("Número telefónico no válido")
+
         if enrolamiento:
             tel = Telefono.objects.filter(telefono=numero, activo=False,
-                validado=False)
+                                          validado=False)
             if tel.count() == 0:
                 raise Exception('Número no registrado')
             tel = tel.last()
@@ -752,7 +758,7 @@ class ValidacionTelefono(graphene.Mutation):
                 return ValidacionTelefono(validacion="Incorrecto")
         else:
             tel = Telefono.objects.filter(telefono=numero).exclude(
-                    user=None)
+                user=None)
             if tel.count() == 0:
                 raise Exception('No existe usuario asociado al teléfono')
             tel = tel.last()

@@ -10,7 +10,8 @@ from demograficos.schemas import (userProfileSchema,
                                   institucionesSchema,
                                   documentosSchema,
                                   direccionSchema,
-                                  locationSchema)
+                                  locationSchema,
+                                  proveedorSchema)
 from spei.schemas import listabancosSchema
 from seguros.schemas import asignar_seguro
 from dde.schemas import (createddeSchema, imagenesddeSchema)
@@ -129,6 +130,7 @@ class Mutation(transaccionSchema.Mutation,
                crecimientoSchema.Mutation,
                arcusbills.Mutation,
                servicioClientes.Mutation,
+               proveedorSchema.Mutation,
                graphene.ObjectType):
     token_auth = ObtainToken.Field()
     verify_token = graphql_jwt.Verify.Field()

@@ -342,6 +342,11 @@ class UserProfile(AbstractBaseUser):
     contador_servicio_cliente = models.IntegerField(null=True,
                                                     blank=True,
                                                     default=0)
+    pep = models.BooleanField(null=True,
+                              blank=True)
+    fuente_ingresos_alter = models.CharField(max_length=32,
+                                             null=True,
+                                             blank=True)
 
     class Meta():
         verbose_name_plural = 'Perfil del usuario'
@@ -812,3 +817,25 @@ class AliasInvalido(models.Model):
 
     def __str__(self):
         return str(self.substring_invalida)
+
+
+class Proveedor(models.Model):
+    user = models.ForeignKey(User,
+                             related_name='user_proveedor',
+                             on_delete=models.CASCADE,
+                             blank=True,
+                             null=True)
+    nombre = models.CharField(max_length=50, blank=True, null=True)
+    apellido_p = models.CharField(max_length=30, blank=True, null=True)
+    apellido_m = models.CharField(max_length=30, blank=True, null=True)
+    correo_electronico = models.EmailField(max_length=100,
+                                           blank=True, null=True)
+    curp = models.CharField(max_length=20, blank=True, null=True)
+    entidad_nacimiento = models.CharField(max_length=560,
+                                          blank=True, null=True)
+    ocupacion = models.CharField(max_length=50, blank=True, null=True)
+    parentesco = models.CharField(max_length=30, blank=True, null=True)
+    fecha_nacimiento = models.DateField(blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.user}{self.nombre}"
