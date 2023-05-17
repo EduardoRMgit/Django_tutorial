@@ -131,13 +131,19 @@ class ArcusPay(graphene.Mutation):
         account_number = graphene.String(required=True)
         monto = graphene.Float(required=True)
         tipo = graphene.String(required=True)
+        nip = graphene.String(required=True)
 
     @login_required
-    def mutate(self, info, token, monto, company_sku, account_number):
+    def mutate(self, info, token, monto,
+               company_sku, account_number, tipo, nip):
         try:
             user = info.context.user
         except Exception:
             raise Exception('Usuario Inexistente')
+        if not user.Uprofile.password:
+            raise Exception("Usuario no ha establecido nip")
+        if not user.Uprofile.check_password(nip):
+            raise Exception('Nip incorrecto')
         if float(monto) <= user.Uprofile.saldo_cuenta:
             saldo = True
         else:
@@ -151,7 +157,7 @@ class ArcusPay(graphene.Mutation):
             data["service_number"] = account_number
             data["amount"] = monto
             data["currency"] = "MXN"
-            data["external_id"] = "ec2a0bb7-deac-4c21-9ed1-042e3fe58475"
+            data["external_id"] = uid
             data["payment_method"] = "DC"
             response = requests.post(url=url, headers=headers, json=data)
 
@@ -166,14 +172,17 @@ class ArcusPay(graphene.Mutation):
             status = StatusTrans.objects.get(nombre="exito")
         else:
             status = StatusTrans.objects.get(nombre="rechazada")
-        tipo = TipoTransaccion.objects.get(codigo=101)
+        if tipo == "R":
+            _tipo = TipoTransaccion.objects.get(codigo=101)
+        elif tipo == "S":
+            _tipo = TipoTransaccion.objects.get(codigo=100)
         concepto = response["ticket_text"]
         main_trans = Transaccion.objects.create(
             user=user,
             fechaValor=fecha,
             monto=monto,
             statusTrans=status,
-            tipoTrans=tipo,
+            tipoTrans=_tipo,
             concepto=concepto,
             claveRastreo=rastreo
         )
@@ -198,4 +207,4 @@ class ArcusPay(graphene.Mutation):
 
 
 class Mutation(graphene.ObjectType):
-    recarga_pay = PagosArcus.Field()
+    arcus_pay = ArcusPay.Field()
