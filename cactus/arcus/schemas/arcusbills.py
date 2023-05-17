@@ -9,6 +9,7 @@ import requests
 from django.conf import settings
 import json
 import uuid
+from django.db.models import Q
 
 
 class ServicesType(DjangoObjectType):
@@ -51,7 +52,9 @@ class Query(object):
     recargas_bills = graphene.List(RecargasType,
                                    token=graphene.String(required=True),
                                    limit=graphene.Int(),
-                                   offset=graphene.Int())
+                                   offset=graphene.Int(),
+                                   tipo=graphene.String(),
+                                   nombre=graphene.String())
     consult_bill = graphene.Field(ConsultaBillType,
                                   token=graphene.String(required=True),
                                   empresa=graphene.String(required=True),
@@ -61,31 +64,47 @@ class Query(object):
     def resolve_services_bills(self, info,
                                limit=None,
                                offset=None, tipo=None, nombre=None, **kwargs):
-        all = ServicesArcus.objects.all().exclude(biller_type="NO MOSTRAR")
+        qs = ServicesArcus.objects.all().exclude(biller_type="NO MOSTRAR")
+
         if nombre:
-            try:
-                return all.filter(name=nombre)
-            except Exception:
-                raise Exception("Compañia no existe.")
+            filter = (
+                Q(name__icontains=nombre)
+            )
+            qs = qs.filter(filter)
         if tipo:
-            return all.filter(biller_type=tipo)
+            filter = (
+                Q(biller_type__icontains=tipo)
+            )
+            qs = qs.filter(filter)
         if offset:
-            all = all[offset:]
+            qs = qs[offset:]
         if limit:
-            all = all[:limit]
-        return all
+            qs = qs[:limit]
+        return qs
 
     @login_required
-    def resolve_recargas_bills(self, info, id=None,
+    def resolve_recargas_bills(self, info, id=None, nombre=None, tipo=None,
                                limit=None, offset=None, **kwargs):
-        all = RecargasArcus.objects.all().exclude(biller_type="NO MOSTRAR")
+        qs = RecargasArcus.objects.all().exclude(biller_type="NO MOSTRAR")
+        if nombre:
+            filter = (
+                Q(name__icontains=nombre)
+            )
+            qs = qs.filter(filter)
+        if tipo:
+            filter = (
+                Q(biller_type__icontains=tipo)
+            )
+            qs = qs.filter(filter)
         if id:
-            all = all.filter(id_recarga=id)
+            filter = (
+                Q(id_recarga__exact=id)
+            )
         if offset:
-            all = all[offset:]
+            qs = qs[offset:]
         if limit:
-            all = all[:limit]
-        return all
+            qs = qs[:limit]
+        return qs
 
     @login_required
     def resolve_consult_bill(self, info, empresa, referencia, **kwargs):
