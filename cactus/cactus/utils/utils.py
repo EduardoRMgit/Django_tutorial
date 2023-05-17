@@ -49,7 +49,6 @@ def token_auth(f):
                     log.Uprofile.blocked_reason = "T"
                     log.Uprofile.blocked_date = timezone.now()
                     log.save()
-                    return Exception("Cuenta Bloqueada")
                 return exceptions.JSONWebTokenError(
                     _("Usuario y/o contraseña incorrectos"),
                 )
