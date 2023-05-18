@@ -61,7 +61,6 @@ class TestDireccion(JSONWebTokenTestCase):
         call_command('loaddata', 'nivelCuenta', verbosity=0)
         call_command('loaddata', 'entidad_federativa', verbosity=0)
         call_command('loaddata', 'tipoDireccion', verbosity=0)
-        call_command('loaddata', 'urls', verbosity=0)
         call_command('loaddata', 'usertesting', verbosity=0)
         call_command('loaddata', 'component', verbosity=0)
         call_command('loaddata', 'docAdjuntoTipo', verbosity=0)
