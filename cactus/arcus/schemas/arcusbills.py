@@ -10,6 +10,7 @@ from django.conf import settings
 import json
 import uuid
 from django.db.models import Q
+from datetime import datetime, time
 
 
 class ServicesType(DjangoObjectType):
@@ -164,10 +165,11 @@ class ArcusPay(graphene.Mutation):
         except Exception as error:
             raise Exception("Error en la peticion", error)
         response = (json.loads(response.content.decode("utf-8")))
-        fecha = response["processed_at"]
-        hora = response["process_at_time"]
+        print(response)
+        fecha = datetime.strptime(response["processed_at"], '%Y-%m-%d').date()
+        hora = datetime.strptime(response["process_at_time"], '%H:%M').time()
         rastreo = randomString()
-        fecha = f"{fecha}T{hora}Z"
+        fecha = datetime.combine(fecha, hora)
         if "Pago realizado exitosamente" in response["ticket_text"]:
             status = StatusTrans.objects.get(nombre="exito")
         else:
