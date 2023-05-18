@@ -1,10 +1,8 @@
-from pld.models import (Movimiento,
-                        UrlsPLD)
+from pld.models import Movimiento
 import json
 import requests
 import logging
 from cactus.settings import cluster_secret
-from cactus.settings import SITE
 from django.utils import timezone
 
 db_logger = logging.getLogger('db')

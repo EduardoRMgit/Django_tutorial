@@ -1,9 +1,7 @@
-from pld.models import UrlsPLD
 import json
 import requests
 import logging
 from cactus.settings import cluster_secret
-from cactus.settings import SITE
 
 db_logger = logging.getLogger('db')
 

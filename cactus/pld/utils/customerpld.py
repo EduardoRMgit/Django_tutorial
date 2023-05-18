@@ -1,10 +1,8 @@
-from pld.models import (Customer,
-                        UrlsPLD)
+from pld.models import (Customer)
 import json
 import requests
 import logging
 from cactus.settings import cluster_secret
-from cactus.settings import SITE
 
 db_logger = logging.getLogger('db')
 
@@ -13,7 +11,8 @@ def create_pld_customer(user):
 
     url_customer = cluster_secret('ubcubo-credentials', 'urlcustomer')
     url_auth = cluster_secret('ubcubo-credentials', 'urltoken')
-    url_activate_customer = cluster_secret('ubcubo-credentials', 'urlactivatecustomer')
+    url_activate_customer = cluster_secret(
+        'ubcubo-credentials', 'urlactivatecustomer')
 
     try:
         headers_auth = {
@@ -176,7 +175,6 @@ def update_pld_customer(user, direccion):
 
     url_customer = cluster_secret('ubcubo-credentials', 'urlcustomer')
     url_auth = cluster_secret('ubcubo-credentials', 'urltoken')
-    url_activate_customer = cluster_secret('ubcubo-credentials', 'urlactivatecustomer')
 
     try:
         headers_auth = {
