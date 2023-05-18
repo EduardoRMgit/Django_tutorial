@@ -10,17 +10,11 @@ db_logger = logging.getLogger('db')
 
 
 def create_pld_customer(user):
-    if SITE == 'local':
-        pass
-    elif SITE == 'prod':
-        url_customer = UrlsPLD.objects.get(nombre="customer").urls
-        url_auth = UrlsPLD.objects.get(nombre="generateToken").urls
-        url_activate_customer = UrlsPLD.objects.get(nombre="activate").urls
-    else:
-        url_customer = UrlsPLD.objects.get(nombre="customer_sandbox").urls
-        url_auth = UrlsPLD.objects.get(nombre="generateToken_sandbox").urls
-        url_activate_customer = UrlsPLD.objects.get(
-            nombre="activate_sandbox").urls
+
+    url_customer = cluster_secret('ubcubo-credentials', 'urlcustomer')
+    url_auth = cluster_secret('ubcubo-credentials', 'urltoken')
+    url_activate_customer = cluster_secret('ubcubo-credentials', 'urlactivatecustomer')
+
     try:
         headers_auth = {
             'Accept': 'application/json',
@@ -33,7 +27,7 @@ def create_pld_customer(user):
         }
 
         res = requests.post(
-            url_auth,
+            url=url_auth,
             data=body_auth,
             headers=headers_auth
         )
@@ -180,14 +174,10 @@ def create_pld_customer(user):
 
 def update_pld_customer(user, direccion):
 
-    if SITE == 'local':
-        return
-    elif SITE == 'prod':
-        url_customer = UrlsPLD.objects.get(nombre="customer").urls
-        url_auth = UrlsPLD.objects.get(nombre="generateToken").urls
-    else:
-        url_customer = UrlsPLD.objects.get(nombre="customer_sandbox").urls
-        url_auth = UrlsPLD.objects.get(nombre="generateToken_sandbox").urls
+    url_customer = cluster_secret('ubcubo-credentials', 'urlcustomer')
+    url_auth = cluster_secret('ubcubo-credentials', 'urltoken')
+    url_activate_customer = cluster_secret('ubcubo-credentials', 'urlactivatecustomer')
+
     try:
         headers_auth = {
             'Accept': 'application/json',
@@ -200,7 +190,7 @@ def update_pld_customer(user, direccion):
         }
 
         res = requests.post(
-            url_auth,
+            url=url_auth,
             data=body_auth,
             headers=headers_auth
         )

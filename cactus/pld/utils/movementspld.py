@@ -12,15 +12,9 @@ db_logger = logging.getLogger('db')
 
 def create_pld_movement(trans):
 
-    if SITE == 'local':
-        return
+    url_transaction = cluster_secret('ubcubo-credentials', 'urlmovements')
+    url_auth = cluster_secret('ubcubo-credentials', 'urltoken')
 
-    if SITE == 'prod':
-        url_transaction = UrlsPLD.objects.get(nombre="movements").urls
-        url_auth = UrlsPLD.objects.get(nombre="generateToken").urls
-    else:
-        url_transaction = UrlsPLD.objects.get(nombre="movements_sandbox").urls
-        url_auth = UrlsPLD.objects.get(nombre="generateToken_sandbox").urls
     try:
         headers_auth = {
             'Accept': 'application/json',

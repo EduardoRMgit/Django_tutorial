@@ -10,14 +10,9 @@ db_logger = logging.getLogger('db')
 
 def pld_customer_delete(curp):
 
-    if SITE == 'local':
-        pass
-    elif SITE == 'prod':
-        url_customer = UrlsPLD.objects.get(nombre="delete").urls
-        url_auth = UrlsPLD.objects.get(nombre="generateToken").urls
-    else:
-        url_customer = UrlsPLD.objects.get(nombre="delete_sandbox").urls
-        url_auth = UrlsPLD.objects.get(nombre="generateToken_sandbox").urls
+    url_customer = cluster_secret('ubcubo-credentials', 'urldeletecustomer')
+    url_auth = cluster_secret('ubcubo-credentials', 'urltoken')
+
     try:
         headers_auth = {
             'Accept': 'application/json',
@@ -30,7 +25,7 @@ def pld_customer_delete(curp):
         }
 
         res = requests.post(
-            url_auth,
+            url=url_auth,
             data=body_auth,
             headers=headers_auth
         )
