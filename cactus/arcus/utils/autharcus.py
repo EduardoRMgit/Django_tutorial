@@ -1,24 +1,24 @@
-from datetime import datetime
-import hashlib
-import hmac
-import base64
-import pytz
+from datetime import datetime, timedelta
 from django.conf import settings
+import pytz
+import jwt
 
 
-def headers_arcus(endpoint):
-    date = datetime.now(tz=pytz.utc).astimezone(pytz.timezone('GMT'))
-    date = date.strftime('%a, %d %b %Y %H:%M:%S GMT')
+def headers_arcus(uid):
     autorizacion = settings.API_KEY_ARCUS
     key = settings.SECRET_ARCUS
     content = "application/json"
-    content_md5 = ""
-    accept = "application/vnd.regalii.v3.mx+json"
-    checksum = f"{content},{content_md5},{endpoint},{date}".encode("utf-8")
-    checksum = (hmac.new(key.encode('utf-8'), checksum, hashlib.sha1)).digest()
-    checksum = (base64.b64encode(checksum)).decode("ascii")
+    actual = (datetime.now(pytz.timezone("GMT"))).timestamp()
+    expiracion = (
+        datetime.now(pytz.timezone("GMT")) + timedelta(minutes=15)).timestamp()
+    accept = "application/vnd.regalii.v4.1+json"
+    payload = {'sub': autorizacion,
+               'exp': int(expiracion),
+               'iat': int(actual),
+               'jti': uid}
+    bearer = jwt.encode(payload=payload, key=key, algorithm="HS256")
     headers = {'Content-Type': content,
                'Accept': accept,
-               'Date': date,
-               'Authorization': f'APIAuth {autorizacion}:{checksum}'}
+               'Authorization': f'Bearer {bearer}',
+               'Idempotency-Key': uid}
     return headers
