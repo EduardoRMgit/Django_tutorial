@@ -46,6 +46,7 @@ class CompTrans(object):
 
     def inguz(self, show=False):
         trans = self._trans
+        inguz_trans = InguzTransaction.objects.get(transaccion=trans)
         alias = f"@{trans.user.Uprofile.alias}"
         avatar = trans.user.Uprofile.avatar
         monto = "${:.2f}".format(round(float(trans.monto), 2))
@@ -155,6 +156,8 @@ class CompTrans(object):
 
     def stp(self):
         trans = self._trans
+        stp_trans = StpTransaction.objects.get(
+            transaccion=trans)
         importe = "${:,.2f}".format(round(float(trans.monto), 2))
         fechaValor = trans.fechaValor - timedelta(hours=6)
         fecha = fechaValor.strftime("%d/%m/%Y")
