@@ -63,3 +63,5 @@ schedule: "20 4 * * *"
 scheduleTrans: "10,20,40,50 0-23 * * 1-5"
 
 scheduleRetiro: "10,20,40,50 0-23 * * 1-5"
+
+scheduleArcus: "15 10 * * *"

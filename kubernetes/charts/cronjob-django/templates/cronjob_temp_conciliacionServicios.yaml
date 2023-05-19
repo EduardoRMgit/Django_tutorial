@@ -1,9 +1,9 @@
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: conciliacion-recargas-{{ include "cronjob-django.name" . }}-cronjob
+  name: conciliacion-servicios-{{ include "cronjob-django.name" . }}-cronjob
 spec:
-  schedule: {{ .Values.scheduleConciliacionServicios | quote}}
+  schedule: {{ .Values.scheduleArcus | quote}}
   jobTemplate:
     spec:
       template:
@@ -14,7 +14,7 @@ spec:
           {{- end }}
           containers:
             # Do not forget that only lettters and - for this name
-          - name: scotia-retiro-{{ include "cronjob-django.name" . }}-cronjob
+          - name: arcus-servicios-{{ include "cronjob-django.name" . }}-cronjob
             image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
             imagePullPolicy: Always
             command: ['python','manage.py','runscript','conciliacionServicios']

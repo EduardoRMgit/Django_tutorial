@@ -3,7 +3,7 @@ kind: CronJob
 metadata:
   name: conciliacion-recargas-{{ include "cronjob-django.name" . }}-cronjob
 spec:
-  schedule: {{ .Values.scheduleConciliacionRecargas | quote}}
+  schedule: {{ .Values.scheduleArcus | quote}}
   jobTemplate:
     spec:
       template:
@@ -14,7 +14,7 @@ spec:
           {{- end }}
           containers:
             # Do not forget that only lettters and - for this name
-          - name: scotia-retiro-{{ include "cronjob-django.name" . }}-cronjob
+          - name: arcus-recargas-{{ include "cronjob-django.name" . }}-cronjob
             image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
             imagePullPolicy: Always
             command: ['python','manage.py','runscript','conciliacionRecargas']
