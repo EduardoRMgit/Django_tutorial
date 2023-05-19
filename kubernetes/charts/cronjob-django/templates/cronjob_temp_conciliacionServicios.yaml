@@ -1,0 +1,87 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: conciliacion-recargas-{{ include "cronjob-django.name" . }}-cronjob
+spec:
+  schedule: {{ .Values.scheduleConciliacionServicios | quote}}
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          {{- with .Values.imagePullSecrets }}
+          imagePullSecrets:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          containers:
+            # Do not forget that only lettters and - for this name
+          - name: scotia-retiro-{{ include "cronjob-django.name" . }}-cronjob
+            image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+            imagePullPolicy: Always
+            command: ['python','manage.py','runscript','conciliacionServicios']
+            env:
+              - name: POSTGRES_USER
+                valueFrom:
+                  secretKeyRef:
+                    name: {{ .Values.dbSecret }}
+                    key: user
+
+              - name: POSTGRES_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: {{ .Values.dbSecret }}
+                    key: password
+
+              - name: POSTGRES_NAME
+                value: {{ .Values.dbName | quote }}
+
+              - name: SITE
+                value: {{ .Values.site | quote }}
+
+  {{- if .Values.s3.enabled }}
+              - name: AWS_SECRET_ID
+                valueFrom:
+                  secretKeyRef:
+                    name: {{ .Values.s3.secret }}
+                    key: secret
+
+              - name: AWS_KEY_ID
+                valueFrom:
+                  secretKeyRef:
+                    name: {{ .Values.s3.secret }}
+                    key: id
+  {{- end }}
+  {{- if .Values.twilio.enabled }}
+              - name: TWILIO_SID
+                valueFrom:
+                  secretKeyRef:
+                    name: {{ .Values.twilio.secret }}
+                    key: sid
+
+              - name: TWILIO_TOKEN
+                valueFrom:
+                  secretKeyRef:
+                    name: {{ .Values.twilio.secret }}
+                    key: token
+  {{- end }}
+              - name: POSTGRES_HOST
+                value: cactus-{{ .Values.site }}-postgres
+
+              - name: POSTGRES_PORT
+                value: {{ .Values.dbPort | quote }}
+
+              - name: PRODUCTION
+                value: "true"
+
+              - name: DJANGO_SECRET_KEY
+                valueFrom:
+                  secretKeyRef:
+                    name: django-secret
+                    key: key
+
+              - name: UBUNTUPEM
+                valueFrom:
+                  secretKeyRef:
+                    name: ubuntu-key
+                    key: key
+          restartPolicy: OnFailure
+      backoffLimit: 3
