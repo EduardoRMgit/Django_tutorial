@@ -117,6 +117,5 @@ class PagosArcus(models.Model):
                                          blank=True,
                                          null=True)
 
-
     def __str__(self):
         return f"{self.transaccion} {self.id_transaccion}"

@@ -7,7 +7,7 @@ def conciliacion_arcus_recargas():
     today = datetime.now().date()
     pagos = PagosArcus.objects.filter(fecha_creacion__date=today, tipo='R')
     if len(pagos) != 0:
-    # Inicio del archivo
+        # Inicio del archivo
         header_date = today.strftime("%Y/%m/%d").replace('/', '')
         document = f"HEADER|{header_date}\n"
         for pago in pagos:
@@ -28,8 +28,9 @@ def conciliacion_arcus_recargas():
     else:
         header_date = today.strftime("%Y/%m/%d").replace('/', '')
         document = f"HEADER|{header_date}\n"
-        document += f"FOOTER|0"
+        document += "FOOTER|0"
         with open(f"chainname_{header_date}.txt", "w") as file:
             file.write(document)
+
 
 conciliacion_arcus_recargas()

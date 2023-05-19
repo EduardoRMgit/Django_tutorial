@@ -11,7 +11,7 @@ import json
 import uuid
 from django.db.models import Q
 from collections import Counter
-from datetime import datetime, time
+from datetime import datetime
 
 
 class ServicesType(DjangoObjectType):
