@@ -2,7 +2,9 @@
 
 def categorias(categoria, name):
     if categoria == "Cable" or \
-            categoria == "PostPaidCell" and \
+            categoria == "PostPaidCell" or \
+            categoria == "Landline" or \
+            categoria == "Satellite" and \
             name != "Juego total":
         categoria = "INTERNET/TV"
     elif categoria == "Electricity" and name == "CFE":

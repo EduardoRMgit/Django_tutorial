@@ -1,0 +1,1119 @@
+[
+{
+  "model": "arcus.servicesarcus",
+  "pk": 2,
+  "fields": {
+    "sku_id": "4026029027",
+    "name": "Agua de Aguascalientes - VEOLIA",
+    "biller_type": "AGUA",
+    "country": "MX",
+    "bill_types": [
+      {
+        "mask": "9999999999999999999",
+        "bill_type": "bar_code",
+        "length": "19"
+      }
+    ],
+    "currency": "MXN",
+    "customer_fee": 0.0,
+    "customer_fee_type": "04",
+    "logo_url": "https://d1ipkd1k928rz.cloudfront.net/p7kuYr3WNDh4cj5xdAyHWTgj",
+    "autopay": true,
+    "tracking": true,
+    "supports_partial_payments": false,
+    "hours_to_fulfill": 24,
+    "allows_reversal": true
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 3,
+  "fields": {
+    "sku_id": "4003192020",
+    "name": "Agua de Mty-AyDM",
+    "biller_type": "AGUA",
+    "country": "MX",
+    "bill_types": [
+      {
+        "mask": "99999999999999999999999999999999",
+        "bill_type": "bar_code",
+        "length": "32"
+      }
+    ],
+    "currency": "MXN",
+    "customer_fee": 0.0,
+    "customer_fee_type": "01",
+    "logo_url": "https://d1ipkd1k928rz.cloudfront.net/vxd4MbzswVZkCFf1J5ab5iUQ",
+    "autopay": false,
+    "tracking": false,
+    "supports_partial_payments": true,
+    "hours_to_fulfill": 48,
+    "allows_reversal": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 4,
+  "fields": {
+    "sku_id": "4013633021",
+    "name": "Agua de Puebla",
+    "biller_type": "AGUA",
+    "country": "MX",
+    "bill_types": [
+      {
+        "mask": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+        "bill_type": "bar_code",
+        "length": "20..30"
+      }
+    ],
+    "currency": "MXN",
+    "customer_fee": 0.0,
+    "customer_fee_type": "01",
+    "logo_url": "https://d1ipkd1k928rz.cloudfront.net/HbDFDgPivcb44HoWVu5GdPXR",
+    "autopay": false,
+    "tracking": true,
+    "supports_partial_payments": true,
+    "hours_to_fulfill": 48,
+    "allows_reversal": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 5,
+  "fields": {
+    "sku_id": "4003172022",
+    "name": "Agua de Quintana Roo-Aguakan",
+    "biller_type": "AGUA",
+    "country": "MX",
+    "bill_types": [
+      {
+        "mask": "999999999999999999999999999",
+        "bill_type": "bar_code",
+        "length": "27"
+      }
+    ],
+    "currency": "MXN",
+    "customer_fee": 0.0,
+    "customer_fee_type": "01",
+    "logo_url": "https://d1ipkd1k928rz.cloudfront.net/MhD3gsn9Tczg2hTKEp5FcaK4",
+    "autopay": false,
+    "tracking": false,
+    "supports_partial_payments": false,
+    "hours_to_fulfill": 48,
+    "allows_reversal": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 6,
+  "fields": {
+    "sku_id": "4003162023",
+    "name": "Agua de Salamanca-cmapas",
+    "biller_type": "AGUA",
+    "country": "MX",
+    "bill_types": [
+      {
+        "mask": "99999999999999999999999999",
+        "bill_type": "account_number",
+        "length": "26"
+      }
+    ],
+    "currency": "MXN",
+    "customer_fee": 0.0,
+    "customer_fee_type": "01",
+    "logo_url": "https://d1ipkd1k928rz.cloudfront.net/HwiQAhAaKz1EZqDo8iTdBgCp",
+    "autopay": false,
+    "tracking": false,
+    "supports_partial_payments": true,
+    "hours_to_fulfill": 48,
+    "allows_reversal": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 7,
+  "fields": {
+    "sku_id": "4013650025",
+    "name": "Agua Gomez Palacio, Durango - SIDEAPA",
+    "biller_type": "AGUA",
+    "country": "MX",
+    "bill_types": [
+      {
+        "mask": "999 99999999 9999999999 9",
+        "bill_type": "bar_code",
+        "length": "22"
+      }
+    ],
+    "currency": "MXN",
+    "customer_fee": 0.0,
+    "customer_fee_type": "04",
+    "logo_url": "https://d1ipkd1k928rz.cloudfront.net/DspSbE5pB8btTM7bSjbVR7hr",
+    "autopay": false,
+    "tracking": false,
+    "supports_partial_payments": false,
+    "hours_to_fulfill": 24,
+    "allows_reversal": true
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 8,
+  "fields": {
+    "sku_id": "4012532026",
+    "name": "AMD - Durango",
+    "biller_type": "AGUA",
+    "country": "MX",
+    "bill_types": [
+      {
+        "mask": "XXXXXXXXXXXXXXXXXXXXXX",
+        "bill_type": "account_number",
+        "length": "22"
+      }
+    ],
+    "currency": "MXN",
+    "customer_fee": 0.0,
+    "customer_fee_type": "01",
+    "logo_url": "https://d1ipkd1k928rz.cloudfront.net/pXi4gs2Nag9MwgrScqddpkHy",
+    "autopay": false,
+    "tracking": false,
+    "supports_partial_payments": false,
+    "hours_to_fulfill": 0,
+    "allows_reversal": true
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 9,
+  "fields": {
+    "sku_id": "4012495026",
+    "name": "Avon",
+    "biller_type": "OTROS",
+    "country": "MX",
+    "bill_types": [
+      {
+        "mask": "XXXXXXXXXXXXXXXXXXXX",
+        "bill_type": "account_number",
+        "length": "20"
+      }
+    ],
+    "currency": "MXN",
+    "customer_fee": 0.0,
+    "customer_fee_type": "04",
+    "logo_url": "https://d1ipkd1k928rz.cloudfront.net/wF7yvargjrZcfUys9aYHixQg",
+    "autopay": false,
+    "tracking": false,
+    "supports_partial_payments": true,
+    "hours_to_fulfill": null,
+    "allows_reversal": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 10,
+  "fields": {
+    "sku_id": "4000036022",
+    "name": "Axtel [Barcode]",
+    "biller_type": "INTERNET/TV",
+    "country": "MX",
+    "bill_types": [
+      {
+        "mask": "99999999999999999999999999",
+        "bill_type": "bar_code",
+        "length": "26"
+      }
+    ],
+    "currency": "MXN",
+    "customer_fee": 0.0,
+    "customer_fee_type": "01",
+    "logo_url": "https://d1ipkd1k928rz.cloudfront.net/47wPbxtEx11e2XiKMotk2281",
+    "autopay": false,
+    "tracking": true,
+    "supports_partial_payments": true,
+    "hours_to_fulfill": 24,
+    "allows_reversal": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 11,
+  "fields": {
+    "sku_id": "4013651023",
+    "name": "Ayuntamiento Reynosa",
+    "biller_type": "OTROS",
+    "country": "MX",
+    "bill_types": [
+      {
+        "mask": "99999999999999999999999999999",
+        "bill_type": "bar_code",
+        "length": "29"
+      }
+    ],
+    "currency": "MXN",
+    "customer_fee": 0.0,
+    "customer_fee_type": "04",
+    "logo_url": "https://d1ipkd1k928rz.cloudfront.net/JHj3kcBi7RHEW3vig76DQNbS",
+    "autopay": false,
+    "tracking": true,
+    "supports_partial_payments": false,
+    "hours_to_fulfill": 24,
+    "allows_reversal": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 12,
+  "fields": {
+    "sku_id": "4013620028",
+    "name": "CEA - Comisión Estatal de Aguas Querétaro [BARCODE]",
+    "biller_type": "AGUA",
+    "country": "MX",
+    "bill_types": [
+      {
+        "mask": "99999999999999999999999",
+        "bill_type": "bar_code",
+        "length": "20..23"
+      }
+    ],
+    "currency": "MXN",
+    "customer_fee": 0.0,
+    "customer_fee_type": "04",
+    "logo_url": "https://d1ipkd1k928rz.cloudfront.net/LYVUmZzt7Pr82EGgsjLhVfAM",
+    "autopay": false,
+    "tracking": true,
+    "supports_partial_payments": true,
+    "hours_to_fulfill": 24,
+    "allows_reversal": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 13,
+  "fields": {
+    "sku_id": "4013646023",
+    "name": "CESPE",
+    "biller_type": "AGUA",
+    "country": "MX",
+    "bill_types": [
+      {
+        "mask": "999999999999999999999999999999",
+        "bill_type": "bar_code",
+        "length": "8..30"
+      }
+    ],
+    "currency": "MXN",
+    "customer_fee": 0.0,
+    "customer_fee_type": "01",
+    "logo_url": "https://d1ipkd1k928rz.cloudfront.net/kwNHvep5AzUcAJXm5e9DkmYv",
+    "autopay": true,
+    "tracking": true,
+    "supports_partial_payments": false,
+    "hours_to_fulfill": 0,
+    "allows_reversal": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 14,
+  "fields": {
+    "sku_id": "4013622024",
+    "name": "CESPT - Comision Estatal de Servicios Publicos de Tijuana",
+    "biller_type": "AGUA",
+    "country": "MX",
+    "bill_types": [
+      {
+        "mask": "99999999999999999999999999999",
+        "bill_type": "bar_code",
+        "length": "29"
+      }
+    ],
+    "currency": "MXN",
+    "customer_fee": 0.0,
+    "customer_fee_type": "04",
+    "logo_url": "https://d1ipkd1k928rz.cloudfront.net/NeyHZ6BwLdLjxGbd8bkJ5xqq",
+    "autopay": false,
+    "tracking": false,
+    "supports_partial_payments": false,
+    "hours_to_fulfill": 24,
+    "allows_reversal": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 15,
+  "fields": {
+    "sku_id": "4000035024",
+    "name": "CFE",
+    "biller_type": "LUZ",
+    "country": "MX",
+    "bill_types": [
+      {
+        "mask": "999999999999999999999999999999",
+        "bill_type": "bar_code",
+        "length": "30"
+      },
+      {
+        "mask": "999999999999",
+        "bill_type": "account_number",
+        "length": "12"
+      }
+    ],
+    "currency": "MXN",
+    "customer_fee": 0.0,
+    "customer_fee_type": "01",
+    "logo_url": "https://d1ipkd1k928rz.cloudfront.net/H5tDEbD2VjP2FAuhRWwYTC8r",
+    "autopay": true,
+    "tracking": true,
+    "supports_partial_payments": true,
+    "hours_to_fulfill": 24,
+    "allows_reversal": true
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 16,
+  "fields": {
+    "sku_id": "4001771023",
+    "name": "Dish",
+    "biller_type": "INTERNET/TV",
+    "country": "MX",
+    "bill_types": [
+      {
+        "mask": "999999999999999",
+        "bill_type": "bar_code",
+        "length": "13..14"
+      }
+    ],
+    "currency": "MXN",
+    "customer_fee": 0.0,
+    "customer_fee_type": "01",
+    "logo_url": "https://d1ipkd1k928rz.cloudfront.net/K8oZWR7ZdGHLBWKotnP7JDqg",
+    "autopay": true,
+    "tracking": true,
+    "supports_partial_payments": true,
+    "hours_to_fulfill": 24,
+    "allows_reversal": true
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 17,
+  "fields": {
+    "sku_id": "4013683026",
+    "name": "Fomento Metropolitano de Monterrey - Fomerrey",
+    "biller_type": "OTROS",
+    "country": "MX",
+    "bill_types": [
+      {
+        "mask": "999999999999999999",
+        "bill_type": "bar_code",
+        "length": "18"
+      }
+    ],
+    "currency": "MXN",
+    "customer_fee": 0.0,
+    "customer_fee_type": "04",
+    "logo_url": "https://d1ipkd1k928rz.cloudfront.net/33AstV28VXEHaBP5qD1A2bCU",
+    "autopay": false,
+    "tracking": false,
+    "supports_partial_payments": false,
+    "hours_to_fulfill": 24,
+    "allows_reversal": true
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 18,
+  "fields": {
+    "sku_id": "4000043028",
+    "name": "Gas Natural de Mexico",
+    "biller_type": "GAS",
+    "country": "MX",
+    "bill_types": [
+      {
+        "mask": "9999999999999999999999999999",
+        "bill_type": "bar_code",
+        "length": "28"
+      }
+    ],
+    "currency": "MXN",
+    "customer_fee": 0.0,
+    "customer_fee_type": "01",
+    "logo_url": "https://d1ipkd1k928rz.cloudfront.net/NaV5yC5u1JQTVHFwsV8XPg3z",
+    "autopay": true,
+    "tracking": true,
+    "supports_partial_payments": false,
+    "hours_to_fulfill": 24,
+    "allows_reversal": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 19,
+  "fields": {
+    "sku_id": "4013630027",
+    "name": "Gobierno de Coahuila",
+    "biller_type": "OTROS",
+    "country": "MX",
+    "bill_types": [
+      {
+        "mask": "XXXXXXXXXXXXXXXXXXX",
+        "bill_type": "bar_code",
+        "length": "19"
+      }
+    ],
+    "currency": "MXN",
+    "customer_fee": 0.0,
+    "customer_fee_type": "01",
+    "logo_url": "https://d1ipkd1k928rz.cloudfront.net/j7GfjREtYkP4DFjyghwRG8iC",
+    "autopay": false,
+    "tracking": true,
+    "supports_partial_payments": false,
+    "hours_to_fulfill": 0,
+    "allows_reversal": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 20,
+  "fields": {
+    "sku_id": "4013628021",
+    "name": "Gobierno de Guanajuato",
+    "biller_type": "OTROS",
+    "country": "MX",
+    "bill_types": [
+      {
+        "mask": "XXXXXXXXXXXXXXXXXXXXXXXXXXX",
+        "bill_type": "bar_code",
+        "length": "4..27"
+      }
+    ],
+    "currency": "MXN",
+    "customer_fee": 0.0,
+    "customer_fee_type": "01",
+    "logo_url": "https://d1ipkd1k928rz.cloudfront.net/t57oYMsZnpgGmbT5dD4sRW1B",
+    "autopay": false,
+    "tracking": true,
+    "supports_partial_payments": false,
+    "hours_to_fulfill": 0,
+    "allows_reversal": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 21,
+  "fields": {
+    "sku_id": "4013631025",
+    "name": "Gobierno de Hidalgo",
+    "biller_type": "OTROS",
+    "country": "MX",
+    "bill_types": [
+      {
+        "mask": "XXXXXXXXXXXXXXXXXXXX",
+        "bill_type": "bar_code",
+        "length": "20"
+      }
+    ],
+    "currency": "MXN",
+    "customer_fee": 0.0,
+    "customer_fee_type": "01",
+    "logo_url": "https://d1ipkd1k928rz.cloudfront.net/874yhLpJE1dT1wApkQmpUYAx",
+    "autopay": false,
+    "tracking": true,
+    "supports_partial_payments": false,
+    "hours_to_fulfill": 0,
+    "allows_reversal": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 22,
+  "fields": {
+    "sku_id": "4013625027",
+    "name": "Gobierno de Jalisco",
+    "biller_type": "OTROS",
+    "country": "MX",
+    "bill_types": [
+      {
+        "mask": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+        "bill_type": "bar_code",
+        "length": "32"
+      }
+    ],
+    "currency": "MXN",
+    "customer_fee": 0.0,
+    "customer_fee_type": "01",
+    "logo_url": "https://d1ipkd1k928rz.cloudfront.net/Z61vLJF44DftmK1xRpcZZvWZ",
+    "autopay": false,
+    "tracking": false,
+    "supports_partial_payments": false,
+    "hours_to_fulfill": 72,
+    "allows_reversal": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 23,
+  "fields": {
+    "sku_id": "4012500023",
+    "name": "Gobierno de la Ciudad de Mexico",
+    "biller_type": "OTROS",
+    "country": "MX",
+    "bill_types": [
+      {
+        "mask": "XXXXXXXXXXXXXXXXXXXX",
+        "bill_type": "bar_code",
+        "length": "20..32"
+      }
+    ],
+    "currency": "MXN",
+    "customer_fee": 0.0,
+    "customer_fee_type": "01",
+    "logo_url": "https://d1ipkd1k928rz.cloudfront.net/iQMsbryzjrS6fHKL5DaZYtqT",
+    "autopay": false,
+    "tracking": false,
+    "supports_partial_payments": false,
+    "hours_to_fulfill": 24,
+    "allows_reversal": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 24,
+  "fields": {
+    "sku_id": "4013627023",
+    "name": "Gobierno de Michoacan",
+    "biller_type": "OTROS",
+    "country": "MX",
+    "bill_types": [
+      {
+        "mask": "XXXXXXXXXXXXXXXXXXXX",
+        "bill_type": "bar_code",
+        "length": "20"
+      }
+    ],
+    "currency": "MXN",
+    "customer_fee": 0.0,
+    "customer_fee_type": "01",
+    "logo_url": "https://d1ipkd1k928rz.cloudfront.net/W8FmF6ncgGsEAPk4yhfpmLaC",
+    "autopay": false,
+    "tracking": false,
+    "supports_partial_payments": false,
+    "hours_to_fulfill": 0,
+    "allows_reversal": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 25,
+  "fields": {
+    "sku_id": "4013629029",
+    "name": "Gobierno de Tlaxcala",
+    "biller_type": "OTROS",
+    "country": "MX",
+    "bill_types": [
+      {
+        "mask": "XXXXXXXXXXXXXXXXXXXX",
+        "bill_type": "bar_code",
+        "length": "20"
+      }
+    ],
+    "currency": "MXN",
+    "customer_fee": 0.0,
+    "customer_fee_type": "01",
+    "logo_url": "https://d1ipkd1k928rz.cloudfront.net/w28s8pXTocd8TdZFmH1mxiKG",
+    "autopay": false,
+    "tracking": true,
+    "supports_partial_payments": false,
+    "hours_to_fulfill": 0,
+    "allows_reversal": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 26,
+  "fields": {
+    "sku_id": "4013614021",
+    "name": "Gobierno del Estado de Mexico",
+    "biller_type": "OTROS",
+    "country": "MX",
+    "bill_types": [
+      {
+        "mask": "XXXXXXXXXXXXXXX",
+        "bill_type": "bar_code",
+        "length": "7..27"
+      }
+    ],
+    "currency": "MXN",
+    "customer_fee": 0.0,
+    "customer_fee_type": "01",
+    "logo_url": "https://d1ipkd1k928rz.cloudfront.net/58Pcut9PTQdsVJvditvMEq6d",
+    "autopay": false,
+    "tracking": false,
+    "supports_partial_payments": false,
+    "hours_to_fulfill": 24,
+    "allows_reversal": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 27,
+  "fields": {
+    "sku_id": "4012552024",
+    "name": "Ilusion",
+    "biller_type": "OTROS",
+    "country": "MX",
+    "bill_types": [
+      {
+        "mask": "",
+        "bill_type": "account_number",
+        "length": "6..17"
+      }
+    ],
+    "currency": "MXN",
+    "customer_fee": 0.0,
+    "customer_fee_type": "04",
+    "logo_url": "https://d1ipkd1k928rz.cloudfront.net/tUQpLCD3e4sYSS9d8hqbjeVL",
+    "autopay": false,
+    "tracking": false,
+    "supports_partial_payments": true,
+    "hours_to_fulfill": 0,
+    "allows_reversal": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 28,
+  "fields": {
+    "sku_id": "4000044026",
+    "name": "Infonavit",
+    "biller_type": "OTROS",
+    "country": "MX",
+    "bill_types": [
+      {
+        "mask": "9999999999",
+        "bill_type": "account_number",
+        "length": "10"
+      }
+    ],
+    "currency": "MXN",
+    "customer_fee": 0.0,
+    "customer_fee_type": "01",
+    "logo_url": "https://d1ipkd1k928rz.cloudfront.net/uiLKd225ZidmswsyMoCip7bc",
+    "autopay": false,
+    "tracking": false,
+    "supports_partial_payments": true,
+    "hours_to_fulfill": 24,
+    "allows_reversal": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 29,
+  "fields": {
+    "sku_id": "4012533024",
+    "name": "INTERAPAS (San Luis Potosi)",
+    "biller_type": "AGUA",
+    "country": "MX",
+    "bill_types": [
+      {
+        "mask": "99999999999999999999999",
+        "bill_type": "bar_code",
+        "length": "23"
+      }
+    ],
+    "currency": "MXN",
+    "customer_fee": 0.0,
+    "customer_fee_type": "01",
+    "logo_url": "https://d1ipkd1k928rz.cloudfront.net/iFvmhE8a7R1faMo2s5S5SK9Y",
+    "autopay": false,
+    "tracking": false,
+    "supports_partial_payments": true,
+    "hours_to_fulfill": 0,
+    "allows_reversal": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 30,
+  "fields": {
+    "sku_id": "4002901025",
+    "name": "AT&T",
+    "biller_type": "INTERNET/TV",
+    "country": "MX",
+    "bill_types": [
+      {
+        "mask": "9999999999",
+        "bill_type": "phone_number",
+        "length": "10"
+      }
+    ],
+    "currency": "MXN",
+    "customer_fee": 0.0,
+    "customer_fee_type": "01",
+    "logo_url": "https://d1ipkd1k928rz.cloudfront.net/Hpsxs4qDQN1tCwQAwc54UCRg",
+    "autopay": true,
+    "tracking": true,
+    "supports_partial_payments": true,
+    "hours_to_fulfill": 24,
+    "allows_reversal": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 31,
+  "fields": {
+    "sku_id": "4013616026",
+    "name": "JAPAY - JUNTA DE AGUA POTABLE Y ALCANTARILLADO DE YUCATAN",
+    "biller_type": "AGUA",
+    "country": "MX",
+    "bill_types": [
+      {
+        "mask": "9999999999999999999999?9",
+        "bill_type": "bar_code",
+        "length": "22..23"
+      }
+    ],
+    "currency": "MXN",
+    "customer_fee": 0.0,
+    "customer_fee_type": "04",
+    "logo_url": "https://d1ipkd1k928rz.cloudfront.net/BAygiUeKgpcsrxH5FYgUrs5U",
+    "autopay": false,
+    "tracking": true,
+    "supports_partial_payments": false,
+    "hours_to_fulfill": 72,
+    "allows_reversal": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 32,
+  "fields": {
+    "sku_id": "4012534022",
+    "name": "JMAS - Chihuahua [Barcode]",
+    "biller_type": "AGUA",
+    "country": "MX",
+    "bill_types": [
+      {
+        "mask": "XXXXXXXXXXXXXXXXXXXXXX????????",
+        "bill_type": "bar_code",
+        "length": "22..30"
+      }
+    ],
+    "currency": "MXN",
+    "customer_fee": 0.0,
+    "customer_fee_type": "01",
+    "logo_url": "https://d1ipkd1k928rz.cloudfront.net/jtYjvxzMvzFtLmLJkVzrK1nq",
+    "autopay": false,
+    "tracking": false,
+    "supports_partial_payments": true,
+    "hours_to_fulfill": 0,
+    "allows_reversal": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 33,
+  "fields": {
+    "sku_id": "4003202027",
+    "name": "JUMAPA - Agua de Celaya [Barcode]",
+    "biller_type": "AGUA",
+    "country": "MX",
+    "bill_types": [
+      {
+        "mask": "999999999999999999999999999999",
+        "bill_type": "bar_code",
+        "length": "30"
+      }
+    ],
+    "currency": "MXN",
+    "customer_fee": 0.0,
+    "customer_fee_type": "04",
+    "logo_url": "https://d1ipkd1k928rz.cloudfront.net/hqgusRYhJCJtzz75MAdLC73T",
+    "autopay": false,
+    "tracking": true,
+    "supports_partial_payments": false,
+    "hours_to_fulfill": 48,
+    "allows_reversal": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 34,
+  "fields": {
+    "sku_id": "4001821026",
+    "name": "Megacable",
+    "biller_type": "INTERNET/TV",
+    "country": "MX",
+    "bill_types": [
+      {
+        "mask": "9999999999",
+        "bill_type": "account_number",
+        "length": "10"
+      },
+      {
+        "mask": "99999999999999999999999999",
+        "bill_type": "bar_code",
+        "length": "26"
+      }
+    ],
+    "currency": "MXN",
+    "customer_fee": 0.0,
+    "customer_fee_type": "01",
+    "logo_url": "https://d1ipkd1k928rz.cloudfront.net/egZ8Txyf4yt2UGtu5jMiFVBx",
+    "autopay": true,
+    "tracking": true,
+    "supports_partial_payments": true,
+    "hours_to_fulfill": 48,
+    "allows_reversal": true
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 35,
+  "fields": {
+    "sku_id": "4005985025",
+    "name": "Movistar [Barcode]",
+    "biller_type": "INTERNET/TV",
+    "country": "MX",
+    "bill_types": [
+      {
+        "mask": "999999999999999999",
+        "bill_type": "bar_code",
+        "length": "10..18"
+      }
+    ],
+    "currency": "MXN",
+    "customer_fee": 0.0,
+    "customer_fee_type": "01",
+    "logo_url": "https://d1ipkd1k928rz.cloudfront.net/7wddvXSyzWwk2qpZPK5cbdBg",
+    "autopay": true,
+    "tracking": true,
+    "supports_partial_payments": true,
+    "hours_to_fulfill": 0,
+    "allows_reversal": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 36,
+  "fields": {
+    "sku_id": "4012557023",
+    "name": "Natura",
+    "biller_type": "OTROS",
+    "country": "MX",
+    "bill_types": [
+      {
+        "mask": "",
+        "bill_type": "account_number",
+        "length": ""
+      }
+    ],
+    "currency": "MXN",
+    "customer_fee": 0.0,
+    "customer_fee_type": "04",
+    "logo_url": "https://d1ipkd1k928rz.cloudfront.net/Hx1MB5KUaYDWD5EeCYJxjMZw",
+    "autopay": false,
+    "tracking": false,
+    "supports_partial_payments": false,
+    "hours_to_fulfill": 0,
+    "allows_reversal": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 37,
+  "fields": {
+    "sku_id": "4012513026",
+    "name": "Pase Urbano",
+    "biller_type": "PEAJE/PARQUIMETRO",
+    "country": "MX",
+    "bill_types": [
+      {
+        "mask": "999999999999?",
+        "bill_type": "account_number",
+        "length": "12..13"
+      }
+    ],
+    "currency": "MXN",
+    "customer_fee": 0.0,
+    "customer_fee_type": "01",
+    "logo_url": "https://d1ipkd1k928rz.cloudfront.net/5pGBQD5kPUyHhhtrrcjUHk7y",
+    "autopay": false,
+    "tracking": true,
+    "supports_partial_payments": true,
+    "hours_to_fulfill": 0,
+    "allows_reversal": true
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 38,
+  "fields": {
+    "sku_id": "4000045023",
+    "name": "Siapa (Guadalajara) [Barcode]",
+    "biller_type": "AGUA",
+    "country": "MX",
+    "bill_types": [
+      {
+        "mask": "9999999999999999999999",
+        "bill_type": "bar_code",
+        "length": "22"
+      }
+    ],
+    "currency": "MXN",
+    "customer_fee": 0.0,
+    "customer_fee_type": "01",
+    "logo_url": "https://d1ipkd1k928rz.cloudfront.net/YDqrLj1JMjxaPbFYCWnHBHnN",
+    "autopay": false,
+    "tracking": false,
+    "supports_partial_payments": true,
+    "hours_to_fulfill": 24,
+    "allows_reversal": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 39,
+  "fields": {
+    "sku_id": "4012515021",
+    "name": "Televia",
+    "biller_type": "PEAJE/PARQUIMETRO",
+    "country": "MX",
+    "bill_types": [
+      {
+        "mask": "99999999999?",
+        "bill_type": "account_number",
+        "length": "11..12"
+      }
+    ],
+    "currency": "MXN",
+    "customer_fee": 0.0,
+    "customer_fee_type": "01",
+    "logo_url": "https://d1ipkd1k928rz.cloudfront.net/ZdX4WiSWYh974pLxjeMP81je",
+    "autopay": false,
+    "tracking": false,
+    "supports_partial_payments": true,
+    "hours_to_fulfill": 0,
+    "allows_reversal": true
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 40,
+  "fields": {
+    "sku_id": "4000037020",
+    "name": "Telmex",
+    "biller_type": "INTERNET/TV",
+    "country": "MX",
+    "bill_types": [
+      {
+        "mask": "9999999999",
+        "bill_type": "phone_number",
+        "length": "10"
+      },
+      {
+        "mask": "99999999999999999999",
+        "bill_type": "bar_code",
+        "length": "20"
+      }
+    ],
+    "currency": "MXN",
+    "customer_fee": 0.0,
+    "customer_fee_type": "01",
+    "logo_url": "https://d1ipkd1k928rz.cloudfront.net/QiTy79poMMaPZ3kuaC8nBKhQ",
+    "autopay": true,
+    "tracking": true,
+    "supports_partial_payments": true,
+    "hours_to_fulfill": 48,
+    "allows_reversal": true
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 41,
+  "fields": {
+    "sku_id": "4012540029",
+    "name": "Telnor",
+    "biller_type": "INTERNET/TV",
+    "country": "MX",
+    "bill_types": [
+      {
+        "mask": "9999999999",
+        "bill_type": "phone_number",
+        "length": "10..20"
+      },
+      {
+        "mask": "99999999999999999999",
+        "bill_type": "bar_code",
+        "length": "20"
+      }
+    ],
+    "currency": "MXN",
+    "customer_fee": 0.0,
+    "customer_fee_type": "01",
+    "logo_url": "https://d1ipkd1k928rz.cloudfront.net/nf3qjBwVgdJZMQxpgoqAL15S",
+    "autopay": true,
+    "tracking": true,
+    "supports_partial_payments": false,
+    "hours_to_fulfill": 24,
+    "allows_reversal": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 42,
+  "fields": {
+    "sku_id": "4012493021",
+    "name": "Totalplay",
+    "biller_type": "INTERNET/TV",
+    "country": "MX",
+    "bill_types": [
+      {
+        "mask": "9999999999",
+        "bill_type": "account_number",
+        "length": "10"
+      },
+      {
+        "mask": "99999999999999999",
+        "bill_type": "bar_code",
+        "length": "17"
+      }
+    ],
+    "currency": "MXN",
+    "customer_fee": 0.0,
+    "customer_fee_type": "04",
+    "logo_url": "https://d1ipkd1k928rz.cloudfront.net/ePRc2VDT14S6WGH8Xk7cf1qE",
+    "autopay": true,
+    "tracking": true,
+    "supports_partial_payments": true,
+    "hours_to_fulfill": 0,
+    "allows_reversal": false
+  }
+},
+{
+  "model": "arcus.servicesarcus",
+  "pk": 43,
+  "fields": {
+    "sku_id": "4000091027",
+    "name": "VeTv",
+    "biller_type": "INTERNET/TV",
+    "country": "MX",
+    "bill_types": [
+      {
+        "mask": "999999999999",
+        "bill_type": "account_number",
+        "length": "12"
+      }
+    ],
+    "currency": "MXN",
+    "customer_fee": 0.0,
+    "customer_fee_type": "01",
+    "logo_url": "https://d1ipkd1k928rz.cloudfront.net/TDrU3FPz1wMWjCqaURSYH8u5",
+    "autopay": true,
+    "tracking": true,
+    "supports_partial_payments": true,
+    "hours_to_fulfill": 0,
+    "allows_reversal": true
+  }
+}
+]
