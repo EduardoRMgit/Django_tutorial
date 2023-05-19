@@ -49,7 +49,7 @@ class CompTrans(object):
         alias = f"@{trans.user.Uprofile.alias}"
         avatar = trans.user.Uprofile.avatar
         monto = "${:.2f}".format(round(float(trans.monto), 2))
-        cuenta = f"*{trans.user.Uprofile.cuentaClabe[14:]}"
+        cuenta = f"*{inguz_trans.contacto.clabe[14:]}"
         fechaValor = trans.fechaValor - timedelta(hours=6)
         fecha = fechaValor.strftime("%d/%m/%Y")
         hora = fechaValor.strftime("%H:%M:%S")
@@ -160,7 +160,7 @@ class CompTrans(object):
         fecha = fechaValor.strftime("%d/%m/%Y")
         hora = fechaValor.strftime("%H:%M:%S")
         concepto = trans.concepto
-        cuenta = f"*{trans.user.Uprofile.cuentaClabe[14:]}"
+        cuenta = f"*{stp_trans.cuentaBeneficiario[14:]}"
         rastreo = trans.claveRastreo
         referencia = StpTransaction.objects.get(
             transaccion=trans).referenciaNumerica
