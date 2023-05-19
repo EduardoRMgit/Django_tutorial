@@ -10,6 +10,7 @@ from django.conf import settings
 import json
 import uuid
 from django.db.models import Q
+from collections import Counter
 from datetime import datetime, time
 
 
@@ -60,6 +61,8 @@ class Query(object):
                                   token=graphene.String(required=True),
                                   empresa=graphene.String(required=True),
                                   referencia=graphene.String(required=True))
+    pagos_recurrentes = graphene.List(ServicesType,
+                                      token=graphene.String(required=True))
 
     @login_required
     def resolve_services_bills(self, info,
@@ -122,6 +125,25 @@ class Query(object):
         response = (json.loads(response.content.decode("utf-8")))
         return response
 
+    @login_required
+    def resolve_pagos_recurrentes(self, info, token, **kwargs):
+        try:
+            user = info.context.user
+        except Exception:
+            raise Exception('Usuario Inexistente')
+        tipo = "S"
+        status = "successful"
+        _s = []
+        recurrente_ = []
+        pagos = PagosArcus.objects.filter(
+            usuario=user, tipo=tipo, estatus=status)
+        for pago in pagos:
+            _s.append(pago.empresa.sku_id)
+        recurrentes = list(Counter(_s))[:5]
+        for recurrente in recurrentes:
+            recurrente_.append(ServicesArcus.objects.get(sku_id=recurrente))
+        return recurrente_
+
 
 class ArcusPay(graphene.Mutation):
     pay = graphene.Field(PagosArcusType)
@@ -178,6 +200,10 @@ class ArcusPay(graphene.Mutation):
             _tipo = TipoTransaccion.objects.get(codigo=101)
         elif tipo == "S":
             _tipo = TipoTransaccion.objects.get(codigo=100)
+        try:
+            empresa = ServicesArcus.objects.get(sku_id=company_sku)
+        except Exception:
+            raise Exception("Empresa no existe")
         concepto = response["ticket_text"]
         main_trans = Transaccion.objects.create(
             user=user,
@@ -190,6 +216,7 @@ class ArcusPay(graphene.Mutation):
         )
         pay = PagosArcus.objects.create(
             tipo=tipo,
+            usuario=user,
             transaccion=main_trans,
             id_transaccion=response["uid"],
             identificador=response["identifier"],
@@ -200,7 +227,8 @@ class ArcusPay(graphene.Mutation):
             estatus=response["status"],
             id_externo=response["external_id"],
             descripcion=response["ticket_text"],
-            numero_telefono=response["service_number"]
+            numero_cuenta=response["service_number"],
+            empresa=empresa
         )
         if status.nombre == "exito" and saldo:
             user.Uprofile.saldo_cuenta -= round(float(monto), 2)

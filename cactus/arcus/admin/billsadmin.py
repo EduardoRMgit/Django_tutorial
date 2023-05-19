@@ -6,6 +6,7 @@ import requests
 import json
 from django.conf import settings
 import logging
+import uuid
 
 db_logger = logging.getLogger('db')
 
@@ -55,7 +56,8 @@ class ServicesArcusAdmin(admin.ModelAdmin):
                     )
 
     def updateservices(self, request, servicios):
-        headers = headers_arcus()
+        uid = str(uuid.uuid4())
+        headers = headers_arcus(uid)
         url = f"{settings.ARCUS_DOMAIN}/merchants"
         try:
             servicios = (
@@ -141,7 +143,8 @@ class RecargasArcusAdmin(admin.ModelAdmin):
 
     def updaterecargas(self, request, servicios):
         try:
-            headers = headers_arcus()
+            uid = str(uuid.uuid4())
+            headers = headers_arcus(uid)
             url = f"{settings.ARCUS_DOMAIN}/merchants/topups"
             recargas = (
                 requests.get(url=url, headers=headers)).content.decode()
@@ -216,7 +219,7 @@ class PagosArcusAdmin(admin.ModelAdmin):
                     'estatus',
                     'id_externo',
                     'descripcion',
-                    'numero_telefono',
+                    'numero_cuenta',
                     'tipo'
                     )
 
