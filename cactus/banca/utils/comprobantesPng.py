@@ -1,6 +1,6 @@
 import os
 import cv2
-from banca.models import Comprobante
+from banca.models import Comprobante, InguzTransaction
 from spei.models import StpTransaction
 from django.conf import settings
 import imutils
