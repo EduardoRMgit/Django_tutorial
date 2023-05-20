@@ -11,6 +11,7 @@ import json
 import uuid
 from django.db.models import Q
 from collections import Counter
+from datetime import datetime
 
 
 class ServicesType(DjangoObjectType):
@@ -186,20 +187,21 @@ class ArcusPay(graphene.Mutation):
         except Exception as error:
             raise Exception("Error en la peticion", error)
         response = (json.loads(response.content.decode("utf-8")))
-        fecha = response["processed_at"]
-        hora = response["process_at_time"]
+        fecha = datetime.strptime(response["processed_at"], '%Y-%m-%d').date()
+        hora = datetime.strptime(response["process_at_time"], '%H:%M').time()
         rastreo = randomString()
-        fecha = f"{fecha}T{hora}Z"
+        fecha = datetime.combine(fecha, hora)
         if "Pago realizado exitosamente" in response["ticket_text"]:
             status = StatusTrans.objects.get(nombre="exito")
         else:
             status = StatusTrans.objects.get(nombre="rechazada")
-        if tipo == "R":
-            _tipo = TipoTransaccion.objects.get(codigo=101)
-        elif tipo == "S":
-            _tipo = TipoTransaccion.objects.get(codigo=100)
         try:
-            empresa = ServicesArcus.objects.get(sku_id=company_sku)
+            if tipo == "R":
+                _tipo = TipoTransaccion.objects.get(codigo=101)
+                empresa = RecargasArcus.objects.get(sku_id=company_sku)
+            elif tipo == "S":
+                _tipo = TipoTransaccion.objects.get(codigo=100)
+                empresa = ServicesArcus.objects.get(sku_id=company_sku)
         except Exception:
             raise Exception("Empresa no existe")
         concepto = response["ticket_text"]
@@ -212,22 +214,40 @@ class ArcusPay(graphene.Mutation):
             concepto=concepto,
             claveRastreo=rastreo
         )
-        pay = PagosArcus.objects.create(
-            tipo=tipo,
-            usuario=user,
-            transaccion=main_trans,
-            id_transaccion=response["uid"],
-            identificador=response["identifier"],
-            monto=monto,
-            moneda="MXN",
-            comision=response["customer_fee"],
-            fecha_creacion=fecha,
-            estatus=response["status"],
-            id_externo=response["external_id"],
-            descripcion=response["ticket_text"],
-            numero_cuenta=response["service_number"],
-            empresa=empresa
-        )
+        if tipo == "R":
+            pay = PagosArcus.objects.create(
+                tipo=tipo,
+                usuario=user,
+                transaccion=main_trans,
+                id_transaccion=response["uid"],
+                identificador=response["identifier"],
+                monto=monto,
+                moneda="MXN",
+                comision=response["customer_fee"],
+                fecha_creacion=fecha,
+                estatus=response["status"],
+                id_externo=response["external_id"],
+                descripcion=response["ticket_text"],
+                numero_cuenta=response["service_number"],
+                empresa_recargas=empresa
+            )
+        if tipo == "S":
+            pay = PagosArcus.objects.create(
+                tipo=tipo,
+                usuario=user,
+                transaccion=main_trans,
+                id_transaccion=response["uid"],
+                identificador=response["identifier"],
+                monto=monto,
+                moneda="MXN",
+                comision=response["customer_fee"],
+                fecha_creacion=fecha,
+                estatus=response["status"],
+                id_externo=response["external_id"],
+                descripcion=response["ticket_text"],
+                numero_cuenta=response["service_number"],
+                empresa_servicio=empresa
+            )
         if status.nombre == "exito" and saldo:
             user.Uprofile.saldo_cuenta -= round(float(monto), 2)
             user.Uprofile.save()
