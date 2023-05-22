@@ -108,10 +108,10 @@ def validate_cfe(user, list):
     else:
         direccion.append(municipio)
     if isinstance(estado, str) and len(estado.split()) >= 2:
-        for n in municipio.split():
+        for n in estado.split():
             direccion.append(n)
     else:
-        direccion.append(municipio)
+        direccion.append(estado)
     direccion = [item.upper() for item in direccion]
     list = [item.upper() for item in list]
 
@@ -309,10 +309,10 @@ def validate_izzi(user, list):
     else:
         direccion.append(municipio)
     if isinstance(estado, str) and len(estado.split()) >= 2:
-        for n in municipio.split():
+        for n in estado.split():
             direccion.append(n)
     else:
-        direccion.append(municipio)
+        direccion.append(estado)
     direccion = [item.upper() for item in direccion]
     list = [item.upper() for item in list]
 
@@ -393,10 +393,10 @@ def validate_total(user, list):
     else:
         direccion.append(municipio)
     if isinstance(estado, str) and len(estado.split()) >= 2:
-        for n in municipio.split():
+        for n in estado.split():
             direccion.append(n)
     else:
-        direccion.append(municipio)
+        direccion.append(estado)
     direccion = [item.upper() for item in direccion]
 
     for item in direccion:
