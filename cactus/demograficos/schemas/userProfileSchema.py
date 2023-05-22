@@ -6,6 +6,9 @@ import json
 import os
 
 from re import U
+from re import search as re_search
+from re import IGNORECASE as re_IGNORECASE
+
 from random import randint
 
 from graphene_django.types import DjangoObjectType
@@ -1664,6 +1667,9 @@ class CreateUser(graphene.Mutation):
             except Exception:
                 raise Exception("El teléfono no ha sido validado")
             if password is not None:
+                inguz_match = re_search("inguz", password, re_IGNORECASE)
+                if inguz_match:
+                    raise Exception("Contraseña no válida")
                 if codigo_referencia is None:
                     codigoconfianza = None
                 else:
@@ -1771,6 +1777,11 @@ class ChangePassword(graphene.Mutation):
         user = info.context.user
         if not user.is_anonymous:
             if user.check_password(old_password):
+
+                inguz_match = re_search("inguz", new_password, re_IGNORECASE)
+                if inguz_match:
+                    raise Exception("Contraseña no válida")
+
                 if user.check_password(new_password):
                     raise Exception("La nueva contraseña no puede "
                                     "ser igual a la anterior.")
@@ -2043,28 +2054,31 @@ class UpdateInfoPersonal(graphene.Mutation):
         correo = graphene.String()
         avatarId = graphene.Int()
         pep = graphene.Boolean()
+        fuente_ingresos_alter = graphene.String()
 
     def mutate(
         self, info, token,
-        alias=None,
-        name=None,
-        gender=None,
-        last_name_p=None,
-        last_name_m=None,
-        birth_date=None,
-        nationality=None,
-        country=None,
-        city=None,
-        numero_INE=None,
-        occupation=None,
-        curp=None,
-        rfc=None,
-        correo=None,
-        avatarId=None,
-        pep=None
+            alias=None,
+            name=None,
+            gender=None,
+            last_name_p=None,
+            last_name_m=None,
+            birth_date=None,
+            nationality=None,
+            country=None,
+            city=None,
+            numero_INE=None,
+            occupation=None,
+            curp=None,
+            rfc=None,
+            correo=None,
+            avatarId=None,
+            pep=None,
+            fuente_ingresos_alter=None
     ):
         def _es_alias_valido(_alias):
-            if " " in _alias:
+            inguz_match = re_search("inguz", _alias, re_IGNORECASE)
+            if " " in _alias or inguz_match:
                 return False
             lista_negra_alias = AliasInvalido.objects.filter(
                 substring_invalida__iexact=_alias)
@@ -2162,6 +2176,9 @@ class UpdateInfoPersonal(graphene.Mutation):
             u_profile.save()
             message = InfoValidator.setCheckpoint(user=user, concepto='IP')
 
+            if fuente_ingresos_alter:
+                u_profile.fuente_ingresos_alter = fuente_ingresos_alter
+
             if message == "curp validado":
                 u_profile.verificacion_curp = True
             u_profile.save()
@@ -2184,6 +2201,7 @@ class UpdateInfoPersonal(graphene.Mutation):
                         raise AssertionError('Entidad de nacimiento inválida')
                     u_profile.ciudad_nacimiento = entidad_fed.entidad
                     u_profile.save()
+
             if pep:
                 u_profile.pep = pep
                 user.is_active = False
@@ -2563,6 +2581,10 @@ class RecoverPassword(graphene.Mutation):
                     user=user,
                     activo=True)[0]
                 if pass_temporal.validate(pin):
+                    inguz_match = re_search(
+                        "inguz", new_password, re_IGNORECASE)
+                    if inguz_match:
+                        raise Exception("Contraseña no válida")
                     if user.check_password(new_password):
                         raise Exception("La nueva contraseña no puede "
                                         "ser igual a la anterior.")

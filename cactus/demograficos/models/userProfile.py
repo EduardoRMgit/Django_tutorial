@@ -345,6 +345,9 @@ class UserProfile(AbstractBaseUser):
                                                     default=0)
     pep = models.BooleanField(null=True,
                               blank=True)
+    fuente_ingresos_alter = models.CharField(max_length=32,
+                                             null=True,
+                                             blank=True)
 
     class Meta():
         verbose_name_plural = 'Perfil del usuario'
@@ -833,7 +836,7 @@ class Proveedor(models.Model):
                                           blank=True, null=True)
     ocupacion = models.CharField(max_length=50, blank=True, null=True)
     parentesco = models.CharField(max_length=30, blank=True, null=True)
-    fecha_nacimiento = models.DateField(blank=True, null=True)
+    fecha_nacimiento = models.CharField(max_length=256, blank=True, null=True)
 
     def __str__(self):
         return f"{self.user}{self.nombre}"

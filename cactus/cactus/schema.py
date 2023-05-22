@@ -25,6 +25,7 @@ from django.contrib.auth import get_user_model
 from cactus.utils import token_auth, unblock_account
 from django.utils import timezone
 from datetime import timedelta
+from arcus.schemas import arcusbills
 
 
 __all__ = [
@@ -108,6 +109,7 @@ class Query(transaccionSchema.Query,
             ScotiaSchema.Query,
             creacionSchema.Query,
             crecimientoSchema.Query,
+            arcusbills.Query,
             graphene.ObjectType):
     pass
 
@@ -126,6 +128,7 @@ class Mutation(transaccionSchema.Mutation,
                inguzSchema.Mutation,
                ScotiaSchema.Mutation,
                crecimientoSchema.Mutation,
+               arcusbills.Mutation,
                servicioClientes.Mutation,
                proveedorSchema.Mutation,
                graphene.ObjectType):

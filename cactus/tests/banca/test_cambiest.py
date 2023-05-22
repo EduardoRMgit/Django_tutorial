@@ -13,7 +13,6 @@ class Testcambioestado(APITestCase):
     def setUp(self):
         load_min_test()
         call_command('loaddata', 'comisionstp', verbosity=0)
-        call_command('loaddata', 'urls', verbosity=0)
         call_command('loaddata', 'contactos', verbosity=0)
         call_command('loaddata', 'stptrans', verbosity=0)
         call_command('loaddata', 'statusTrans', verbosity=0)

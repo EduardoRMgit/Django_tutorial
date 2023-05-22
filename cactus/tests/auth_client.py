@@ -16,7 +16,6 @@ class JWTAuthClientTestCase(JSONWebTokenTestCase):
         call_command('loaddata', 'entidad_federativa', verbosity=0)
         call_command('loaddata', 'tipoDireccion', verbosity=0)
         call_command('loaddata', 'direccion', verbosity=0)
-        call_command('loaddata', 'urls', verbosity=0)
         call_command('loaddata', 'contable_cuenta', verbosity=0)
         call_command('loaddata', 'tipo_contable_cuenta', verbosity=0)
         call_command('loaddata', 'cuenta_saldo', verbosity=0)

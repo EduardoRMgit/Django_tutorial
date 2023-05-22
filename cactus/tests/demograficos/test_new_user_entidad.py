@@ -16,7 +16,6 @@ class TestNewUserReferencia(JSONWebTokenTestCase):
     def setUp(self):
         call_command('loaddata', 'adminUtils', verbosity=0)
         load_groups()
-        call_command('loaddata', 'urls', verbosity=0)
         call_command('loaddata', 'nivelCuenta', verbosity=0)
         call_command('loaddata', 'user', verbosity=0)
         call_command('loaddata', 'statusRegistro', verbosity=0)
