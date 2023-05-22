@@ -178,7 +178,8 @@ class UserProfileAdmin(ExportActionMixin, PasswordResetUserAdmin):
     list_filter = (
         'Uprofile__nivel_cuenta',
         'Uprofile__enrolamiento',
-        'Uprofile__status'
+        'Uprofile__status',
+        'is_active'
     )
 
     search_fields = (
@@ -197,6 +198,7 @@ class UserProfileAdmin(ExportActionMixin, PasswordResetUserAdmin):
                     'get_curp',
                     'get_cuenta_clabe',
                     'get_enrolamiento',
+                    'is_active'
                     )
 
     list_per_page = 25
