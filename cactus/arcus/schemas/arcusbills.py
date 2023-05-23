@@ -138,7 +138,7 @@ class Query(object):
         pagos = PagosArcus.objects.filter(
             usuario=user, tipo=tipo, estatus=status)
         for pago in pagos:
-            _s.append(pago.empresa.sku_id)
+            _s.append(pago.empresa_servicio.sku_id)
         recurrentes = list(Counter(_s))[:5]
         for recurrente in recurrentes:
             recurrente_.append(ServicesArcus.objects.get(sku_id=recurrente))
