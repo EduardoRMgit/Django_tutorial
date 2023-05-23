@@ -127,6 +127,8 @@ def validate_cfe(user, list):
         user.Uprofile.ocr_comprobante_validado = True
         user.Uprofile.save()
         return True
+    else:
+        raise Exception("Direccion no coincide con el comprobante")
 
 
 def validate_telmex(user, list):
@@ -235,6 +237,8 @@ def validate_telmex(user, list):
         user.Uprofile.ocr_comprobante_validado = True
         user.Uprofile.save()
         return True
+    else:
+        raise Exception("Direccion no coincide con el comprobante")
 
 
 def validate_izzi(user, list):
@@ -328,6 +332,8 @@ def validate_izzi(user, list):
         user.Uprofile.ocr_comprobante_validado = True
         user.Uprofile.save()
         return True
+    else:
+        raise Exception("Direccion no coincide con el comprobante")
 
 
 def validate_total(user, list):
@@ -412,3 +418,5 @@ def validate_total(user, list):
         user.Uprofile.ocr_comprobante_validado = True
         user.Uprofile.save()
         return True
+    else:
+        raise Exception("Direccion no coincide con el comprobante")
