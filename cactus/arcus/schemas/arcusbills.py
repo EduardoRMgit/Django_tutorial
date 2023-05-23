@@ -19,9 +19,22 @@ class ServicesType(DjangoObjectType):
         model = ServicesArcus
 
 
+class TopupsType(graphene.ObjectType):
+    amount = graphene.Float()
+    description = graphene.String()
+    details = graphene.String()
+
+
 class RecargasType(DjangoObjectType):
     class Meta:
         model = RecargasArcus
+    topups_amounts = graphene.List(TopupsType)
+
+    def resolve_topups_amounts(self, info):
+        lista = [self.topup_amounts[0],
+                 self.topup_amounts[1],
+                 self.topup_amounts[2]]
+        return list(lista)
 
 
 class PagosArcusType(DjangoObjectType):
