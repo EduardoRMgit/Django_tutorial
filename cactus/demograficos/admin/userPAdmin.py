@@ -347,7 +347,7 @@ class Cancelacion(User):
 
 class CancelacionAdmin(ClienteAdmin):
     def get_queryset(self, request):
-        return User.objects.filter(is_active = False)
+        return User.objects.filter(is_active=False)
 
 
 admin.site.unregister(User)
