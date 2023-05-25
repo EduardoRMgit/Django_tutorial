@@ -181,7 +181,7 @@ def pago(data_pago):
     tipoPago = "1"  # tipo de pago 3 a 3
 
     fechaOperacion = _set_fecha_operacion()
-    db_logger.info(f"[STP pago()] fechaOperacion: {str(fecha)}")
+    db_logger.info(f"[STP pago()] fechaOperacion: {str(fechaOperacion)}")
 
     firma = generateSignatureString(institucionContraparte,
                                     fechaOperacion,
