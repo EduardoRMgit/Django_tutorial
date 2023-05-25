@@ -125,6 +125,26 @@ def randomString(stringLength=10):
     return ''.join(random.choice(letters) for i in range(stringLength))
 
 
+def _set_fecha_operacion():
+    hoy = datetime.now()
+    fecha_nueva = hoy
+    delta_horas = {
+        1: 12,
+        2: 12,
+        3: 12,
+        4: 12,
+        5: 72,
+        6: 48,
+        7: 24
+    }[hoy.isoweekday()]
+
+    if hoy.isoweekday() in [6, 7] or hoy.time() >= time(18, 0):
+        fecha_nueva = hoy + timedelta(hours=delta_horas)
+        fecha_nueva = fecha_nueva.replace(hour=7, minute=0)
+
+    return fecha_nueva.strftime('%Y%m%d')
+
+
 def pago(data_pago):
     env = environ.Env()
     STPSECRET = env.str('STPSECRET', '')
@@ -160,57 +180,7 @@ def pago(data_pago):
     tipoCuentaOrdenante = "40"  # es 40 por cuenta clabe
     tipoPago = "1"  # tipo de pago 3 a 3
 
-    if (
-        # False
-        datetime.now().time() >= time(18, 0)
-        or datetime.now().time() < time(7, 0)
-    ):
-
-        horas = datetime.now() + timedelta(hours=12)
-
-        def es_feriado_2023():
-            if horas.year == 2023:
-                # Regresa el último value con key True
-                return {
-                    True: False,
-                    horas.month == 5 and horas.day == 1: "L",
-                    horas.month == 9 and horas.day == 16: "S",
-                    horas.month == 10 and horas.day == 2: "J",
-                    horas.month == 10 and horas.day == 20: "L",
-                    horas.month == 12 and horas.day == 12: "Ma",
-                    horas.month == 12 and horas.day == 25: "L"}[True]
-
-        # inhabil = es_feriado_2023()
-
-        if horas.isoweekday() == 6:
-            # if inhabil == 'L':
-            #     horas = horas + timedelta(hours=72)
-            # else:
-            #     # Agregar casos para Martes y Jueves
-            #     horas = horas + timedelta(hours=48)
-            horas = horas + timedelta(hours=48)
-        elif horas.isoweekday() == 7:
-            # if inhabil == 'L':
-            #     horas = horas + timedelta(hours=48)
-            # else:
-            #     # Agregar casos para Martes y Jueves
-            #     horas = horas + timedelta(hours=24)
-            horas = horas + timedelta(hours=24)
-        # ----------------------------------------------
-        # Sólo día festivo particular: semana santa
-        if horas.month == 4 and horas.year == 2023:
-            if horas.day == 6:
-                horas = horas + timedelta(hours=96)
-            elif horas.day == 7:
-                horas = horas + timedelta(hours=72)
-        # ----------------------------------------------
-
-        nueva_hora = horas.replace(hour=7, minute=0)
-        fecha = nueva_hora.strftime('%Y%m%d')
-    else:
-        fecha = datetime.now().strftime('%Y%m%d')
-
-    fechaOperacion = fecha
+    fechaOperacion = _set_fecha_operacion()
     db_logger.info(f"[STP pago()] fechaOperacion: {str(fecha)}")
 
     firma = generateSignatureString(institucionContraparte,
