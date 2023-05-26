@@ -12,6 +12,10 @@ import uuid
 from django.db.models import Q
 from collections import Counter
 from datetime import datetime
+import logging
+
+
+db_logger = logging.getLogger('db')
 
 
 class ServicesType(DjangoObjectType):
@@ -199,6 +203,10 @@ class ArcusPay(graphene.Mutation):
 
         except Exception as error:
             raise Exception("Error en la peticion", error)
+        if response.status_code != 201:
+            response_error = (json.loads(response.content.decode("utf-8")))
+            msg_arcus = f"[Error Arcus] Respuesta arcus: {response_error}"
+            db_logger.error(msg_arcus)
         response = (json.loads(response.content.decode("utf-8")))
         fecha = datetime.strptime(response["processed_at"], '%Y-%m-%d').date()
         hora = datetime.strptime(response["process_at_time"], '%H:%M').time()
@@ -264,6 +272,9 @@ class ArcusPay(graphene.Mutation):
         if status.nombre == "exito" and saldo:
             user.Uprofile.saldo_cuenta -= round(float(monto), 2)
             user.Uprofile.save()
+        msg_arcus = f"[Pago Exitoso Arcus] Pago realizado exitosamente " \
+                    f"transaccion: {response}"
+        db_logger.info(msg_arcus)
         return ArcusPay(pay=pay)
 
 
