@@ -22,6 +22,7 @@ noToken_validate = [
 
 block_exception = [
     'unBlock',
+    'tokenAuth',
     'updateDevice',
     'blockAccountEmergency',
     'recoverPassword',
