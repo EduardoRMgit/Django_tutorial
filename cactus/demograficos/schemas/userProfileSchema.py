@@ -3537,6 +3537,8 @@ class CancelacionCuenta(graphene.Mutation):
             raise Exception('El saldo de tu cuenta debe ser $0 para cancelar')
         user.is_active = False
         user.save()
+        user.Uprofile.status = "C"
+        user.Uprofile.save()
         folio = randomString()
         url = "No hay comprobante disponible"
         fecha = timezone.now()
