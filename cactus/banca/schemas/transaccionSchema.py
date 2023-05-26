@@ -842,8 +842,7 @@ class UrlImagenComprobanteInter(graphene.Mutation):
             trans = trans.last()
             if not trans.statusTrans:
                 raise Exception("Transacción no genera Comprobante.")
-            if trans.statusTrans.nombre != "exito" and \
-                    trans.statusTrans.nombre != "rechazada":
+            if trans.statusTrans.nombre != "rechazada":
                 raise Exception("Transacción no genera Comprobante.")
             comp = CompTrans(trans)
             url = comp.trans()

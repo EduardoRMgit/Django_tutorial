@@ -178,7 +178,8 @@ class UserProfileAdmin(ExportActionMixin, PasswordResetUserAdmin):
     list_filter = (
         'Uprofile__nivel_cuenta',
         'Uprofile__enrolamiento',
-        'Uprofile__status'
+        'Uprofile__status',
+        'is_active'
     )
 
     search_fields = (
@@ -197,6 +198,7 @@ class UserProfileAdmin(ExportActionMixin, PasswordResetUserAdmin):
                     'get_curp',
                     'get_cuenta_clabe',
                     'get_enrolamiento',
+                    'is_active'
                     )
 
     list_per_page = 25
@@ -336,6 +338,18 @@ class ClienteAdmin(UserProfileAdmin):
     )
 
 
+class Cancelacion(User):
+    class Meta:
+        proxy = True
+        verbose_name = 'Cuentas Canceladas'
+        verbose_name_plural = 'Cuentas Canceladas'
+
+
+class CancelacionAdmin(ClienteAdmin):
+    def get_queryset(self, request):
+        return User.objects.filter(is_active=False)
+
+
 admin.site.unregister(User)
 admin.site.register(User, UserProfileAdmin)
 admin.site.register(PreguntaSeguridad)
@@ -348,3 +362,4 @@ admin.site.register(Avatar)
 # admin.site.register(Administradore, AdministradoreAdmin)
 admin.site.register(PasswordHistory)
 admin.site.register(AliasInvalido)
+admin.site.register(Cancelacion, CancelacionAdmin)

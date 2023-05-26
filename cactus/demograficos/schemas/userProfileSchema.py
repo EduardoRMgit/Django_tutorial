@@ -3641,12 +3641,15 @@ class SetPerfilTransaccional(graphene.Mutation):
         operaciones_id = graphene.Int(required=True)
         uso_id = graphene.Int(required=True)
         origen_id = graphene.Int(required=True)
+        nip = graphene.String(required=True)
 
     @login_required
     def mutate(self, info, token, transferencias_id, operaciones_id,
-               uso_id, origen_id
+               uso_id, origen_id, nip
                ):
         user = info.context.user
+        if not user.Uprofile.check_password(nip):
+            raise Exception("Nip incorrecto")
         transferencias = TransferenciasMensuales.objects.get(
             pk=transferencias_id)
         operaciones = OperacionesMensual.objects.get(pk=operaciones_id)
