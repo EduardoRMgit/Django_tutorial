@@ -126,9 +126,9 @@ def validate_cfe(user, list):
     if percentage >= 80:
         user.Uprofile.ocr_comprobante_validado = True
         user.Uprofile.save()
-        return True
+        return True, ("ok")
     else:
-        raise Exception("Direccion no coincide con el comprobante")
+        return False, ("Comprobante en proceso de validacionr")
 
 
 def validate_telmex(user, list):
@@ -236,9 +236,9 @@ def validate_telmex(user, list):
     if percentage >= 80:
         user.Uprofile.ocr_comprobante_validado = True
         user.Uprofile.save()
-        return True
+        return True, ("ok")
     else:
-        raise Exception("Direccion no coincide con el comprobante")
+        return False, ("Comprobante en proceso de validacionr")
 
 
 def validate_izzi(user, list):
@@ -331,9 +331,9 @@ def validate_izzi(user, list):
     if percentage >= 80:
         user.Uprofile.ocr_comprobante_validado = True
         user.Uprofile.save()
-        return True
+        return True, ("ok")
     else:
-        raise Exception("Direccion no coincide con el comprobante")
+        return False, ("Comprobante en proceso de validacionr")
 
 
 def validate_total(user, list):
@@ -417,6 +417,6 @@ def validate_total(user, list):
     if percentage >= 80:
         user.Uprofile.ocr_comprobante_validado = True
         user.Uprofile.save()
-        return True
+        return True, ("ok")
     else:
-        raise Exception("Direccion no coincide con el comprobante")
+        return False, ("Comprobante en proceso de validacion")

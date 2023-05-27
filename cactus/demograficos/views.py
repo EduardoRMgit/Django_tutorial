@@ -148,15 +148,15 @@ class ImageDoc(generics.CreateAPIView):
                         str(tipo_comprobante), imagen, username)
                     valida, informacion = extract_comprobantes(path)
                     if str(tipo_comprobante) == '1':
-                        validacion = validate_cfe(username, informacion)
-                        print(validacion)
+                        validacion, msg = validate_cfe(username, informacion)
                     if str(tipo_comprobante) == '2':
-                        validacion = validate_telmex(username, informacion)
+                        validacion, msg = validate_telmex(username,
+                            informacion)
                     if str(tipo_comprobante) == '3':
-                        validacion = validate_izzi(username, informacion)
+                        validacion, msg = validate_izzi(username, informacion)
                     if str(tipo_comprobante) == '4':
-                        validacion = validate_total(username, informacion)
-                    if validacion:
+                        validacion, msg = validate_total(username, informacion)
+                    if validacion is True:
                         a = DocAdjunto.objects.create(
                             user=user_,
                             tipo=doctipo,
@@ -164,6 +164,28 @@ class ImageDoc(generics.CreateAPIView):
                             imagen=nombre_archivo,
                             imagen_url=url,
                             validado=True)
+                    elif validacion is False:
+                        fotos = DocAdjunto.objects.filter(
+                            user=user_, tipo=doctipo)
+                        if len(fotos) < 3:
+                            a = DocAdjunto.objects.create(
+                                user=user_,
+                                tipo=doctipo,
+                                tipo_comprobante=tipocomprobante,
+                                imagen=nombre_archivo,
+                                imagen_url=url)
+                            return Response(
+                                {
+                                    'Mensaje': "Error al validar documento "
+                                               "volver a tomar foto"
+                                },
+                                status=status.HTTP_200_OK)
+                        elif len(fotos) >= 3:
+                            return Response(
+                                {
+                                    'Mensaje': msg
+                                },
+                                status=status.HTTP_200_OK)
                     else:
                         a = DocAdjunto.objects.create(
                             user=user_,
@@ -192,7 +214,7 @@ class ImageDoc(generics.CreateAPIView):
                         valida, informacion = textract_ine(path)
                         validacion, front = validate_information(
                             username, informacion)
-                        if validacion:
+                        if validacion is True:
                             a = DocAdjunto.objects.create(
                                 user=user_,
                                 tipo=doctipo,
@@ -200,31 +222,61 @@ class ImageDoc(generics.CreateAPIView):
                                 imagen_url=url,
                                 validacion_frontal=front,
                                 validado=True)
-                        else:
-                            a = DocAdjunto.objects.create(
-                                user=user_,
-                                tipo=doctipo,
-                                imagen=nombre_archivo,
-                                imagen_url=url)
+                        elif validacion is False:
+                            fotos = DocAdjunto.objects.filter(
+                                user=user_, tipo=doctipo)
+                            if len(fotos) < 3:
+                                a = DocAdjunto.objects.create(
+                                    user=user_,
+                                    tipo=doctipo,
+                                    imagen=nombre_archivo,
+                                    imagen_url=url)
+                                return Response(
+                                    {
+                                        'Mensaje': "Error al validar "
+                                                   "documento volver a "
+                                                   "tomar foto"
+                                    },
+                                    status=status.HTTP_200_OK)
+                            elif len(fotos) >= 3:
+                                return Response(
+                                    {
+                                        'Mensaje': front
+                                    },
+                                    status=status.HTTP_200_OK)
                     if str(tipo) == '2':
                         valida, informacion = textract_ine_reverso(path)
-                        validacion = validate_information_ine_back(username,
-                                                                   informacion
-                                                                   )
-                        if validacion:
+                        validacion, msg = validate_information_ine_back(
+                            username, informacion)
+                        if validacion is True:
                             a = DocAdjunto.objects.create(
                                 user=user_,
                                 tipo=doctipo,
                                 imagen=nombre_archivo,
                                 imagen_url=url,
-                                validacion_frontal=front,
                                 validado=True)
-                        else:
-                            a = DocAdjunto.objects.create(
-                                user=user_,
-                                tipo=doctipo,
-                                imagen=nombre_archivo,
-                                imagen_url=url)
+                        elif validacion is False:
+                            fotos = DocAdjunto.objects.filter(
+                                user=user_, tipo=doctipo)
+                            if len(fotos) < 3:
+                                a = DocAdjunto.objects.create(
+                                    user=user_,
+                                    tipo=doctipo,
+                                    imagen=nombre_archivo,
+                                    imagen_url=url)
+                                return Response(
+                                    {
+                                        'Mensaje': "Error al validar "
+                                                   "documento "
+                                                   "volver a tomar foto"
+                                    },
+                                    status=status.HTTP_200_OK)
+                            elif len(fotos) >= 3:
+                                return Response(
+                                    {
+                                        'Mensaje': msg
+                                    },
+                                    status=status.HTTP_200_OK)
                 else:
                     a = DocAdjunto.objects.create(user=user_,
                                                   tipo=doctipo,
