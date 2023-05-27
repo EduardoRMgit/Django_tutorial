@@ -383,5 +383,5 @@ EMAIL_HOST_USER = cluster_secret('gmail-credentials', 'email')
 EMAIL_HOST_PASSWORD = cluster_secret('gmail-credentials', 'pwd')
 AUTH_PWD = cluster_secret('gmail-credentials', 'apwd')
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
-API_KEY_ARCUS = cluster_secret('arcus-credentials', 'apikey')
-SECRET_ARCUS = cluster_secret('arcus-credentials', 'secret')
+API_KEY_ARCUS = "00c0d2159be9988bfb4d5fd36a6d97df"
+SECRET_ARCUS = "+8teRHyPKfD5N/EWiRxeWsaDwjtD+ybdgZ0yeo8PtEkhV03cEUFTYxUD6AshGXqfgm/WkNbL6LY+nyI7y9ifJw=="
