@@ -146,7 +146,8 @@ class Query(object):
             db_logger.error(msg_arcus)
         elif response.status_code == 200:
             response = (json.loads(response.content.decode("utf-8")))
-            msg_arcus = f"[Consulta Balance Exitosa] Respuesta Arcus: {response}"
+            msg_arcus = f"[Consulta Balance Exitosa] Respuesta Arcus: " \
+                        f"{response}"
             db_logger.info(msg_arcus)
             return response
 
