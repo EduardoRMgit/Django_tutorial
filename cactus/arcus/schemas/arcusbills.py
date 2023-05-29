@@ -139,8 +139,17 @@ class Query(object):
             response = requests.post(url=url, headers=headers, json=data)
         except Exception as error:
             raise Exception("Error en la peticion", error)
-        response = (json.loads(response.content.decode("utf-8")))
-        return response
+        if response.status_code != 200:
+            response_error = (json.loads(response.content.decode("utf-8")))
+            msg_arcus = f"[Error Arcus Consulta Bill] Respuesta " \
+                        f"Arcus: {response_error}"
+            db_logger.error(msg_arcus)
+        elif response.status_code == 200:
+            response = (json.loads(response.content.decode("utf-8")))
+            msg_arcus = f"[Consulta Balance Exitosa] Respuesta Arcus: " \
+                        f"{response}"
+            db_logger.info(msg_arcus)
+            return response
 
     @login_required
     def resolve_pagos_recurrentes(self, info, token, **kwargs):
