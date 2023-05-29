@@ -214,7 +214,8 @@ class ArcusPay(graphene.Mutation):
             raise Exception("Error en la peticion", error)
         if response.status_code != 201:
             response_error = (json.loads(response.content.decode("utf-8")))
-            msg_arcus = f"[Error Arcus] Respuesta arcus: {response_error}"
+            msg_arcus = f"[Error Arcus] Respuesta arcus: {response_error} " \
+                        f"peticion: {data} del usuario: {user}"
             db_logger.error(msg_arcus)
         response = (json.loads(response.content.decode("utf-8")))
         fecha = datetime.strptime(response["processed_at"], '%Y-%m-%d').date()
