@@ -5,6 +5,9 @@ import datetime
 import json
 import os
 
+import mailchimp_marketing as MailchimpMarketing
+from mailchimp_marketing.api_client import ApiClientError
+
 from re import U
 from re import search as re_search
 from re import IGNORECASE as re_IGNORECASE
@@ -3540,6 +3543,26 @@ class CancelacionCuenta(graphene.Mutation):
         user.Uprofile.status = "C"
         user.Uprofile.save()
         folio = randomString()
+        try:
+            client = MailchimpMarketing.Client()
+            client.set_config({
+                "api_key": settings.MAILCHIMP_KEY,
+                "server": settings.MAILCHIMP_SERVER
+            })
+
+            response = client.lists.set_list_member(
+                settings.MAILCHIMP_ID, user.Uprofile.correo_electronico,
+                  {"status": "unsubscribed"})
+            db_logger.info(
+                f"[Unsubscribed mailchimp]: {user}"
+                f"response: {response}"
+            )
+        except ApiClientError as error:
+            print("Error: {}".format(error.text))
+            msg_mailchimp = (
+                f"[Error mailchimp] Error al suscribir al usuario"
+                f"con el email: {user.email}. Error: {error.text}")
+            db_logger.warning(msg_mailchimp)
         url = "No hay comprobante disponible"
         fecha = timezone.now()
         # Pendiente de crear movimiento no transaccional

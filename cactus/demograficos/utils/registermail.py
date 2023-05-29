@@ -1,7 +1,7 @@
 import mailchimp_marketing as MailchimpMarketing
 import logging
 from mailchimp_marketing.api_client import ApiClientError
-from cactus.settings import cluster_secret
+from django.conf import settings
 
 db_logger = logging.getLogger('db')
 
@@ -10,12 +10,12 @@ def RegistrarMail(user):
     try:
         client = MailchimpMarketing.Client()
         client.set_config({
-            "api_key": cluster_secret('mailchimp-credentials', 'key'),
-            "server": cluster_secret('mailchimp-credentials', 'server')
+            "api_key": settings.MAILCHIMP_KEY,
+            "server": settings.MAILCHIMP_SERVER
         })
 
         response = client.lists.add_list_member(
-            cluster_secret('mailchimp-credentials', 'id'), {
+            settings.MAILCHIMP_ID, {
                            "email_address": user.email,
                            "status": "subscribed"})
         db_logger.info(
