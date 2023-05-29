@@ -137,8 +137,6 @@ class Query(object):
             data["company_sku"] = empresa
             data["service_number"] = referencia
             response = requests.post(url=url, headers=headers, json=data)
-            print(response.__dict__)
-            print(response.status_code)
         except Exception as error:
             raise Exception("Error en la peticion", error)
         if response.status_code != 200:
