@@ -385,3 +385,6 @@ AUTH_PWD = cluster_secret('gmail-credentials', 'apwd')
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 API_KEY_ARCUS = cluster_secret('arcus-credentials', 'apikey')
 SECRET_ARCUS = cluster_secret('arcus-credentials', 'secret')
+MAILCHIMP_SERVER = cluster_secret('mailchimp-credentials', 'server')
+MAILCHIMP_KEY = cluster_secret('mailchimp-credentials', 'key')
+MAILCHIMP_ID = cluster_secret('mailchimp-credentials', 'id')
