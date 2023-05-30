@@ -271,7 +271,6 @@ class BuscadorInguzType(graphene.ObjectType):
         origen = info.context.user
         clabe = self.cuentaClabe
         try:
-            print(self.user)
             contacto = origen.Contactos_Usuario.get(
                 clabe=clabe,
                 activo=True,
@@ -303,6 +302,28 @@ class BlockDetails(graphene.ObjectType):
     clabe = graphene.String()
     time = graphene.types.datetime.DateTime()
     status = graphene.String()
+
+
+class UrlType(graphene.ObjectType):
+    url = graphene.String()
+
+
+class IntranetType(graphene.ObjectType):
+    id = graphene.String()
+    username = graphene.String()
+    perfildeclarado = graphene.String()
+    urls = graphene.List(UrlType)
+
+    # def resolve_urls(self, info):
+    #     urls = []
+    #     user = User.objects.get(username=self['username'])
+    #     docs = DocAdjunto.objects.filter(user=user.id)
+    #     print(len(docs))
+    #     for i in range(0, len(docs)):
+    #         url = docs[i].imagen_url
+    #         urls.append(url)
+    #         print(urls)
+    #     return urls
 
 
 class Query(graphene.ObjectType):
@@ -513,6 +534,13 @@ class Query(graphene.ObjectType):
     all_origen_deposito = graphene.List(OrigenDepositoType,
                                         description="Query all objects from \
                                         model OrigenDeposito")
+
+    all_intranet_docs = graphene.List(IntranetType,
+                                      description="Query all objects to \
+                                      intranet admin")
+
+    intranet_docs = graphene.List(IntranetType,
+                                  id=graphene.Int(required=True))
 
     def resolve_all_avatars(self, info, **kwargs):
         """``allAvatars (Query): Query all the objects from Avatar Model``
@@ -1550,6 +1578,26 @@ class Query(graphene.ObjectType):
 
     def resolve_all_origen_deposito(self, info, **kwargs):
         return OrigenDeposito.objects.all()
+
+    def resolve_all_intranet_docs(self, info, **kwargs):
+
+        perfiles = PerfilTransaccionalDeclarado.objects.all()
+        list = []
+        urls = []
+        for perfil in perfiles:
+            lista_perfiles = {}
+            lista_perfiles['id'] = perfil.id
+            lista_perfiles['username'] = perfil.user.username
+            lista_perfiles['perfildeclarado'] = perfil.status_perfil
+            list.append(lista_perfiles)
+            docs = DocAdjunto.objects.filter(user=perfil.user)
+            for doc in docs:
+            #     urls_dicc = {}
+            #     urls_dicc['url'] = doc.imagen_url
+            #     urls.append(urls_dicc)
+            # lista_perfiles['urls'] = urls
+
+        return list
 
 
 class CreateUser(graphene.Mutation):
