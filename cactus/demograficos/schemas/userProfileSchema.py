@@ -308,14 +308,22 @@ class BlockDetails(graphene.ObjectType):
 
 
 class UrlType(graphene.ObjectType):
+    id = graphene.Int()
     url = graphene.String()
+    validado = graphene.Boolean()
+    validado_operador = graphene.Boolean()
 
 
 class IntranetType(graphene.ObjectType):
-    id = graphene.String()
+    id = graphene.Int()
     username = graphene.String()
     perfildeclarado = graphene.String()
     urls = graphene.List(UrlType)
+
+
+# class DocType(graphene.ObjectType):
+#     id = graphene.Int()
+#
 
 
 class Query(graphene.ObjectType):
@@ -531,8 +539,8 @@ class Query(graphene.ObjectType):
                                       description="Query all objects to \
                                       intranet admin")
 
-    intranet_docs = graphene.List(IntranetType,
-                                  id=graphene.Int(required=True))
+    intranet_docs = graphene.Field(IntranetType,
+                                   id=graphene.Int(required=True))
 
     def resolve_all_avatars(self, info, **kwargs):
         """``allAvatars (Query): Query all the objects from Avatar Model``
@@ -1584,13 +1592,36 @@ class Query(graphene.ObjectType):
             urls = []
             for doc in docs:
                 urls_dicc = {}
+                urls_dicc['id'] = doc.id
                 urls_dicc['url'] = doc.imagen_url
-                urls_dicc['validado'] = doc.
+                urls_dicc['validado'] = doc.validado
+                urls_dicc['validado_operador'] = doc.validado_operador
                 urls.append(urls_dicc)
             lista_perfiles['urls'] = urls
             list.append(lista_perfiles)
 
         return list
+
+    def resolve_intranet_docs(self, info, **kwargs):
+
+        id = kwargs['id']
+        perfil = PerfilTransaccionalDeclarado.objects.get(id=id)
+        perfil_dicc = {}
+        perfil_dicc['id'] = perfil.id
+        perfil_dicc['username'] = perfil.user.username
+        perfil_dicc['perfildeclarado'] = perfil.status_perfil
+        docs = DocAdjunto.objects.filter(user=perfil.user)
+        urls = []
+        for doc in docs:
+            urls_dicc = {}
+            urls_dicc['id'] = doc.id
+            urls_dicc['url'] = doc.imagen_url
+            urls_dicc['validado'] = doc.validado
+            urls_dicc['validado_operador'] = doc.validado_operador
+            urls.append(urls_dicc)
+        perfil_dicc['urls'] = urls
+
+        return perfil_dicc
 
 
 class CreateUser(graphene.Mutation):
@@ -3774,6 +3805,43 @@ class UpdateEmail(graphene.Mutation):
         return UpdateEmail(correo=user.email)
 
 
+class AprobacionIntranet(graphene.Mutation):
+
+    validado = graphene.Boolean()
+
+    class Arguments:
+
+        id = graphene.Int(required=True)
+        upgrade = graphene.Boolean(required=True)
+        valida_docs = graphene.Boolean(required=True)
+        documentos = graphene.List(graphene.String, required=True)
+
+    def mutate(self, info, id, valida_docs, upgrade, documentos):
+
+        try:
+            perfil = PerfilTransaccionalDeclarado.objects.get(id=id)
+            if upgrade:
+                perfil.status_perfil = "Aprobado"
+                perfil.save()
+                user = User.objects.get(username=perfil.user)
+                user.Uprofile.nivel_cuenta_id = 2
+                user.Uprofile.save()
+                if valida_docs:
+                    for item in documentos:
+                        doc = DocAdjunto.objects.get(id=item)
+                        doc.validado_operador = True
+                        doc.save()
+                return AprobacionIntranet(validado = True)
+            else:
+                perfil.status_perfil = "Rechazado"
+                perfil.save()
+                return AprobacionIntranet(validado = False)
+        except Exception as ex:
+            raise Exception("No existe perfil transaccional con ese id", ex)
+
+
+
+
 class Mutation(graphene.ObjectType):
     delete_pregunta_seguridad = BorrarPreguntaSeguridad.Field()
     create_user = CreateUser.Field()
@@ -3814,3 +3882,4 @@ class Mutation(graphene.ObjectType):
     set_perfil_transaccional = SetPerfilTransaccional.Field()
     block_account_emergency = BlockAccountEmergency.Field()
     update_email = UpdateEmail.Field()
+    aprobacion_intranet = AprobacionIntranet.Field()

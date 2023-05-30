@@ -75,6 +75,10 @@ class DocAdjunto(models.Model):
         null=True
     )
     validado = models.BooleanField(default=False, blank=True, null=True)
+    validado_operador = models.BooleanField(
+        default=False,
+        blank=True,
+        null=True)
     user = models.ForeignKey(
         User,
         related_name='user_documento',
