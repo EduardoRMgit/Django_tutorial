@@ -5,7 +5,8 @@ from datetime import datetime, timedelta
 def conciliacion_arcus_recargas():
 
     today = datetime.now().date()
-    pagos = PagosArcus.objects.filter(fecha_creacion__date=today, tipo='R')
+    yesterday = today - timedelta(days=1)
+    pagos = PagosArcus.objects.filter(fecha_creacion__date=yesterday, tipo='R')
     if len(pagos) != 0:
         # Inicio del archivo
         header_date = today.strftime("%Y/%m/%d").replace('/', '')
@@ -22,15 +23,12 @@ def conciliacion_arcus_recargas():
         register_count = len(pagos)
 
         document += f"FOOTER|{register_count}"
-        with open(f"chainname_{header_date}.txt", "w") as file:
+        with open(f"inguz_topups_mx_{header_date}.txt", "w") as file:
             file.write(document)
 
     else:
         header_date = today.strftime("%Y/%m/%d").replace('/', '')
         document = f"HEADER|{header_date}\n"
         document += "FOOTER|0"
-        with open(f"chainname_{header_date}.txt", "w") as file:
+        with open(f"inguz_topups_mx_{header_date}.txt", "w") as file:
             file.write(document)
-
-
-conciliacion_arcus_recargas()

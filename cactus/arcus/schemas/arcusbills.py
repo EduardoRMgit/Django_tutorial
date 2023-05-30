@@ -139,8 +139,17 @@ class Query(object):
             response = requests.post(url=url, headers=headers, json=data)
         except Exception as error:
             raise Exception("Error en la peticion", error)
-        response = (json.loads(response.content.decode("utf-8")))
-        return response
+        if response.status_code != 200:
+            response_error = (json.loads(response.content.decode("utf-8")))
+            msg_arcus = f"[Error Arcus Consulta Bill] Respuesta " \
+                        f"Arcus: {response_error}"
+            db_logger.error(msg_arcus)
+        elif response.status_code == 200:
+            response = (json.loads(response.content.decode("utf-8")))
+            msg_arcus = f"[Consulta Balance Exitosa] Respuesta Arcus: " \
+                        f"{response}"
+            db_logger.info(msg_arcus)
+            return response
 
     @login_required
     def resolve_pagos_recurrentes(self, info, token, **kwargs):
@@ -205,7 +214,8 @@ class ArcusPay(graphene.Mutation):
             raise Exception("Error en la peticion", error)
         if response.status_code != 201:
             response_error = (json.loads(response.content.decode("utf-8")))
-            msg_arcus = f"[Error Arcus] Respuesta arcus: {response_error}"
+            msg_arcus = f"[Error Arcus] Respuesta arcus: {response_error} " \
+                        f"peticion: {data} del usuario: {user}"
             db_logger.error(msg_arcus)
         response = (json.loads(response.content.decode("utf-8")))
         fecha = datetime.strptime(response["processed_at"], '%Y-%m-%d').date()
