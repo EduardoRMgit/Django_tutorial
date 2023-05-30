@@ -314,16 +314,16 @@ class IntranetType(graphene.ObjectType):
     perfildeclarado = graphene.String()
     urls = graphene.List(UrlType)
 
-    # def resolve_urls(self, info):
-    #     urls = []
-    #     user = User.objects.get(username=self['username'])
-    #     docs = DocAdjunto.objects.filter(user=user.id)
-    #     print(len(docs))
-    #     for i in range(0, len(docs)):
-    #         url = docs[i].imagen_url
-    #         urls.append(url)
-    #         print(urls)
-    #     return urls
+    def resolve_urls(self, info):
+        urls = []
+        user = User.objects.get(username=self['username'])
+        docs = DocAdjunto.objects.filter(user=user.id)
+        print(len(docs))
+        for i in range(0, len(docs)):
+            url = docs[i].imagen_url
+            urls.append(url)
+            print(urls)
+        return urls
 
 
 class Query(graphene.ObjectType):
@@ -1591,7 +1591,7 @@ class Query(graphene.ObjectType):
             lista_perfiles['perfildeclarado'] = perfil.status_perfil
             list.append(lista_perfiles)
             docs = DocAdjunto.objects.filter(user=perfil.user)
-            for doc in docs:
+            # for doc in docs:
             #     urls_dicc = {}
             #     urls_dicc['url'] = doc.imagen_url
             #     urls.append(urls_dicc)
