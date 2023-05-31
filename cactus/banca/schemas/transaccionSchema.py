@@ -577,7 +577,6 @@ class CreateTransferenciaEnviada(graphene.Mutation):
         comision, comision_m = comisionSTP(main_trans)
         comision = round(comision, 2)
         reservado_stp_trans = comision
-        print(comision_m, "aaaaaaaaaaaa")
         if comision_m:
             main_trans.comision = comision_m
             main_trans.comision.save()
