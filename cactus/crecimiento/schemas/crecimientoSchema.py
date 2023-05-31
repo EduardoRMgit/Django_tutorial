@@ -72,7 +72,6 @@ class Query(object):
     @login_required
     def resolve_all_respaldos(self, info, ordering=None, **kwargs):
         user = info.context.user
-        print(user)
         qs = Respaldo.objects.filter(
             Q(ordenante=user) |
             Q(respaldo=user)
