@@ -321,11 +321,6 @@ class IntranetType(graphene.ObjectType):
     urls = graphene.List(UrlType)
 
 
-# class DocType(graphene.ObjectType):
-#     id = graphene.Int()
-#
-
-
 class Query(graphene.ObjectType):
     """
         >>> Query (Pregunstas Secretas) Example:
