@@ -26,7 +26,8 @@ from django.conf import settings
 from django.contrib.auth import authenticate
 from django.http import HttpRequest
 from django.contrib.auth.models import User
-from demograficos.models import GeoLocation, GeoDevice, UserLocation
+from demograficos.models import (
+    GeoLocation, GeoDevice, UserLocation, MotivoRechazoDoc)
 from crecimiento.models import Respaldo
 from django.contrib.auth import authenticate
 from django.utils import timezone
@@ -215,6 +216,11 @@ class OrigenDepositoType(DjangoObjectType):
 class PerfilTransaccionalDeclaradoType(DjangoObjectType):
     class Meta:
         model = PerfilTransaccionalDeclarado
+
+
+class MotivoRechazoType(DjangoObjectType):
+    class Meta:
+        model = MotivoRechazoDoc
 
 
 class AvatarType(graphene.ObjectType):
@@ -494,6 +500,10 @@ class Query(graphene.ObjectType):
                                                description="`Query all objects from the \
                                             pregunta_secreta model`")
 
+    all_motivos_rechazo = graphene.List(MotivoRechazoType,
+                                        description="`Query all objects from the \
+                                            MotivoRechazoDoc model`")
+
     all_contactos = graphene.List(ContactosType,
                                   limit=graphene.Int(),
                                   offset=graphene.Int(),
@@ -736,6 +746,9 @@ class Query(graphene.ObjectType):
 
         """
         return StatusRegistro.objects.all()
+
+    def resolve_all_motivos_rechazo(self, info, **kwargs):
+        return MotivoRechazoDoc.objects.all()
 
     def resolve_all_status_cuenta(self, info, **kwargs):
         """
