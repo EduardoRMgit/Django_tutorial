@@ -557,7 +557,7 @@ class CreateTransferenciaEnviada(graphene.Mutation):
         ubicacion = "00"
         empresa = "ZYGOO"  # "INVERCRATOS2"
         folio_origen = "000001"
-        tipo_cuenta_beneficiario = "40"                                                                         
+        tipo_cuenta_beneficiario = "40"
         tipo_cuenta_ordenante = "40"
         balance = 1  # ???
         status = StatusTrans.objects.get(nombre="esperando respuesta")
