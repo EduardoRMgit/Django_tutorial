@@ -1,0 +1,83 @@
+[
+    {
+        "model": "demograficos.motivorechazodoc",
+        "pk": 1,
+        "fields": {
+            "motivo": "Identificaci\u00f3n poco n\u00edtida o muy borrosa",
+            "tipo": "I",
+            "codigo": "0001"
+        }
+    },
+    {
+        "model": "demograficos.motivorechazodoc",
+        "pk": 2,
+        "fields": {
+            "motivo": "Identificaci\u00f3n cortada",
+            "tipo": "I",
+            "codigo": "0002"
+        }
+    },
+    {
+        "model": "demograficos.motivorechazodoc",
+        "pk": 3,
+        "fields": {
+            "motivo": "Identificaci\u00f3n vencida",
+            "tipo": "I",
+            "codigo": "0003"
+        }
+    },
+    {
+        "model": "demograficos.motivorechazodoc",
+        "pk": 4,
+        "fields": {
+            "motivo": "Nombre del cliente no corresponde o distinto  al registrado",
+            "tipo": "I",
+            "codigo": "0004"
+        }
+    },
+    {
+        "model": "demograficos.motivorechazodoc",
+        "pk": 5,
+        "fields": {
+            "motivo": "CURP del cliente no corresponde o distinto al registrado",
+            "tipo": "I",
+            "codigo": "0005"
+        }
+    },
+    {
+        "model": "demograficos.motivorechazodoc",
+        "pk": 6,
+        "fields": {
+            "motivo": "Comprobante poco n\u00edtido o muy borroso",
+            "tipo": "C",
+            "codigo": "0006"
+        }
+    },
+    {
+        "model": "demograficos.motivorechazodoc",
+        "pk": 7,
+        "fields": {
+            "motivo": "Comprobante cortado",
+            "tipo": "C",
+            "codigo": "0007"
+        }
+    },
+    {
+        "model": "demograficos.motivorechazodoc",
+        "pk": 8,
+        "fields": {
+            "motivo": "Comprobante vencido",
+            "tipo": "C",
+            "codigo": "0008"
+        }
+    },
+    {
+        "model": "demograficos.motivorechazodoc",
+        "pk": 9,
+        "fields": {
+            "motivo": "Domicilio no corresponde o distinto al registrado",
+            "tipo": "C",
+            "codigo": "0009"
+        }
+    }
+]
