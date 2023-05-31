@@ -324,6 +324,12 @@ class DocPerfilDecType(graphene.InputObjectType):
 class PerfilDeclaradoType(graphene.ObjectType):
     id = graphene.Int()
     username = graphene.String()
+    nombre = graphene.String()
+    apellido_materno = graphene.String()
+    apellido_paterno = graphene.String()
+    curp = graphene.String()
+    email = graphene.String()
+    fecha_nacimiento = graphene.String()
     status = graphene.String()
     documentos = graphene.List(DocumentoType)
     fecha_creacion = graphene.String()
@@ -1597,6 +1603,13 @@ class Query(graphene.ObjectType):
             lista_perfiles['username'] = perfil.user.username
             lista_perfiles['status'] = perfil.status_perfil
             lista_perfiles['fecha_creacion'] = perfil.fecha_creacion
+            lista_perfiles['nombre'] = perfil.user.first_name
+            lista_perfiles['apellido_materno'] = perfil.user.last_name
+            lista_perfiles['apellido_paterno'] = perfil.user.Uprofile.apMaterno
+            lista_perfiles['curp'] = perfil.user.Uprofile.curp
+            lista_perfiles['email'] = perfil.user.email
+            lista_perfiles['fecha_nacimiento'
+                           ] = perfil.user.Uprofile.fecha_nacimiento
             docs = DocAdjunto.objects.filter(user=perfil.user)
             documentos = []
             for doc in docs:
@@ -1622,6 +1635,14 @@ class Query(graphene.ObjectType):
         perfil_dicc['username'] = perfil.user.username
         perfil_dicc['status'] = perfil.status_perfil
         perfil_dicc['fecha_creacion'] = perfil.fecha_creacion
+        perfil_dicc['nombre'] = perfil.user.first_name
+        perfil_dicc['apellido_materno'] = perfil.user.last_name
+        perfil_dicc['apellido_paterno'] = perfil.user.Uprofile.apMaterno
+        perfil_dicc['curp'] = perfil.user.Uprofile.curp
+        perfil_dicc['email'] = perfil.user.email
+        perfil_dicc['fecha_nacimiento'
+                    ] = perfil.user.Uprofile.fecha_nacimiento
+
         docs = DocAdjunto.objects.filter(user=perfil.user)
         documentos = []
         for doc in docs:
