@@ -94,6 +94,20 @@ class DocAdjunto(models.Model):
         return "{} de {}".format(self.tipo, self.user)
 
 
+class MotivoRechazoDoc(models.Model):
+    tipos_doc = (
+        ("I", "INE"),
+        ("C", "Comprobante")
+    )
+    motivo = models.CharField(max_length=1028, null=True)
+    tipo = models.CharField(choices=tipos_doc,
+                            max_length=16, null=True)
+    codigo = models.CharField(max_length=4, null=True)
+
+    def __str__(self):
+        return f"{self.motivo}"
+
+
 class DocExtraction(models.Model):
     """guardar en esta tabla el dict extraido de la foto y la validacio"""
     documento = models.OneToOneField(DocAdjunto, on_delete=models.CASCADE,

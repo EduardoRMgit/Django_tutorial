@@ -307,18 +307,26 @@ class BlockDetails(graphene.ObjectType):
     status = graphene.String()
 
 
-class UrlType(graphene.ObjectType):
+class DocumentoType(graphene.ObjectType):
     id = graphene.Int()
     url = graphene.String()
     validado = graphene.Boolean()
     validado_operador = graphene.Boolean()
+    motivo_rechazo = graphene.String()
 
 
-class IntranetType(graphene.ObjectType):
+class DocPerfilDecType(graphene.InputObjectType):
+    id = graphene.Int()
+    validado_operador = graphene.Boolean()
+    motivo_rechazo = graphene.String()
+
+
+class PerfilDeclaradoType(graphene.ObjectType):
     id = graphene.Int()
     username = graphene.String()
-    perfildeclarado = graphene.String()
-    urls = graphene.List(UrlType)
+    status = graphene.String()
+    documentos = graphene.List(DocumentoType)
+    fecha_creacion = graphene.String()
 
 
 class Query(graphene.ObjectType):
@@ -530,12 +538,16 @@ class Query(graphene.ObjectType):
                                         description="Query all objects from \
                                         model OrigenDeposito")
 
-    all_intranet_docs = graphene.List(IntranetType,
-                                      description="Query all objects to \
-                                      intranet admin")
+    all_perfildeclarado_docs = graphene.List(PerfilDeclaradoType,
+                                             token=graphene.String(
+                                                 required=True),
+                                             description="Query all objects to\
+                                             Perfil Declarado admin")
 
-    intranet_docs = graphene.Field(IntranetType,
-                                   id=graphene.Int(required=True))
+    perfildeclarado_docs = graphene.Field(PerfilDeclaradoType,
+                                          token=graphene.String(
+                                              required=True),
+                                          id=graphene.Int(required=True))
 
     def resolve_all_avatars(self, info, **kwargs):
         """``allAvatars (Query): Query all the objects from Avatar Model``
@@ -1574,7 +1586,8 @@ class Query(graphene.ObjectType):
     def resolve_all_origen_deposito(self, info, **kwargs):
         return OrigenDeposito.objects.all()
 
-    def resolve_all_intranet_docs(self, info, **kwargs):
+    @login_required
+    def resolve_all_perfildeclarado_docs(self, info, **kwargs):
 
         perfiles = PerfilTransaccionalDeclarado.objects.all()
         list = []
@@ -1582,39 +1595,44 @@ class Query(graphene.ObjectType):
             lista_perfiles = {}
             lista_perfiles['id'] = perfil.id
             lista_perfiles['username'] = perfil.user.username
-            lista_perfiles['perfildeclarado'] = perfil.status_perfil
+            lista_perfiles['status'] = perfil.status_perfil
+            lista_perfiles['fecha_creacion'] = perfil.fecha_creacion
             docs = DocAdjunto.objects.filter(user=perfil.user)
-            urls = []
+            documentos = []
             for doc in docs:
-                urls_dicc = {}
-                urls_dicc['id'] = doc.id
-                urls_dicc['url'] = doc.imagen_url
-                urls_dicc['validado'] = doc.validado
-                urls_dicc['validado_operador'] = doc.validado_operador
-                urls.append(urls_dicc)
-            lista_perfiles['urls'] = urls
+                documentos_dicc = {}
+                documentos_dicc['id'] = doc.id
+                documentos_dicc['url'] = doc.imagen_url
+                documentos_dicc['validado'] = doc.validado
+                documentos_dicc['validado_operador'] = doc.validado_operador
+                documentos_dicc['motivo_rechazo'] = doc.motivo_rechazo
+                documentos.append(documentos_dicc)
+            lista_perfiles['documentos'] = documentos
             list.append(lista_perfiles)
 
         return list
 
-    def resolve_intranet_docs(self, info, **kwargs):
+    @login_required
+    def resolve_perfildeclarado_docs(self, info, **kwargs):
 
         id = kwargs['id']
         perfil = PerfilTransaccionalDeclarado.objects.get(id=id)
         perfil_dicc = {}
         perfil_dicc['id'] = perfil.id
         perfil_dicc['username'] = perfil.user.username
-        perfil_dicc['perfildeclarado'] = perfil.status_perfil
+        perfil_dicc['status'] = perfil.status_perfil
+        perfil_dicc['fecha_creacion'] = perfil.fecha_creacion
         docs = DocAdjunto.objects.filter(user=perfil.user)
-        urls = []
+        documentos = []
         for doc in docs:
-            urls_dicc = {}
-            urls_dicc['id'] = doc.id
-            urls_dicc['url'] = doc.imagen_url
-            urls_dicc['validado'] = doc.validado
-            urls_dicc['validado_operador'] = doc.validado_operador
-            urls.append(urls_dicc)
-        perfil_dicc['urls'] = urls
+            documentos_dicc = {}
+            documentos_dicc['id'] = doc.id
+            documentos_dicc['url'] = doc.imagen_url
+            documentos_dicc['validado'] = doc.validado
+            documentos_dicc['validado_operador'] = doc.validado_operador
+            documentos_dicc['motivo_rechazo'] = doc.motivo_rechazo
+            documentos.append(documentos_dicc)
+        perfil_dicc['documentos'] = documentos
 
         return perfil_dicc
 
@@ -3616,7 +3634,7 @@ class CancelacionCuenta(graphene.Mutation):
 
             response = client.lists.set_list_member(
                 settings.MAILCHIMP_ID, user.Uprofile.correo_electronico,
-                  {"status": "unsubscribed"})
+                {"status": "unsubscribed"})
             db_logger.info(
                 f"[Unsubscribed mailchimp]: {user}"
                 f"response: {response}"
@@ -3800,51 +3818,49 @@ class UpdateEmail(graphene.Mutation):
         return UpdateEmail(correo=user.email)
 
 
-class AprobacionIntranet(graphene.Mutation):
+class AprobacionN3(graphene.Mutation):
 
     validado = graphene.Boolean()
 
     class Arguments:
 
         id = graphene.Int(required=True)
+        token = graphene.String(required=True)
         upgrade = graphene.Boolean(required=True)
         valida_docs = graphene.Boolean(required=True)
-        documentos = graphene.List(graphene.String, required=True)
-        motivo_rechazo = graphene.List(graphene.String)
+        documentos = graphene.List(DocPerfilDecType, required=True)
 
-    def mutate(self, info, id, valida_docs, upgrade, documentos,
-               motivo_rechazo=None):
+    @login_required
+    def mutate(self, info, token, id, valida_docs, upgrade, documentos):
 
         try:
             perfil = PerfilTransaccionalDeclarado.objects.get(id=id)
+
+            if valida_docs:
+                for documento in documentos:
+                    doc = DocAdjunto.objects.get(id=documento['id'])
+                    if perfil.user.id != doc.user.id:
+                        return ValueError(
+                            "Error. Algún documento no pertenece al usuario")
+                    doc.validado_operador = documento['validado_operador']
+                    doc.motivo_rechazo = documento['motivo_rechazo']
+                    doc.save()
+
             if upgrade:
                 perfil.status_perfil = "Aprobado"
                 perfil.save()
-                user = User.objects.get(username=perfil.user)
+                user = perfil.user
                 user.Uprofile.nivel_cuenta_id = 2
                 user.Uprofile.save()
-                if valida_docs:
-                    for item in documentos:
-                        doc = DocAdjunto.objects.get(id=item)
-                        doc.validado_operador = True
-                        doc.save()
-                return AprobacionIntranet(validado = True)
+                return AprobacionN3(validado=True)
             else:
                 perfil.status_perfil = "Rechazado"
                 perfil.save()
-                if valida_docs is False:
-                    for index_doc, item in enumerate(documentos):
-                        doc = DocAdjunto.objects.get(id=item)
-                        for index_motivo, motivo in zip(
-                            range(len(documentos)), motivo_rechazo):
-                            if index_doc == index_motivo:
-                                doc.motivo_rechazo = motivo
-                                doc.save()
-                return AprobacionIntranet(validado = False)
+                return AprobacionN3(validado=False)
         except Exception as ex:
-            raise Exception("No existe perfil transaccional con ese id", ex)
-
-
+            msg = f"[Error al validar documetos N3] ID PerfilTD: {id}"
+            db_logger.warning(msg)
+            raise Exception("Error al validar documentos")
 
 
 class Mutation(graphene.ObjectType):
@@ -3887,4 +3903,4 @@ class Mutation(graphene.ObjectType):
     set_perfil_transaccional = SetPerfilTransaccional.Field()
     block_account_emergency = BlockAccountEmergency.Field()
     update_email = UpdateEmail.Field()
-    aprobacion_intranet = AprobacionIntranet.Field()
+    aprobacion_n3 = AprobacionN3.Field()
