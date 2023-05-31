@@ -3815,8 +3815,10 @@ class AprobacionIntranet(graphene.Mutation):
         upgrade = graphene.Boolean(required=True)
         valida_docs = graphene.Boolean(required=True)
         documentos = graphene.List(graphene.String, required=True)
+        motivo_rechazo = graphene.List(graphene.String)
 
-    def mutate(self, info, id, valida_docs, upgrade, documentos):
+    def mutate(self, info, id, valida_docs, upgrade, documentos,
+               motivo_rechazo=None):
 
         try:
             perfil = PerfilTransaccionalDeclarado.objects.get(id=id)
@@ -3835,6 +3837,14 @@ class AprobacionIntranet(graphene.Mutation):
             else:
                 perfil.status_perfil = "Rechazado"
                 perfil.save()
+                if valida_docs is False:
+                    for index_doc, item in enumerate(documentos):
+                        doc = DocAdjunto.objects.get(id=item)
+                        for index_motivo, motivo in zip(
+                            range(len(documentos)), motivo_rechazo):
+                            if index_doc == index_motivo:
+                                doc.motivo_rechazo = motivo
+                                doc.save()
                 return AprobacionIntranet(validado = False)
         except Exception as ex:
             raise Exception("No existe perfil transaccional con ese id", ex)
