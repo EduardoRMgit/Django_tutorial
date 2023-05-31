@@ -333,6 +333,13 @@ class PerfilDeclaradoType(graphene.ObjectType):
     status = graphene.String()
     documentos = graphene.List(DocumentoType)
     fecha_creacion = graphene.String()
+    calle = graphene.String()
+    num_interior = graphene.String()
+    num_exterior = graphene.String()
+    colonia = graphene.String()
+    codigo_postal = graphene.String()
+    ciudad = graphene.String()
+    municipio = graphene.String()
 
 
 class Query(graphene.ObjectType):
@@ -1610,6 +1617,18 @@ class Query(graphene.ObjectType):
             lista_perfiles['email'] = perfil.user.email
             lista_perfiles['fecha_nacimiento'
                            ] = perfil.user.Uprofile.fecha_nacimiento
+
+            direccion = perfil.user.user_direccion.all()
+            if direccion.count() > 0:
+                direccion = direccion.last()
+                lista_perfiles['calle'] = direccion.calle
+                lista_perfiles['num_exterior'] = direccion.num_ext
+                lista_perfiles['num_interior'] = direccion.num_int
+                lista_perfiles['colonia'] = direccion.colonia
+                lista_perfiles['codigo_postal'] = direccion.codPostal
+                lista_perfiles['municipio'] = direccion.delegMunicipio
+                lista_perfiles['ciudad'] = direccion.estado
+
             docs = DocAdjunto.objects.filter(user=perfil.user)
             documentos = []
             for doc in docs:
@@ -1630,6 +1649,7 @@ class Query(graphene.ObjectType):
 
         id = kwargs['id']
         perfil = PerfilTransaccionalDeclarado.objects.get(id=id)
+
         perfil_dicc = {}
         perfil_dicc['id'] = perfil.id
         perfil_dicc['username'] = perfil.user.username
@@ -1642,6 +1662,17 @@ class Query(graphene.ObjectType):
         perfil_dicc['email'] = perfil.user.email
         perfil_dicc['fecha_nacimiento'
                     ] = perfil.user.Uprofile.fecha_nacimiento
+
+        direccion = perfil.user.user_direccion.all()
+        if direccion.count() > 0:
+            direccion = direccion.last()
+            perfil_dicc['calle'] = direccion.calle
+            perfil_dicc['num_exterior'] = direccion.num_ext
+            perfil_dicc['num_interior'] = direccion.num_int
+            perfil_dicc['colonia'] = direccion.colonia
+            perfil_dicc['codigo_postal'] = direccion.codPostal
+            perfil_dicc['municipio'] = direccion.delegMunicipio
+            perfil_dicc['ciudad'] = direccion.estado
 
         docs = DocAdjunto.objects.filter(user=perfil.user)
         documentos = []
