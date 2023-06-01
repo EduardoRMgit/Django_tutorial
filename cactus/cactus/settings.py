@@ -355,9 +355,6 @@ PREFIJO_CUENTA_INGUZ = "6461802180"
 AXES_LOCKOUT_CALLABLE = "cactus.customAuthBackend.lockout"
 
 
-ARCUS_DOMAIN = 'https://api.staging.arcusapi.com'
-
-
 def cluster_secret(key, value):
     try:
         from kubernetes import client, config
@@ -385,3 +382,7 @@ AUTH_PWD = cluster_secret('gmail-credentials', 'apwd')
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 API_KEY_ARCUS = cluster_secret('arcus-credentials', 'apikey')
 SECRET_ARCUS = cluster_secret('arcus-credentials', 'secret')
+ARCUS_DOMAIN = cluster_secret('arcus-credentials', 'url')
+MAILCHIMP_SERVER = cluster_secret('mailchimp-credentials', 'server')
+MAILCHIMP_KEY = cluster_secret('mailchimp-credentials', 'key')
+MAILCHIMP_ID = cluster_secret('mailchimp-credentials', 'id')

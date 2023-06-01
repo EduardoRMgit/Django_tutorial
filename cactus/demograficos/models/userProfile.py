@@ -171,17 +171,23 @@ class UserProfile(AbstractBaseUser):
     OK = 'O'
     BLOCKED = 'B'
     CANCELED = 'C'
+    BLOCKED_EMERGENCY = "BE"
+    VOLUNTARY_BLOCKED = "BV"
 
     STATUS_CHOICES = (
         (OK, ("Ok")),
         (BLOCKED, "Bloqueada"),
-        (CANCELED, u"Suscripción cancelada")
+        (CANCELED, u"Suscripción cancelada"),
+        (BLOCKED_EMERGENCY, "Bloqueada de Emergencia"),
+        (VOLUNTARY_BLOCKED, "Bloqueo Voluntario")
     )
 
     BLOCKED = 'B'
     TOO_MANY_LOGIN_ATTEMPTS = 'T'
     TOO_MANY_LOGIN_ATTEMPTS_INSIDE = 'I'
     NOT_BLOCKED = 'K'
+    BLOCKED_EMERGENCY = "BE"
+    VOLUNTARY_BLOQUED = "BV"
     BLOCKED_REASONS = (
         (BLOCKED, ("Su cuenta ha sido bloqueada, "
                    "por favor contactenos")),
@@ -191,7 +197,10 @@ class UserProfile(AbstractBaseUser):
         (TOO_MANY_LOGIN_ATTEMPTS_INSIDE, ("Su cuenta ha sido bloqueada "
                                           "por exceso de intentos de "
                                           u"inicio de sesión")),
-        (NOT_BLOCKED, "OK")
+        (NOT_BLOCKED, "OK"),
+        (BLOCKED_EMERGENCY, ("Su cuenta fue bloqueada por el flujo "
+                             "de emergencia")),
+        (VOLUNTARY_BLOCKED, ("su cuenta fue bloqueada voluntariamente"))
     )
 
     UN = 'U'
@@ -228,7 +237,7 @@ class UserProfile(AbstractBaseUser):
     )
 
     blocked_reason = models.CharField(
-        max_length=1,
+        max_length=2,
         choices=BLOCKED_REASONS,
         default=NOT_BLOCKED
     )
@@ -237,7 +246,7 @@ class UserProfile(AbstractBaseUser):
     login_attempts = models.PositiveSmallIntegerField(default=0)
     login_attempts_inside = models.PositiveSmallIntegerField(default=0)
     status = models.CharField(
-        max_length=1,
+        max_length=2,
         choices=STATUS_CHOICES,
         default=OK
     )

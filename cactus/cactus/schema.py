@@ -11,7 +11,8 @@ from demograficos.schemas import (userProfileSchema,
                                   documentosSchema,
                                   direccionSchema,
                                   locationSchema,
-                                  proveedorSchema)
+                                  proveedorSchema,
+                                  versionappSchema)
 from spei.schemas import listabancosSchema
 from seguros.schemas import asignar_seguro
 from dde.schemas import (createddeSchema, imagenesddeSchema)
@@ -91,6 +92,8 @@ class ObtainToken(JSONWebTokenMutationP):
                     f"Cuenta Bloqueada intenta en: {minutos} {minuto}")
             elif user_.status == "C":
                 return Exception("Cuenta Cancelada")
+            elif user_.status == "BE" or user_.status == "BV":
+                return Exception("Cuenta Bloqueada")
             return ex
 
 
@@ -110,6 +113,7 @@ class Query(transaccionSchema.Query,
             creacionSchema.Query,
             crecimientoSchema.Query,
             arcusbills.Query,
+            versionappSchema.Query,
             graphene.ObjectType):
     pass
 
