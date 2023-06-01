@@ -1,7 +1,8 @@
 from .calculoDeLines import (Prospectos,
                              Depositos)
 from .direccion import Direccion, EntidadFed, TipoDireccion
-from .documentos import DocAdjuntoTipo, DocAdjunto, TipoComprobante
+from .documentos import (DocAdjuntoTipo, DocAdjunto,
+                         TipoComprobante, MotivoRechazoDoc)
 from .instituciones import Institucion, Columnas, SoyClienteDe, BinBanco
 from .solicitud import CatalogoCampos, SolicitudIncompleta, Respuestas
 from .tarjeta import StatusTarjeta, Tarjeta
