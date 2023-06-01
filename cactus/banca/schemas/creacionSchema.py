@@ -82,7 +82,7 @@ class Query(object):
                 registro = Fecha.objects.get(user=user)
                 registro = registro.creacion
                 start = datetime.now()
-                rmonth = registro.month
+                rmonth = registro.month + 1
                 smonth = start.month
                 if start.year != registro.year:
                     aniosdiff = start.year - registro.year
