@@ -3707,7 +3707,7 @@ class CancelacionCuenta(graphene.Mutation):
         except ApiClientError as error:
             print("Error: {}".format(error.text))
             msg_mailchimp = (
-                f"[Error mailchimp] Error al desubscribir al usuario"
+                f"[Error mailchimp] Error al desuscribir al usuario"
                 f"con el email: {user.email}. Error: {error.text}")
             db_logger.warning(msg_mailchimp)
         url = "No hay comprobante disponible"
