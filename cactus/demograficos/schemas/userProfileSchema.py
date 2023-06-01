@@ -3550,10 +3550,10 @@ class BlockAccount(graphene.Mutation):
             if up.check_password(nip):
                 date_blocked = timezone.now()
                 up.blocked_date = date_blocked
-                up.blockedReason = up.BLOCKED
+                up.blockedReason = up.VOLUNTARY_BLOCKED
                 user.Ufecha.bloqueo = date_blocked
-                up.blocked_reason = up.BLOCKED
-                up.status = up.BLOCKED
+                up.blocked_reason = up.VOLUNTARY_BLOCKED
+                up.status = up.VOLUNTARY_BLOCKED
                 up.save()
                 user.Ufecha.save()
                 user.save()
@@ -3586,14 +3586,14 @@ class BlockAccountEmergency(graphene.Mutation):
         up = user.Uprofile
         if not up.check_password(nip):
             raise Exception("El NIP es incorrecto")
-        status = "Cuenta bloqueada"
+        status = "Bloqueada de Emergencia"
         if up.status == 'O':
             date_blocked = timezone.now()
             up.blocked_date = date_blocked
-            up.blockedReason = up.BLOCKED
+            up.blockedReason = up.BLOCKED_EMERGENCY
             user.Ufecha.bloqueo = date_blocked
-            up.blocked_reason = up.BLOCKED
-            up.status = up.BLOCKED
+            up.blocked_reason = up.BLOCKED_EMERGENCY
+            up.status = up.BLOCKED_EMERGENCY
             up.save()
             user.Ufecha.save()
             user.save()

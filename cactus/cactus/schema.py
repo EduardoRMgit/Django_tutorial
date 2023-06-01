@@ -92,6 +92,8 @@ class ObtainToken(JSONWebTokenMutationP):
                     f"Cuenta Bloqueada intenta en: {minutos} {minuto}")
             elif user_.status == "C":
                 return Exception("Cuenta Cancelada")
+            elif user_.status == "BE" or user_.status == "BV":
+                return Exception("Cuenta Bloqueada")
             return ex
 
 
