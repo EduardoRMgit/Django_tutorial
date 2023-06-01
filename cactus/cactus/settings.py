@@ -51,9 +51,9 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'staging.inguz.site',
 
 INSTALLED_APPS = [
     'django_otp',
-	'django_otp.plugins.otp_static',
-	'django_otp.plugins.otp_totp',
-	'two_factor',
+    'django_otp.plugins.otp_static',
+    'django_otp.plugins.otp_totp',
+    'two_factor',
     'rest_framework.authtoken',
     'rest_framework',
     'corsheaders',
@@ -386,3 +386,4 @@ ARCUS_DOMAIN = cluster_secret('arcus-credentials', 'url')
 MAILCHIMP_SERVER = cluster_secret('mailchimp-credentials', 'server')
 MAILCHIMP_KEY = cluster_secret('mailchimp-credentials', 'key')
 MAILCHIMP_ID = cluster_secret('mailchimp-credentials', 'id')
+USERNAME_ZAKI = "5529641640"
