@@ -3698,8 +3698,8 @@ class CancelacionCuenta(graphene.Mutation):
             })
 
             response = client.lists.set_list_member(
-                settings.MAILCHIMP_ID, user.Uprofile.correo_electronico,
-                {"status": "unsubscribed"})
+                settings.MAILCHIMP_ID, user.email,
+                  {"status": "unsubscribed"})
             db_logger.info(
                 f"[Unsubscribed mailchimp]: {user}"
                 f"response: {response}"
@@ -3707,7 +3707,7 @@ class CancelacionCuenta(graphene.Mutation):
         except ApiClientError as error:
             print("Error: {}".format(error.text))
             msg_mailchimp = (
-                f"[Error mailchimp] Error al suscribir al usuario"
+                f"[Error mailchimp] Error al desuscribir al usuario"
                 f"con el email: {user.email}. Error: {error.text}")
             db_logger.warning(msg_mailchimp)
         url = "No hay comprobante disponible"
