@@ -2109,7 +2109,6 @@ class UpdateInfoPersonal(graphene.Mutation):
             user.last_name = last_name_p if last_name_p else user.last_name
             user.email = correo if correo else user.email
             u_profile = UserProfile.objects.filter(user=user)[0]
-            u_profile.correo_electronico = user.email
             u_profile.sexo = gender if gender else u_profile.sexo
             u_profile.apMaterno = (
                 last_name_m if last_name_m else u_profile.apMaterno)
@@ -3552,7 +3551,7 @@ class CancelacionCuenta(graphene.Mutation):
             })
 
             response = client.lists.set_list_member(
-                settings.MAILCHIMP_ID, user.Uprofile.correo_electronico,
+                settings.MAILCHIMP_ID, user.email,
                   {"status": "unsubscribed"})
             db_logger.info(
                 f"[Unsubscribed mailchimp]: {user}"
