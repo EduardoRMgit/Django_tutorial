@@ -260,5 +260,49 @@
     "tipo": "S",
     "salida": true
   }
+},
+{
+  "model": "banca.tipotransaccion",
+  "pk": 200,
+  "fields": {
+    "codigo": "200",
+    "medio": "T",
+    "nombre": "Prestamo Zaki enviada",
+    "tipo": "E",
+    "salida": false
+  }
+},
+{
+  "model": "banca.tipotransaccion",
+  "pk": 201,
+  "fields": {
+    "codigo": "201",
+    "medio": "T",
+    "nombre": "Prestamo Zaki recibida",
+    "tipo": "R",
+    "salida": true
+  }
+},
+{
+  "model": "banca.tipotransaccion",
+  "pk": 202,
+  "fields": {
+    "codigo": "202",
+    "medio": "T",
+    "nombre": "Pago Zaki enviada",
+    "tipo": "E",
+    "salida": false
+  }
+},
+{
+  "model": "banca.tipotransaccion",
+  "pk": 203,
+  "fields": {
+    "codigo": "203",
+    "medio": "T",
+    "nombre": "Pago Zaki recibida",
+    "tipo": "R",
+    "salida": true
+  }
 }
 ]
