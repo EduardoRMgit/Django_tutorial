@@ -3925,6 +3925,10 @@ class AprobacionN3(graphene.Mutation):
                     doc.save()
 
             if upgrade:
+                if perfil.status_perfil == "Aprobado":
+                    return ValueError(
+                        "Error. Perfil transaccional aprobado por otro "
+                        "operador")
                 perfil.status_perfil = "Aprobado"
                 perfil.save()
                 user = perfil.user
@@ -3936,7 +3940,7 @@ class AprobacionN3(graphene.Mutation):
                 perfil.save()
                 return AprobacionN3(validado=False)
         except Exception as ex:
-            msg = f"[Error al validar documetos N3] ID PerfilTD: {id}"
+            msg = f"[Error al validar documetos N3] ID PerfilTD: {id}, {ex}"
             db_logger.warning(msg)
             raise Exception("Error al validar documentos")
 

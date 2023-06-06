@@ -1,11 +1,11 @@
-from cactus.settings import (AWS_ACCESS_KEY_ID,
-                             AWS_SECRET_ACCESS_KEY,
-                             AWS_S3_REGION_NAME,
-                             AWS_STORAGE_BUCKET_NAME)
 import boto3
 
 
 def resigned_url(path):
+    from cactus.settings import (AWS_ACCESS_KEY_ID,
+                                 AWS_SECRET_ACCESS_KEY,
+                                 AWS_S3_REGION_NAME,
+                                 AWS_STORAGE_BUCKET_NAME)
 
     client = boto3.client(
         's3',
