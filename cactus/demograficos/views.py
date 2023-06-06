@@ -226,7 +226,7 @@ class ImageDoc(generics.CreateAPIView):
                                 imagen=nombre_archivo,
                                 imagen_url=url,
                                 validacion_frontal=front,
-                                ruda=path,
+                                ruta=path,
                                 validado=True)
                         elif validacion is False:
                             fotos = DocAdjunto.objects.filter(
