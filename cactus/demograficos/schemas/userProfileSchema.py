@@ -84,6 +84,7 @@ from pld.utils.customerpld import create_pld_customer
 
 from demograficos.utils.registermail import RegistrarMail
 from demograficos.utils.validatepassword import password_validation
+from demograficos.utils.resignurl import resigned_url
 
 db_logger = logging.getLogger("db")
 
@@ -316,6 +317,7 @@ class BlockDetails(graphene.ObjectType):
 class DocumentoType(graphene.ObjectType):
     id = graphene.Int()
     url = graphene.String()
+    tipo = graphene.String()
     validado = graphene.Boolean()
     validado_operador = graphene.Boolean()
     motivo_rechazo = graphene.String()
@@ -1645,9 +1647,11 @@ class Query(graphene.ObjectType):
             docs = DocAdjunto.objects.filter(user=perfil.user)
             documentos = []
             for doc in docs:
+                url = resigned_url(doc.ruta)
                 documentos_dicc = {}
                 documentos_dicc['id'] = doc.id
-                documentos_dicc['url'] = doc.imagen_url
+                documentos_dicc['url'] = url
+                documentos_dicc['tipo'] = doc.tipo.tipo
                 documentos_dicc['validado'] = doc.validado
                 documentos_dicc['validado_operador'] = doc.validado_operador
                 documentos_dicc['motivo_rechazo'] = doc.motivo_rechazo
@@ -1690,9 +1694,11 @@ class Query(graphene.ObjectType):
         docs = DocAdjunto.objects.filter(user=perfil.user)
         documentos = []
         for doc in docs:
+            url = resigned_url(doc.ruta)
             documentos_dicc = {}
             documentos_dicc['id'] = doc.id
-            documentos_dicc['url'] = doc.imagen_url
+            documentos_dicc['url'] = url
+            documentos_dicc['tipo'] = doc.tipo.tipo
             documentos_dicc['validado'] = doc.validado
             documentos_dicc['validado_operador'] = doc.validado_operador
             documentos_dicc['motivo_rechazo'] = doc.motivo_rechazo

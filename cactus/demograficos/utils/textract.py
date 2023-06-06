@@ -4,13 +4,15 @@ import boto3
 
 
 def textract_ine(img):
-    from cactus.settings import AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY
+    from cactus.settings import (AWS_ACCESS_KEY_ID,
+                                 AWS_SECRET_ACCESS_KEY,
+                                 AWS_S3_REGION_NAME)
 
     client = boto3.client(
         'textract',
         aws_access_key_id=AWS_ACCESS_KEY_ID,
         aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
-        region_name='us-east-1'
+        region_name=AWS_S3_REGION_NAME
     )
 
     response = client.detect_document_text(
@@ -65,13 +67,15 @@ def validate_ine(extract):
 
 
 def textract_ine_reverso(img):
-    from cactus.settings import AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY
+    from cactus.settings import (AWS_ACCESS_KEY_ID,
+                                 AWS_SECRET_ACCESS_KEY,
+                                 AWS_S3_REGION_NAME)
 
     client = boto3.client(
         'textract',
         aws_access_key_id=AWS_ACCESS_KEY_ID,
         aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
-        region_name='us-east-1'
+        region_name=AWS_S3_REGION_NAME
     )
 
     response = client.detect_document_text(
@@ -121,13 +125,15 @@ def validate_ine_reverso(extract_reverso):
 
 
 def extract_comprobantes(img):
-    from cactus.settings import AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY
+    from cactus.settings import (AWS_ACCESS_KEY_ID,
+                                 AWS_SECRET_ACCESS_KEY,
+                                 AWS_S3_REGION_NAME)
 
     client = boto3.client(
         'textract',
         aws_access_key_id=AWS_ACCESS_KEY_ID,
         aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
-        region_name="us-east-1"
+        region_name=AWS_S3_REGION_NAME
     )
 
     response = client.detect_document_text(
