@@ -15,6 +15,8 @@ from demograficos.utils.comprobantes import (validate_cfe,
                                              validate_telmex,
                                              validate_izzi,
                                              validate_total)
+from PIL import Image
+from io import BytesIO
 
 import boto3
 from django.conf import settings
@@ -138,6 +140,18 @@ class ImageDoc(generics.CreateAPIView):
         doctipo = DocAdjuntoTipo.objects.get(id=tipo)
         url = ""
         id = 0
+        image = request.FILES['imagen']
+        img = Image.open(image, mode='r')
+
+        max_size = (1920, 1080)
+        img.thumbnail(max_size, Image.ANTIALIAS)
+
+        compressed_image = BytesIO()
+
+        img.save(compressed_image, format='PNG')
+        compressed_image.seek(0)
+        imagen = compressed_image
+
         try:
             if request.data['tipo_comprobante'] != '':
                 tipo_comprobante = request.data['tipo_comprobante']
@@ -303,4 +317,3 @@ class ImageDoc(generics.CreateAPIView):
             'tipo': request.data['tipo'],
             'imagen': url},
             status=status.HTTP_200_OK)
-#
