@@ -1647,10 +1647,13 @@ class Query(graphene.ObjectType):
             docs = DocAdjunto.objects.filter(user=perfil.user)
             documentos = []
             for doc in docs:
-                url = resigned_url(doc.ruta)
                 documentos_dicc = {}
                 documentos_dicc['id'] = doc.id
-                documentos_dicc['url'] = url
+                if doc.ruta is not None:
+                    url = resigned_url(doc.ruta)
+                    documentos_dicc['url'] = url
+                else:
+                    documentos_dicc['url'] = doc.imagen_url
                 documentos_dicc['tipo'] = doc.tipo.tipo
                 documentos_dicc['validado'] = doc.validado
                 documentos_dicc['validado_operador'] = doc.validado_operador
@@ -1694,10 +1697,13 @@ class Query(graphene.ObjectType):
         docs = DocAdjunto.objects.filter(user=perfil.user)
         documentos = []
         for doc in docs:
-            url = resigned_url(doc.ruta)
             documentos_dicc = {}
             documentos_dicc['id'] = doc.id
-            documentos_dicc['url'] = url
+            if doc.ruta is not None:
+                url = resigned_url(doc.ruta)
+                documentos_dicc['url'] = url
+            else:
+                documentos_dicc['url'] = doc.imagen_url
             documentos_dicc['tipo'] = doc.tipo.tipo
             documentos_dicc['validado'] = doc.validado
             documentos_dicc['validado_operador'] = doc.validado_operador
