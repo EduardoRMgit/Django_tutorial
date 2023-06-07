@@ -162,7 +162,8 @@ CORS_ORIGIN_WHITELIST = ['http://localhost:5000',
                          'http://10.5.1.1',
                          'http://10.5.1.1:8000',
                          'http://inguzmx.com',
-                         'https://inguzmx.com', ]
+                         'https://inguzmx.com',
+                         'http://10.8.0.1:3000', ]
 
 
 ROOT_URLCONF = 'cactus.urls'

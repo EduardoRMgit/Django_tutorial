@@ -59,7 +59,7 @@ class DocAdjunto(models.Model):
         null=True,
         blank=True
     )
-    ruta = models.CharField(max_length=50, blank=True, null=True)
+    ruta = models.CharField(max_length=255, blank=True, null=True)
     tipo = models.ForeignKey(
         DocAdjuntoTipo,
         related_name='tipo_documento',

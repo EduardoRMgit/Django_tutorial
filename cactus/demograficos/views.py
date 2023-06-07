@@ -27,14 +27,16 @@ db_logger = logging.getLogger('db')
 
 
 def get_file_url(archivo, file_path):
-    from cactus.settings import AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY
+    from cactus.settings import (AWS_ACCESS_KEY_ID,
+                                 AWS_SECRET_ACCESS_KEY,
+                                 AWS_S3_REGION_NAME)
 
     client = boto3.client(
         's3',
         config=boto3.session.Config(signature_version='s3v4'),
         aws_access_key_id=AWS_ACCESS_KEY_ID,
         aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
-        region_name="us-east-1")
+        region_name=AWS_S3_REGION_NAME)
     client.upload_fileobj(archivo,
                           settings.AWS_STORAGE_BUCKET_NAME,
                           file_path)
@@ -163,6 +165,7 @@ class ImageDoc(generics.CreateAPIView):
                             tipo_comprobante=tipocomprobante,
                             imagen=nombre_archivo,
                             imagen_url=url,
+                            ruta=path,
                             validado=True)
                     elif validacion is False:
                         fotos = DocAdjunto.objects.filter(
@@ -173,7 +176,8 @@ class ImageDoc(generics.CreateAPIView):
                                 tipo=doctipo,
                                 tipo_comprobante=tipocomprobante,
                                 imagen=nombre_archivo,
-                                imagen_url=url)
+                                imagen_url=url,
+                                ruta=path)
                             return Response(
                                 {
                                     'Mensaje': "Error al validar documento "
@@ -192,7 +196,8 @@ class ImageDoc(generics.CreateAPIView):
                             tipo=doctipo,
                             tipo_comprobante=tipocomprobante,
                             imagen=nombre_archivo,
-                            imagen_url=url)
+                            imagen_url=url,
+                            ruta=path)
                 else:
                     a = DocAdjunto.objects.create(
                         user=user_,
@@ -221,6 +226,7 @@ class ImageDoc(generics.CreateAPIView):
                                 imagen=nombre_archivo,
                                 imagen_url=url,
                                 validacion_frontal=front,
+                                ruta=path,
                                 validado=True)
                         elif validacion is False:
                             fotos = DocAdjunto.objects.filter(
@@ -230,7 +236,8 @@ class ImageDoc(generics.CreateAPIView):
                                     user=user_,
                                     tipo=doctipo,
                                     imagen=nombre_archivo,
-                                    imagen_url=url)
+                                    imagen_url=url,
+                                    ruta=path)
                                 return Response(
                                     {
                                         'Mensaje': "Error al validar "
@@ -254,6 +261,7 @@ class ImageDoc(generics.CreateAPIView):
                                 tipo=doctipo,
                                 imagen=nombre_archivo,
                                 imagen_url=url,
+                                ruta=path,
                                 validado=True)
                         elif validacion is False:
                             fotos = DocAdjunto.objects.filter(
@@ -263,7 +271,8 @@ class ImageDoc(generics.CreateAPIView):
                                     user=user_,
                                     tipo=doctipo,
                                     imagen=nombre_archivo,
-                                    imagen_url=url)
+                                    imagen_url=url,
+                                    ruta=path)
                                 return Response(
                                     {
                                         'Mensaje': "Error al validar "
@@ -303,4 +312,3 @@ class ImageDoc(generics.CreateAPIView):
             'tipo': request.data['tipo'],
             'imagen': url},
             status=status.HTTP_200_OK)
-#
