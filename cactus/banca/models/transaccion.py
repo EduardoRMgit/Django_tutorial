@@ -6,7 +6,7 @@ from django.db.models.signals import pre_save, post_save
 from django.core.validators import MinValueValidator
 from decimal import Decimal
 
-# from pld.utils.movementspld import create_pld_movement
+from pld.utils.movementspld import create_pld_movement
 
 from .catalogos import (ErroresTransaccion,
                         TipoTransaccion)
