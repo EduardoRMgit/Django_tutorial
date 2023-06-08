@@ -4,6 +4,8 @@ import graphene
 import datetime
 import json
 import os
+import urllib.parse
+
 
 import mailchimp_marketing as MailchimpMarketing
 from mailchimp_marketing.api_client import ApiClientError
@@ -1646,11 +1648,25 @@ class Query(graphene.ObjectType):
 
             docs = DocAdjunto.objects.filter(user=perfil.user)
             documentos = []
+            dominio_aws = "s3.amazonaws.com"
             for doc in docs:
-                url = resigned_url(doc.ruta)
                 documentos_dicc = {}
                 documentos_dicc['id'] = doc.id
-                documentos_dicc['url'] = url
+                if doc.imagen_url is not None:
+                    url = doc.imagen_url
+                    parsed_url = urllib.parse.urlparse(url)
+                    path = parsed_url.path
+                    dominio = parsed_url.netloc
+                    decoded_path = urllib.parse.unquote(path)
+                    decoded_path = decoded_path.lstrip("/")
+                    if dominio == dominio_aws or dominio.endswith(
+                        "." + dominio_aws):
+                        nueva_url = resigned_url(decoded_path)
+                        documentos_dicc['url'] = nueva_url
+                    else:
+                        documentos_dicc['url'] = url
+                else:
+                    documentos_dicc['url'] = ''
                 documentos_dicc['tipo'] = doc.tipo.tipo
                 documentos_dicc['validado'] = doc.validado
                 documentos_dicc['validado_operador'] = doc.validado_operador
@@ -1693,11 +1709,25 @@ class Query(graphene.ObjectType):
 
         docs = DocAdjunto.objects.filter(user=perfil.user)
         documentos = []
+        dominio_aws = "s3.amazonaws.com"
         for doc in docs:
-            url = resigned_url(doc.ruta)
             documentos_dicc = {}
             documentos_dicc['id'] = doc.id
-            documentos_dicc['url'] = url
+            if doc.imagen_url is not None:
+                url = doc.imagen_url
+                parsed_url = urllib.parse.urlparse(url)
+                path = parsed_url.path
+                dominio = parsed_url.netloc
+                decoded_path = urllib.parse.unquote(path)
+                decoded_path = decoded_path.lstrip("/")
+                if dominio == dominio_aws or dominio.endswith(
+                    "." + dominio_aws):
+                    nueva_url = resigned_url(decoded_path)
+                    documentos_dicc['url'] = nueva_url
+                else:
+                    documentos_dicc['url'] = url
+            else:
+                documentos_dicc['url'] = ''
             documentos_dicc['tipo'] = doc.tipo.tipo
             documentos_dicc['validado'] = doc.validado
             documentos_dicc['validado_operador'] = doc.validado_operador
