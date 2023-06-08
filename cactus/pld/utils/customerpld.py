@@ -45,7 +45,7 @@ def create_pld_customer(user):
             'rfc': user.Uprofile.rfc,
             'curp': user.Uprofile.curp,
             'fecha_nacimiento': user.Uprofile.fecha_nacimiento.strftime(
-                "Y-%m-%d"),
+                "%Y-%m-%d"),
             'nacionalidad': user.Uprofile.nacionalidad,
             'pais_nacimiento': user.Uprofile.nacionalidad,
             'actividad': user.Uprofile.ocupacion,
@@ -75,7 +75,7 @@ def create_pld_customer(user):
 
         if res2.status_code != 200:
             if content_customer['response_api']['message'] == \
-                                'This custumer is concurrent delete':
+                    'This custumer is concurrent delete':
                 body = {
                     'usr': cluster_secret('ubcubo-credentials', 'user'),
                     'pass': cluster_secret('ubcubo-credentials', 'password'),
@@ -89,7 +89,7 @@ def create_pld_customer(user):
 
                 content_activate = json.loads(res3.content)
                 if content_activate['response_api']['message'] == \
-                                    'The customer has been reactivated':
+                        'The customer has been reactivated':
                     Customer.objects.create(
                         id_entidad=cluster_secret(
                             'ubcubo-credentials', 'entity'),
@@ -142,7 +142,7 @@ def create_pld_customer(user):
             return
 
         if not content_customer['response_api']['message'] == \
-                            'THE CURP IS ALREADY REGISTERED':
+                'THE CURP IS ALREADY REGISTERED':
             Customer.objects.create(
                 id_entidad=cluster_secret('ubcubo-credentials', 'entity'),
                 tipo=1,
