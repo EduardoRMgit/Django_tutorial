@@ -71,6 +71,9 @@ def create_pld_movement(trans):
             headers=headers
         )
 
+        db_logger.debug(
+            f"[Create PLD movement]: {trans.user} resp: {res2.__dict__}")
+
         content_movement = json.loads(res2.content)
 
         if res2.status_code != 200:
