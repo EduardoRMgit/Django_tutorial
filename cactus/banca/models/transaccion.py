@@ -1,3 +1,7 @@
+import logging
+
+from threading import Thread
+
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
@@ -6,11 +10,14 @@ from django.db.models.signals import pre_save, post_save
 from django.core.validators import MinValueValidator
 from decimal import Decimal
 
-# from pld.utils.movementspld import create_pld_movement
+from pld.utils.movementspld import create_pld_movement
 
 from .catalogos import (ErroresTransaccion,
                         TipoTransaccion)
 from banca.models import ComisioneSTP
+
+
+db_logger = logging.getLogger('db')
 
 
 class StatusTrans(models.Model):
@@ -93,17 +100,39 @@ def succesful_transaction_notCreated(sender, instance, **kwargs):
         anterior = Transaccion.objects.get(id=instance.id)
         if (not anterior.statusTrans == instance.statusTrans) and instance.statusTrans == exito:  # noqa: E501
             tipo_trans = int(instance.tipoTrans.codigo)
-            # create_pld_movement(instance)
+
+            db_logger.info(
+                f"[succesful_transaction_notCreated] ThreadINIT {instance.id}")
+
+            def __create_pld_movement():
+                create_pld_movement(instance)
+            dmn = Thread(target=__create_pld_movement,
+                         daemon=True, name="pldmovement")
+            dmn.start()
+            db_logger.info(
+                f"[succesful_transaction_notCreated] waitThread {instance.id}")
+
             if tipo_trans in [1, 2, 3, 6, 18, 19]:
                 balanza(instance, tipo_trans)
 
 
-@receiver(post_save, sender=Transaccion)
+@ receiver(post_save, sender=Transaccion)
 def succesful_transaction_created(sender, instance, created, **kwargs):
     from contabilidad.balanza import balanza
     exito = StatusTrans.objects.get(nombre="exito")
     if created and instance.statusTrans == exito:
-        # create_pld_movement(instance)
+
+        db_logger.info(
+            f"[succesful_transaction_created] Thread INIT {instance.id}")
+
+        def __create_pld_movement():
+            create_pld_movement(instance)
+        dmn = Thread(target=__create_pld_movement,
+                     daemon=True, name="pldmovement")
+        dmn.start()
+        db_logger.info(
+            f"[succesful_transaction_created] wait Thread {instance.id}")
+
         tipo_trans = int(instance.tipoTrans.codigo)
         if tipo_trans in [1, 2, 3, 6, 18, 19]:
             balanza(instance, tipo_trans)
