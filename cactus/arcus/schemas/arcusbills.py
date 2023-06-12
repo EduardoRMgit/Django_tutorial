@@ -300,7 +300,7 @@ class ArcusPay(graphene.Mutation):
                 numero_cuenta=response["service_number"],
                 empresa_servicio=empresa
             )
-        if status.nombre == "exito" and saldo:
+        if status.nombre == "exito" and saldo and len(q) == 0:
             user.Uprofile.saldo_cuenta -= round(float(monto), 2)
             user.Uprofile.save()
         msg_arcus = f"[Pago Exitoso Arcus] Pago realizado exitosamente " \
