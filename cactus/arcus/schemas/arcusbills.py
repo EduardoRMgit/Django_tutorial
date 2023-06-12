@@ -11,7 +11,7 @@ import json
 import uuid
 from django.db.models import Q
 from collections import Counter
-from datetime import datetime
+from datetime import datetime, timedelta
 import logging
 
 
@@ -197,9 +197,30 @@ class ArcusPay(graphene.Mutation):
             saldo = True
         else:
             raise Exception("Saldo insuficiente")
+        now = datetime.now()
+        yesterday = now - timedelta(hours=24)
         try:
-            uid = str(uuid.uuid4())
-            headers = headers_arcus(uid)
+            if tipo == "S":
+                q = PagosArcus.objects.filter(
+                        Q(fecha_creacion__gte=yesterday) & Q(
+                            fecha_creacion__lte=now) & Q(
+                                empresa_servicio__sku_id=company_sku) & Q(
+                                    numero_cuenta=account_number) & Q(
+                                            monto=monto))
+            elif tipo == "R":
+                q = PagosArcus.objects.filter(
+                        Q(fecha_creacion__gte=yesterday) & Q(
+                            fecha_creacion__lte=now) & Q(
+                                empresa_recargas__sku_id=company_sku) & Q(
+                                    numero_cuenta=account_number) & Q(
+                                            monto=monto))
+            if q is not None:
+                try:
+                    uid = q.last().id_externo
+                    headers = headers_arcus(uid)
+                except Exception:
+                    uid = str(uuid.uuid4())
+                    headers = headers_arcus(uid)
             url = f"{settings.ARCUS_DOMAIN}/pay"
             data = {}
             data["company_sku"] = company_sku
