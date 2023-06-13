@@ -1,5 +1,5 @@
 import calendar
-from datetime import datetime, timedelta
+from datetime import timedelta
 from weasyprint import HTML
 from demograficos.models import Fecha
 
