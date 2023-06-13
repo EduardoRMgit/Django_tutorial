@@ -95,7 +95,7 @@ class Query(object):
                 else:
                     mes = smonth - rmonth
                     if mes == 0:
-                        mes = 1
+                        return listf
                 for x in range(0, mes):
                     dicc = {}
                     end = start - timedelta(days=1)
