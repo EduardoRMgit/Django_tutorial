@@ -5,6 +5,7 @@ from arcus.models import ServicesArcus, RecargasArcus, PagosArcus
 from banca.models import Transaccion, StatusTrans, TipoTransaccion
 from arcus.utils.autharcus import headers_arcus
 from spei.stpTools import randomString
+from arcus.utils.erroresArcus import mensajes_error
 import requests
 from django.conf import settings
 import json
@@ -238,6 +239,8 @@ class ArcusPay(graphene.Mutation):
             msg_arcus = f"[Error Arcus] Respuesta arcus: {response_error} " \
                         f"peticion: {data} del usuario: {user}"
             db_logger.error(msg_arcus)
+            mensaje = mensajes_error(response_error)
+            raise Exception(mensaje)
         response = (json.loads(response.content.decode("utf-8")))
         fecha = datetime.strptime(response["processed_at"], '%Y-%m-%d').date()
         hora = datetime.strptime(response["process_at_time"], '%H:%M').time()
