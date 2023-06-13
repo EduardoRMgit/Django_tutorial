@@ -1,6 +1,7 @@
 import calendar
-from datetime import datetime
+from datetime import datetime, timedelta
 from weasyprint import HTML
+from demograficos.models import Fecha
 
 from django.conf import settings
 from django.utils import timezone
@@ -234,7 +235,13 @@ class UrlEdoCuenta(graphene.Mutation):
                 date_to.year > timezone.now().year):
             raise GraphQLError("End date cannot be more than " +
                                "present month")
-
+        registro = Fecha.objects.get(user=user)
+        try:
+            date_from = date_from.replace(day=registro.creacion.day)
+        except Exception:
+            date_from = date_from.replace(
+                day=calendar.monthrange(date_to.year, date_to.month)[1])
+        date_to = date_from + timedelta(days=30)
         last_day_of_month = calendar.monthrange(date_to.year, date_to.month)[1]
         fecha_dt = (
             str(last_day_of_month) + '/' + str(date_to.month) + '/' + str(date_to.year))  # noqa
