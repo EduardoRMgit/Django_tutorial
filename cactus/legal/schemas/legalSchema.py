@@ -238,12 +238,12 @@ class UrlEdoCuenta(graphene.Mutation):
         registro = Fecha.objects.get(user=user)
         last_day_of_month = calendar.monthrange(date_to.year, date_to.month)[1]
         try:
-            date_from = date_from.replace(day=registro.creacion.day)
+            date_to = date_to.replace(day=registro.creacion.day)
         except Exception:
-            date_from = date_from.replace(
+            date_to = date_to.replace(
                 day=last_day_of_month)
-        date_to = date_from - timedelta(days=30)
-        cut_off_date = date_from
+        date_from = date_to - timedelta(days=30)
+        cut_off_date = date_to
 
         month_period = date_from.month
         months = ['Enero', 'Febrero',
