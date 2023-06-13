@@ -236,16 +236,14 @@ class UrlEdoCuenta(graphene.Mutation):
             raise GraphQLError("End date cannot be more than " +
                                "present month")
         registro = Fecha.objects.get(user=user)
+        last_day_of_month = calendar.monthrange(date_to.year, date_to.month)[1]
         try:
             date_from = date_from.replace(day=registro.creacion.day)
         except Exception:
             date_from = date_from.replace(
-                day=calendar.monthrange(date_to.year, date_to.month)[1])
-        date_to = date_from + timedelta(days=30)
-        last_day_of_month = calendar.monthrange(date_to.year, date_to.month)[1]
-        fecha_dt = (
-            str(last_day_of_month) + '/' + str(date_to.month) + '/' + str(date_to.year))  # noqa
-        cut_off_date = datetime.strptime(fecha_dt, '%d/%m/%Y')
+                day=last_day_of_month)
+        date_to = date_from - timedelta(days=30)
+        cut_off_date = date_from
 
         month_period = date_from.month
         months = ['Enero', 'Febrero',
