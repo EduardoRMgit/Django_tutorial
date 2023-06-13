@@ -2,6 +2,11 @@
 
 def mensajes_error(requests):
 
+    default_msg = ('Error en la solicitud, volver a intentar')
+
+    if 'code' not in requests:
+        mensaje = default_msg
+
     if requests['code'] == 'R100':
         mensaje = ("La solicitud no ha podido ser procesada, "
                    "intenta de nuevo en unas horas.")
@@ -31,4 +36,6 @@ def mensajes_error(requests):
     elif requests['code'] == 'R99':
         mensaje = ('La solicitud no ha podido ser procesada, intenta '
                    'de nuevo en unas horas')
+    else:
+        mensaje = default_msg
     return mensaje
