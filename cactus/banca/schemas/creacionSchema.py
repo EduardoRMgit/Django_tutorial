@@ -84,6 +84,8 @@ class Query(object):
                 start = datetime.now()
                 rmonth = registro.month
                 smonth = start.month
+                if smonth == rmonth:
+                    return listf
                 if start.year != registro.year:
                     aniosdiff = start.year - registro.year
                     if aniosdiff > 1:
