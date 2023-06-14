@@ -230,7 +230,16 @@ class ArcusPay(graphene.Mutation):
             data["currency"] = "MXN"
             data["external_id"] = uid
             data["payment_method"] = "DC"
-            response = requests.post(url=url, headers=headers, json=data)
+            try:
+                response = requests.post(
+                    url=url,
+                    headers=headers,
+                    json=data,
+                    timeout=5)
+            except Exception as t:
+                msg_arcus = f"[TimeOut Arcus] Tiempo de respuesta excedido:" \
+                            f" {t}"
+                db_logger.error(msg_arcus)
 
         except Exception as error:
             raise Exception("Error en la peticion", error)
