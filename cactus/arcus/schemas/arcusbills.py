@@ -260,16 +260,17 @@ class ArcusPay(graphene.Mutation):
         except Exception:
             raise Exception("Empresa no existe")
         concepto = response["ticket_text"]
-        main_trans = Transaccion.objects.create(
-            user=user,
-            fechaValor=fecha,
-            monto=monto,
-            statusTrans=status,
-            tipoTrans=_tipo,
-            concepto=concepto,
-            claveRastreo=rastreo
-        )
-        if tipo == "R":
+        if len(q) == 0:
+            main_trans = Transaccion.objects.create(
+                user=user,
+                fechaValor=fecha,
+                monto=monto,
+                statusTrans=status,
+                tipoTrans=_tipo,
+                concepto=concepto,
+                claveRastreo=rastreo
+            )
+        if tipo == "R" and len(q) == 0:
             pay = PagosArcus.objects.create(
                 tipo=tipo,
                 usuario=user,
@@ -286,7 +287,7 @@ class ArcusPay(graphene.Mutation):
                 numero_cuenta=response["service_number"],
                 empresa_recargas=empresa
             )
-        if tipo == "S":
+        if tipo == "S" and len(q) == 0:
             pay = PagosArcus.objects.create(
                 tipo=tipo,
                 usuario=user,
@@ -303,6 +304,8 @@ class ArcusPay(graphene.Mutation):
                 numero_cuenta=response["service_number"],
                 empresa_servicio=empresa
             )
+        else:
+             pay = q.last()
         if status.nombre == "exito" and saldo and len(q) == 0:
             user.Uprofile.saldo_cuenta -= round(float(monto), 2)
             user.Uprofile.save()
