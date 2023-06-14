@@ -7,6 +7,7 @@ chmod 400 renapo.pem
 # host name for stp
 echo "192.168.66.211    prod.stpmex.com" >> /etc/hosts
 echo "192.168.87.187    webs.curp.gob.mx" >> /etc/hosts
+echo "192.168.64.205    api.arcusapi.com" >> /etc/hosts
 
 echo "|1|dGBySoddqblhiE3IFP0fIiEQBjg=|/2iqmk6+MmtFjyksiNjvJZ1F8Fw= ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBC+aYJ8hwj6iX2fjVCbev5ziOKryfzMmQ1gdweKDIIuPOnS2/O/ztqxOzOI7AB2SSk2bBNVbg+4aNV6DIAaNalU=" >> /root/.ssh/known_hosts
 echo "|1|osZXqV5SdNpvOBUK7WzOFkd4CtA=|dVBPJtWvxEOjlE+RY8Ub8WEDXOs= ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBGhnMcYpnHXN1eLsdJYeVeQCEStBC5pCXoi7x6nufhqHL8LQOK5Ak5T8UBv/EhhOCdNLbkgx8VrOwQPv5+nXsfk=" >> /root/.ssh/known_hosts
@@ -16,7 +17,7 @@ echo "|1|lyRk8O8I9dkbEx6LPOlPIxbZ6Ys=|Ukp/nnqO4n6/X2NxFPDCj0OYdP4= ecdsa-sha2-ni
 chmod 400 neto.pem
 # send current ip to scotia proxy
 if [[ $SITE == 'stage' ]] ; then
-    cat /etc/hosts | grep cactus-$SITE > my_ip 
+    cat /etc/hosts | grep cactus-$SITE > my_ip
     # scotia
     scp -i neto.pem my_ip ubuntu@192.168.93.229:stage_ip
     # stp
