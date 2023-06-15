@@ -92,6 +92,6 @@ class Query(object):
             tmp_month = 1
 
         if creation_date.day >= now.day:
-            return months[-6:-1]
+            return months[-7:-1]
 
         return months[-6:]
