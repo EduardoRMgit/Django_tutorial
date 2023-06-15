@@ -1,5 +1,5 @@
 import calendar
-from datetime import datetime, timedelta
+from datetime import timedelta
 from weasyprint import HTML
 from demograficos.models import Fecha
 
@@ -236,16 +236,14 @@ class UrlEdoCuenta(graphene.Mutation):
             raise GraphQLError("End date cannot be more than " +
                                "present month")
         registro = Fecha.objects.get(user=user)
-        try:
-            date_from = date_from.replace(day=registro.creacion.day)
-        except Exception:
-            date_from = date_from.replace(
-                day=calendar.monthrange(date_to.year, date_to.month)[1])
-        date_to = date_from + timedelta(days=30)
         last_day_of_month = calendar.monthrange(date_to.year, date_to.month)[1]
-        fecha_dt = (
-            str(last_day_of_month) + '/' + str(date_to.month) + '/' + str(date_to.year))  # noqa
-        cut_off_date = datetime.strptime(fecha_dt, '%d/%m/%Y')
+        try:
+            date_to = date_to.replace(day=registro.creacion.day)
+        except Exception:
+            date_to = date_to.replace(
+                day=last_day_of_month)
+        date_from = date_to - timedelta(days=30)
+        cut_off_date = date_to
 
         month_period = date_from.month
         months = ['Enero', 'Febrero',

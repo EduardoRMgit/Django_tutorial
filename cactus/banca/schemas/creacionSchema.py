@@ -1,7 +1,6 @@
 import graphene
 from graphql_jwt.decorators import login_required
-from demograficos.models import Fecha
-from datetime import datetime, timedelta
+from datetime import datetime
 
 
 class HistoryType(graphene.ObjectType):
@@ -75,35 +74,24 @@ class Query(object):
 
     @login_required
     def resolve_history_trans(root, info, **kwargs):
-        try:
-            user = info.context.user
-            if not user.is_anonymous:
-                listf = []
-                registro = Fecha.objects.get(user=user)
-                registro = registro.creacion
-                start = datetime.now()
-                rmonth = registro.month
-                smonth = start.month
-                if start.year != registro.year:
-                    aniosdiff = start.year - registro.year
-                    if aniosdiff > 1:
-                        mes = 6
-                    else:
-                        b = rmonth + 5
-                        mes = b - smonth
 
-                else:
-                    mes = smonth - rmonth
-                    if mes == 0:
-                        mes = 1
-                for x in range(0, mes):
-                    dicc = {}
-                    end = start - timedelta(days=1)
-                    start = end.replace(day=1)
-                    dicc['month'] = str(start.date().month).zfill(2)
-                    dicc['year'] = start.date().year
-                    listf.append(dicc)
-                listf = reversed(listf)
-                return listf
-        except Exception:
-            raise Exception('Bad Credentials')
+        user = info.context.user
+        if user.is_anonymous:
+            raise Exception('Usuario no válido')
+
+        now = datetime.now()
+        creation_date = user.Ufecha.creacion
+        tmp_month = creation_date.month
+
+        months = []
+        for year in range(creation_date.year, now.year+1):
+            while ((year < now.year and tmp_month <= 12) or
+                   tmp_month <= now.month):
+                months.append({'month': tmp_month, 'year': year})
+                tmp_month += 1
+            tmp_month = 1
+
+        if creation_date.day >= now.day:
+            return months[-6:-1]
+
+        return months[-6:]
