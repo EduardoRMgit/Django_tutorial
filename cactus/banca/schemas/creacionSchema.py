@@ -86,7 +86,7 @@ class Query(object):
         months = []
         for year in range(creation_date.year, now.year+1):
             while ((year < now.year and tmp_month <= 12) or
-                   tmp_month <= now.month):
+                   tmp_month < now.month):
                 months.append({'month': tmp_month, 'year': year})
                 tmp_month += 1
             tmp_month = 1
