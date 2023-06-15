@@ -1,7 +1,6 @@
 import graphene
 from graphql_jwt.decorators import login_required
-from demograficos.models import Fecha
-from datetime import datetime, timedelta
+from datetime import datetime
 
 
 class HistoryType(graphene.ObjectType):
