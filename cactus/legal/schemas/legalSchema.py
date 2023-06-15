@@ -241,7 +241,7 @@ class UrlEdoCuenta(graphene.Mutation):
         except Exception:
             date_to = date_to.replace(
                 day=last_day_of_month)
-        date_from = date_to - timedelta(days=30)
+        date_from = date_to - timedelta(month=1)
         cut_off_date = date_to
 
         month_period = date_from.month
