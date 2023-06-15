@@ -1,5 +1,4 @@
 import calendar
-from datetime import timedelta
 from weasyprint import HTML
 
 from django.conf import settings
@@ -241,7 +240,7 @@ class UrlEdoCuenta(graphene.Mutation):
         except Exception:
             date_to = date_to.replace(
                 day=last_day_of_month)
-        date_from = date_to - timedelta(month=1)
+        date_from = date_to.replace(month=date_to.month-1)
         cut_off_date = date_to
 
         month_period = date_from.month
