@@ -1619,7 +1619,9 @@ class Query(graphene.ObjectType):
     @login_required
     def resolve_all_perfildeclarado_docs(self, info, **kwargs):
 
-        perfiles = PerfilTransaccionalDeclarado.objects.all()
+        perfiles = PerfilTransaccionalDeclarado.objects.all().exclude(Q(
+                status_perfil='Aprobado') | Q(
+                        status_perfil='Rechazado'))
         list = []
         for perfil in perfiles:
             lista_perfiles = {}
