@@ -1689,8 +1689,8 @@ class Query(graphene.ObjectType):
         perfil_dicc['status'] = perfil.status_perfil
         perfil_dicc['fecha_creacion'] = perfil.fecha_creacion
         perfil_dicc['nombre'] = perfil.user.first_name
-        lista_perfiles['apellido_materno'] = perfil.user.Uprofile.apMaterno
-        lista_perfiles['apellido_paterno'] = perfil.user.last_name
+        perfil_dicc['apellido_materno'] = perfil.user.Uprofile.apMaterno
+        perfil_dicc['apellido_paterno'] = perfil.user.last_name
         perfil_dicc['curp'] = perfil.user.Uprofile.curp
         perfil_dicc['email'] = perfil.user.email
         perfil_dicc['fecha_nacimiento'
