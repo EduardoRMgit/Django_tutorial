@@ -389,3 +389,6 @@ MAILCHIMP_SERVER = cluster_secret('mailchimp-credentials', 'server')
 MAILCHIMP_KEY = cluster_secret('mailchimp-credentials', 'key')
 MAILCHIMP_ID = cluster_secret('mailchimp-credentials', 'id')
 USERNAME_ZAKI = "5529641640"
+ARCUS_HOST = cluster_secret('arcus-sftp-credentials', 'host')
+ARCUS_USER = cluster_secret('arcus-sftp-credentials', 'user')
+ARCUS_PASS = cluster_secret('arcus-sftp-credentials', 'pass')
