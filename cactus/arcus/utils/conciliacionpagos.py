@@ -25,6 +25,7 @@ def conciliacion_arcus_pagos():
         document += f"FOOTER|{register_count}"
         with open(f"inguz_billpay_mx_{header_date}.txt", "w") as file:
             file.write(document)
+            contenido = document
 
     else:
         header_date = today.strftime("%Y/%m/%d").replace('/', '')
@@ -32,3 +33,6 @@ def conciliacion_arcus_pagos():
         document += "FOOTER|0"
         with open(f"inguz_billpay_mx_{header_date}.txt", "w") as file:
             file.write(document)
+            contenido = document
+
+    return file, contenido
