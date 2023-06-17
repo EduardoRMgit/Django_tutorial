@@ -137,7 +137,13 @@ class Query(object):
             data = {}
             data["company_sku"] = empresa
             data["service_number"] = referencia
-            response = requests.post(url=url, headers=headers, json=data)
+            try:
+                response = requests.post(
+                    url=url, headers=headers, json=data, timeout=5)
+            except Exception as t:
+                msg_arcus = f"[TimeOut Arcus] Tiempo de respuesta excedido:" \
+                            f" {t}"
+                db_logger.error(msg_arcus)
         except Exception as error:
             raise Exception("Error en la peticion", error)
         if response.status_code != 200:
@@ -145,6 +151,8 @@ class Query(object):
             msg_arcus = f"[Error Arcus Consulta Bill] Respuesta " \
                         f"Arcus: {response_error}"
             db_logger.error(msg_arcus)
+            mensaje = mensajes_error(response_error)
+            raise Exception(mensaje)
         elif response.status_code == 200:
             response = (json.loads(response.content.decode("utf-8")))
             msg_arcus = f"[Consulta Balance Exitosa] Respuesta Arcus: " \
