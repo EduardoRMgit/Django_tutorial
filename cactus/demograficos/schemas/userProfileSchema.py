@@ -86,6 +86,7 @@ from pld.utils.customerpld import create_pld_customer
 
 from demograficos.utils.registermail import RegistrarMail
 from demograficos.utils.validatepassword import password_validation
+from demograficos.utils.validatecurp import curp_validation
 from demograficos.utils.resignurl import resigned_url
 
 db_logger = logging.getLogger("db")
@@ -2286,6 +2287,9 @@ class UpdateInfoPersonal(graphene.Mutation):
             nationality = nationality.strip()
         if curp is not None:
             curp = curp.upper()
+            valida = curp_validation(curp)
+            if not valida:
+                raise AssertionError('CURP no valido')
         user = info.context.user
         if user.is_anonymous:
             raise AssertionError('usuario no identificado')
