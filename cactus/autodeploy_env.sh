@@ -23,3 +23,6 @@ export NEW_RELEASE=false
 
 # Add a new cronjob
 export CRONJOB=true
+
+# Add conciliation file for arcus
+export CRONJOB_ARCUS=true

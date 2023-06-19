@@ -4,8 +4,16 @@ import graphene
 import datetime
 import json
 import os
+import urllib.parse
+
+
+import mailchimp_marketing as MailchimpMarketing
+from mailchimp_marketing.api_client import ApiClientError
 
 from re import U
+from re import search as re_search
+from re import IGNORECASE as re_IGNORECASE
+
 from random import randint
 
 from graphene_django.types import DjangoObjectType
@@ -20,7 +28,8 @@ from django.conf import settings
 from django.contrib.auth import authenticate
 from django.http import HttpRequest
 from django.contrib.auth.models import User
-from demograficos.models import GeoLocation, GeoDevice, UserLocation
+from demograficos.models import (
+    GeoLocation, GeoDevice, UserLocation, MotivoRechazoDoc)
 from crecimiento.models import Respaldo
 from django.contrib.auth import authenticate
 from django.utils import timezone
@@ -78,6 +87,7 @@ from pld.utils.customerpld import create_pld_customer
 
 from demograficos.utils.registermail import RegistrarMail
 from demograficos.utils.validatepassword import password_validation
+from demograficos.utils.resignurl import resigned_url
 
 db_logger = logging.getLogger("db")
 
@@ -212,6 +222,11 @@ class PerfilTransaccionalDeclaradoType(DjangoObjectType):
         model = PerfilTransaccionalDeclarado
 
 
+class MotivoRechazoType(DjangoObjectType):
+    class Meta:
+        model = MotivoRechazoDoc
+
+
 class AvatarType(graphene.ObjectType):
     id = graphene.Int()
     name = graphene.String()
@@ -269,7 +284,6 @@ class BuscadorInguzType(graphene.ObjectType):
         origen = info.context.user
         clabe = self.cuentaClabe
         try:
-            print(self.user)
             contacto = origen.Contactos_Usuario.get(
                 clabe=clabe,
                 activo=True,
@@ -303,9 +317,40 @@ class BlockDetails(graphene.ObjectType):
     status = graphene.String()
 
 
-class TokenDinamico(graphene.ObjectType):
+class DocumentoType(graphene.ObjectType):
+    id = graphene.Int()
+    url = graphene.String()
+    tipo = graphene.String()
+    validado = graphene.Boolean()
+    validado_operador = graphene.Boolean()
+    motivo_rechazo = graphene.String()
 
-    token = graphene.String()
+
+class DocPerfilDecType(graphene.InputObjectType):
+    id = graphene.Int()
+    validado_operador = graphene.Boolean()
+    motivo_rechazo = graphene.String()
+
+
+class PerfilDeclaradoType(graphene.ObjectType):
+    id = graphene.Int()
+    username = graphene.String()
+    nombre = graphene.String()
+    apellido_materno = graphene.String()
+    apellido_paterno = graphene.String()
+    curp = graphene.String()
+    email = graphene.String()
+    fecha_nacimiento = graphene.String()
+    status = graphene.String()
+    documentos = graphene.List(DocumentoType)
+    fecha_creacion = graphene.String()
+    calle = graphene.String()
+    num_interior = graphene.String()
+    num_exterior = graphene.String()
+    colonia = graphene.String()
+    codigo_postal = graphene.String()
+    ciudad = graphene.String()
+    municipio = graphene.String()
 
 
 class Query(graphene.ObjectType):
@@ -460,6 +505,10 @@ class Query(graphene.ObjectType):
                                                description="`Query all objects from the \
                                             pregunta_secreta model`")
 
+    all_motivos_rechazo = graphene.List(MotivoRechazoType,
+                                        description="`Query all objects from the \
+                                            MotivoRechazoDoc model`")
+
     all_contactos = graphene.List(ContactosType,
                                   limit=graphene.Int(),
                                   offset=graphene.Int(),
@@ -519,6 +568,17 @@ class Query(graphene.ObjectType):
     
     token_dinamico = graphene.Field(TokenDinamico,
                                     token=graphene.String(required=True))
+
+    all_perfildeclarado_docs = graphene.List(PerfilDeclaradoType,
+                                             token=graphene.String(
+                                                 required=True),
+                                             description="Query all objects to\
+                                             Perfil Declarado admin")
+
+    perfildeclarado_docs = graphene.Field(PerfilDeclaradoType,
+                                          token=graphene.String(
+                                              required=True),
+                                          id=graphene.Int(required=True))
 
     def resolve_all_avatars(self, info, **kwargs):
         """``allAvatars (Query): Query all the objects from Avatar Model``
@@ -694,6 +754,9 @@ class Query(graphene.ObjectType):
 
         """
         return StatusRegistro.objects.all()
+
+    def resolve_all_motivos_rechazo(self, info, **kwargs):
+        return MotivoRechazoDoc.objects.all()
 
     def resolve_all_status_cuenta(self, info, **kwargs):
         """
@@ -1565,6 +1628,129 @@ class Query(graphene.ObjectType):
             dicc["token"] = token
             return dicc
 
+    @login_required
+    def resolve_all_perfildeclarado_docs(self, info, **kwargs):
+
+        perfiles = PerfilTransaccionalDeclarado.objects.all().exclude(Q(
+                status_perfil='Aprobado') | Q(
+                        status_perfil='Rechazado'))
+        list = []
+        for perfil in perfiles:
+            lista_perfiles = {}
+            lista_perfiles['id'] = perfil.id
+            lista_perfiles['username'] = perfil.user.username
+            lista_perfiles['status'] = perfil.status_perfil
+            lista_perfiles['fecha_creacion'] = perfil.fecha_creacion
+            lista_perfiles['nombre'] = perfil.user.first_name
+            lista_perfiles['apellido_materno'] = perfil.user.Uprofile.apMaterno
+            lista_perfiles['apellido_paterno'] = perfil.user.last_name
+            lista_perfiles['curp'] = perfil.user.Uprofile.curp
+            lista_perfiles['email'] = perfil.user.email
+            lista_perfiles['fecha_nacimiento'
+                           ] = perfil.user.Uprofile.fecha_nacimiento
+
+            direccion = perfil.user.user_direccion.all()
+            if direccion.count() > 0:
+                direccion = direccion.last()
+                lista_perfiles['calle'] = direccion.calle
+                lista_perfiles['num_exterior'] = direccion.num_ext
+                lista_perfiles['num_interior'] = direccion.num_int
+                lista_perfiles['colonia'] = direccion.colonia
+                lista_perfiles['codigo_postal'] = direccion.codPostal
+                lista_perfiles['municipio'] = direccion.delegMunicipio
+                lista_perfiles['ciudad'] = direccion.estado
+
+            docs = DocAdjunto.objects.filter(user=perfil.user)
+            documentos = []
+            dominio_aws = "s3.amazonaws.com"
+            for doc in docs:
+                documentos_dicc = {}
+                documentos_dicc['id'] = doc.id
+                if doc.imagen_url is not None:
+                    url = doc.imagen_url
+                    parsed_url = urllib.parse.urlparse(url)
+                    path = parsed_url.path
+                    dominio = parsed_url.netloc
+                    decoded_path = urllib.parse.unquote(path)
+                    decoded_path = decoded_path.lstrip("/")
+                    if dominio == dominio_aws or dominio.endswith(
+                        "." + dominio_aws):
+                        nueva_url = resigned_url(decoded_path)
+                        documentos_dicc['url'] = nueva_url
+                    else:
+                        documentos_dicc['url'] = url
+                else:
+                    documentos_dicc['url'] = ''
+                documentos_dicc['tipo'] = doc.tipo.tipo
+                documentos_dicc['validado'] = doc.validado
+                documentos_dicc['validado_operador'] = doc.validado_operador
+                documentos_dicc['motivo_rechazo'] = doc.motivo_rechazo
+                documentos.append(documentos_dicc)
+            lista_perfiles['documentos'] = documentos
+            list.append(lista_perfiles)
+
+        return list
+
+    @login_required
+    def resolve_perfildeclarado_docs(self, info, **kwargs):
+
+        id = kwargs['id']
+        perfil = PerfilTransaccionalDeclarado.objects.get(id=id)
+
+        perfil_dicc = {}
+        perfil_dicc['id'] = perfil.id
+        perfil_dicc['username'] = perfil.user.username
+        perfil_dicc['status'] = perfil.status_perfil
+        perfil_dicc['fecha_creacion'] = perfil.fecha_creacion
+        perfil_dicc['nombre'] = perfil.user.first_name
+        perfil_dicc['apellido_materno'] = perfil.user.Uprofile.apMaterno
+        perfil_dicc['apellido_paterno'] = perfil.user.last_name
+        perfil_dicc['curp'] = perfil.user.Uprofile.curp
+        perfil_dicc['email'] = perfil.user.email
+        perfil_dicc['fecha_nacimiento'
+                    ] = perfil.user.Uprofile.fecha_nacimiento
+
+        direccion = perfil.user.user_direccion.all()
+        if direccion.count() > 0:
+            direccion = direccion.last()
+            perfil_dicc['calle'] = direccion.calle
+            perfil_dicc['num_exterior'] = direccion.num_ext
+            perfil_dicc['num_interior'] = direccion.num_int
+            perfil_dicc['colonia'] = direccion.colonia
+            perfil_dicc['codigo_postal'] = direccion.codPostal
+            perfil_dicc['municipio'] = direccion.delegMunicipio
+            perfil_dicc['ciudad'] = direccion.estado
+
+        docs = DocAdjunto.objects.filter(user=perfil.user)
+        documentos = []
+        dominio_aws = "s3.amazonaws.com"
+        for doc in docs:
+            documentos_dicc = {}
+            documentos_dicc['id'] = doc.id
+            if doc.imagen_url is not None:
+                url = doc.imagen_url
+                parsed_url = urllib.parse.urlparse(url)
+                path = parsed_url.path
+                dominio = parsed_url.netloc
+                decoded_path = urllib.parse.unquote(path)
+                decoded_path = decoded_path.lstrip("/")
+                if dominio == dominio_aws or dominio.endswith(
+                    "." + dominio_aws):
+                    nueva_url = resigned_url(decoded_path)
+                    documentos_dicc['url'] = nueva_url
+                else:
+                    documentos_dicc['url'] = url
+            else:
+                documentos_dicc['url'] = ''
+            documentos_dicc['tipo'] = doc.tipo.tipo
+            documentos_dicc['validado'] = doc.validado
+            documentos_dicc['validado_operador'] = doc.validado_operador
+            documentos_dicc['motivo_rechazo'] = doc.motivo_rechazo
+            documentos.append(documentos_dicc)
+        perfil_dicc['documentos'] = documentos
+
+        return perfil_dicc
+
 
 class CreateUser(graphene.Mutation):
     """
@@ -1681,6 +1867,9 @@ class CreateUser(graphene.Mutation):
             except Exception:
                 raise Exception("El teléfono no ha sido validado")
             if password is not None:
+                inguz_match = re_search("inguz", password, re_IGNORECASE)
+                if inguz_match:
+                    raise Exception("Contraseña no válida")
                 if codigo_referencia is None:
                     codigoconfianza = None
                 else:
@@ -1788,6 +1977,11 @@ class ChangePassword(graphene.Mutation):
         user = info.context.user
         if not user.is_anonymous:
             if user.check_password(old_password):
+
+                inguz_match = re_search("inguz", new_password, re_IGNORECASE)
+                if inguz_match:
+                    raise Exception("Contraseña no válida")
+
                 if user.check_password(new_password):
                     raise Exception("La nueva contraseña no puede "
                                     "ser igual a la anterior.")
@@ -2059,27 +2253,32 @@ class UpdateInfoPersonal(graphene.Mutation):
         rfc = graphene.String()
         correo = graphene.String()
         avatarId = graphene.Int()
+        pep = graphene.Boolean()
+        fuente_ingresos_alter = graphene.String()
 
     def mutate(
         self, info, token,
-        alias=None,
-        name=None,
-        gender=None,
-        last_name_p=None,
-        last_name_m=None,
-        birth_date=None,
-        nationality=None,
-        country=None,
-        city=None,
-        numero_INE=None,
-        occupation=None,
-        curp=None,
-        rfc=None,
-        correo=None,
-        avatarId=None,
+            alias=None,
+            name=None,
+            gender=None,
+            last_name_p=None,
+            last_name_m=None,
+            birth_date=None,
+            nationality=None,
+            country=None,
+            city=None,
+            numero_INE=None,
+            occupation=None,
+            curp=None,
+            rfc=None,
+            correo=None,
+            avatarId=None,
+            pep=None,
+            fuente_ingresos_alter=None
     ):
         def _es_alias_valido(_alias):
-            if " " in _alias:
+            inguz_match = re_search("inguz", _alias, re_IGNORECASE)
+            if " " in _alias or inguz_match:
                 return False
             lista_negra_alias = AliasInvalido.objects.filter(
                 substring_invalida__iexact=_alias)
@@ -2177,6 +2376,9 @@ class UpdateInfoPersonal(graphene.Mutation):
             u_profile.save()
             message = InfoValidator.setCheckpoint(user=user, concepto='IP')
 
+            if fuente_ingresos_alter:
+                u_profile.fuente_ingresos_alter = fuente_ingresos_alter
+
             if message == "curp validado":
                 u_profile.verificacion_curp = True
             u_profile.save()
@@ -2199,6 +2401,13 @@ class UpdateInfoPersonal(graphene.Mutation):
                         raise AssertionError('Entidad de nacimiento inválida')
                     u_profile.ciudad_nacimiento = entidad_fed.entidad
                     u_profile.save()
+
+            if pep:
+                u_profile.pep = pep
+                user.is_active = False
+                u_profile.save()
+                user.save()
+                raise Exception("Usuario PEP")
 
             msg = f"[curp (1.5) UpdtInfoPersonal userProfileSchema] ->{curp}<-"
             db_logger.info(msg)
@@ -2572,6 +2781,10 @@ class RecoverPassword(graphene.Mutation):
                     user=user,
                     activo=True)[0]
                 if pass_temporal.validate(pin):
+                    inguz_match = re_search(
+                        "inguz", new_password, re_IGNORECASE)
+                    if inguz_match:
+                        raise Exception("Contraseña no válida")
                     if user.check_password(new_password):
                         raise Exception("La nueva contraseña no puede "
                                         "ser igual a la anterior.")
@@ -3387,10 +3600,10 @@ class BlockAccount(graphene.Mutation):
             if up.check_password(nip):
                 date_blocked = timezone.now()
                 up.blocked_date = date_blocked
-                up.blockedReason = up.BLOCKED
+                up.blockedReason = up.VOLUNTARY_BLOCKED
                 user.Ufecha.bloqueo = date_blocked
-                up.blocked_reason = up.BLOCKED
-                up.status = up.BLOCKED
+                up.blocked_reason = up.VOLUNTARY_BLOCKED
+                up.status = up.VOLUNTARY_BLOCKED
                 up.save()
                 user.Ufecha.save()
                 user.save()
@@ -3423,14 +3636,14 @@ class BlockAccountEmergency(graphene.Mutation):
         up = user.Uprofile
         if not up.check_password(nip):
             raise Exception("El NIP es incorrecto")
-        status = "Cuenta bloqueada"
+        status = "Bloqueada de Emergencia"
         if up.status == 'O':
             date_blocked = timezone.now()
             up.blocked_date = date_blocked
-            up.blockedReason = up.BLOCKED
+            up.blockedReason = up.BLOCKED_EMERGENCY
             user.Ufecha.bloqueo = date_blocked
-            up.blocked_reason = up.BLOCKED
-            up.status = up.BLOCKED
+            up.blocked_reason = up.BLOCKED_EMERGENCY
+            up.status = up.BLOCKED_EMERGENCY
             up.save()
             user.Ufecha.save()
             user.save()
@@ -3524,7 +3737,29 @@ class CancelacionCuenta(graphene.Mutation):
             raise Exception('El saldo de tu cuenta debe ser $0 para cancelar')
         user.is_active = False
         user.save()
+        user.Uprofile.status = "C"
+        user.Uprofile.save()
         folio = randomString()
+        try:
+            client = MailchimpMarketing.Client()
+            client.set_config({
+                "api_key": settings.MAILCHIMP_KEY,
+                "server": settings.MAILCHIMP_SERVER
+            })
+
+            response = client.lists.set_list_member(
+                settings.MAILCHIMP_ID, user.email,
+                  {"status": "unsubscribed"})
+            db_logger.info(
+                f"[Unsubscribed mailchimp]: {user}"
+                f"response: {response}"
+            )
+        except ApiClientError as error:
+            print("Error: {}".format(error.text))
+            msg_mailchimp = (
+                f"[Error mailchimp] Error al desuscribir al usuario"
+                f"con el email: {user.email}. Error: {error.text}")
+            db_logger.warning(msg_mailchimp)
         url = "No hay comprobante disponible"
         fecha = timezone.now()
         # Pendiente de crear movimiento no transaccional
@@ -3628,12 +3863,15 @@ class SetPerfilTransaccional(graphene.Mutation):
         operaciones_id = graphene.Int(required=True)
         uso_id = graphene.Int(required=True)
         origen_id = graphene.Int(required=True)
+        nip = graphene.String(required=True)
 
     @login_required
     def mutate(self, info, token, transferencias_id, operaciones_id,
-               uso_id, origen_id
+               uso_id, origen_id, nip
                ):
         user = info.context.user
+        if not user.Uprofile.check_password(nip):
+            raise Exception("Nip incorrecto")
         transferencias = TransferenciasMensuales.objects.get(
             pk=transferencias_id)
         operaciones = OperacionesMensual.objects.get(pk=operaciones_id)
@@ -3657,6 +3895,13 @@ class SetPerfilTransaccional(graphene.Mutation):
             )
         except Exception:
             raise Exception("Error al crear perfil")
+        up = user.Uprofile
+        if (up.ocr_ine_validado and up.ocr_ine_back_validado and
+                up.ocr_comprobante_validado):
+            up.nivel_cuenta_id = 2
+            up.save()
+            user.user_perfil.status_perfil = 'Aprobado'
+            user.user_perfil.save()
         return SetPerfilTransaccional(perfil=perfil_declarado)
 
 
@@ -3693,6 +3938,55 @@ class UpdateEmail(graphene.Mutation):
         user.email = email_nuevo.lower()
         user.save()
         return UpdateEmail(correo=user.email)
+
+
+class AprobacionN3(graphene.Mutation):
+
+    validado = graphene.Boolean()
+
+    class Arguments:
+
+        id = graphene.Int(required=True)
+        token = graphene.String(required=True)
+        upgrade = graphene.Boolean(required=True)
+        valida_docs = graphene.Boolean(required=True)
+        documentos = graphene.List(DocPerfilDecType, required=True)
+
+    @login_required
+    def mutate(self, info, token, id, valida_docs, upgrade, documentos):
+
+        try:
+            perfil = PerfilTransaccionalDeclarado.objects.get(id=id)
+
+            if valida_docs:
+                for documento in documentos:
+                    doc = DocAdjunto.objects.get(id=documento['id'])
+                    if perfil.user.id != doc.user.id:
+                        return ValueError(
+                            "Error. Algún documento no pertenece al usuario")
+                    doc.validado_operador = documento['validado_operador']
+                    doc.motivo_rechazo = documento['motivo_rechazo']
+                    doc.save()
+
+            if upgrade:
+                if perfil.status_perfil == "Aprobado":
+                    return ValueError(
+                        "Error. Perfil transaccional aprobado por otro "
+                        "operador")
+                perfil.status_perfil = "Aprobado"
+                perfil.save()
+                user = perfil.user
+                user.Uprofile.nivel_cuenta_id = 2
+                user.Uprofile.save()
+                return AprobacionN3(validado=True)
+            else:
+                perfil.status_perfil = "Rechazado"
+                perfil.save()
+                return AprobacionN3(validado=False)
+        except Exception as ex:
+            msg = f"[Error al validar documetos N3] ID PerfilTD: {id}, {ex}"
+            db_logger.warning(msg)
+            raise Exception("Error al validar documentos")
 
 
 class Mutation(graphene.ObjectType):
@@ -3735,3 +4029,4 @@ class Mutation(graphene.ObjectType):
     set_perfil_transaccional = SetPerfilTransaccional.Field()
     block_account_emergency = BlockAccountEmergency.Field()
     update_email = UpdateEmail.Field()
+    aprobacion_n3 = AprobacionN3.Field()

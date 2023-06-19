@@ -15,8 +15,7 @@ from banca.models.transaccion import (Transaccion,
                                       TipoAnual,
                                       SaldoReservado)
 from banca.models.catalogos import TipoTransaccion
-from banca.models import (NotificacionCobro, InguzTransaction, NivelCuenta,
-                          ComisioneSTP)
+from banca.models import (NotificacionCobro, InguzTransaction, NivelCuenta)
 from banca.utils.clabe import es_cuenta_inguz
 from banca.utils.limiteTrans import LimiteTrans
 from banca.utils.comprobantesPng import CompTrans
@@ -45,6 +44,14 @@ class TransaccionType(DjangoObjectType):
 class StpTransaccionType(DjangoObjectType):
     class Meta:
         model = StpTransaction
+    comision = graphene.Float()
+
+    def resolve_comision(self, info):
+        if self.transaccion.comision:
+            comision = 7.52
+        else:
+            comision = 0
+        return comision
 
 
 class StatusTransType(DjangoObjectType):
@@ -557,7 +564,6 @@ class CreateTransferenciaEnviada(graphene.Mutation):
         rfc_beneficiario = None
         if not LimiteTrans(user.id).trans_mes(float(monto_stp_trans)):
             raise Exception("Límite transaccional superado")
-        comision = ComisioneSTP.objects.last()
         main_trans = Transaccion.objects.create(
             user=user,
             fechaValor=fecha,
@@ -565,8 +571,7 @@ class CreateTransferenciaEnviada(graphene.Mutation):
             statusTrans=status,
             tipoTrans=tipo,
             concepto=concepto,
-            claveRastreo=clave_rastreo,
-            comision=comision
+            claveRastreo=clave_rastreo
         )
         comision, comision_m = comisionSTP(main_trans)
         comision = round(comision, 2)
@@ -839,8 +844,7 @@ class UrlImagenComprobanteInter(graphene.Mutation):
             trans = trans.last()
             if not trans.statusTrans:
                 raise Exception("Transacción no genera Comprobante.")
-            if trans.statusTrans.nombre != "exito" and \
-                    trans.statusTrans.nombre != "rechazada":
+            if trans.statusTrans.nombre != "rechazada":
                 raise Exception("Transacción no genera Comprobante.")
             comp = CompTrans(trans)
             url = comp.trans()

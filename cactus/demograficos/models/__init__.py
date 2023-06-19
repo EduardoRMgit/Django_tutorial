@@ -1,7 +1,8 @@
 from .calculoDeLines import (Prospectos,
                              Depositos)
 from .direccion import Direccion, EntidadFed, TipoDireccion
-from .documentos import DocAdjuntoTipo, DocAdjunto, TipoComprobante
+from .documentos import (DocAdjuntoTipo, DocAdjunto,
+                         TipoComprobante, MotivoRechazoDoc)
 from .instituciones import Institucion, Columnas, SoyClienteDe, BinBanco
 from .solicitud import CatalogoCampos, SolicitudIncompleta, Respuestas
 from .tarjeta import StatusTarjeta, Tarjeta
@@ -20,7 +21,8 @@ from .userProfile import (StatusRegistro,
                           UserDevice,
                           Parentesco,
                           Avatar,
-                          AliasInvalido
+                          AliasInvalido,
+                          Proveedor
                           )
 from .comportamiento import (ComportamientoDiario, ComportamientoMensual)
 from .contactos import Contacto
@@ -36,3 +38,62 @@ from .perfildeclarado import (TransferenciasMensuales,
                               PerfilTransaccionalDeclarado,
                               )
 from .tokenDinamico import TokenDinamico
+from .versionapp import VersionApp
+
+__all__ = ["Prospectos",
+           "Depositos",
+           "Direccion",
+           "EntidadFed",
+           "TipoDireccion",
+           "DocAdjuntoTipo",
+           "DocAdjunto",
+           "TipoComprobante",
+           "MotivoRechazoDoc",
+           "Institucion",
+           "Columnas",
+           "SoyClienteDe",
+           "BinBanco",
+           "CatalogoCampos",
+           "SolicitudIncompleta",
+           "Respuestas",
+           "StatusTarjeta",
+           "Tarjeta",
+           "TipoTelefono",
+           "ProveedorTelefonico",
+           "Telefono",
+           "StatusRegistro",
+           "StatusCuenta",
+           "IndiceDisponible",
+           "PasswordHistory",
+           "UserProfile",
+           "Cliente",
+           "UserNotas",
+           "HistoriaLinea",
+           "PreguntaSeguridad",
+           "UserBeneficiario",
+           "RespuestaSeguridad",
+           "UserDevice",
+           "Parentesco",
+           "Avatar",
+           "AliasInvalido",
+           "Proveedor",
+           "ComportamientoDiario",
+           "ComportamientoMensual",
+           "Contacto",
+           "ProfileComponent",
+           "ComponentValidated",
+           "Fecha",
+           "adminUtils",
+           "GeoDevice",
+           "GeoLocation",
+           "UserLocation",
+           "UDevice",
+           "DocExtraction",
+           "TransferenciasMensuales",
+           "OperacionesMensual",
+           "UsoCuenta",
+           "OrigenDeposito",
+           "PerfilTransaccionalDeclarado",
+           "TokenDinamico",
+           "VersionApp"
+           ]

@@ -18,7 +18,8 @@ from demograficos.models import (UserProfile,
                                  Avatar,
                                  PerfilTransaccionalDeclarado,
                                  PasswordHistory,
-                                 AliasInvalido)
+                                 AliasInvalido,
+                                 Proveedor)
 from banca.models import Transaccion
 from pld.models import (Customer)
 from .cambio_password import PasswordResetUserAdmin
@@ -28,6 +29,7 @@ from django.utils.translation import gettext_lazy as _
 from cactus.settings import SITE
 from import_export.admin import ExportActionMixin
 from spei.deletecuentaSTP import delete_stp
+from demograficos.utils.deletecustomer import pld_customer_delete
 
 
 import logging
@@ -146,6 +148,14 @@ class PerfilTransaccionalInLine(admin.TabularInline):
     extra = 0
 
 
+class ProveddorInLine(admin.TabularInline):
+    model = Proveedor
+    can_delete = True
+    verbose_name_plural = "Proveedor"
+    fk_name = "user"
+    extra = 0
+
+
 class UserProfileAdmin(ExportActionMixin, PasswordResetUserAdmin):
     inlines = (
         DireccionInLine,
@@ -160,14 +170,16 @@ class UserProfileAdmin(ExportActionMixin, PasswordResetUserAdmin):
         UserContactoInline,
         DocAdjuntoInLine,
         BeneficiarioInLine,
-        PerfilTransaccionalInLine
+        PerfilTransaccionalInLine,
+        ProveddorInLine
     )
-    actions = ['registra_cuenta', 'delete_stp_cuenta']
+    actions = ['registra_cuenta', 'delete_stp_cuenta', 'delete_pld_customer']
 
     list_filter = (
         'Uprofile__nivel_cuenta',
         'Uprofile__enrolamiento',
-        'Uprofile__status'
+        'Uprofile__status',
+        'is_active'
     )
 
     search_fields = (
@@ -186,6 +198,7 @@ class UserProfileAdmin(ExportActionMixin, PasswordResetUserAdmin):
                     'get_curp',
                     'get_cuenta_clabe',
                     'get_enrolamiento',
+                    'is_active'
                     )
 
     list_per_page = 25
@@ -293,6 +306,16 @@ class UserProfileAdmin(ExportActionMixin, PasswordResetUserAdmin):
         # up.save()
         # u.save()
 
+    def delete_pld_customer(self, request, users):
+
+        for user in users:
+            try:
+                pld_customer_delete(user.Uprofile.curp)
+            except Exception as ex:
+                msg = f"[ERROR action ubcubo delete customer] " \
+                      f"descripcion: {ex}"
+                db_logger.error(msg)
+
 
 class ClienteAdmin(UserProfileAdmin):
     fieldsets = (
@@ -315,6 +338,18 @@ class ClienteAdmin(UserProfileAdmin):
     )
 
 
+class Cancelacion(User):
+    class Meta:
+        proxy = True
+        verbose_name = 'Cuentas Canceladas'
+        verbose_name_plural = 'Cuentas Canceladas'
+
+
+class CancelacionAdmin(ClienteAdmin):
+    def get_queryset(self, request):
+        return User.objects.filter(is_active=False)
+
+
 admin.site.unregister(User)
 admin.site.register(User, UserProfileAdmin)
 admin.site.register(PreguntaSeguridad)
@@ -327,3 +362,4 @@ admin.site.register(Avatar)
 # admin.site.register(Administradore, AdministradoreAdmin)
 admin.site.register(PasswordHistory)
 admin.site.register(AliasInvalido)
+admin.site.register(Cancelacion, CancelacionAdmin)

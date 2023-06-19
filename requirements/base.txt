@@ -15,7 +15,7 @@ django-jet
 google-api-python-client
 django-crispy-forms
 django-recaptcha2
-reportlab
+reportlab==3.6.13
 WeasyPrint==49
 google-api-python-client
 google-auth-httplib2
@@ -57,3 +57,4 @@ reverse-geocoder==1.5.1
 pyotp==2.8.0
 geographiclib==2.0
 imutils==0.5.4
+paramiko==3.2.0

@@ -20,7 +20,6 @@ def comisionSTP(instance):
             tipoTrans__medio="T",
             fechaValor__year=today.year,
             fechaValor__month=today.month,
-            statusTrans__nombre__in=["exito"],
         )
     valida_primera = transacciones_d.count()
     valida_total = transacciones_t.count()
@@ -37,7 +36,8 @@ def comisionSTP(instance):
                     ivastp = comision.ivaSTP
                     cliente = comision.cliente
                     stp = comision.stp
+                    _comision = comision
         monto = monto + ivacliente + ivastp + cliente + stp
-        return monto, comision
+        return monto, _comision
     else:
         return monto, None

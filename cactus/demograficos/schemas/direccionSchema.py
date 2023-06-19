@@ -9,7 +9,6 @@ from demograficos.models.direccion import (TipoDireccion,
 from demograficos.models.telefono import Telefono
 from demograficos.models.profileChecks import InfoValidator, ComponentValidated
 from pld.utils.customerpld import update_pld_customer
-from demograficos.utils.tokendinamico import tokenD
 
 
 class TipoDireccionType(DjangoObjectType):
@@ -534,7 +533,7 @@ class CreateDireccion(graphene.Mutation):
     class Arguments:
 
         token = graphene.String(required=True)
-        token_d = graphene.String(required=True)
+        nip = graphene.String()
         calle = graphene.String()
         num_int = graphene.String()
         num_ext = graphene.String()
@@ -543,16 +542,16 @@ class CreateDireccion(graphene.Mutation):
         alcaldiaMunicipio = graphene.String()
         estado = graphene.String()
 
-    def mutate(self, info, token, token_d, calle=None, codPostal=None,
+    def mutate(self, info, token, nip=None, calle=None, codPostal=None,
                num_int=None, num_ext=None, colonia=None,
                alcaldiaMunicipio=None, estado=None):
 
         user = info.context.user
-        dinamico = tokenD()
         if user.is_anonymous:
             raise Exception('User does not exist')
-        if not dinamico.verify(token_d):
-            raise Exception('token dinamico incorrecto')
+        if nip:
+            if not user.Uprofile.check_password(nip):
+                raise Exception('Nip incorrecto')
         direccion = Direccion.objects.create(
             calle=calle,
             num_int=num_int,

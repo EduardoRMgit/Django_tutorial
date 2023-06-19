@@ -164,3 +164,20 @@ jobs:
             --set site=$SUFFIX \
             --set stpSecret=$STPSECRET
           fi;
+          if [[ $CRONJOB_ARCUS == true ]] && [[ ${GITHUB_REF##*/} == main ]]; then
+            if helm list -q | grep -q cron-arcus-$SUFFIX; then
+              echo "Delete previous cron chart because it is present"
+              helm del cron-arcus-$SUFFIX
+            fi;
+            helm package kubernetes/charts/cronjob-arcus
+            helm upgrade cron-arcus-$SUFFIX --install --force cronjob-arcus-0.1.0.tgz \
+            --set dbName=$DB_NAME \
+            --set rdsExternal=$DB \
+            --set dbSecret=postgres-credentials \
+            --set nameOverride=cron-arcus-$SUFFIX \
+            --set image.tag=$IMAGE_TAG \
+            --set s3.enabled=true \
+            --set twilio.enabled=false \
+            --set site=$SUFFIX \
+            --set stpSecret=$STPSECRET
+          fi;

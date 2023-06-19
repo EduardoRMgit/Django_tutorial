@@ -17,7 +17,6 @@ class UsersTestCase(TestCase):
         call_command('loaddata', 'adminUtils', verbosity=0)
         call_command('loaddata', 'statusRegistro', verbosity=0)
         call_command('loaddata', 'errorestransaccion', verbosity=0)
-        call_command('loaddata', 'urls', verbosity=0)
         call_command('loaddata', 'nivelCuenta', verbosity=0)
         self._client = Client()
         self._user1 = None
@@ -164,7 +163,6 @@ class UsersTestCase(TestCase):
 
 #     def setUp(self):
 #         load_min_test()
-#         call_command('loaddata', 'urls', verbosity=0)
 #         call_command('loaddata', 'tipo_contable_cuenta', verbosity=0)
 #         call_command('loaddata', 'contable_cuenta', verbosity=0)
 #         call_command('loaddata', 'cuenta_saldo', verbosity=0)

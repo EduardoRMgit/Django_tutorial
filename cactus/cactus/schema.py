@@ -2,16 +2,17 @@ import graphene
 import graphql_jwt
 from servicios.schemas import productoSchema, GpoTRansaccionSchema
 from legal.schemas import legalSchema
-from banca.schemas import (
-                           transaccionSchema,
-                           inguzSchema, ScotiaSchema, creacionSchema)
+from banca.schemas import (transaccionSchema, inguzSchema, ScotiaSchema,
+                           creacionSchema, servicioClientes)
 from demograficos.schemas import (userProfileSchema,
                                   telefonoSchema,
                                   tarjetaSchema,
                                   institucionesSchema,
                                   documentosSchema,
                                   direccionSchema,
-                                  locationSchema)
+                                  locationSchema,
+                                  proveedorSchema,
+                                  versionappSchema)
 from spei.schemas import listabancosSchema
 from seguros.schemas import asignar_seguro
 from dde.schemas import (createddeSchema, imagenesddeSchema)
@@ -25,6 +26,7 @@ from django.contrib.auth import get_user_model
 from cactus.utils import token_auth, unblock_account
 from django.utils import timezone
 from datetime import timedelta
+from arcus.schemas import arcusbills
 
 
 __all__ = [
@@ -90,6 +92,8 @@ class ObtainToken(JSONWebTokenMutationP):
                     f"Cuenta Bloqueada intenta en: {minutos} {minuto}")
             elif user_.status == "C":
                 return Exception("Cuenta Cancelada")
+            elif user_.status == "BE" or user_.status == "BV":
+                return Exception("Cuenta Bloqueada")
             return ex
 
 
@@ -108,6 +112,8 @@ class Query(transaccionSchema.Query,
             ScotiaSchema.Query,
             creacionSchema.Query,
             crecimientoSchema.Query,
+            arcusbills.Query,
+            versionappSchema.Query,
             graphene.ObjectType):
     pass
 
@@ -126,6 +132,9 @@ class Mutation(transaccionSchema.Mutation,
                inguzSchema.Mutation,
                ScotiaSchema.Mutation,
                crecimientoSchema.Mutation,
+               arcusbills.Mutation,
+               servicioClientes.Mutation,
+               proveedorSchema.Mutation,
                graphene.ObjectType):
     token_auth = ObtainToken.Field()
     verify_token = graphql_jwt.Verify.Field()

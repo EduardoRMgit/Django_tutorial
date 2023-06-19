@@ -171,17 +171,23 @@ class UserProfile(AbstractBaseUser):
     OK = 'O'
     BLOCKED = 'B'
     CANCELED = 'C'
+    BLOCKED_EMERGENCY = "BE"
+    VOLUNTARY_BLOCKED = "BV"
 
     STATUS_CHOICES = (
         (OK, ("Ok")),
         (BLOCKED, "Bloqueada"),
-        (CANCELED, u"Suscripción cancelada")
+        (CANCELED, u"Suscripción cancelada"),
+        (BLOCKED_EMERGENCY, "Bloqueada de Emergencia"),
+        (VOLUNTARY_BLOCKED, "Bloqueo Voluntario")
     )
 
     BLOCKED = 'B'
     TOO_MANY_LOGIN_ATTEMPTS = 'T'
     TOO_MANY_LOGIN_ATTEMPTS_INSIDE = 'I'
     NOT_BLOCKED = 'K'
+    BLOCKED_EMERGENCY = "BE"
+    VOLUNTARY_BLOQUED = "BV"
     BLOCKED_REASONS = (
         (BLOCKED, ("Su cuenta ha sido bloqueada, "
                    "por favor contactenos")),
@@ -191,7 +197,10 @@ class UserProfile(AbstractBaseUser):
         (TOO_MANY_LOGIN_ATTEMPTS_INSIDE, ("Su cuenta ha sido bloqueada "
                                           "por exceso de intentos de "
                                           u"inicio de sesión")),
-        (NOT_BLOCKED, "OK")
+        (NOT_BLOCKED, "OK"),
+        (BLOCKED_EMERGENCY, ("Su cuenta fue bloqueada por el flujo "
+                             "de emergencia")),
+        (VOLUNTARY_BLOCKED, ("su cuenta fue bloqueada voluntariamente"))
     )
 
     UN = 'U'
@@ -228,7 +237,7 @@ class UserProfile(AbstractBaseUser):
     )
 
     blocked_reason = models.CharField(
-        max_length=1,
+        max_length=2,
         choices=BLOCKED_REASONS,
         default=NOT_BLOCKED
     )
@@ -237,7 +246,7 @@ class UserProfile(AbstractBaseUser):
     login_attempts = models.PositiveSmallIntegerField(default=0)
     login_attempts_inside = models.PositiveSmallIntegerField(default=0)
     status = models.CharField(
-        max_length=1,
+        max_length=2,
         choices=STATUS_CHOICES,
         default=OK
     )
@@ -316,6 +325,7 @@ class UserProfile(AbstractBaseUser):
         related_name='userProfile_codigo_de_confianza',
         null=True)
     ocr_ine_validado = models.BooleanField(default=False)
+    ocr_ine_back_validado = models.BooleanField(default=False)
     ocr_comprobante_validado = models.BooleanField(default=False)
     cuenta_clabe_bloqueada = models.BooleanField(default=False)
 
@@ -339,6 +349,14 @@ class UserProfile(AbstractBaseUser):
         blank=True
     )
     enrolamiento = models.BooleanField(default=False)
+    contador_servicio_cliente = models.IntegerField(null=True,
+                                                    blank=True,
+                                                    default=0)
+    pep = models.BooleanField(null=True,
+                              blank=True)
+    fuente_ingresos_alter = models.CharField(max_length=32,
+                                             null=True,
+                                             blank=True)
 
     class Meta():
         verbose_name_plural = 'Perfil del usuario'
@@ -809,3 +827,25 @@ class AliasInvalido(models.Model):
 
     def __str__(self):
         return str(self.substring_invalida)
+
+
+class Proveedor(models.Model):
+    user = models.ForeignKey(User,
+                             related_name='user_proveedor',
+                             on_delete=models.CASCADE,
+                             blank=True,
+                             null=True)
+    nombre = models.CharField(max_length=50, blank=True, null=True)
+    apellido_p = models.CharField(max_length=30, blank=True, null=True)
+    apellido_m = models.CharField(max_length=30, blank=True, null=True)
+    correo_electronico = models.EmailField(max_length=100,
+                                           blank=True, null=True)
+    curp = models.CharField(max_length=20, blank=True, null=True)
+    entidad_nacimiento = models.CharField(max_length=560,
+                                          blank=True, null=True)
+    ocupacion = models.CharField(max_length=50, blank=True, null=True)
+    parentesco = models.CharField(max_length=30, blank=True, null=True)
+    fecha_nacimiento = models.CharField(max_length=256, blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.user}{self.nombre}"

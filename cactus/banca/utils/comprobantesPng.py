@@ -1,6 +1,6 @@
 import os
 import cv2
-from banca.models import Comprobante
+from banca.models import Comprobante, InguzTransaction
 from spei.models import StpTransaction
 from django.conf import settings
 import imutils
@@ -46,10 +46,11 @@ class CompTrans(object):
 
     def inguz(self, show=False):
         trans = self._trans
+        inguz_trans = InguzTransaction.objects.get(transaccion=trans)
         alias = f"@{trans.user.Uprofile.alias}"
         avatar = trans.user.Uprofile.avatar
         monto = "${:.2f}".format(round(float(trans.monto), 2))
-        cuenta = f"*{trans.user.Uprofile.cuentaClabe[13:-1]}"
+        cuenta = f"*{inguz_trans.contacto.clabe[14:]}"
         fechaValor = trans.fechaValor - timedelta(hours=6)
         fecha = fechaValor.strftime("%d/%m/%Y")
         hora = fechaValor.strftime("%H:%M:%S")
@@ -155,12 +156,14 @@ class CompTrans(object):
 
     def stp(self):
         trans = self._trans
+        stp_trans = StpTransaction.objects.get(
+            transaccion=trans)
         importe = "${:,.2f}".format(round(float(trans.monto), 2))
         fechaValor = trans.fechaValor - timedelta(hours=6)
         fecha = fechaValor.strftime("%d/%m/%Y")
         hora = fechaValor.strftime("%H:%M:%S")
         concepto = trans.concepto
-        cuenta = f"*{trans.user.Uprofile.cuentaClabe[13:-1]}"
+        cuenta = f"*{stp_trans.cuentaBeneficiario[14:]}"
         rastreo = trans.claveRastreo
         referencia = StpTransaction.objects.get(
             transaccion=trans).referenciaNumerica

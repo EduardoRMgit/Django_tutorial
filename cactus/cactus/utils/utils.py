@@ -41,18 +41,22 @@ def token_auth(f):
             username_ = username
             try:
                 log = User.objects.get(username=username_)
-                intento = log.Uprofile.login_attempts + 1
-                log.Uprofile.login_attempts = intento
-                log.save()
-                if log.Uprofile.login_attempts >= 5:
-                    log.Uprofile.status = "B"
-                    log.Uprofile.blocked_reason = "T"
-                    log.Uprofile.blocked_date = timezone.now()
+                if log.is_active is True:
+                    intento = log.Uprofile.login_attempts + 1
+                    log.Uprofile.login_attempts = intento
                     log.save()
-                    return Exception("Cuenta Bloqueada")
-                return exceptions.JSONWebTokenError(
-                    _("Usuario y/o contraseña incorrectos"),
-                )
+                    if log.Uprofile.login_attempts >= 5:
+                        log.Uprofile.status = "B"
+                        log.Uprofile.blocked_reason = "T"
+                        log.Uprofile.blocked_date = timezone.now()
+                        log.save()
+                    return exceptions.JSONWebTokenError(
+                        _("Usuario y/o contraseña incorrectos"),
+                    )
+                elif log.Uprofile.status == 'C' and log.is_active is False:
+                    return exceptions.JSONWebTokenError(
+                        _("Cuenta en proceso de cancelación")
+                    )
             except Exception:
                 pass
             # return Exception("Inactive user")

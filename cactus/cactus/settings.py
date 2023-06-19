@@ -51,9 +51,9 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'staging.inguz.site',
 
 INSTALLED_APPS = [
     'django_otp',
-	'django_otp.plugins.otp_static',
-	'django_otp.plugins.otp_totp',
-	'two_factor',
+    'django_otp.plugins.otp_static',
+    'django_otp.plugins.otp_totp',
+    'two_factor',
     'rest_framework.authtoken',
     'rest_framework',
     'corsheaders',
@@ -92,6 +92,7 @@ INSTALLED_APPS = [
     'renapo.apps.RenapoConfig',
     'dapp.apps.DappConfig',
     'crecimiento.apps.CrecimientoConfig',
+    'arcus.apps.ArcusConfig',
 ]
 
 if SITE == "local":
@@ -161,7 +162,9 @@ CORS_ORIGIN_WHITELIST = ['http://localhost:5000',
                          'http://10.5.1.1',
                          'http://10.5.1.1:8000',
                          'http://inguzmx.com',
-                         'https://inguzmx.com', ]
+                         'https://inguzmx.com',
+                         'http://10.8.0.1',
+                         'http://10.8.0.1:3000']
 
 
 ROOT_URLCONF = 'cactus.urls'
@@ -354,8 +357,6 @@ PREFIJO_CUENTA_INGUZ = "6461802180"
 AXES_LOCKOUT_CALLABLE = "cactus.customAuthBackend.lockout"
 
 
-
-
 def cluster_secret(key, value):
     try:
         from kubernetes import client, config
@@ -381,3 +382,13 @@ EMAIL_HOST_USER = cluster_secret('gmail-credentials', 'email')
 EMAIL_HOST_PASSWORD = cluster_secret('gmail-credentials', 'pwd')
 AUTH_PWD = cluster_secret('gmail-credentials', 'apwd')
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+API_KEY_ARCUS = cluster_secret('arcus-credentials', 'apikey')
+SECRET_ARCUS = cluster_secret('arcus-credentials', 'secret')
+ARCUS_DOMAIN = cluster_secret('arcus-credentials', 'url')
+MAILCHIMP_SERVER = cluster_secret('mailchimp-credentials', 'server')
+MAILCHIMP_KEY = cluster_secret('mailchimp-credentials', 'key')
+MAILCHIMP_ID = cluster_secret('mailchimp-credentials', 'id')
+USERNAME_ZAKI = "5529641640"
+ARCUS_HOST = cluster_secret('arcus-sftp-credentials', 'host')
+ARCUS_USER = cluster_secret('arcus-sftp-credentials', 'user')
+ARCUS_PASS = cluster_secret('arcus-sftp-credentials', 'pass')
