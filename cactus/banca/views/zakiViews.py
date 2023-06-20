@@ -1,7 +1,8 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from banca.utils.compruebazaki import (
-    comprobar_username_curp, comprobar_username, comprobar_curp)
+    comprobar_username_curp, comprobar_username, comprobar_curp,
+    comprobar_clabe_curp)
 from banca.utils.pago_prestamo_zaki import crear_prestamo, liquidar_prestamo
 
 
@@ -15,6 +16,11 @@ def __c_back_zaki(f, request):
 @api_view(['POST'])
 def ZakiUsernameCurpView(request):
     return __c_back_zaki(comprobar_username_curp, request)
+
+
+@api_view(['POST'])
+def ZakiClabeCurpView(request):
+    return __c_back_zaki(comprobar_clabe_curp, request)
 
 
 @api_view(['POST'])
