@@ -29,14 +29,14 @@ from django.contrib.auth import authenticate
 from django.http import HttpRequest
 from django.contrib.auth.models import User
 from demograficos.models import (
-    GeoLocation, GeoDevice, UserLocation, MotivoRechazoDoc)
+    GeoLocation, GeoDevice, UserLocation, MotivoRechazoDoc, TokenDinamico)
 from crecimiento.models import Respaldo
 from django.contrib.auth import authenticate
 from django.utils import timezone
 from spei.stpTools import randomString
 
 import reverse_geocoder as gr
-from demograficos.utils.tokendinamico import tokenD
+from demograficos.utils.tokendinamico import tokenD, validaToken
 from django.contrib.auth.hashers import check_password
 
 
@@ -227,6 +227,11 @@ class MotivoRechazoType(DjangoObjectType):
         model = MotivoRechazoDoc
 
 
+class TokenDinamicoType(DjangoObjectType):
+    class Meta:
+        model = TokenDinamico
+
+
 class AvatarType(graphene.ObjectType):
     id = graphene.Int()
     name = graphene.String()
@@ -351,6 +356,7 @@ class PerfilDeclaradoType(graphene.ObjectType):
     codigo_postal = graphene.String()
     ciudad = graphene.String()
     municipio = graphene.String()
+
 
 
 class Query(graphene.ObjectType):
@@ -566,7 +572,7 @@ class Query(graphene.ObjectType):
                                         description="Query all objects from \
                                         model OrigenDeposito")
     
-    token_dinamico = graphene.Field(TokenDinamico,
+    token_dinamico = graphene.Field(TokenDinamicoType,
                                     token=graphene.String(required=True))
 
     all_perfildeclarado_docs = graphene.List(PerfilDeclaradoType,
@@ -1624,9 +1630,7 @@ class Query(graphene.ObjectType):
         user = info.context.user
         if not user.is_anonymous:
             token = tokenD(user)
-            dicc = {}
-            dicc["token"] = token
-            return dicc
+            return token
 
     @login_required
     def resolve_all_perfildeclarado_docs(self, info, **kwargs):
@@ -2466,7 +2470,7 @@ class CreateBeneficiario(graphene.Mutation):
 
     class Arguments:
         token = graphene.String(required=True)
-        token_d = graphene.String(required=True)
+        nip = graphene.String(required=True)
         name = graphene.String(required=True)
         apellidopat = graphene.String()
         apellidomat = graphene.String()
@@ -3099,7 +3103,7 @@ class BlockContacto(graphene.Mutation):
         token = graphene.String(required=True)
         bloquear = graphene.Boolean(required=True)
         clabe = graphene.String(required=True)
-        nip = graphene.String(required=True)
+        token = graphene.String(required=True)
 
     def mutate(self, info, token, bloquear, clabe, nip):
 
@@ -3268,14 +3272,15 @@ class DeleteContacto(graphene.Mutation):
     class Arguments:
         token = graphene.String(required=True)
         clabe = graphene.String(required=True)
-        nip = graphene.String(required=True)
+        token_d = graphene.String(required=True)
 
     @login_required
-    def mutate(self, info, token, clabe, nip):
+    def mutate(self, info, token, clabe, token_d):
         associated_user = info.context.user
         if not associated_user.is_anonymous:
             up = associated_user.Uprofile
-            if up.check_password(nip):
+            token = validaToken(associated_user, token_d)
+            if token:
                 try:
                     contacto = associated_user.Contactos_Usuario.get(
                         clabe=clabe, activo=True)
@@ -3305,7 +3310,7 @@ class DeleteContacto(graphene.Mutation):
                     except Exception:
                         pass
             else:
-                raise AssertionError("NIP esta mal")
+                raise AssertionError("Token dinamico esta mal")
         return DeleteContacto(contacto=contacto,
                               all_contactos=associated_user.
                               Contactos_Usuario.all())

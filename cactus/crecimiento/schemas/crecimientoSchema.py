@@ -10,7 +10,6 @@ from django.db.models import Q
 from demograficos.models import Contacto, UserProfile
 from crecimiento.models import PodcastLink
 from crecimiento.models import Respaldo
-from demograficos.utils.tokendinamico import tokenD
 
 
 class ExtendedConnection(graphene.Connection):
@@ -93,19 +92,19 @@ class CreateRespaldo(graphene.Mutation):
 
     class Arguments:
         token = graphene.String(required=True)
-        token_d = graphene.String(required=True)
+        nip = graphene.String(required=True)
         contacto_list = graphene.List(graphene.Int, required=True)
 
     @login_required
-    def mutate(self, info, token, token_d, contacto_list):
+    def mutate(self, info, token, nip, contacto_list):
 
         errores = []
         agregados = []
 
         user = info.context.user
-        dinamico = tokenD()
-        if not dinamico.verify(token_d):
-            raise Exception("El token dinamico es incorrecto")
+        up = user.Uprofile
+        if not up.check_password(nip):
+            raise Exception("El NIP es incorrecto")
 
         if len(contacto_list) > 5:
             raise Exception("No pueden seleccionarse mas de 5 contactos")
@@ -200,17 +199,17 @@ class ConfirmRespaldo(graphene.Mutation):
 
     class Arguments:
         token = graphene.String(required=True)
-        token_d = graphene.String(required=True)
+        nip = graphene.String(required=True)
         respaldo = graphene.Int(required=True)
         aceptar = graphene.Boolean(required=True)
 
     @login_required
-    def mutate(self, info, token, token_d, respaldo, aceptar):
+    def mutate(self, info, token, nip, respaldo, aceptar):
 
         user = info.context.user
-        dinamico = tokenD()
-        if not dinamico.verify(token_d):
-            raise Exception("El token dinamico es incorrecto")
+        up = user.Uprofile
+        if not up.check_password(nip):
+            raise Exception("El NIP es incorrecto")
 
         try:
             respaldo = Respaldo.objects.get(
@@ -243,16 +242,16 @@ class DeleteRespaldo(graphene.Mutation):
 
     class Arguments:
         token = graphene.String(required=True)
-        token_d = graphene.String(required=True)
+        nip = graphene.String(required=True)
         respaldo = graphene.Int(required=True)
 
     @login_required
-    def mutate(self, info, token, token_d, respaldo):
+    def mutate(self, info, token, nip, respaldo):
 
         user = info.context.user
-        dinamico = tokenD()
-        if not dinamico.verify(token_d):
-            raise Exception("El token dinamico es incorrecto")
+        up = user.Uprofile
+        if not up.check_password(nip):
+            raise Exception("El NIP es incorrecto")
 
         try:
             respaldo = Respaldo.objects.get(

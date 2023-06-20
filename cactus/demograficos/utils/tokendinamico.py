@@ -10,7 +10,7 @@ def tokenD(user):
     while tokenv > 0:
         token = random.randint(1000000000, 9999999999)
         tokenv = TokenDinamico.objects.filter(token=token).count()
-    TokenDinamico.objects.create(user=user, token=token)
+    token = TokenDinamico.objects.create(user=user, token=token)
     return token
 
 

@@ -11,7 +11,6 @@ from ..models.transaccion import TransaccionDDE
 from datetime import datetime, timedelta
 from graphene_django.types import DjangoObjectType
 from demograficos.schemas.userProfileSchema import UserProfileType
-from demograficos.utils.tokendinamico import tokenD
 
 
 class TransaccionDDEType(DjangoObjectType):
@@ -27,13 +26,13 @@ class CreateDde(graphene.Mutation):
 
     class Arguments:
         token = graphene.String(required=True)
-        token_d = graphene.String(required=True)
+        nip = graphene.String(required=True)
         local = graphene.Boolean()
         flag_tel = graphene.Boolean()
         flag_dir = graphene.Boolean()
         flag_user = graphene.Boolean()
 
-    def mutate(self, info, token_d, token, local=False, flag_tel=False,
+    def mutate(self, info, nip, token, local=False, flag_tel=False,
                flag_dir=False, flag_user=False):
         mutation_u = """
         mutation($username: String!, $up: String!,
@@ -51,9 +50,10 @@ class CreateDde(graphene.Mutation):
 
         user = info.context.user
         up = user.Uprofile
-        dinamico = tokenD()
 
-        if user.is_anonymous or not dinamico.verify(token_d):
+        if not up.password:
+            raise Exception("user does not have nip")
+        if user.is_anonymous or not user.Uprofile.check_password(nip):
             return None
         if not flag_tel and not up.validacion_telefono:
             raise Exception('telefono no validado')

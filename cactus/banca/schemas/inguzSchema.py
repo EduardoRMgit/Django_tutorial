@@ -13,7 +13,6 @@ from demograficos.models.userProfile import UserProfile
 from demograficos.models import Contacto
 from spei.stpTools import randomString
 from banca.utils.limiteTrans import LimiteTrans
-from demograficos.utils.tokendinamico import validaToken
 from banca.utils.comprobantesPng import CompTrans
 from datetime import datetime
 
@@ -32,7 +31,7 @@ class CreateInguzTransaccion(graphene.Mutation):
         contacto = graphene.Int(required=True)
         abono = graphene.String(required=True)
         concepto = graphene.String(required=True)
-        token_d = graphene.String(required=True)
+        nip = graphene.String(required=True)
         cobro_id = graphene.Int()
 
     @login_required
@@ -42,7 +41,7 @@ class CreateInguzTransaccion(graphene.Mutation):
                contacto,
                abono,
                concepto,
-               token_d,
+               nip,
                cobro_id=None):
         db_logger = logging.getLogger("db")
         try:
@@ -53,8 +52,10 @@ class CreateInguzTransaccion(graphene.Mutation):
             raise Exception("Cuenta ordenante no es Inguz")
         if UserProfile.objects.filter(user=ordenante).count() == 0:
             raise Exception('Usuario sin perfil')
-        if not validaToken(token_d):
-            raise Exception('token dinamico incorrecto')
+        if not ordenante.Uprofile.password:
+            raise Exception("Usuario no ha establecido nip")
+        if not ordenante.Uprofile.check_password(nip):
+            raise Exception('Nip incorrecto')
 
         try:
             contacto = Contacto.objects.get(pk=contacto,
