@@ -15,14 +15,14 @@ def comprobar_clabe_curp(request):
             is_active=True,
             Uprofile__cuentaClabe=clabe,
             Uprofile__curp=curp_)
-        if curp:
+        if curp.count() >= 2:
+            msg_logg = "[Error Servicio Zaki CLABE-CURP] {}.".format(
+                f"Hay varios usuarios con el mismo curp {curp_}")
+            db_logger.info(msg_logg)
+        elif curp.count() == 1:
             curp_valido = True
             msg_logg = "[Servicio Zaki CLABE-CURP] {}.".format(
                 f"CURP {curp_} Valido")
-            db_logger.info(msg_logg)
-        elif curp >= 2:
-            msg_logg = "[Error Servicio Zaki CLABE-CURP] {}.".format(
-                f"Hay varios usuarios con el mismo curp {curp_}")
             db_logger.info(msg_logg)
         if not curp_valido:
             msg_logg = "[Servicio Zaki CLABE-CURP] {}.".format(
