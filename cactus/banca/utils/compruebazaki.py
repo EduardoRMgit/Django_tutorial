@@ -13,7 +13,7 @@ def comprobar_clabe_curp(request):
         clabe = request['clabe']
         curp = User.objects.filter(
             is_active=True,
-            Uprofile__CuentaClabe=clabe,
+            Uprofile__cuentaClabe=clabe,
             Uprofile__curp=curp_)
         if curp:
             curp_valido = True
