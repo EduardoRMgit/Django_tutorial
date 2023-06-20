@@ -2489,7 +2489,7 @@ class CreateBeneficiario(graphene.Mutation):
     def mutate(self,
                info,
                token,
-               token_d,
+               nip,
                name,
                apellidopat,
                apellidomat,
@@ -2509,11 +2509,11 @@ class CreateBeneficiario(graphene.Mutation):
             def _valida(expr, msg):
                 if expr:
                     raise Exception(msg)
-            dinamico = tokenD()
             _valida(user.Uprofile.password is None,
                     'El usuario no ha establecido su NIP.')
-            _valida(not dinamico.verify(token_d),
-                    'El token dinamico es incorrecto.')
+            _valida(not user.Uprofile.check_password(nip),
+                    'El NIP es incorrecto.')
+
 
             if name is not None:
                 name = name.strip()
@@ -3103,7 +3103,7 @@ class BlockContacto(graphene.Mutation):
         token = graphene.String(required=True)
         bloquear = graphene.Boolean(required=True)
         clabe = graphene.String(required=True)
-        token = graphene.String(required=True)
+        nip = graphene.String(required=True)
 
     def mutate(self, info, token, bloquear, clabe, nip):
 
