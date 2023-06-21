@@ -526,6 +526,7 @@ class CreateTransferenciaEnviada(graphene.Mutation):
                 raise Exception(msg)
         abono = abono.strip()
         concepto = concepto.strip()
+        nip = nip.strip()
         user = info.context.user
         monto = float(abono)
         saldo_inicial_usuario = user.Uprofile.saldo_cuenta
