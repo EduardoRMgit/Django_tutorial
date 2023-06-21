@@ -813,13 +813,15 @@ class LiquidarCobro(graphene.Mutation):
             concepto=concepto,
             claveRastreo=claveR
         )
+        clave_contacto = beneficiario.Uprofile.cuentaClabe
+        contacto = ordenante.Contactos_Usuario.filter(clabe=clave_contacto)
         inguz_transaccion = InguzTransaction.objects.create(
             monto=monto2F,
             concepto=concepto,
             ordenante=ordenante,
             fechaOperacion=fecha,
             transaccion=main_trans,
-            contacto=user_contacto
+            contacto=contacto
         )
         cobro.transaccion = inguz_transaccion
         cobro.status = NotificacionCobro.LIQUIDADO
