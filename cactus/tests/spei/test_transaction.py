@@ -43,7 +43,7 @@ class TransactionTestCase(TokenTestCase):
     variables = {
         'concepto':  "prueba",
         'abono': "0.01",
-        'nip': "1234",
+        'nip': "123456",
         'contacto': 1
     }
 

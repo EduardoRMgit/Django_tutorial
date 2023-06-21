@@ -20,7 +20,8 @@ def validaToken(user, token_d):
         hoy = timezone.now()
         tokensc = token.count()
         if tokensc:
-            comparacion = (hoy - token.fecha > timedelta(minutes=2))
+            comparacion = (hoy - token.last().fecha < timedelta(minutes=2))
+            print(comparacion, "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb")
             if comparacion:
                 token.delete()
                 return True
