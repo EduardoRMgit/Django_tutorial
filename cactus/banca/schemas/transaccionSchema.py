@@ -20,7 +20,7 @@ from banca.utils.clabe import es_cuenta_inguz
 from banca.utils.limiteTrans import LimiteTrans
 from banca.utils.comprobantesPng import CompTrans
 
-from spei.models import StpTransaction, InstitutionBanjico
+from spei.models import StpTransaction
 from spei.stpTools import randomString
 from spei.stpTools import gen_referencia_numerica
 
@@ -819,12 +819,6 @@ class LiquidarCobro(graphene.Mutation):
         if contacto:
             contacto = contacto.last()
         else:
-            try:
-                name_banco = InstitutionBanjico.objects.get(
-                    short_id=str(clave_contacto[:3])).short_name
-            except Exception:
-                raise Exception(
-                    'CLABE inválida, no existe banco válido para esa CLABE')
             es_inguz = es_cuenta_inguz(clave_contacto)
             if es_inguz:
                 try:
@@ -834,16 +828,19 @@ class LiquidarCobro(graphene.Mutation):
                         status="O")
                 except Exception:
                     raise Exception("No existe usuario Inguz con esa CLABE")
-            contacto = Contacto.objects.create(
-                nombre=ordenante.first_name,
-                ap_paterno=ordenante.last_name,
-                ap_materno=ordenante.Uprofile.apMaterno,
-                nombreCompleto=ordenante.Uprofile.get_nombre_completo(),
-                banco=name_banco,
-                clabe=clave_contacto,
-                user=beneficiario,
-                es_inguz=es_inguz
-            )
+                contacto = Contacto.objects.create(
+                    nombre=ordenante.first_name,
+                    ap_paterno=ordenante.last_name,
+                    ap_materno=ordenante.Uprofile.apMaterno,
+                    nombreCompleto=(
+                        ordenante.Uprofile.get_nombre_completo()),
+                    banco="Inguz",
+                    clabe=clave_contacto,
+                    user=beneficiario,
+                    es_inguz=es_inguz
+                )
+            else:
+                raise Exception("No es cuenta inguz")
         inguz_transaccion = InguzTransaction.objects.create(
             monto=monto2F,
             concepto=concepto,
