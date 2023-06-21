@@ -813,13 +813,41 @@ class LiquidarCobro(graphene.Mutation):
             concepto=concepto,
             claveRastreo=claveR
         )
+        clave_contacto = beneficiario.Uprofile.cuentaClabe
+        contacto = ordenante.Contactos_Usuario.filter(
+            clabe=clave_contacto)
+        if contacto:
+            contacto = contacto.last()
+        else:
+            es_inguz = es_cuenta_inguz(clave_contacto)
+            if es_inguz:
+                try:
+                    UserProfile.objects.get(
+                        cuentaClabe=clave_contacto,
+                        enrolamiento=True,
+                        status="O")
+                except Exception:
+                    raise Exception("No existe usuario Inguz con esa CLABE")
+                contacto = Contacto.objects.create(
+                    nombre=ordenante.first_name,
+                    ap_paterno=ordenante.last_name,
+                    ap_materno=ordenante.Uprofile.apMaterno,
+                    nombreCompleto=(
+                        ordenante.Uprofile.get_nombre_completo()),
+                    banco="Inguz",
+                    clabe=clave_contacto,
+                    user=beneficiario,
+                    es_inguz=es_inguz
+                )
+            else:
+                raise Exception("No es cuenta inguz")
         inguz_transaccion = InguzTransaction.objects.create(
             monto=monto2F,
             concepto=concepto,
             ordenante=ordenante,
             fechaOperacion=fecha,
             transaccion=main_trans,
-            contacto=user_contacto
+            contacto=contacto
         )
         cobro.transaccion = inguz_transaccion
         cobro.status = NotificacionCobro.LIQUIDADO
