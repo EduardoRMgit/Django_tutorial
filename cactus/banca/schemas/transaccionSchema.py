@@ -803,7 +803,7 @@ class LiquidarCobro(graphene.Mutation):
         )
         # Padre de la entrada del beneficiario
         user_contacto = cobro.usuario_solicitante
-        Transaccion.objects.create(
+        main_trans2 = Transaccion.objects.create(
             user=user_contacto,
             fechaValor=fecha,
             fechaAplicacion=fecha,
@@ -819,6 +819,13 @@ class LiquidarCobro(graphene.Mutation):
             ordenante=ordenante,
             fechaOperacion=fecha,
             transaccion=main_trans
+        )
+        inguz_transaccion = InguzTransaction.objects.create(
+            monto=monto2F,
+            concepto=concepto,
+            ordenante=cobro.usuario_solicitante,
+            fechaOperacion=fecha,
+            transaccion=main_trans2
         )
         cobro.transaccion = inguz_transaccion
         cobro.status = NotificacionCobro.LIQUIDADO
