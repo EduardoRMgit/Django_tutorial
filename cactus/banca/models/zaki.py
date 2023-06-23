@@ -44,9 +44,10 @@ class PrestamoZakiTransaccion(models.Model):
         null=True)
 
     monto = models.CharField(max_length=64, null=True)
+    monto_total = models.CharField(max_length=64, null=True)
 
     def __str__(self):
-        return f"{self.user.Uprofile.cuentaClabe} - {self.monto}"
+        return f"{self.user.Uprofile.cuentaClabe} - {self.monto_total}"
 
 
 class PagoZakiTransaccion(models.Model):
@@ -56,22 +57,26 @@ class PagoZakiTransaccion(models.Model):
         User,
         on_delete=models.CASCADE,
         related_name='pagos_zaki',
-        null=False,
-        blank=False
     )
     enviada_pago = models.OneToOneField(
-        Transaccion,
-        related_name="pagos_recibida",
-        on_delete=models.CASCADE,
-        blank=True,
-        null=True)
-    recibida_pago = models.OneToOneField(
         Transaccion,
         related_name="pagos_enviada",
         on_delete=models.CASCADE,
         blank=True,
         null=True)
-
+    recibida_pago = models.OneToOneField(
+        Transaccion,
+        related_name="pagos_recibida",
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True)
+    prestamo = models.ForeignKey(
+        PrestamoZakiTransaccion,
+        on_delete=models.CASCADE,
+        related_name='abonos',
+        null=True,
+        blank=True
+    )
     monto = models.CharField(max_length=64, null=True)
 
     def __str__(self):
