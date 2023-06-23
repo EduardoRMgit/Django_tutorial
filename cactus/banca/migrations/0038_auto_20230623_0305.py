@@ -14,12 +14,8 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='pagozakitransaccion',
             name='prestamo',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='abonos', to='banca.prestamozakitransaccion'),
-        ),
-        migrations.AlterField(
-            model_name='notificacioncobro',
-            name='transaccion',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='banca.inguztransaction'),
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE,
+                                    related_name='abonos', to='banca.prestamozakitransaccion'),
         ),
         migrations.AlterField(
             model_name='pagozakitransaccion',
