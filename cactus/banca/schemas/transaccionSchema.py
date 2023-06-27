@@ -818,7 +818,7 @@ class LiquidarCobro(graphene.Mutation):
             concepto=concepto,
             ordenante=ordenante,
             fechaOperacion=fecha,
-            transaccion=main_trans,
+            transaccion=main_trans
         )
         cobro.transaccion = inguz_transaccion
         cobro.status = NotificacionCobro.LIQUIDADO

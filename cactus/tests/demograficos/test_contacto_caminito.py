@@ -213,10 +213,10 @@ class TestContacto(JSONWebTokenTestCase):
         mutation3 = '''
                 mutation deleteContacto($token: String!,
                                         $clabe: String!,
-                                        $nip: String!){
+                                        $tokenD: String!){
                     deleteContacto(token: $token,
                                    clabe: $clabe,
-                                   nip: $nip){
+                                   tokenD: $tokenD){
                         contacto{
                                 nombre
                                 activo
@@ -224,10 +224,19 @@ class TestContacto(JSONWebTokenTestCase):
                     }
                 }
         '''
+        mutation30 = '''
+                query tokenDinamico($token: String!){
+                    tokenDinamico(token: $token){
+                        token
+                    }
+                }
+        '''
+        variable60 = {"token": self.token}
+        res60 = self.client.execute(mutation30, variable60)
         # (deleteContacto)' <con clabe incorrecta>
         variables6 = {"token": self.token,
                       "clabe": "014111111111111111",
-                      "nip": "1234"}
+                      "tokenD": res60.data["tokenDinamico"]["token"]}
         res6 = self.client.execute(mutation3, variables6)
         self.assertEqual(res6.errors[0].message,
                          'No existe contacto activo')
@@ -239,16 +248,17 @@ class TestContacto(JSONWebTokenTestCase):
             (random.choice(letters_and_digits) for i in range(158)))
         variables7 = {"token": str(token_wrong3),
                       "clabe": "014122223333444455",
-                      "nip": "1234"}
+                      "tokenD": res60.data["tokenDinamico"]["token"]}
         res7 = self.client.execute(mutation3, variables7)
         self.assertEqual(res7.errors[0].message,
                          'Error decoding signature')
         print("    [assert OK] Wrong token for deleteContacto")
 
         # deleteContacto con variables correctas
+        res60 = self.client.execute(mutation30, variable60)
         variables8 = {"token": self.token,
                       "clabe": "014122223333444455",
-                      "nip": "1234"}
+                      "tokenD": res60.data["tokenDinamico"]["token"]}
         res8 = self.client.execute(mutation3, variables8)
         expected_res = {
                     "deleteContacto": {

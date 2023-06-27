@@ -5,13 +5,14 @@ from arcus.models import ServicesArcus, RecargasArcus, PagosArcus
 from banca.models import Transaccion, StatusTrans, TipoTransaccion
 from arcus.utils.autharcus import headers_arcus
 from spei.stpTools import randomString
+from arcus.utils.erroresArcus import mensajes_error
 import requests
 from django.conf import settings
 import json
 import uuid
 from django.db.models import Q
 from collections import Counter
-from datetime import datetime
+from datetime import datetime, timedelta
 import logging
 
 
@@ -136,7 +137,13 @@ class Query(object):
             data = {}
             data["company_sku"] = empresa
             data["service_number"] = referencia
-            response = requests.post(url=url, headers=headers, json=data)
+            try:
+                response = requests.post(
+                    url=url, headers=headers, json=data, timeout=5)
+            except Exception as t:
+                msg_arcus = f"[TimeOut Arcus] Tiempo de respuesta excedido:" \
+                            f" {t}"
+                db_logger.error(msg_arcus)
         except Exception as error:
             raise Exception("Error en la peticion", error)
         if response.status_code != 200:
@@ -144,6 +151,8 @@ class Query(object):
             msg_arcus = f"[Error Arcus Consulta Bill] Respuesta " \
                         f"Arcus: {response_error}"
             db_logger.error(msg_arcus)
+            mensaje = mensajes_error(response_error)
+            raise Exception(mensaje)
         elif response.status_code == 200:
             response = (json.loads(response.content.decode("utf-8")))
             msg_arcus = f"[Consulta Balance Exitosa] Respuesta Arcus: " \
@@ -197,9 +206,30 @@ class ArcusPay(graphene.Mutation):
             saldo = True
         else:
             raise Exception("Saldo insuficiente")
+        now = datetime.now()
+        yesterday = now - timedelta(hours=24)
         try:
-            uid = str(uuid.uuid4())
-            headers = headers_arcus(uid)
+            if tipo == "S":
+                q = PagosArcus.objects.filter(
+                        Q(fecha_creacion__gte=yesterday) & Q(
+                            fecha_creacion__lte=now) & Q(
+                                empresa_servicio__sku_id=company_sku) & Q(
+                                    numero_cuenta=account_number) & Q(
+                                            monto=monto))
+            elif tipo == "R":
+                q = PagosArcus.objects.filter(
+                        Q(fecha_creacion__gte=yesterday) & Q(
+                            fecha_creacion__lte=now) & Q(
+                                empresa_recargas__sku_id=company_sku) & Q(
+                                    numero_cuenta=account_number) & Q(
+                                            monto=monto))
+            if q is not None:
+                try:
+                    uid = q.last().id_externo
+                    headers = headers_arcus(uid)
+                except Exception:
+                    uid = str(uuid.uuid4())
+                    headers = headers_arcus(uid)
             url = f"{settings.ARCUS_DOMAIN}/pay"
             data = {}
             data["company_sku"] = company_sku
@@ -208,7 +238,16 @@ class ArcusPay(graphene.Mutation):
             data["currency"] = "MXN"
             data["external_id"] = uid
             data["payment_method"] = "DC"
-            response = requests.post(url=url, headers=headers, json=data)
+            try:
+                response = requests.post(
+                    url=url,
+                    headers=headers,
+                    json=data,
+                    timeout=5)
+            except Exception as t:
+                msg_arcus = f"[TimeOut Arcus] Tiempo de respuesta excedido:" \
+                            f" {t}"
+                db_logger.error(msg_arcus)
 
         except Exception as error:
             raise Exception("Error en la peticion", error)
@@ -217,6 +256,8 @@ class ArcusPay(graphene.Mutation):
             msg_arcus = f"[Error Arcus] Respuesta arcus: {response_error} " \
                         f"peticion: {data} del usuario: {user}"
             db_logger.error(msg_arcus)
+            mensaje = mensajes_error(response_error)
+            raise Exception(mensaje)
         response = (json.loads(response.content.decode("utf-8")))
         fecha = datetime.strptime(response["processed_at"], '%Y-%m-%d').date()
         hora = datetime.strptime(response["process_at_time"], '%H:%M').time()
@@ -236,16 +277,17 @@ class ArcusPay(graphene.Mutation):
         except Exception:
             raise Exception("Empresa no existe")
         concepto = response["ticket_text"]
-        main_trans = Transaccion.objects.create(
-            user=user,
-            fechaValor=fecha,
-            monto=monto,
-            statusTrans=status,
-            tipoTrans=_tipo,
-            concepto=concepto,
-            claveRastreo=rastreo
-        )
-        if tipo == "R":
+        if len(q) == 0:
+            main_trans = Transaccion.objects.create(
+                user=user,
+                fechaValor=fecha,
+                monto=monto,
+                statusTrans=status,
+                tipoTrans=_tipo,
+                concepto=concepto,
+                claveRastreo=rastreo
+            )
+        if tipo == "R" and len(q) == 0:
             pay = PagosArcus.objects.create(
                 tipo=tipo,
                 usuario=user,
@@ -262,7 +304,7 @@ class ArcusPay(graphene.Mutation):
                 numero_cuenta=response["service_number"],
                 empresa_recargas=empresa
             )
-        if tipo == "S":
+        if tipo == "S" and len(q) == 0:
             pay = PagosArcus.objects.create(
                 tipo=tipo,
                 usuario=user,
@@ -279,7 +321,9 @@ class ArcusPay(graphene.Mutation):
                 numero_cuenta=response["service_number"],
                 empresa_servicio=empresa
             )
-        if status.nombre == "exito" and saldo:
+        else:
+            pay = q.last()
+        if status.nombre == "exito" and saldo and len(q) == 0:
             user.Uprofile.saldo_cuenta -= round(float(monto), 2)
             user.Uprofile.save()
         msg_arcus = f"[Pago Exitoso Arcus] Pago realizado exitosamente " \

@@ -1,8 +1,42 @@
 import logging
+
 from django.contrib.auth.models import User
 
 
 db_logger = logging.getLogger('db')
+
+
+def comprobar_clabe_curp(request):
+    curp_valido = False
+    dicc = {}
+    try:
+        curp_ = request['curp']
+        clabe = request['clabe']
+        curp = User.objects.filter(
+            is_active=True,
+            Uprofile__cuentaClabe=clabe,
+            Uprofile__curp=curp_)
+        if curp.count() >= 2:
+            msg_logg = "[Error Servicio Zaki CLABE-CURP] {}.".format(
+                f"Hay varios usuarios con el mismo curp {curp_}")
+            db_logger.info(msg_logg)
+        elif curp.count() == 1:
+            curp_valido = True
+            msg_logg = "[Servicio Zaki CLABE-CURP] {}.".format(
+                f"CURP {curp_} Valido")
+            db_logger.info(msg_logg)
+        if not curp_valido:
+            msg_logg = "[Servicio Zaki CLABE-CURP] {}.".format(
+                f"CURP {curp_}  No valido")
+            db_logger.error(msg_logg)
+
+        dicc['curp_valido'] = curp_valido
+
+    except Exception as ex:
+        msg = f"[Servicio Zaki]:{ex}"
+        db_logger.error(msg)
+        dicc['error'] = "bad request"
+    return dicc
 
 
 def comprobar_username_curp(request):

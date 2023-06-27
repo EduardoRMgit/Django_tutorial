@@ -2,6 +2,7 @@ from django.contrib import admin
 from arcus.models import Bills, ServicesArcus, RecargasArcus, PagosArcus
 from arcus.utils.autharcus import headers_arcus
 from arcus.utils.categorias import categorias
+from arcus.utils.sftp import sftp_connect
 import requests
 import json
 from django.conf import settings
@@ -201,6 +202,7 @@ class RecargasArcusAdmin(admin.ModelAdmin):
 
 
 class PagosArcusAdmin(admin.ModelAdmin):
+    actions = ['conciliacion_pago']
     search_fields = ('id',
                      'id_transaccion',
                      'transaccion',
@@ -222,6 +224,13 @@ class PagosArcusAdmin(admin.ModelAdmin):
                     'numero_cuenta',
                     'tipo'
                     )
+
+    def conciliacion_pago(self, request, pago):
+        try:
+            sftp_connect()
+        except Exception as ex:
+            msg = f"[ARCUS CONCILIACION ERROR] {ex}"
+            db_logger.error(msg)
 
 
 admin.site.register(Bills, BillsAdmin)
