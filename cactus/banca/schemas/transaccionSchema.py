@@ -823,7 +823,7 @@ class LiquidarCobro(graphene.Mutation):
         inguz_transaccion = InguzTransaction.objects.create(
             monto=monto2F,
             concepto=concepto,
-            ordenante=cobro.usuario_solicitante,
+            ordenante=beneficiario,
             fechaOperacion=fecha,
             transaccion=main_trans2
         )
