@@ -2286,9 +2286,9 @@ class UpdateInfoPersonal(graphene.Mutation):
         if nationality is not None:
             nationality = nationality.strip()
         if curp is not None:
+            u_profile = UserProfile.objects.filter(curp=curp)
             curp = curp.upper()
             valida = curp_validation(curp)
-            u_profile = UserProfile.objects.filter(curp=curp)
             c_profile = u_profile.count()
             if c_profile > 1:
                 raise AssertionError('CURP ya registrado.')
@@ -2301,7 +2301,7 @@ class UpdateInfoPersonal(graphene.Mutation):
             user.first_name = name if name else user.first_name
             user.last_name = last_name_p if last_name_p else user.last_name
             user.email = correo if correo else user.email
-            u_profile = u_profile[0]
+            u_profile = UserProfile.objects.filter(user=user)[0]
             u_profile.sexo = gender if gender else u_profile.sexo
             u_profile.apMaterno = (
                 last_name_m if last_name_m else u_profile.apMaterno)
