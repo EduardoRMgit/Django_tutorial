@@ -163,7 +163,8 @@ CORS_ORIGIN_WHITELIST = ['http://localhost:5000',
                          'http://10.5.1.1:8000',
                          'http://inguzmx.com',
                          'https://inguzmx.com',
-                         'http://10.8.0.1:3000', ]
+                         'http://10.8.0.1',
+                         'http://10.8.0.1:3000']
 
 
 ROOT_URLCONF = 'cactus.urls'
@@ -387,4 +388,11 @@ ARCUS_DOMAIN = cluster_secret('arcus-credentials', 'url')
 MAILCHIMP_SERVER = cluster_secret('mailchimp-credentials', 'server')
 MAILCHIMP_KEY = cluster_secret('mailchimp-credentials', 'key')
 MAILCHIMP_ID = cluster_secret('mailchimp-credentials', 'id')
+if SITE == "prod":
+    MAILCHIMP_SERVER_C = cluster_secret('mailchimp-credentials-c', 'server')
+    MAILCHIMP_KEY_C = cluster_secret('mailchimp-credentials-c', 'key')
+    MAILCHIMP_ID_C = cluster_secret('mailchimp-credentials-c', 'id')
 USERNAME_ZAKI = "5529641640"
+ARCUS_HOST = cluster_secret('arcus-sftp-credentials', 'host')
+ARCUS_USER = cluster_secret('arcus-sftp-credentials', 'user')
+ARCUS_PASS = cluster_secret('arcus-sftp-credentials', 'pass')

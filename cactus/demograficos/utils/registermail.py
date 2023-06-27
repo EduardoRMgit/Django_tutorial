@@ -7,6 +7,7 @@ db_logger = logging.getLogger('db')
 
 
 def RegistrarMail(user):
+    # Marketing
     try:
         client = MailchimpMarketing.Client()
         client.set_config({
@@ -28,3 +29,26 @@ def RegistrarMail(user):
             f"[Error mailchimp] Error al suscribir al usuario"
             f"con el email: {user.email}. Error: {error.text}")
         db_logger.warning(msg_mailchimp)
+    # Clientes
+    if settings.SITE == "prod":
+        try:
+            client = MailchimpMarketing.Client()
+            client.set_config({
+                "api_key": settings.MAILCHIMP_KEY_C,
+                "server": settings.MAILCHIMP_SERVER_c
+            })
+
+            response = client.lists.add_list_member(
+                settings.MAILCHIMP_ID_C, {
+                               "email_address": user.email,
+                               "status": "subscribed"})
+            db_logger.info(
+                f"[Subcription mailchimp]: {user}"
+                f"response: {response}"
+            )
+        except ApiClientError as error:
+            print("Error: {}".format(error.text))
+            msg_mailchimp = (
+                f"[Error mailchimp] Error al suscribir al usuario"
+                f"con el email: {user.email}. Error: {error.text}")
+            db_logger.warning(msg_mailchimp)
