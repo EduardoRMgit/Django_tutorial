@@ -5,6 +5,7 @@ from graphene_django.types import DjangoObjectType
 from django.conf import settings
 from demograficos.utils.stringNormalize import normalize
 from demograficos.models import EntidadFed
+from demograficos.models import UserProfile
 import logging
 
 
@@ -38,14 +39,15 @@ class ProveedorSchema(graphene.Mutation):
         user = info.context.user
         if user.is_anonymous:
             raise AssertionError('usuario no identificado')
-
         curp = curp.upper()
+        if curp == user.Uprofile.curp:
+            raise AssertionError("El cliente no puede ser su mismo proveedor")
         nombre_renapo = None
         ap_pat_renapo = None
         ap_mat_renapo = None
         fechNac_renapo = None
         entidad_fed = None
-
+        
         if settings.SITE in ["prod"]:
             data, mensaje = check_renapo(curp)
             if not data:
