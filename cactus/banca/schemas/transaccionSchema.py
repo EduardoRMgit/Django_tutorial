@@ -788,9 +788,36 @@ class LiquidarCobro(graphene.Mutation):
                 'Saldo insuficiente')
         ordenante.Uprofile.saldo_cuenta -= round(float(importe), 2)
         ordenante.Uprofile.save()
+        clabe_ordenante = ordenante.Uprofile.cuentaClabe
         beneficiario.Uprofile.saldo_cuenta += round(float(importe), 2)
         beneficiario.Uprofile.save()
-
+        clabe_beneficiario = beneficiario.Uprofile.cuentaClabe
+        contacto_ordenante = ordenante.Contactos_Usuario.filter(
+            clabe=clabe_beneficiario).last()
+        contacto_beneficiario = beneficiario.Contactos_Usuario.filter(
+            clabe=clabe_ordenante).last()
+        if contacto_ordenante is None:
+            Contacto.objects.create(
+                nombre=beneficiario.first_name,
+                ap_paterno=beneficiario.last_name
+                ap_materno=beneficiario.Uprofile.apMaterno,
+                nombreCompleto=beneficiario.Uprofile.get_nombre_completo,
+                banco="STP",
+                clabe=clabe_beneficiario,
+                user=ordenante,
+                es_inguz=True
+            )
+        if contacto_beneficiario is None:
+            Contacto.objects.create(
+                nombre=ordenante.first_name,
+                ap_paterno=ordenante.last_name
+                ap_materno=ordenante.Uprofile.apMaterno,
+                nombreCompleto=ordenante.Uprofile.get_nombre_completo,
+                banco="STP",
+                clabe=clabe_ordenante,
+                user=beneficiario,
+                es_inguz=True
+            )
         concepto = "Liquidacion de cobro"
         main_trans = Transaccion.objects.create(
             user=ordenante,
@@ -818,14 +845,16 @@ class LiquidarCobro(graphene.Mutation):
             concepto=concepto,
             ordenante=ordenante,
             fechaOperacion=fecha,
-            transaccion=main_trans
+            transaccion=main_trans,
+            contacto=contacto_ordenante
         )
         inguz_transaccion2 = InguzTransaction.objects.create(
             monto=monto2F,
             concepto=concepto,
             ordenante=beneficiario,
             fechaOperacion=fecha,
-            transaccion=main_trans2
+            transaccion=main_trans2,
+            contacto=contacto_beneficiario
         )
         cobro.transaccion = inguz_transaccion
         cobro.status = NotificacionCobro.LIQUIDADO
