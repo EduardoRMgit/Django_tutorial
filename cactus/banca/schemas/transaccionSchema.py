@@ -563,7 +563,7 @@ class CreateTransferenciaEnviada(graphene.Mutation):
         status = StatusTrans.objects.get(nombre="esperando respuesta")
         tipo = TipoTransaccion.objects.get(codigo=2)  # Transferencia Enviada
         rfc_beneficiario = None
-        if not LimiteTrans(user.id).trans_mes(float(monto_stp_trans)):
+        if not LimiteTrans(user.id).saldo_max_salida(float(monto_stp_trans)):
             raise Exception("Límite transaccional superado")
         main_trans = Transaccion.objects.create(
             user=user,

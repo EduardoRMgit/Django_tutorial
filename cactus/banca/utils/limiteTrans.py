@@ -28,6 +28,7 @@ class LimiteTrans(object):
             return True
         trans = self.user.user_transaccion.filter(
             tipoTrans__medio="T",
+            tipoTrans__tipo="R",
             fechaValor__year=self.today.year,
             fechaValor__month=self.today.month,
             statusTrans__nombre="exito"
@@ -41,6 +42,21 @@ class LimiteTrans(object):
         if self.nivel.saldo_max is None:
             return True
         if not self.up.saldo_cuenta + monto <= self.nivel.saldo_max:
+            return False
+        return True
+
+    def saldo_max_salida(self, monto):
+        if self.nivel.saldo_max is None:
+            return True
+        trans = self.user.user_transaccion.filter(
+            tipoTrans__medio="T",
+            tipoTrans__tipo="E",
+            fechaValor__year=self.today.year,
+            fechaValor__month=self.today.month,
+            statusTrans__nombre="exito",
+        )
+        total = sum([x.monto for x in trans]) + Decimal(monto)
+        if not self.up.saldo_cuenta >= total <= self.nivel.saldo_max:
             return False
         return True
 

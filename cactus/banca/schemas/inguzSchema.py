@@ -86,7 +86,7 @@ class CreateInguzTransaccion(graphene.Mutation):
         tipo = TipoTransaccion.objects.get(codigo=18)
         tipo_recibida = TipoTransaccion.objects.get(codigo=19)
 
-        if not LimiteTrans(ordenante.id).trans_mes(float(monto2F)):
+        if not LimiteTrans(ordenante.id).saldo_max_salida(float(monto2F)):
             raise Exception("Límite transaccional superado")
 
         if not LimiteTrans(user_contacto.id).saldo_max(float(monto2F)) or \
