@@ -81,6 +81,10 @@ class ServicesArcusAdmin(admin.ModelAdmin):
                     servicio["name"] = "CESPE [Código de barras]"
                 if servicio["sku"] == "4013649027":
                     servicio["name"] = "CESPE [Número de cuenta]"
+                servicio["name"] = servicio["name"].replace(
+                    "[Barcode]", "[Código de barras]")
+                servicio["name"] = servicio["name"].replace(
+                    "[BARCODE]", "[Código de barras]")
                 if valida:
                     ServicesArcus.objects.filter(
                         sku_id=servicio["sku"]).update(
