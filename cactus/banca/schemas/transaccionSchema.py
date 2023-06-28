@@ -799,7 +799,7 @@ class LiquidarCobro(graphene.Mutation):
         if contacto_ordenante is None:
             Contacto.objects.create(
                 nombre=beneficiario.first_name,
-                ap_paterno=beneficiario.last_name
+                ap_paterno=beneficiario.last_name,
                 ap_materno=beneficiario.Uprofile.apMaterno,
                 nombreCompleto=beneficiario.Uprofile.get_nombre_completo,
                 banco="STP",
@@ -810,7 +810,7 @@ class LiquidarCobro(graphene.Mutation):
         if contacto_beneficiario is None:
             Contacto.objects.create(
                 nombre=ordenante.first_name,
-                ap_paterno=ordenante.last_name
+                ap_paterno=ordenante.last_name,
                 ap_materno=ordenante.Uprofile.apMaterno,
                 nombreCompleto=ordenante.Uprofile.get_nombre_completo,
                 banco="STP",
@@ -848,7 +848,7 @@ class LiquidarCobro(graphene.Mutation):
             transaccion=main_trans,
             contacto=contacto_ordenante
         )
-        inguz_transaccion2 = InguzTransaction.objects.create(
+        InguzTransaction.objects.create(
             monto=monto2F,
             concepto=concepto,
             ordenante=beneficiario,
