@@ -56,6 +56,11 @@ class ServicesArcusAdmin(admin.ModelAdmin):
                     'allows_reversal'
                     )
 
+    def get_queryset(Self, request):
+        queryset = super().get_queryset(request)
+        queryset = queryset.exclude(biller_type="NO MOSTRAR")
+        return queryset
+
     def updateservices(self, request, servicios):
         uid = str(uuid.uuid4())
         headers = headers_arcus(uid)
@@ -68,6 +73,18 @@ class ServicesArcusAdmin(admin.ModelAdmin):
                 tipo = categorias(servicio["biller_type"], servicio["name"])
                 valida = ServicesArcus.objects.filter(
                     sku_id=servicio["sku"]).count()
+                if servicio["sku"] == "4001771023":
+                    servicio["name"] = "Dish [Código de barras]"
+                if servicio["sku"] == "4000038028":
+                    servicio["name"] = "Dish [Número de cuenta]"
+                if servicio["sku"] == "4013646023":
+                    servicio["name"] = "CESPE [Código de barras]"
+                if servicio["sku"] == "4013649027":
+                    servicio["name"] = "CESPE [Número de cuenta]"
+                servicio["name"] = servicio["name"].replace(
+                    "[Barcode]", "[Código de barras]")
+                servicio["name"] = servicio["name"].replace(
+                    "[BARCODE]", "[Código de barras]")
                 if valida:
                     ServicesArcus.objects.filter(
                         sku_id=servicio["sku"]).update(

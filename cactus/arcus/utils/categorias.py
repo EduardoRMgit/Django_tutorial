@@ -16,8 +16,12 @@ def categorias(categoria, name):
             categoria == "Media Subscription" or \
             categoria == "Mortgage":
         categoria = "OTROS"
+        if name == "Gobierno del Estado de Mexico":
+            categoria = "OTROS", "AGUA"
     elif categoria == "Toll":
         categoria = "PEAJE/PARQUIMETRO"
+        if name == "Pase Urbano":
+            categoria = "NO MOSTRAR"
     elif categoria == "Water":
         categoria = "AGUA"
     elif categoria == "MXCell" and name == "TAEMOVISTAR":
