@@ -388,6 +388,10 @@ ARCUS_DOMAIN = cluster_secret('arcus-credentials', 'url')
 MAILCHIMP_SERVER = cluster_secret('mailchimp-credentials', 'server')
 MAILCHIMP_KEY = cluster_secret('mailchimp-credentials', 'key')
 MAILCHIMP_ID = cluster_secret('mailchimp-credentials', 'id')
+if SITE == "prod":
+    MAILCHIMP_SERVER_C = cluster_secret('changorreos-credentials', 'server')
+    MAILCHIMP_KEY_C = cluster_secret('changorreos-credentials', 'key')
+    MAILCHIMP_ID_C = cluster_secret('changorreos-credentials', 'id')
 USERNAME_ZAKI = "5529641640"
 ARCUS_HOST = cluster_secret('arcus-sftp-credentials', 'host')
 ARCUS_USER = cluster_secret('arcus-sftp-credentials', 'user')
