@@ -38,6 +38,7 @@ class TransactionTestCase(TokenTestCase):
                 }
         }
         """
+    # Se agrega token dinamico
 
     variables = {
         'concepto':  "prueba",
@@ -51,10 +52,8 @@ class TransactionTestCase(TokenTestCase):
             (instanciado en la clase padre)."""
 
         self.variables['token'] = self.token
-
         # Establecemos nip
         self.user.Uprofile.set_password("123456")
-
         # Establecemos el saldo
         self.user.Uprofile.saldo_cuenta = 0.01
         self.user.Uprofile.save()

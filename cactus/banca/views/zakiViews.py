@@ -3,11 +3,10 @@ from rest_framework.decorators import api_view
 from banca.utils.compruebazaki import (
     comprobar_username_curp, comprobar_username, comprobar_curp,
     comprobar_clabe_curp)
-from banca.utils.pago_prestamo_zaki import crear_prestamo, liquidar_prestamo
+from banca.utils.pago_prestamo_zaki import crear_prestamo, abonar_prestamo
 
 
 def __c_back_zaki(f, request):
-    print("request: ", request)
     if request.method == 'POST':
         valida = f(request.data)
     return Response(valida)
@@ -40,4 +39,4 @@ def ZakiLoanView(request):
 
 @api_view(['POST'])
 def ZakiPayView(request):
-    return __c_back_zaki(liquidar_prestamo, request)
+    return __c_back_zaki(abonar_prestamo, request)

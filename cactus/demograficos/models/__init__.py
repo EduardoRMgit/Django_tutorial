@@ -37,6 +37,7 @@ from .perfildeclarado import (TransferenciasMensuales,
                               OrigenDeposito,
                               PerfilTransaccionalDeclarado,
                               )
+from .tokenDinamico import TokenDinamico
 from .versionapp import VersionApp
 
 __all__ = ["Prospectos",
@@ -47,6 +48,7 @@ __all__ = ["Prospectos",
            "DocAdjuntoTipo",
            "DocAdjunto",
            "TipoComprobante",
+           "MotivoRechazoDoc",
            "Institucion",
            "Columnas",
            "SoyClienteDe",
@@ -92,5 +94,6 @@ __all__ = ["Prospectos",
            "UsoCuenta",
            "OrigenDeposito",
            "PerfilTransaccionalDeclarado",
+           "TokenDinamico",
            "VersionApp"
            ]
