@@ -287,7 +287,6 @@ def firma_cadena_registro_cuenta(data, stp_key_pwd):
     cadena_original = cadena_original_registro_cuenta(data)
     stp_key_pwd = str.encode(stp_key_pwd)
     with open('llavePrivada.pem', 'r') as key:
-        # key = os.getenv('STP-PRIVATE-KEY')
         unlockedKey = crypto.load_privatekey(
             crypto.FILETYPE_PEM,
             key.read(),
