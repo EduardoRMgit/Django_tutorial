@@ -137,14 +137,14 @@ class CreateInguzTransaccion(graphene.Mutation):
             claveRastreo=claveR
         )
 
-        a = InguzTransaction.objects.create(
-                monto=monto2F,
-                concepto=concepto.split(' - ')[-1],
-                ordenante=user_contacto,
-                fechaOperacion=fecha,
-                contacto=contacto_beneficiario,
-                transaccion=main_trans2,
-            )
+        InguzTransaction.objects.create(
+            monto=monto2F,
+            concepto=concepto.split(' - ')[-1],
+            ordenante=user_contacto,
+            fechaOperacion=fecha,
+            contacto=contacto_beneficiario,
+            transaccion=main_trans2,
+        )
 
         if cobro_id is not None:
             cobro = NotificacionCobro.objects.filter(pk=cobro_id)
