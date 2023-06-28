@@ -197,7 +197,7 @@ class ImageDoc(generics.CreateAPIView):
                                     'Mensaje': "Error al validar documento "
                                                "volver a tomar foto"
                                 },
-                                status=status.HTTP_200_OK)
+                                status=status.HTTP_400_BAD_REQUEST)
                         elif len(fotos) >= 3:
                             return Response(
                                 {
@@ -258,7 +258,7 @@ class ImageDoc(generics.CreateAPIView):
                                                    "documento volver a "
                                                    "tomar foto"
                                     },
-                                    status=status.HTTP_200_OK)
+                                    status=status.HTTP_400_BAD_REQUEST)
                             elif len(fotos) >= 3:
                                 return Response(
                                     {
@@ -293,7 +293,7 @@ class ImageDoc(generics.CreateAPIView):
                                                    "documento "
                                                    "volver a tomar foto"
                                     },
-                                    status=status.HTTP_200_OK)
+                                    status=status.HTTP_400_BAD_REQUEST)
                             elif len(fotos) >= 3:
                                 return Response(
                                     {
@@ -318,7 +318,7 @@ class ImageDoc(generics.CreateAPIView):
                 {
                     'error': "No fue posible crear el documento"
                 },
-                status=status.HTTP_200_OK)
+                status=status.HTTP_400_BAD_REQUEST)
 
         return Response({
             'id': id,
