@@ -56,6 +56,7 @@ class TransactionTestCase(TokenTestCase):
         self.user.Uprofile.set_password("123456")
         # Establecemos el saldo
         self.user.Uprofile.saldo_cuenta = 0.01
+        self.user.Uprofile.nivel_cuenta_id = 2
         self.user.Uprofile.save()
 
         response = self.client.execute(self.mutation, self.variables)
