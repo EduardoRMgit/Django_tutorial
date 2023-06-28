@@ -86,7 +86,7 @@ class CreateInguzTransaccion(graphene.Mutation):
         tipo = TipoTransaccion.objects.get(codigo=18)
         tipo_recibida = TipoTransaccion.objects.get(codigo=19)
 
-        if not LimiteTrans(ordenante.id).saldo_max_salida(float(monto2F)):
+        if not LimiteTrans(ordenante.id).trans_mes(float(monto2F)):
             raise Exception("Límite transaccional superado")
 
         if not LimiteTrans(user_contacto.id).saldo_max(float(monto2F)) or \
@@ -102,6 +102,9 @@ class CreateInguzTransaccion(graphene.Mutation):
 
         user_contacto.Uprofile.saldo_cuenta += round(float(abono), 2)
         user_contacto.Uprofile.save()
+        clabe_ordenante = ordenante.Uprofile.cuentaClabe
+        contacto_beneficiario = user_contacto.Contactos_Usuario.filter(
+            clabe=clabe_ordenante).last()
         main_trans = Transaccion.objects.create(
             user=ordenante,
             fechaValor=fecha,
@@ -123,7 +126,7 @@ class CreateInguzTransaccion(graphene.Mutation):
         )
 
         # Recibida (sin transacción hija)
-        Transaccion.objects.create(
+        main_trans2 = Transaccion.objects.create(
             user=user_contacto,
             fechaValor=fecha,
             fechaAplicacion=fecha,
@@ -133,6 +136,15 @@ class CreateInguzTransaccion(graphene.Mutation):
             concepto=concepto,
             claveRastreo=claveR
         )
+
+        a = InguzTransaction.objects.create(
+                monto=monto2F,
+                concepto=concepto.split(' - ')[-1],
+                ordenante=user_contacto,
+                fechaOperacion=fecha,
+                contacto=contacto_beneficiario,
+                transaccion=main_trans2,
+            )
 
         if cobro_id is not None:
             cobro = NotificacionCobro.objects.filter(pk=cobro_id)
