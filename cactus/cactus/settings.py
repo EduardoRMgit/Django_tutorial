@@ -392,3 +392,7 @@ USERNAME_ZAKI = "5529641640"
 ARCUS_HOST = cluster_secret('arcus-sftp-credentials', 'host')
 ARCUS_USER = cluster_secret('arcus-sftp-credentials', 'user')
 ARCUS_PASS = cluster_secret('arcus-sftp-credentials', 'pass')
+if SITE == "prod":
+    STP_CEP = cluster_secret('stpsecretprod', 'url-cep')
+else:
+    STP_CEP = cluster_secret('stpsecrettest', 'url-cep')

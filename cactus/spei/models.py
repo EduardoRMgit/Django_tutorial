@@ -386,6 +386,7 @@ class StpTransaction(models.Model):
         default=OK
     )
     conciliado = models.BooleanField(default=False)
+    url_cep = models.URLField(max_length=2056, blank=True, null=True)
 
     def __str__(self) -> str:
         txt = "Id Inguz: {} | StpId: {}"
