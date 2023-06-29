@@ -818,7 +818,7 @@ class LiquidarCobro(graphene.Mutation):
                 user=beneficiario,
                 es_inguz=True
             )
-        concepto = "Liquidacion de cobro"
+        concepto = "Cobro pagado"
         main_trans = Transaccion.objects.create(
             user=ordenante,
             fechaValor=fecha,
@@ -837,7 +837,7 @@ class LiquidarCobro(graphene.Mutation):
             monto=float(importe),
             statusTrans=status,
             tipoTrans=tipo_recibida,
-            concepto=concepto,
+            concepto="Cobro liquidado",
             claveRastreo=claveR
         )
         inguz_transaccion = InguzTransaction.objects.create(
@@ -850,7 +850,7 @@ class LiquidarCobro(graphene.Mutation):
         )
         InguzTransaction.objects.create(
             monto=monto2F,
-            concepto=concepto,
+            concepto="Cobro liquidado",
             ordenante=beneficiario,
             fechaOperacion=fecha,
             transaccion=main_trans2,
