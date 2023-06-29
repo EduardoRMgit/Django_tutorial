@@ -56,7 +56,7 @@ class LimiteTrans(object):
             statusTrans__nombre="exito",
         )
         total = sum([x.monto for x in trans]) + Decimal(monto)
-        if not self.up.saldo_cuenta >= total <= self.nivel.saldo_max:
+        if total > self.nivel.saldo_max:
             return False
         return True
 
