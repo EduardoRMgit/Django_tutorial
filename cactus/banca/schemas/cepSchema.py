@@ -16,6 +16,7 @@ class UrlCepType(DjangoObjectType):
             comision = 0
         return comision
 
+
 class Query(graphene.ObjectType):
     cep = graphene.Field(UrlCepType,
                          id=graphene.Int(required=True),
