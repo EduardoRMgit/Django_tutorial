@@ -56,6 +56,8 @@ class CreateInguzTransaccion(graphene.Mutation):
             raise Exception("Usuario no ha establecido nip")
         if not ordenante.Uprofile.check_password(nip):
             raise Exception('Nip incorrecto')
+        if ordenante.Uprofile.saldo_cuenta < round(float(abono), 2):
+            raise Exception("Saldo insuficiente")
 
         try:
             contacto = Contacto.objects.get(pk=contacto,
