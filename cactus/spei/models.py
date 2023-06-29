@@ -83,6 +83,7 @@ class CuentaPersonaFisica(models.Model):
         blank=True,
         null=True
     )
+    fecha_creacion = models.DateTimeField(default=timezone.now)
 
     def registra(self):
         '''

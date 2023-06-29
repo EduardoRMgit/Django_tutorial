@@ -22,7 +22,8 @@ from .userProfile import (StatusRegistro,
                           Parentesco,
                           Avatar,
                           AliasInvalido,
-                          Proveedor
+                          Proveedor,
+                          UserLogin
                           )
 from .comportamiento import (ComportamientoDiario, ComportamientoMensual)
 from .contactos import Contacto
@@ -95,5 +96,6 @@ __all__ = ["Prospectos",
            "OrigenDeposito",
            "PerfilTransaccionalDeclarado",
            "TokenDinamico",
-           "VersionApp"
+           "VersionApp",
+           "UserLogin"
            ]

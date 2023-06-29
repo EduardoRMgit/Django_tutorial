@@ -8,7 +8,7 @@ from graphene_django.views import GraphQLView
 from graphql_jwt.shortcuts import get_user_by_token
 
 from demograficos.models.profileChecks import InfoValidator as Validator
-from demograficos.models import GeoLocation, GeoDevice, UserLocation
+from demograficos.models import GeoLocation, GeoDevice, UserLocation, UserLogin
 import logging
 
 db_logger = logging.getLogger("db")
@@ -38,6 +38,8 @@ uuid_exception = [
 class LoggingGraphQLView(GraphQLView):
     def dispatch(self, request, *args, **kwargs):
         try:
+            print(request)
+            print('-------------------------------')
             data = self.parse_body(request)
             query = data['query']
             try:
@@ -93,6 +95,12 @@ class LoggingGraphQLView(GraphQLView):
                 user.Uprofile.blocked_reason != 'T') and not self.query_ex(
                 query, block_exception):
             return HttpResponseForbidden("action forbidden, user blocked")
+        if 'tokenAuth' in query:
+            UserLogin.objects.create(
+                user=user,
+                lat=lat,
+                lon=lon
+            )
         return super().dispatch(request, *args, **kwargs)
 
     @classmethod
