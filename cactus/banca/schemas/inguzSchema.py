@@ -102,6 +102,9 @@ class CreateInguzTransaccion(graphene.Mutation):
 
         user_contacto.Uprofile.saldo_cuenta += round(float(abono), 2)
         user_contacto.Uprofile.save()
+        clabe_ordenante = ordenante.Uprofile.cuentaClabe
+        contacto_beneficiario = user_contacto.Contactos_Usuario.filter(
+            clabe=clabe_ordenante).last()
         main_trans = Transaccion.objects.create(
             user=ordenante,
             fechaValor=fecha,
@@ -123,7 +126,7 @@ class CreateInguzTransaccion(graphene.Mutation):
         )
 
         # Recibida (sin transacción hija)
-        Transaccion.objects.create(
+        main_trans2 = Transaccion.objects.create(
             user=user_contacto,
             fechaValor=fecha,
             fechaAplicacion=fecha,
@@ -132,6 +135,15 @@ class CreateInguzTransaccion(graphene.Mutation):
             tipoTrans=tipo_recibida,
             concepto=concepto,
             claveRastreo=claveR
+        )
+
+        InguzTransaction.objects.create(
+            monto=monto2F,
+            concepto=concepto.split(' - ')[-1],
+            ordenante=user_contacto,
+            fechaOperacion=fecha,
+            contacto=contacto_beneficiario,
+            transaccion=main_trans2,
         )
 
         if cobro_id is not None:
