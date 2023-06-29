@@ -299,6 +299,20 @@ def firma_cadena_registro_cuenta(data, stp_key_pwd):
     return firma
 
 
+def firma_cadena_registro_cuenta_moral(data, stp_key_pwd):
+    stp_key_pwd = str.encode(stp_key_pwd)
+    with open('llavePrivada.pem', 'r') as key:
+        unlockedKey = crypto.load_privatekey(
+            crypto.FILETYPE_PEM,
+            key.read(),
+            stp_key_pwd)
+
+    baseString = str.encode(data)
+    cipheredString = crypto.sign(unlockedKey, baseString, 'sha256')
+    firma = b64encode(cipheredString)
+    return firma
+
+
 def registra_cuenta_persona_fisica(data):
     env = environ.Env()
     STPSECRET = env.str('STPSECRET', '')

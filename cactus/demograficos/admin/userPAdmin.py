@@ -30,6 +30,7 @@ from cactus.settings import SITE
 from import_export.admin import ExportActionMixin
 from spei.deletecuentaSTP import delete_stp
 from demograficos.utils.deletecustomer import pld_customer_delete
+from spei.registramoralstp import registra_moral_stp
 
 
 import logging
@@ -173,7 +174,8 @@ class UserProfileAdmin(ExportActionMixin, PasswordResetUserAdmin):
         PerfilTransaccionalInLine,
         ProveddorInLine
     )
-    actions = ['registra_cuenta', 'delete_stp_cuenta', 'delete_pld_customer']
+    actions = ['registra_cuenta', 'delete_stp_cuenta', 'delete_pld_customer',
+               'create_stp_moral']
 
     list_filter = (
         'Uprofile__nivel_cuenta',
@@ -315,6 +317,17 @@ class UserProfileAdmin(ExportActionMixin, PasswordResetUserAdmin):
                 msg = f"[ERROR action ubcubo delete customer] " \
                       f"descripcion: {ex}"
                 db_logger.error(msg)
+
+    def create_stp_moral(self, request, users):
+        try:
+            response = registra_moral_stp()
+            msg_logg = "[STP create cuenta moral] {}.".format(
+                        response.content)
+            db_logger.info(msg_logg)
+        except Exception as ex:
+            msg = f"[ERROR action stp create moral stp] " \
+                  f"descripcion: {ex}"
+            db_logger.error(msg)
 
 
 class ClienteAdmin(UserProfileAdmin):
