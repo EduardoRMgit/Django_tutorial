@@ -3,7 +3,7 @@ import graphql_jwt
 from servicios.schemas import productoSchema, GpoTRansaccionSchema
 from legal.schemas import legalSchema
 from banca.schemas import (transaccionSchema, inguzSchema, ScotiaSchema,
-                           creacionSchema, servicioClientes)
+                           creacionSchema, servicioClientes, cepSchema)
 from demograficos.schemas import (userProfileSchema,
                                   telefonoSchema,
                                   tarjetaSchema,
@@ -114,6 +114,7 @@ class Query(transaccionSchema.Query,
             crecimientoSchema.Query,
             arcusbills.Query,
             versionappSchema.Query,
+            cepSchema.Query,
             graphene.ObjectType):
     pass
 
