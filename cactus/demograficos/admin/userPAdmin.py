@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.contrib import admin
 from django.contrib.auth.models import User
 from demograficos.models import (UserProfile,
@@ -30,7 +31,7 @@ from cactus.settings import SITE
 from import_export.admin import ExportActionMixin
 from spei.deletecuentaSTP import delete_stp
 from demograficos.utils.deletecustomer import pld_customer_delete
-from spei.registramoralstp import registra_moral_stp
+from spei.stpTools import registra_cuenta_persona_moral
 
 
 import logging
@@ -175,7 +176,7 @@ class UserProfileAdmin(ExportActionMixin, PasswordResetUserAdmin):
         ProveddorInLine
     )
     actions = ['registra_cuenta', 'delete_stp_cuenta', 'delete_pld_customer',
-               'create_stp_moral']
+               'registra_cuenta_stp_moral']
 
     list_filter = (
         'Uprofile__nivel_cuenta',
@@ -318,16 +319,30 @@ class UserProfileAdmin(ExportActionMixin, PasswordResetUserAdmin):
                       f"descripcion: {ex}"
                 db_logger.error(msg)
 
-    def create_stp_moral(self, request, users):
+    def registra_cuenta_stp_moral(self, request, users):
         try:
-            response = registra_moral_stp()
-            msg_logg = "[STP create cuenta moral] {}.".format(
-                        response.content)
+            user = User.objects.get(Uprofile__rfc="INV070903EY3")
+            response = registra_cuenta_persona_moral()
+            msg_logg = "[STP create cuenta persona moral] {}.".format(
+                response)
             db_logger.info(msg_logg)
+
+            if response[0] == 0:
+                cclabe = response[1]
+                user.Uprofile.cuentaClabe = cclabe
+                user.Uprofile.save()
+                self.message_user(request,
+                                  f"Cuenta creada exitósamente {response[1]}")
+            else:
+                self.message_user(request,
+                                  f"Error en respuesta STP {response}",
+                                  level=messages.ERROR)
+
         except Exception as ex:
-            msg = f"[ERROR action stp create moral stp] " \
-                  f"descripcion: {ex}"
+            msg = "[ERROR action stp create moral stp] "
+            msg += f"descripcion: {ex}"
             db_logger.error(msg)
+            self.message_user(request, msg, level=messages.ERROR)
 
 
 class ClienteAdmin(UserProfileAdmin):
