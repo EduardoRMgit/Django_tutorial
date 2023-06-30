@@ -40,7 +40,7 @@ def registra_moral_stp():
         'rfcCurp': "INV070903EY3",
         'fechaConstitucion': "20070903",
         'entidadFederativa': "9",
-        'actividadEconomica': "38",
+        'actividadEconomica': "40",
         'firma': firma
         }
     resp = requests.put(url,
