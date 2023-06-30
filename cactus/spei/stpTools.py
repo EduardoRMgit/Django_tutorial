@@ -14,10 +14,6 @@ from base64 import b64encode
 
 from datetime import timedelta, time
 
-from django.utils import timezone
-
-from dde.models.transaccion import TransaccionDDE
-
 
 db_logger = logging.getLogger('db')
 
@@ -278,8 +274,6 @@ def cadena_original_registro_cuenta(data):
     msg = "{}{}".format("[(4) cadena_original_registro_cuenta]: ",
                         cadena_original)
     db_logger.info(msg)
-
-    print("cadena_original: ", cadena_original)
     return cadena_original
 
 
@@ -385,6 +379,97 @@ def registra_cuenta_persona_fisica(data):
     return [_id, _stp_descr]
 
 
+def request_registra_persona_moral(cuenta_clabe):
+    env = environ.Env()
+    STPSECRET = env.str('STPSECRET', '')
+
+    try:
+        from kubernetes import client, config
+        import base64
+        try:
+            config.load_kube_config()
+        except Exception:
+            config.load_incluster_config()
+        v1 = client.CoreV1Api()
+        STP_KEY_PWD = v1.read_namespaced_secret(STPSECRET, 'default')
+        STP_KEY_PWD = base64.b64decode(STP_KEY_PWD.data['key']).decode('utf-8')
+    except Exception:
+        STP_KEY_PWD = str.encode("12345678")
+
+    with open('llavePrivada.pem', 'r') as key:
+        unlockedKey = crypto.load_privatekey(
+            crypto.FILETYPE_PEM,
+            key.read(),
+            STP_KEY_PWD)
+
+    cadena_original = f"||ZYGOO|{cuenta_clabe}|INV070903EY3||"
+    msg = "{}{}".format("[registro_cuenta_persona_moral]: Cadena original",
+                        cadena_original)
+    db_logger.info(msg)
+    cadena_original = crypto.sign(unlockedKey,
+                                  str.encode(cadena_original),
+                                  'sha256')
+    firma = b64encode(cadena_original)
+    data = {
+        'nombre': "INVERCRATOS SAPI DE CV",
+        'empresa': "ZYGOO",
+        'cuenta': cuenta_clabe,
+        'pais': "187",
+        'rfcCurp': "INV070903EY3",
+        'fechaConstitucion': "20070903",
+        'entidadFederativa': "9",
+        'actividadEconomica': "40",
+        'firma': firma.decode("utf-8")
+    }
+    msg = f"[registro_cuenta_persona_moral] Data: {data}"
+    db_logger.info(msg)
+    try:
+        site = os.getenv("SITE", "local")
+        url = 'https://demo.stpmex.com:7024/speiws/rest/cuentaModule/moral'
+        if site == "prod":
+            url = 'https://prod.stpmex.com:7002/speiws/rest/cuentaModule/moral'
+
+        cert = os.path.join(
+            os.path.dirname(__file__),
+            "stpmex-com-chain.pem")
+
+        r = requests.put(url,
+                         data=json.dumps(data),
+                         headers={'Content-Type': 'application/json'},
+                         verify=cert)
+        db_logger.info(
+            f"[registro_cuenta_persona_moral] respuestaSTP: {str(r.__dict__)}")
+        respuesta = json.loads(r.text)
+        return respuesta['id']
+
+    except Exception as ex:
+        db_logger.error(repr(ex))
+        return -1
+
+
+def registra_cuenta_persona_moral():
+
+    from spei.models import FolioStp
+    from spei.clabe import CuentaClabe
+    from demograficos.models import UserProfile
+
+    folio_stp = FolioStp.objects.last()
+    folio = folio_stp.fol_dispatch()
+    cuenta_clabe = CuentaClabe(folio)
+    while UserProfile.objects.filter(
+            cuentaClabe=cuenta_clabe).count() > 0:
+        folio = folio_stp.fol_dispatch()
+        cuenta_clabe = CuentaClabe(folio)
+
+    id_resp = request_registra_persona_moral(cuenta_clabe)
+    while id_resp == 3:
+        folio = folio_stp.fol_dispatch()
+        cuenta_clabe = CuentaClabe(folio)
+        id_resp = request_registra_persona_moral(cuenta_clabe)
+
+    return id_resp, cuenta_clabe
+
+
 def gen_referencia_numerica(data):
 
     # Primer dígito del tipo de cuentaBeneficiario
@@ -401,82 +486,3 @@ def gen_referencia_numerica(data):
 
     ref_num = f'{prefijo}{__id_trans:05}'
     return ref_num
-
-
-def __valida_empresa(stp_trans, usuario):
-    from .models import adminUtils
-
-    __empresa = stp_trans.empresa
-    __cuenta = stp_trans.cuentaBeneficiario[:10]
-    __flagTrans = adminUtils.objects.get(util='SendAbonoValidation').activo
-
-    if __empresa == 'INVERCRATOS2':
-        stp_trans.rechazada = True
-        stp_trans.rechazadaMsj = "Empresa no permitida"
-        stp_trans.statusTrans = 4
-        stp_trans.save()
-        return False
-
-    if __empresa in ['INVERCRATOS', 'ZYGOO'] and not __flagTrans:
-        stp_trans.rechazada = True
-        stp_trans.rechazadaMsj = "sendabono deshabilitado"
-        stp_trans.statusTrans = 5
-        stp_trans.save()
-        return False
-
-    if (__empresa, __cuenta) not in [('INVERCRATOS', '6461801900'),
-                                     ('ZYGOO', '6461802180'),
-                                     ('INVERCRATOS2', '6461802182')]:
-
-        stp_trans.rechazada = True
-        stp_trans.rechazadaMsj = "La cuenta no corresponde a la empresa"
-        stp_trans.statusTrans = 6
-        stp_trans.save()
-        return False
-
-    if __empresa == 'INVERCRATOS':
-        __monto = float(stp_trans.monto)
-        __fecha = (timezone.now() +
-                   timedelta(hours=24)).strftime('transaccion%Y%m%d')
-        if usuario.Uprofile.saldo_cuenta < __monto:
-            return Exception('saldo insuficiente')
-
-        monto2F = "{:.2f}".format(__monto)
-        try:
-            TransaccionDDE.objects.create(
-                user=usuario,
-                monto=monto2F,
-                fechaTrans=__fecha,
-            )
-        except Exception as e:
-            raise Exception('error user-transaccion {}'.format(id), e)
-
-        if __flagTrans:
-            mutation_trans = """mutation($username: String!, $abono: String!,
-                $concepto: String!, $ubicacion: String!, $referencia: String!,
-                $nombre: String!){
-                    createTransaccionDde(username:$username, abono:$abono,
-                    ubicacion:$ubicacion, concepto:$concepto,
-                    referencia:$referencia, nombre:$nombre){
-                        ddeTransaccion{id, monto, referencia, ubicacion,
-                        user{username}}
-                        }}"""
-
-            variables_trans = {
-                'abono': stp_trans.monto,
-                'referencia': stp_trans.referenciaNumerica,
-                'clabe': stp_trans.clabe,
-                'concepto': stp_trans.concepto,
-                'nombre': stp_trans.nombreBeneficiario,
-                'ubicacion': stp_trans.ubicacion
-            }
-            vars_trans = json.dumps(variables_trans)
-            url = 'https://dde.inguz.site/graphql'
-            headers = {'Accept': 'application/json'}
-            data_trans = {"query": mutation_trans, "variables": vars_trans}
-            try:
-                requests.post(url, headers=headers, data=data_trans)
-            except Exception as e:
-                print(e)
-        return False
-    return True
