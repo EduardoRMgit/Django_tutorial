@@ -849,3 +849,20 @@ class Proveedor(models.Model):
 
     def __str__(self):
         return f"{self.user}{self.nombre}"
+
+
+class UserLogin(models.Model):
+
+    user = models.ForeignKey(User,
+                             related_name='user_login',
+                             on_delete=models.CASCADE,
+                             blank=True,
+                             null=True)
+    fecha = models.DateTimeField(default=timezone.now)
+    lat = models.FloatField(null=True,
+                            blank=True)
+    lon = models.FloatField(null=True,
+                            blank=True)
+
+    def __str__(self):
+        return f"user: {self.user} fecha: {str(self.fecha)}"

@@ -20,7 +20,8 @@ from demograficos.models import (UserProfile,
                                  PerfilTransaccionalDeclarado,
                                  PasswordHistory,
                                  AliasInvalido,
-                                 Proveedor)
+                                 Proveedor,
+                                 UserLogin)
 from banca.models import Transaccion
 from pld.models import (Customer)
 from .cambio_password import PasswordResetUserAdmin
@@ -391,3 +392,4 @@ admin.site.register(Avatar)
 admin.site.register(PasswordHistory)
 admin.site.register(AliasInvalido)
 admin.site.register(Cancelacion, CancelacionAdmin)
+admin.site.register(UserLogin)
