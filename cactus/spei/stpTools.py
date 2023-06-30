@@ -394,13 +394,13 @@ def request_registra_persona_moral(cuenta_clabe):
         STP_KEY_PWD = v1.read_namespaced_secret(STPSECRET, 'default')
         STP_KEY_PWD = base64.b64decode(STP_KEY_PWD.data['key']).decode('utf-8')
     except Exception:
-        STP_KEY_PWD = str.encode("12345678")
+        STP_KEY_PWD = "12345678"
 
     with open('llavePrivada.pem', 'r') as key:
         unlockedKey = crypto.load_privatekey(
             crypto.FILETYPE_PEM,
             key.read(),
-            STP_KEY_PWD)
+            str.encode(STP_KEY_PWD))
 
     cadena_original = f"||ZYGOO|{cuenta_clabe}|INV070903EY3||"
     msg = "{}{}".format("[registro_cuenta_persona_moral]: Cadena original",
