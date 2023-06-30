@@ -350,7 +350,7 @@ class CreateRetiroScotia(graphene.Mutation):
             monto=float(float(monto) + comision),
             statusTrans=status,
             tipoTrans=tipo,
-            concepto="Retiro Scotiabank",
+            concepto="Retiro de efectivo",
             claveRastreo=claveR
         )
 
@@ -493,7 +493,7 @@ class CreateScotiaDeposito(graphene.Mutation):
             monto=float(monto),
             statusTrans=status,
             tipoTrans=tipo,
-            concepto="Depósito Cliente",
+            concepto="Depósito de efectivo",
             claveRastreo=claveR
         )
         scotia_deposito = ScotiaDeposito.objects.create(
