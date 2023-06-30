@@ -38,8 +38,6 @@ uuid_exception = [
 class LoggingGraphQLView(GraphQLView):
     def dispatch(self, request, *args, **kwargs):
         try:
-            print(request)
-            print('-------------------------------')
             data = self.parse_body(request)
             query = data['query']
             try:
