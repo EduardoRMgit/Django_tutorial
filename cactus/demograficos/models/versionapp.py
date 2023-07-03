@@ -17,4 +17,7 @@ class VersionApp(models.Model):
 
 @receiver(pre_save, sender=VersionApp)
 def desactiva_version(sender, instance, **kwargs):
-    VersionApp.objects.filter(activa=True).update(activa=False)
+    version = VersionApp.objects.filter(activa=True)
+
+    if version.count() >= 2:
+        version.filter(fecha=version.first().fecha).update(activa=False)
