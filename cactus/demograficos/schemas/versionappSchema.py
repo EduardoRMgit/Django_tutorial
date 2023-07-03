@@ -20,9 +20,10 @@ class Query(object):
 
     def resolve_version_app(self, info, **kwargs):
         version = kwargs.get('version')
-        version_v = VersionApp.objects.filter(activa=True).last()
+        version_v = VersionApp.objects.filter(
+            version=version, activa=True).last()
         estado = {}
-        if version != version_v.version:
+        if not version_v:
             estado["estatus"] = "Error de version"
             raise Exception(estado)
         else:
