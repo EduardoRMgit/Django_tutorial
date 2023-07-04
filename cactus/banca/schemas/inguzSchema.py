@@ -15,6 +15,7 @@ from spei.stpTools import randomString
 from banca.utils.limiteTrans import LimiteTrans
 from banca.utils.comprobantesPng import CompTrans
 from datetime import datetime
+from demograficos.utils.tokendinamico import validaToken
 
 
 class InguzType(DjangoObjectType):
@@ -31,7 +32,7 @@ class CreateInguzTransaccion(graphene.Mutation):
         contacto = graphene.Int(required=True)
         abono = graphene.String(required=True)
         concepto = graphene.String(required=True)
-        nip = graphene.String(required=True)
+        token_d = graphene.String(required=True)
         cobro_id = graphene.Int()
 
     @login_required
@@ -41,7 +42,7 @@ class CreateInguzTransaccion(graphene.Mutation):
                contacto,
                abono,
                concepto,
-               nip,
+               token_d,
                cobro_id=None):
         db_logger = logging.getLogger("db")
         try:
@@ -54,125 +55,129 @@ class CreateInguzTransaccion(graphene.Mutation):
             raise Exception('Usuario sin perfil')
         if not ordenante.Uprofile.password:
             raise Exception("Usuario no ha establecido nip")
-        if not ordenante.Uprofile.check_password(nip):
-            raise Exception('Nip incorrecto')
-        if ordenante.Uprofile.saldo_cuenta < round(float(abono), 2):
-            raise Exception("Saldo insuficiente")
+        # if not ordenante.Uprofile.check_password(nip):
+        #     raise Exception('Nip incorrecto')
+        if not ordenante.is_anonymous:
+            token = validaToken(ordenante, token_d)
+            if token:
+                if ordenante.Uprofile.saldo_cuenta < round(float(abono), 2):
+                    raise Exception("Saldo insuficiente")
+                try:
+                    contacto = Contacto.objects.get(pk=contacto,
+                                                    verificacion="O",
+                                                    user=ordenante,
+                                                    activo=True,
+                                                    bloqueado=False)
+                except Exception:
+                    raise Exception("Contacto no válido")
 
-        try:
-            contacto = Contacto.objects.get(pk=contacto,
-                                            verificacion="O",
-                                            user=ordenante,
-                                            activo=True,
-                                            bloqueado=False)
-        except Exception:
-            raise Exception("Contacto no válido")
+                if not es_cuenta_inguz(contacto.clabe):  # Inguz
+                    raise Exception("Cuenta de beneficiario no es inguz")
 
-        if not es_cuenta_inguz(contacto.clabe):  # Inguz
-            raise Exception("Cuenta de beneficiario no es inguz")
+                if float(abono) <= 0:
+                    raise Exception("El abono debe ser mayor a cero")
 
-        if float(abono) <= 0:
-            raise Exception("El abono debe ser mayor a cero")
+                try:
+                    user_contacto = UserProfile.objects.get(
+                        cuentaClabe=contacto.clabe,
+                        status="O",
+                        enrolamiento=True).user
+                except Exception:
+                    raise Exception("La cuenta destino está fuera de servicio")
+                fecha = datetime.now()
+                claveR = randomString()
+                monto2F = "{:.2f}".format(round(float(abono), 2))
+                status = StatusTrans.objects.get(nombre="exito")
+                tipo = TipoTransaccion.objects.get(codigo=18)
+                tipo_recibida = TipoTransaccion.objects.get(codigo=19)
 
-        try:
-            user_contacto = UserProfile.objects.get(
-                cuentaClabe=contacto.clabe,
-                status="O",
-                enrolamiento=True).user
-        except Exception:
-            raise Exception("La cuenta destino está fuera de servicio")
-        fecha = datetime.now()
-        claveR = randomString()
-        monto2F = "{:.2f}".format(round(float(abono), 2))
-        status = StatusTrans.objects.get(nombre="exito")
-        tipo = TipoTransaccion.objects.get(codigo=18)
-        tipo_recibida = TipoTransaccion.objects.get(codigo=19)
+                if not LimiteTrans(ordenante.id).saldo_max_salida(
+                        float(monto2F)):
+                    raise Exception("Límite transaccional superado")
 
-        if not LimiteTrans(ordenante.id).saldo_max_salida(float(monto2F)):
-            raise Exception("Límite transaccional superado")
+                if not LimiteTrans(user_contacto.id).saldo_max(
+                        float(monto2F)) or not LimiteTrans(
+                            user_contacto.id).trans_mes(float(monto2F)):
+                    raise Exception("El contacto no puede recibir ese saldo")
 
-        if not LimiteTrans(user_contacto.id).saldo_max(float(monto2F)) or \
-                not LimiteTrans(user_contacto.id).trans_mes(float(monto2F)):
-            raise Exception("El contacto no puede recibir ese saldo")
+                # Actualizamos saldo del usuario
+                if float(abono) <= ordenante.Uprofile.saldo_cuenta:
+                    ordenante.Uprofile.saldo_cuenta -= round(float(abono), 2)
+                    ordenante.Uprofile.save()
+                else:
+                    raise Exception("Saldo insuficiente")
 
-        # Actualizamos saldo del usuario
-        if float(abono) <= ordenante.Uprofile.saldo_cuenta:
-            ordenante.Uprofile.saldo_cuenta -= round(float(abono), 2)
-            ordenante.Uprofile.save()
-        else:
-            raise Exception("Saldo insuficiente")
+                user_contacto.Uprofile.saldo_cuenta += round(float(abono), 2)
+                user_contacto.Uprofile.save()
+                clabe_ordenante = ordenante.Uprofile.cuentaClabe
+                contacto_beneficiario = user_contacto.Contactos_Usuario.filter(
+                    clabe=clabe_ordenante).last()
+                main_trans = Transaccion.objects.create(
+                    user=ordenante,
+                    fechaValor=fecha,
+                    fechaAplicacion=fecha,
+                    monto=float(abono),
+                    statusTrans=status,
+                    tipoTrans=tipo,
+                    concepto=concepto,
+                    claveRastreo=claveR
+                )
 
-        user_contacto.Uprofile.saldo_cuenta += round(float(abono), 2)
-        user_contacto.Uprofile.save()
-        clabe_ordenante = ordenante.Uprofile.cuentaClabe
-        contacto_beneficiario = user_contacto.Contactos_Usuario.filter(
-            clabe=clabe_ordenante).last()
-        main_trans = Transaccion.objects.create(
-            user=ordenante,
-            fechaValor=fecha,
-            fechaAplicacion=fecha,
-            monto=float(abono),
-            statusTrans=status,
-            tipoTrans=tipo,
-            concepto=concepto,
-            claveRastreo=claveR
-        )
+                inguz_transaccion = InguzTransaction.objects.create(
+                    monto=monto2F,
+                    concepto=concepto.split(' - ')[-1],
+                    ordenante=ordenante,
+                    fechaOperacion=fecha,
+                    contacto=contacto,
+                    transaccion=main_trans,
+                )
 
-        inguz_transaccion = InguzTransaction.objects.create(
-            monto=monto2F,
-            concepto=concepto.split(' - ')[-1],
-            ordenante=ordenante,
-            fechaOperacion=fecha,
-            contacto=contacto,
-            transaccion=main_trans,
-        )
+                # Recibida (sin transacción hija)
+                main_trans2 = Transaccion.objects.create(
+                    user=user_contacto,
+                    fechaValor=fecha,
+                    fechaAplicacion=fecha,
+                    monto=float(abono),
+                    statusTrans=status,
+                    tipoTrans=tipo_recibida,
+                    concepto=concepto,
+                    claveRastreo=claveR
+                )
 
-        # Recibida (sin transacción hija)
-        main_trans2 = Transaccion.objects.create(
-            user=user_contacto,
-            fechaValor=fecha,
-            fechaAplicacion=fecha,
-            monto=float(abono),
-            statusTrans=status,
-            tipoTrans=tipo_recibida,
-            concepto=concepto,
-            claveRastreo=claveR
-        )
+                InguzTransaction.objects.create(
+                    monto=monto2F,
+                    concepto=concepto.split(' - ')[-1],
+                    ordenante=user_contacto,
+                    fechaOperacion=fecha,
+                    contacto=contacto_beneficiario,
+                    transaccion=main_trans2,
+                )
 
-        InguzTransaction.objects.create(
-            monto=monto2F,
-            concepto=concepto.split(' - ')[-1],
-            ordenante=user_contacto,
-            fechaOperacion=fecha,
-            contacto=contacto_beneficiario,
-            transaccion=main_trans2,
-        )
+                if cobro_id is not None:
+                    cobro = NotificacionCobro.objects.filter(pk=cobro_id)
+                    if cobro.count() == 0:
+                        raise Exception(f"No existe cobro con ID {cobro_id}")
+                    cobro = cobro.first()
+                    cobro.status = NotificacionCobro.LIQUIDADO
+                    cobro.transaccion = inguz_transaccion
+                    cobro.save()
 
-        if cobro_id is not None:
-            cobro = NotificacionCobro.objects.filter(pk=cobro_id)
-            if cobro.count() == 0:
-                raise Exception(f"No existe cobro con ID {cobro_id}")
-            cobro = cobro.first()
-            cobro.status = NotificacionCobro.LIQUIDADO
-            cobro.transaccion = inguz_transaccion
-            cobro.save()
-
-        msg = "[Inguz_Inguz] Transaccion exitosa del usuario: {} \
-            con cuenta: {} \
-            a la cuenta: {} \
-            por: ${}".format(
-            ordenante.username,
-            ordenante.Uprofile.cuentaClabe,
-            contacto.clabe,
-            monto2F
-        )
-        contacto.frecuencia = int(contacto.frecuencia) + 1
-        contacto.save()
-        db_logger.info(msg)
-        return CreateInguzTransaccion(
-            inguz_transaccion=inguz_transaccion,
-            user=ordenante
-        )
+                msg = "[Inguz_Inguz] Transaccion exitosa del usuario: {} \
+                    con cuenta: {} \
+                    a la cuenta: {} \
+                    por: ${}".format(
+                    ordenante.username,
+                    ordenante.Uprofile.cuentaClabe,
+                    contacto.clabe,
+                    monto2F
+                )
+                contacto.frecuencia = int(contacto.frecuencia) + 1
+                contacto.save()
+                db_logger.info(msg)
+                return CreateInguzTransaccion(
+                    inguz_transaccion=inguz_transaccion,
+                    user=ordenante
+                )
 
 
 class UrlImagenComprobanteInguz(graphene.Mutation):
