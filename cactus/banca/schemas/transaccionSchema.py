@@ -28,6 +28,7 @@ from demograficos.models.userProfile import UserProfile
 from demograficos.models import Contacto
 from django.conf import settings
 from banca.utils.cobroComision import comisionSTP
+from demograficos.utils.tokendinamico import validaToken
 
 
 class UserType(DjangoObjectType):
@@ -515,18 +516,18 @@ class CreateTransferenciaEnviada(graphene.Mutation):
         contacto = graphene.Int(required=True)
         abono = graphene.String(required=True)
         concepto = graphene.String(required=True)
-        nip = graphene.String(required=True)
+        token_d = graphene.String(required=True)
     # 3
 
     @login_required
-    def mutate(self, info, token, contacto, abono, concepto, nip):
+    def mutate(self, info, token, contacto, abono, concepto, token_d):
 
         def _valida(expr, msg):
             if expr:
                 raise Exception(msg)
         abono = abono.strip()
         concepto = concepto.strip()
-        nip = nip.strip()
+        token_d = token_d.strip()
         user = info.context.user
         monto = float(abono)
         saldo_inicial_usuario = user.Uprofile.saldo_cuenta
@@ -535,106 +536,113 @@ class CreateTransferenciaEnviada(graphene.Mutation):
                 'Usuario sin perfil')
         _valida(user.Uprofile.password is None,
                 'El usuario no ha establecido su NIP.')
-        _valida(not user.Uprofile.check_password(nip),
-                'El NIP es incorrecto.')
-        _valida(monto <= 0,
-                'Únicamente montos positivos.')
-        _valida(saldo_inicial_usuario - monto < 0,
-                'Saldo insuficiente.')
+        # _valida(not user.Uprofile.check_password(nip),
+        #         'El NIP es incorrecto.')
+        if not user.is_anonymous:
+            token = validaToken(user, token_d)
+            if token:
+                _valida(monto <= 0,
+                        'Únicamente montos positivos.')
+                _valida(saldo_inicial_usuario - monto < 0,
+                        'Saldo insuficiente.')
 
-        try:
-            contacto = Contacto.objects.get(pk=contacto)
-        except Exception:
-            raise Exception('Contacto inexistente.')
-        fecha = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        nombre_usuario = user.get_full_name()
-        monto_stp_trans = "{:.2f}".format(monto)
-        banco = contacto.banco
-        clabe = contacto.clabe
-        concepto = concepto.split(' - ')[-1]  # ???
-        clave_rastreo = randomString()
-        referencia = clave_rastreo[:int(len(clave_rastreo)/2)]
-        ubicacion = "00"
-        empresa = "ZYGOO"  # "INVERCRATOS2"
-        folio_origen = "000001"
-        tipo_cuenta_beneficiario = "40"
-        tipo_cuenta_ordenante = "40"
-        balance = 1  # ???
-        status = StatusTrans.objects.get(nombre="esperando respuesta")
-        tipo = TipoTransaccion.objects.get(codigo=2)  # Transferencia Enviada
-        rfc_beneficiario = None
-        if not LimiteTrans(user.id).saldo_max_salida(float(monto_stp_trans)):
-            raise Exception("Límite transaccional superado")
-        main_trans = Transaccion.objects.create(
-            user=user,
-            fechaValor=fecha,
-            monto=monto,
-            statusTrans=status,
-            tipoTrans=tipo,
-            concepto=concepto,
-            claveRastreo=clave_rastreo
-        )
-        comision, comision_m = comisionSTP(main_trans)
-        comision = round(comision, 2)
-        reservado_stp_trans = comision
-        if comision_m:
-            main_trans.comision = comision_m
-            main_trans.comision.save()
+                try:
+                    contacto = Contacto.objects.get(pk=contacto)
+                except Exception:
+                    raise Exception('Contacto inexistente.')
+                fecha = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                nombre_usuario = user.get_full_name()
+                monto_stp_trans = "{:.2f}".format(monto)
+                banco = contacto.banco
+                clabe = contacto.clabe
+                concepto = concepto.split(' - ')[-1]  # ???
+                clave_rastreo = randomString()
+                referencia = clave_rastreo[:int(len(clave_rastreo)/2)]
+                ubicacion = "00"
+                empresa = "ZYGOO"  # "INVERCRATOS2"
+                folio_origen = "000001"
+                tipo_cuenta_beneficiario = "40"
+                tipo_cuenta_ordenante = "40"
+                balance = 1  # ???
+                status = StatusTrans.objects.get(nombre="esperando respuesta")
+                # Transferencia Enviada
+                tipo = TipoTransaccion.objects.get(codigo=2)
+                rfc_beneficiario = None
+                if not LimiteTrans(user.id).saldo_max_salida(
+                        float(monto_stp_trans)):
+                    raise Exception("Límite transaccional superado")
+                main_trans = Transaccion.objects.create(
+                    user=user,
+                    fechaValor=fecha,
+                    monto=monto,
+                    statusTrans=status,
+                    tipoTrans=tipo,
+                    concepto=concepto,
+                    claveRastreo=clave_rastreo
+                )
+                comision, comision_m = comisionSTP(main_trans)
+                comision = round(comision, 2)
+                reservado_stp_trans = comision
+                if comision_m:
+                    main_trans.comision = comision_m
+                    main_trans.comision.save()
 
-        stp_reservado = SaldoReservado.objects.create(
-            tipoTrans=tipo,
-            status_saldo="reservado",
-            saldo_reservado=reservado_stp_trans
-        )
+                stp_reservado = SaldoReservado.objects.create(
+                    tipoTrans=tipo,
+                    status_saldo="reservado",
+                    saldo_reservado=reservado_stp_trans
+                )
 
-        stp_transaccion = StpTransaction.objects.create(
-            user=user,
-            nombre=nombre_usuario,
-            monto=monto_stp_trans,
-            banco=banco,
-            clabe=clabe,
-            concepto=concepto,
-            referencia=referencia,
-            ubicacion=ubicacion,
-            empresa=empresa,
-            folioOrigen=folio_origen,
-            claveRastreo=clave_rastreo,
-            nombreOrdenante=nombre_usuario,
-            nombreBeneficiario=contacto.nombre,
-            tipoCuentaBeneficiario=tipo_cuenta_beneficiario,
-            tipoCuentaOrdenante=tipo_cuenta_ordenante,
-            fechaOperacion=fecha,
-            rfcCurpOrdenante=user.Uprofile.curp,
-            cuentaOrdenante=user.Uprofile.cuentaClabe,
-            rfcCurpBeneficiario=rfc_beneficiario,
-            referenciaNumerica=referencia,
-            conceptoPago=concepto,
-            cuentaBeneficiario=clabe,
-            balance=balance,
-            contacto=contacto,
-            saldoReservado=stp_reservado,
-            transaccion=main_trans
-        )
+                stp_transaccion = StpTransaction.objects.create(
+                    user=user,
+                    nombre=nombre_usuario,
+                    monto=monto_stp_trans,
+                    banco=banco,
+                    clabe=clabe,
+                    concepto=concepto,
+                    referencia=referencia,
+                    ubicacion=ubicacion,
+                    empresa=empresa,
+                    folioOrigen=folio_origen,
+                    claveRastreo=clave_rastreo,
+                    nombreOrdenante=nombre_usuario,
+                    nombreBeneficiario=contacto.nombre,
+                    tipoCuentaBeneficiario=tipo_cuenta_beneficiario,
+                    tipoCuentaOrdenante=tipo_cuenta_ordenante,
+                    fechaOperacion=fecha,
+                    rfcCurpOrdenante=user.Uprofile.curp,
+                    cuentaOrdenante=user.Uprofile.cuentaClabe,
+                    rfcCurpBeneficiario=rfc_beneficiario,
+                    referenciaNumerica=referencia,
+                    conceptoPago=concepto,
+                    cuentaBeneficiario=clabe,
+                    balance=balance,
+                    contacto=contacto,
+                    saldoReservado=stp_reservado,
+                    transaccion=main_trans
+                )
 
-        stp_transaccion.referenciaNumerica = gen_referencia_numerica({
-            'id': stp_transaccion.id,
-            'tipoCuentaBeneficiario': stp_transaccion.tipoCuentaBeneficiario,
-            'tipoCuentaOrdenante': stp_transaccion.tipoCuentaOrdenante
-        })
-        stp_transaccion.save()
+                stp_transaccion.referenciaNumerica = gen_referencia_numerica({
+                    'id': stp_transaccion.id,
+                    'tipoCuentaBeneficiario':
+                        stp_transaccion.tipoCuentaBeneficiario,
+                    'tipoCuentaOrdenante': stp_transaccion.tipoCuentaOrdenante
+                })
+                stp_transaccion.save()
 
-        valida = stp_transaccion.pago()
-        if valida > 0:
-            user.Uprofile.saldo_cuenta = round(
-                float(saldo_inicial_usuario) - float(reservado_stp_trans), 2)
-            user.Uprofile.save()
-        for k in stp_transaccion.__dict__:
-            print(f"    {k}:   {stp_transaccion.__dict__[k]}")
+                valida = stp_transaccion.pago()
+                if valida > 0:
+                    user.Uprofile.saldo_cuenta = round(
+                        float(saldo_inicial_usuario) -
+                        float(reservado_stp_trans), 2)
+                    user.Uprofile.save()
+                for k in stp_transaccion.__dict__:
+                    print(f"    {k}:   {stp_transaccion.__dict__[k]}")
 
-        return CreateTransferenciaEnviada(
-            stp_transaccion=stp_transaccion,
-            user=user
-        )
+                return CreateTransferenciaEnviada(
+                    stp_transaccion=stp_transaccion,
+                    user=user
+                )
 
 
 class CreateNotificacionCobro(graphene.Mutation):
@@ -645,10 +653,10 @@ class CreateNotificacionCobro(graphene.Mutation):
         contacto_id = graphene.Int(required=True)
         importe = graphene.String(required=True)
         concepto = graphene.String(required=True)
-        nip = graphene.String(required=True)
+        token_d = graphene.String(required=True)
 
     @login_required
-    def mutate(self, info, token, contacto_id, importe, concepto, nip):
+    def mutate(self, info, token, contacto_id, importe, concepto, token_d):
         def _valida(expr, msg):
             if expr:
                 raise Exception(msg)
@@ -658,42 +666,45 @@ class CreateNotificacionCobro(graphene.Mutation):
 
         _valida(user.Uprofile.password is None,
                 'El usuario no ha establecido su NIP.')
-        _valida(not user.Uprofile.check_password(nip),
-                'El NIP es incorrecto.')
-        _valida(contacto.count() == 0,
-                'Contacto inexistente.')
-        contacto = contacto.first()
-        _valida(contacto.user != user,
-                'El contacto no pertenece al usuario.')
+        # _valida(not user.Uprofile.check_password(nip),
+        #         'El NIP es incorrecto.')
+        if not user.is_anonymous:
+            token = validaToken(user, token_d)
+            if token:
+                _valida(contacto.count() == 0,
+                        'Contacto inexistente.')
+                contacto = contacto.first()
+                _valida(contacto.user != user,
+                        'El contacto no pertenece al usuario.')
 
-        _valida(float(importe) <= 0,
-                'El monto del cobro debe ser positivo.')
+                _valida(float(importe) <= 0,
+                        'El monto del cobro debe ser positivo.')
 
-        usuario_contacto = get_user_model().objects.filter(
-            Uprofile__cuentaClabe=contacto.clabe)
-        _valida(usuario_contacto.count() == 0,
-                'No existe un usuario correspondiente al contacto.')
+                usuario_contacto = get_user_model().objects.filter(
+                    Uprofile__cuentaClabe=contacto.clabe)
+                _valida(usuario_contacto.count() == 0,
+                        'No existe un usuario correspondiente al contacto.')
 
-        usuario_contacto = usuario_contacto.first()
-        qs = Contacto.objects.filter(
-            user=usuario_contacto,
-            clabe=user.Uprofile.cuentaClabe,
-            bloqueado=True,
-            activo=True
-        )
+                usuario_contacto = usuario_contacto.first()
+                qs = Contacto.objects.filter(
+                    user=usuario_contacto,
+                    clabe=user.Uprofile.cuentaClabe,
+                    bloqueado=True,
+                    activo=True
+                )
 
-        _valida(qs, "CB_NP")
+                _valida(qs, "CB_NP")
 
-        cobro = NotificacionCobro.objects.create(
-            usuario_solicitante=user,
-            usuario_deudor=usuario_contacto,
-            importe=importe,
-            concepto=concepto,
-            clave_rastreo=randomString()
-        )
-        return CreateNotificacionCobro(
-            notificacion_cobro=cobro
-        )
+                cobro = NotificacionCobro.objects.create(
+                    usuario_solicitante=user,
+                    usuario_deudor=usuario_contacto,
+                    importe=importe,
+                    concepto=concepto,
+                    clave_rastreo=randomString()
+                )
+                return CreateNotificacionCobro(
+                    notificacion_cobro=cobro
+                )
 
 
 class DeclinarCobro(graphene.Mutation):
@@ -737,10 +748,10 @@ class LiquidarCobro(graphene.Mutation):
     class Arguments:
         token = graphene.String(required=True)
         cobro_id = graphene.Int(required=True)
-        nip = graphene.String(required=True)
+        token_d = graphene.String(required=True)
 
     @login_required
-    def mutate(self, info, token, nip, cobro_id):
+    def mutate(self, info, token, token_d, cobro_id):
         def _valida(expr, msg):
             if expr:
                 raise Exception(msg)
@@ -768,101 +779,104 @@ class LiquidarCobro(graphene.Mutation):
                 'Usuario sin perfil')
         _valida(not ordenante.Uprofile.password,
                 "Usuario no ha establecido nip")
-        _valida(not ordenante.Uprofile.check_password(nip),
-                'Nip incorrecto')
-        _valida(not es_cuenta_inguz(ordenante.Uprofile.cuentaClabe),
-                "Cuenta ordenante no es Inguz")
-        _valida(not es_cuenta_inguz(beneficiario.Uprofile.cuentaClabe),
-                "Cuenta beneficiario no es Inguz")
+        # _valida(not ordenante.Uprofile.check_password(nip),
+        #         'Nip incorrecto')
+        if not ordenante.is_anonymous:
+            token = validaToken(ordenante, token_d)
+            if token:
+                _valida(not es_cuenta_inguz(ordenante.Uprofile.cuentaClabe),
+                        "Cuenta ordenante no es Inguz")
+                _valida(not es_cuenta_inguz(beneficiario.Uprofile.cuentaClabe),
+                        "Cuenta beneficiario no es Inguz")
+                fecha = datetime.now()
+                claveR = randomString()
+                importe = cobro.importe
+                monto2F = "{:.2f}".format(round(float(importe), 2))
+                status = StatusTrans.objects.get(nombre="exito")
+                tipo = TipoTransaccion.objects.get(codigo=20)
+                tipo_recibida = TipoTransaccion.objects.get(codigo=21)
 
-        fecha = datetime.now()
-        claveR = randomString()
-        importe = cobro.importe
-        monto2F = "{:.2f}".format(round(float(importe), 2))
-        status = StatusTrans.objects.get(nombre="exito")
-        tipo = TipoTransaccion.objects.get(codigo=20)
-        tipo_recibida = TipoTransaccion.objects.get(codigo=21)
+                # Actualizamos saldo del usuario
+                _valida(float(importe) > ordenante.Uprofile.saldo_cuenta,
+                        'Saldo insuficiente')
+                ordenante.Uprofile.saldo_cuenta -= round(float(importe), 2)
+                ordenante.Uprofile.save()
+                clabe_ordenante = ordenante.Uprofile.cuentaClabe
+                beneficiario.Uprofile.saldo_cuenta += round(float(importe), 2)
+                beneficiario.Uprofile.save()
+                clabe_beneficiario = beneficiario.Uprofile.cuentaClabe
+                contacto_ordenante = ordenante.Contactos_Usuario.filter(
+                    clabe=clabe_beneficiario).last()
+                contacto_beneficiario = beneficiario.Contactos_Usuario.filter(
+                    clabe=clabe_ordenante).last()
+                if contacto_ordenante is None:
+                    Contacto.objects.create(
+                        nombre=beneficiario.first_name,
+                        ap_paterno=beneficiario.last_name,
+                        ap_materno=beneficiario.Uprofile.apMaterno,
+                        nombreCompleto=(
+                            beneficiario.Uprofile.get_nombre_completo),
+                        banco="STP",
+                        clabe=clabe_beneficiario,
+                        user=ordenante,
+                        es_inguz=True
+                    )
+                if contacto_beneficiario is None:
+                    Contacto.objects.create(
+                        nombre=ordenante.first_name,
+                        ap_paterno=ordenante.last_name,
+                        ap_materno=ordenante.Uprofile.apMaterno,
+                        nombreCompleto=ordenante.Uprofile.get_nombre_completo,
+                        banco="STP",
+                        clabe=clabe_ordenante,
+                        user=beneficiario,
+                        es_inguz=True
+                    )
+                concepto = "Cobro pagado"
+                main_trans = Transaccion.objects.create(
+                    user=ordenante,
+                    fechaValor=fecha,
+                    monto=float(importe),
+                    statusTrans=status,
+                    tipoTrans=tipo,
+                    concepto=concepto,
+                    claveRastreo=claveR
+                )
+                # Padre de la entrada del beneficiario
+                user_contacto = cobro.usuario_solicitante
+                main_trans2 = Transaccion.objects.create(
+                    user=user_contacto,
+                    fechaValor=fecha,
+                    fechaAplicacion=fecha,
+                    monto=float(importe),
+                    statusTrans=status,
+                    tipoTrans=tipo_recibida,
+                    concepto="Cobro liquidado",
+                    claveRastreo=claveR
+                )
+                inguz_transaccion = InguzTransaction.objects.create(
+                    monto=monto2F,
+                    concepto=concepto,
+                    ordenante=ordenante,
+                    fechaOperacion=fecha,
+                    transaccion=main_trans,
+                    contacto=contacto_ordenante
+                )
+                InguzTransaction.objects.create(
+                    monto=monto2F,
+                    concepto="Cobro liquidado",
+                    ordenante=beneficiario,
+                    fechaOperacion=fecha,
+                    transaccion=main_trans2,
+                    contacto=contacto_beneficiario
+                )
+                cobro.transaccion = inguz_transaccion
+                cobro.status = NotificacionCobro.LIQUIDADO
+                cobro.save()
 
-        # Actualizamos saldo del usuario
-        _valida(float(importe) > ordenante.Uprofile.saldo_cuenta,
-                'Saldo insuficiente')
-        ordenante.Uprofile.saldo_cuenta -= round(float(importe), 2)
-        ordenante.Uprofile.save()
-        clabe_ordenante = ordenante.Uprofile.cuentaClabe
-        beneficiario.Uprofile.saldo_cuenta += round(float(importe), 2)
-        beneficiario.Uprofile.save()
-        clabe_beneficiario = beneficiario.Uprofile.cuentaClabe
-        contacto_ordenante = ordenante.Contactos_Usuario.filter(
-            clabe=clabe_beneficiario).last()
-        contacto_beneficiario = beneficiario.Contactos_Usuario.filter(
-            clabe=clabe_ordenante).last()
-        if contacto_ordenante is None:
-            Contacto.objects.create(
-                nombre=beneficiario.first_name,
-                ap_paterno=beneficiario.last_name,
-                ap_materno=beneficiario.Uprofile.apMaterno,
-                nombreCompleto=beneficiario.Uprofile.get_nombre_completo,
-                banco="STP",
-                clabe=clabe_beneficiario,
-                user=ordenante,
-                es_inguz=True
-            )
-        if contacto_beneficiario is None:
-            Contacto.objects.create(
-                nombre=ordenante.first_name,
-                ap_paterno=ordenante.last_name,
-                ap_materno=ordenante.Uprofile.apMaterno,
-                nombreCompleto=ordenante.Uprofile.get_nombre_completo,
-                banco="STP",
-                clabe=clabe_ordenante,
-                user=beneficiario,
-                es_inguz=True
-            )
-        concepto = "Cobro pagado"
-        main_trans = Transaccion.objects.create(
-            user=ordenante,
-            fechaValor=fecha,
-            monto=float(importe),
-            statusTrans=status,
-            tipoTrans=tipo,
-            concepto=concepto,
-            claveRastreo=claveR
-        )
-        # Padre de la entrada del beneficiario
-        user_contacto = cobro.usuario_solicitante
-        main_trans2 = Transaccion.objects.create(
-            user=user_contacto,
-            fechaValor=fecha,
-            fechaAplicacion=fecha,
-            monto=float(importe),
-            statusTrans=status,
-            tipoTrans=tipo_recibida,
-            concepto="Cobro liquidado",
-            claveRastreo=claveR
-        )
-        inguz_transaccion = InguzTransaction.objects.create(
-            monto=monto2F,
-            concepto=concepto,
-            ordenante=ordenante,
-            fechaOperacion=fecha,
-            transaccion=main_trans,
-            contacto=contacto_ordenante
-        )
-        InguzTransaction.objects.create(
-            monto=monto2F,
-            concepto="Cobro liquidado",
-            ordenante=beneficiario,
-            fechaOperacion=fecha,
-            transaccion=main_trans2,
-            contacto=contacto_beneficiario
-        )
-        cobro.transaccion = inguz_transaccion
-        cobro.status = NotificacionCobro.LIQUIDADO
-        cobro.save()
-
-        return CreateNotificacionCobro(
-            notificacion_cobro=cobro
-        )
+                return CreateNotificacionCobro(
+                    notificacion_cobro=cobro
+                )
 
 
 class UrlImagenComprobanteInter(graphene.Mutation):
